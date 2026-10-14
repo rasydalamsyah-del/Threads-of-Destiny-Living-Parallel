@@ -81,8 +81,10 @@ peran       = Teman sekelas, anak nelayan
 pandangan   = setia            (setia / terbuka — sikap bila pasangannya punya pasangan lain)
 bisa_dipacari = tidak          (ya / tidak)
 tempat      = desa
-waktu       = siang, sore      (kapan bisa ditemui di waktu bebas)
-ditemui     = ya
+waktu       = siang, sore      (bagian hari; dipakai untuk pilihan jam "Ajak ketemu")
+ditemui     = janji            (ya = langsung, sesuai jadwal · janji = hanya lewat janji di Chat · tidak = tidak bisa)
+jadwal      = senin-sabtu 13:00-20:00, minggu 07:00-20:00   (kapan ada di sekitarmu; tanpa jadwal → pakai "waktu")
+skala       = 0.95             (ukuran gambar dibanding orang dewasa; Laras 0.78 karena masih anak-anak)
 cinta_awal  = 45
 percaya_awal = 55
 suka_topik  = laut, sepak_bola, kota
@@ -128,15 +130,30 @@ Cara info terbuka:
 - Kesukaan/ketidaksukaan topik & barang terbuka saat dicoba (ngobrol/hadiah).
 - Dari naskah: `@info bayu hobi` (atau `@info bayu semua`).
 
-### Ngobrol & hadiah (waktu bebas → Temui seseorang)
-| Aksi | Akibat ke Cinta |
+### Siapa yang bisa ditemui (waktu bebas → Temui seseorang)
+Hanya orang yang **sudah dikenal**, ada di **tempat yang sama** (desa/kota), dan **memang ada sekarang** menurut `jadwal`:
+| Karakter | ditemui | jadwal |
+|---|---|---|
+| Ayah | ya | setiap hari 12:00–18:30 (pagi tidur setelah melaut) |
+| Ibu | ya | setiap hari 05:00–21:00 |
+| Laras | ya | Senin–Sabtu 13:00–20:00 (pagi sekolah), Minggu 07:00–20:00 |
+| Bayu, Sekar, Dimas | janji | — (Chat → 📅 Ajak ketemu → muncul di "📅 Janji temu") |
+| Juragan Darto | ya | Senin–Sabtu 07:00–16:00 (di gudang) |
+| Nadia | ya | setiap hari 14:00–20:00 (di toko buku) |
+| Sahabat | tidak | — (hanya lewat cerita) |
+
+### Saat bertemu
+Menu menyesuaikan keadaan: **💬 Ngobrol** (maks. 2× per pertemuan) · **🎁 Beri hadiah** (hanya bila tas berisi & belum memberi hari itu) · **👋 Pamit**.
+Isi "Ngobrol" diambil dari **obrolan.txt** (milik masing-masing karakter, tidak acak).
+
+| Aksi | Akibat |
 |---|---|
-| Topik disukai | +6 (+3 bila sudah ngobrol hari itu) |
-| Topik biasa | +2 (+1) |
-| Topik dibenci | −5 |
+| Obrolan santai | sesuai `efek` (topik yang ia sukai +4/+5, dibenci −2/−3). Diulang di hari yang sama: paling banyak +1 |
+| Kenali lebih dalam | membuka info profil; belum cukup akrab/percaya → ia mengelak (tanpa efek, bisa ditanya lagi nanti) |
+| Pertanyaan khusus | muncul bila syarat cerita terpenuhi; bisa membuka petunjuk (`petunjuk_sahabat +1`) |
 | Hadiah disukai / biasa / dibenci | +10 / +3 / −6 (maks. 1 hadiah per karakter per hari) |
 | Hadiah basi | Cinta −8, Kepercayaan −6 |
-| Pamit | Memakai 1 kesempatan waktu bebas, Energi −5, Kewarasan +2 sampai +5 |
+| Pamit | Memakai 1 kesempatan waktu bebas, Energi −5, Kewarasan +2 sampai +5. Lama pertemuan: 15 menit + 20 menit per obrolan + 10 menit bila memberi hadiah |
 
 ### Nama meter di layar
 - 💛 **Akrab**: rasa sayang sebagai teman/keluarga (sesama jenis, keluarga, anak-anak, atau belum 18 tahun).
@@ -165,7 +182,26 @@ nama    = Laut & melaut
 ikon    = 🌊
 kalimat = Kemarin aku lihat kapal besar lewat dekat mercusuar.
 ```
-Saat ngobrol, pemain memilih 1 dari 3 topik acak.
+Dipakai untuk mencatat "Suka / Tidak suka" di halaman Karakter (kolom `topik` di obrolan.txt).
+
+## obrolan.txt (ngobrol saat bertemu)
+```
+[ayah_kisah2]
+karakter = ayah
+jenis    = kenal                 (santai / kenal / khusus)
+judul    = Tanya apa yang Ayah sembunyikan
+akrab    = 60                    (Cinta/Keakraban minimal)
+percaya  = 55                    (Kepercayaan minimal)
+ungkap   = kisah_2               (info profil yang terbuka)
+kamu     = Yah... ada yang Ayah sembunyikan, ya?
+jawab    = * Ayah menghela napas panjang. // Perahu itu... Ayah beli dengan uang pinjaman Juragan Darto.
+tolak    = Tidak ada apa-apa. Jangan dipikirkan.
+efek     = percaya +5
+```
+- `jawab`: beberapa kalimat dipisah `//`; diawali `*` = narasi.
+- `santai` boleh diulang; `kenal` & `khusus` hanya sekali (kecuali `sekali = tidak`). Pertanyaan `kenal` untuk info yang sudah diketahui tidak muncul.
+- `topik` (santai) → id dari topik.txt; `ungkap_lain = sahabat kisah_2` membuka info karakter lain; `syarat` sama seperti di aktivitas (mis. `jalur == kerja && kerja_aktif == 0`).
+- Diperiksa otomatis oleh `tools/cek_naskah.py` dan unit test `MeetingTest`.
 
 ## kejadian.txt (rintangan & kejadian acak)
 ```

@@ -310,6 +310,7 @@ Tempel **blok gaya** + **tambahan background** di setiap prompt.
 | `kota_besar.jpg` | `A huge modern Indonesian metropolis at sunset seen from above, skyscrapers, elevated highways with traffic lights, commuter train line, golden-pink sky, sense of awe and loneliness.` (bisa juga tetap pakai gambar menu utama) |
 | `kos_kamar.jpg` | `A tiny cramped rented room (kos) in a dense Indonesian city neighborhood, 2x3 meters, thin mattress on the floor, standing fan, small window with a view of train tracks and wires, a bag still unpacked, evening lamp light.` |
 | `kelas_sma.jpg` | `A bright Indonesian public high school classroom, rows of desks, whiteboard with "Selamat datang, kelas X-3" written in marker, ceiling fans, windows with city buildings outside, morning light.` |
+| `ruang_makan.jpg` | `Interior of a simple Indonesian fishing-village house dining room in the early morning, eye-level view, a low wooden dining table with a woven mat, plates of rice, fried fish, sambal and a teapot, four simple wooden chairs, plain whitewashed walls with a family photo and a wall calendar, a doorway to a small kitchen on one side, soft golden sunlight from a wooden window, open empty space in the center for characters, warm cozy family mood, no people.` (sertakan `kamar_pagi.jpg` / `rumah_warung.jpg` sebagai referensi gaya) |
 
 **Background yang akan dibutuhkan bab berikutnya** (boleh dibuat dari sekarang):
 | File | Prompt |

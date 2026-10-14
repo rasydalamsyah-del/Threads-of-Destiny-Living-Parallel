@@ -10,6 +10,7 @@
 
 | Tanggal | Build | Yang dikerjakan |
 |---|---|---|
+| 15 Okt 2026 | 31 | **Masukan pemilik (alur & obrolan):** Laras digambar lebih kecil (kolom `skala` per karakter). **Pagi di prolog ditulis ulang** pelan & runtut: bangun → Ibu memanggil sarapan → sarapan di **ruang makan** (latar baru, sementara) bersama Ayah, Ibu, Laras membicarakan ekonomi keluarga (harga ikan, solar, warung sepi) tanpa pilihan, memakan waktu → Ibu mengambil bekal, Laras pakai sepatu, salam, berangkat sekolah naik sepeda → Ayah tidur setelah melaut → Ibu minta bantu buka warung → obrolan masa depan → pilihan. **Sekar tidak lagi muncul** tanpa perkenalan. **Jadwal karakter** (`ditemui`, `jadwal`): "Temui seseorang" hanya berisi orang yang memang ada (Ayah dari siang, Laras setelah sekolah, Bayu/Sekar/Dimas lewat janji). **Obrolan baru per karakter** (`data/obrolan.txt`, 68 obrolan): 😊 santai sesuai kesukaannya, 🔍 kenali lebih dalam (membuka hobi/cita-cita/kisah; menolak bila belum akrab), ❓ pertanyaan khusus sesuai cerita (lowongan, hutang, sahabat masa kecil). Menu bertemu dinamis (hadiah hanya bila tas berisi), maks. 2 obrolan per pertemuan. **HP:** notifikasi hilang setelah pesannya dibaca; ketuk notifikasi membuka chatnya. Tutorial disesuaikan (contoh: temui Ibu). Tes baru `MeetingTest` |
 | 15 Okt 2026 | 30 | **Perbaikan dari tangkapan layar pemilik:** tombol pilihan menimpa kotak dialog (pertanyaan & nama pembicara tertutup) dan teks dialog tampak pudar. Penyebab: posisi pilihan dihitung saat kotak dialog masih beranimasi muncul (transparan) → dianggap tidak tampil. Kini posisi pilihan selalu dihitung dari tinggi kotak dialog yang sebenarnya, diukur ulang setiap kali ukuran dialog berubah, dan dialog dipastikan tampil penuh saat ada pilihan |
 | 15 Okt 2026 | 29 | **Jam mulai aktivitas** (`mulai` di aktivitas.txt, boleh melewati tengah malam): melaut 04:00–06:00, lari pagi 05:00–09:00, bantu warung 05:30–17:00, main dengan Laras 13:00–20:00, perpustakaan 08:00–16:00, jelajah/cari jejak 08:00–17:00, mal 10:00–21:00, kafe 08:00–22:00, begadang game 19:00–02:00. Aktivitas di tempat yang sama yang belum/sudah lewat waktunya tampil **redup** di bagian "🕐 Belum bisa sekarang" dengan keterangan (mis. "Sudah terlalu siang untuk melaut bersama Ayah (paling lambat 06:00)"). Aktivitas tempat lain (desa saat di kota) tetap tidak tampil. Tes baru: jendela jam mulai, data `mulai`, penyaringan tempat |
 | 15 Okt 2026 | 28 | **Tata letak layar ditetapkan** (tidak saling menimpa walau teks memanjang). ATAS: kiri = panel karakter yang bicara (tinggi tetap 56dp, foto 44dp, nama/tingkat/meter satu baris dengan "…", lebar dibatasi agar tidak menabrak kanan); kanan baris 1 = **ikon HP (pindah dari kanan bawah)** + tombol ☰; baris 2 = jam versi pendek ("Sen, 13 Jul · 07:30 ☀️", satu baris); baris 3 = petunjuk "Ketuk HP"; tombol 📊 laci status di sisi kiri di bawah panel. BAWAH: kotak dialog menempel di bawah; tombol pilihan selalu di atas kotak dialog (posisi diukur ulang setelah teks ditata); layar tanpa latar → pilihan di tengah. Perbaikan tutorial 7: ikon HP tertutup kotak penjelasan. **Meter rasa sayang**: 💛 Akrab untuk sesama jenis/keluarga/anak/belum dewasa, 💗 Cinta hanya untuk lawan jenis yang bisa dipacari setelah sama-sama 18+, ❤️ Cinta saat berpacaran (sebelumnya semua tertulis "Cinta"). Tes baru: format jam pendek & aturan romansa |
@@ -120,11 +121,12 @@
 ---
 
 ## 🔜 Langkah berikutnya (urutan)
-1. **Bab 4**: bertemu langsung dengan sahabat masa kecil, rahasia keluarganya; jalur desa menuju Sakala (atau sahabat yang pulang).
-2. **Loncatan waktu antar bab** (ringkasan bulan-bulan rutin) agar cerita bisa sampai usia 18+.
-3. Hutang & cicilan (potong upah), naik jabatan & risiko orang dalam, kebohongan wawancara yang terbongkar, transportasi.
-4. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa), sistem ending & mimpi terakhir.
-5. ~~Prompt gambar AI~~ ✅ dibuat: [PROMPT_GAMBAR.md](PROMPT_GAMBAR.md). Pemilik sedang membuat gambar asli.
+1. **Perkenalan Sekar** lewat cerita (Bab 4), baru setelah itu ia bisa diajak janjian.
+2. **Bab 4**: bertemu langsung dengan sahabat masa kecil, rahasia keluarganya; jalur desa menuju Sakala (atau sahabat yang pulang).
+3. **Loncatan waktu antar bab** (ringkasan bulan-bulan rutin) agar cerita bisa sampai usia 18+.
+4. Hutang & cicilan (potong upah), naik jabatan & risiko orang dalam, kebohongan wawancara yang terbongkar, transportasi.
+5. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa), sistem ending & mimpi terakhir.
+6. ~~Prompt gambar AI~~ ✅ dibuat: [PROMPT_GAMBAR.md](PROMPT_GAMBAR.md). Pemilik sedang membuat gambar asli.
    - Foto **tokoh utama** (`pemain_l` / `pemain_p`): tampil di halaman isi nama, Status, dan Kontak → Saya (tersembunyi bila gambar belum ada).
    - **Perbaikan tampilan karakter** (masukan pemilik setelah mencoba build 19):
      - Sisa putih di rambut: penghapus latar baru `tools/hapus_latar.py` (alpha halus di tepi, buang campuran putih,
