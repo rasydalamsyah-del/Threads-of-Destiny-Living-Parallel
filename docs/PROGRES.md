@@ -118,6 +118,7 @@
 4. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa), sistem ending & mimpi terakhir.
 5. ~~Prompt gambar AI~~ ✅ dibuat: [PROMPT_GAMBAR.md](PROMPT_GAMBAR.md). Pemilik sedang membuat gambar asli.
    - Foto **tokoh utama** (`pemain_l` / `pemain_p`): tampil di halaman isi nama, Status, dan Kontak → Saya (tersembunyi bila gambar belum ada).
+   - Gambar asli gelombang 3: **pemain_l, pemain_p** (foto tokoh utama) + background **toko_buku, taman_kota** (untuk Bab 4). Semua gambar karakter & background dasar kini sudah asli.
    - Gambar asli terpasang (gelombang 2): **darto, bayu, sekar, dimas, nadia, sahabat_l (Arka), sahabat_p (Alya), sosok** + 12 background: kamar_pagi, plafon, rumah_warung, gudang_ikan, kota_kecil, sekolah, stasiun_hujan, stasiun_desa, kos_kamar, kelas_sma, stasiun_besar (dipakai di Bab 3), dermaga_malam (untuk Bab 4).
    - Gambar asli terpasang: **ayah** (versi ke-2), **ibu**, **laras** (latar putih dihapus otomatis + foto profil `_foto.jpg` 512×512).
 
