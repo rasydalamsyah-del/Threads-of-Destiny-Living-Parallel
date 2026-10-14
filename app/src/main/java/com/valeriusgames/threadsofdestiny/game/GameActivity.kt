@@ -1176,24 +1176,46 @@ class GameActivity : Activity() {
         }
         // Posisi: di tengah layar bila layar masih gelap (tanpa latar), selain itu di bawah.
         // Margin kiri-kanan sama agar tombol tepat di tengah; naik sedikit bila ikon HP tampil.
-        val centered = bgName == null
-        fun place() {
-            (choiceList.layoutParams as FrameLayout.LayoutParams).apply {
-                gravity = if (centered) android.view.Gravity.CENTER_VERTICAL else android.view.Gravity.BOTTOM
-                marginStart = (28 * d).toInt()
-                marginEnd = (28 * d).toInt()
-                // selalu di atas kotak dialog (tidak menimpa teks pertanyaan)
-                val parentH = (choiceList.parent as View).height
-                val dialogSpace = if (dialog.alpha > 0f && dialog.height > 0 && parentH > 0)
-                    (parentH - dialog.top).coerceAtLeast(0) else 0
-                bottomMargin = if (centered) 0 else maxOf((24 * d).toInt(), dialogSpace + (12 * d).toInt())
-                choiceList.layoutParams = this
-            }
+        choiceCentered = bgName == null
+        // pertanyaan harus terbaca penuh (jangan sampai animasi munculnya terpotong)
+        if (!choiceCentered || dialog.alpha > 0f) {
+            dialog.animate().cancel()
+            dialog.translationY = 0f
+            dialog.animate().alpha(1f).setDuration(150).start()
         }
-        place()
+        placeChoices()
         choiceList.visibility = View.VISIBLE
-        // ukur ulang setelah teks pertanyaan selesai ditata
-        dialog.post { place() }
+        // Ukur ulang setiap kali kotak dialog berubah ukuran (teks pertanyaan baru selesai ditata)
+        dialog.removeOnLayoutChangeListener(choiceLayoutListener)
+        dialog.addOnLayoutChangeListener(choiceLayoutListener)
+        dialog.post { placeChoices() }
+    }
+
+    private var choiceCentered = false
+    private val choiceLayoutListener = View.OnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+        if (choiceList.visibility == View.VISIBLE) placeChoices()
+    }
+
+    /**
+     * Tombol pilihan selalu tepat DI ATAS kotak dialog, berapa pun tinggi teksnya.
+     * Tidak bergantung pada transparansi dialog (saat dialog baru muncul, ia masih beranimasi dari transparan).
+     */
+    private fun placeChoices() {
+        val d = resources.displayMetrics.density
+        val lp = choiceList.layoutParams as FrameLayout.LayoutParams
+        val parentH = (choiceList.parent as View).height
+        val dialogShown = dialog.visibility == View.VISIBLE && dialog.height > 0 && parentH > 0 &&
+            (wait == Wait.CHOICE || dialog.alpha > 0f)
+        val dialogSpace = if (dialogShown) (parentH - dialog.top).coerceAtLeast(0) else 0
+        val newGravity = if (choiceCentered) android.view.Gravity.CENTER_VERTICAL else android.view.Gravity.BOTTOM
+        val newBottom = if (choiceCentered) 0 else maxOf((24 * d).toInt(), dialogSpace + (12 * d).toInt())
+        if (lp.gravity != newGravity || lp.bottomMargin != newBottom || lp.marginStart != (28 * d).toInt()) {
+            lp.gravity = newGravity
+            lp.marginStart = (28 * d).toInt()
+            lp.marginEnd = (28 * d).toInt()
+            lp.bottomMargin = newBottom
+            choiceList.layoutParams = lp
+        }
     }
 
     private fun pickButton(index: Int, view: View, onPick: (Int) -> Unit) {
