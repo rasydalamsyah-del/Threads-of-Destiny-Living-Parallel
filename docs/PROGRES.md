@@ -117,6 +117,7 @@
 3. Hutang & cicilan (potong upah), naik jabatan & risiko orang dalam, kebohongan wawancara yang terbongkar, transportasi.
 4. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa), sistem ending & mimpi terakhir.
 5. ~~Prompt gambar AI~~ ✅ dibuat: [PROMPT_GAMBAR.md](PROMPT_GAMBAR.md). Pemilik sedang membuat gambar asli.
+   - Foto **tokoh utama** (`pemain_l` / `pemain_p`): tampil di halaman isi nama, Status, dan Kontak → Saya (tersembunyi bila gambar belum ada).
    - Gambar asli terpasang: **ayah** (versi ke-2), **ibu**, **laras** (latar putih dihapus otomatis + foto profil `_foto.jpg` 512×512).
 
 ## 🐞 Catatan teknis

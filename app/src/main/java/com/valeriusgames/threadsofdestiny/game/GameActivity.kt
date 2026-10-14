@@ -389,6 +389,20 @@ class GameActivity : Activity() {
 
     private fun refreshGenderButtons() {
         val d = resources.displayMetrics.density
+        findViewById<android.widget.ImageView>(R.id.gender_preview).apply {
+            val bmp = if (playerGender.isEmpty()) null else playerPhoto()
+            if (bmp == null) {
+                visibility = View.GONE
+            } else {
+                setImageBitmap(bmp)
+                clipToOutline = true
+                if (visibility != View.VISIBLE) {
+                    alpha = 0f
+                    visibility = View.VISIBLE
+                    animate().alpha(1f).setDuration(350).start()
+                }
+            }
+        }
         listOf(R.id.gender_male to GENDER_MALE, R.id.gender_female to GENDER_FEMALE).forEach { (id, g) ->
             val on = playerGender == g
             findViewById<TextView>(id).apply {
@@ -1428,6 +1442,8 @@ class GameActivity : Activity() {
         openSheet(getString(R.string.status_title), "${life.clockText}   ·   💰 ${rupiah(life.money)}", back)
         val d = resources.displayMetrics.density
 
+        sheetList.addView(playerProfileRow(dark = true))
+
         LifeState.Stat.values().forEach { stat ->
             val v = life[stat]
             val row = LinearLayout(this).apply {
@@ -2410,6 +2426,7 @@ class GameActivity : Activity() {
         phone.clearApp()
         phone.setTitle("👥  Kontak")
         phone.backHandler = null
+        phone.content.addView(playerProfileRow(dark = false))
         val known = gameData.characters.values.filter { social.rel(it).met }
         if (known.isEmpty()) phone.content.addView(pText("Belum ada kontak.", 13f, 0xFF8A8A93.toInt()))
         known.forEach { c ->
@@ -2891,6 +2908,44 @@ class GameActivity : Activity() {
         val c = gameData.characters[id] ?: return null
         if (c.text["nama_l"] == null && c.text["nama_p"] == null) return null
         return if (c.gender == "perempuan") "p" else "l"
+    }
+
+    /** Foto tokoh utama sesuai jenis kelamin: karakter/pemain_l_foto.jpg / pemain_p_foto.jpg. */
+    private fun playerPhoto(): Bitmap? {
+        val g = if (playerGender == GENDER_FEMALE) "p" else "l"
+        return loadAsset(listOf("pemain_${g}_foto.jpg", "pemain_${g}_foto.png", "pemain_$g.png")
+            .map { "karakter/$it" })
+    }
+
+    /** Baris profil tokoh utama (foto bulat + nama + usia). Tanpa foto, hanya teks. */
+    private fun playerProfileRow(dark: Boolean): View {
+        val d = resources.displayMetrics.density
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER_VERTICAL
+            setPadding(0, (2 * d).toInt(), 0, (12 * d).toInt())
+        }
+        playerPhoto()?.let { bmp ->
+            row.addView(android.widget.ImageView(this).apply {
+                setImageBitmap(bmp)
+                scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    shape = android.graphics.drawable.GradientDrawable.OVAL
+                    setColor(0xFF2A2A33.toInt())
+                }
+                clipToOutline = true
+            }, LinearLayout.LayoutParams((64 * d).toInt(), (64 * d).toInt()).apply {
+                marginEnd = (14 * d).toInt()
+            })
+        }
+        row.addView(TextView(this).apply {
+            text = (if (dark) "" else "Saya · ") + playerName + "\n" +
+                (if (playerGender == GENDER_FEMALE) "Perempuan" else "Laki-laki") + " · " + playerAge() + " tahun"
+            setTextColor(if (dark) 0xFFF6E7C8.toInt() else 0xFF2A2A33.toInt())
+            textSize = 15f
+            setLineSpacing(0f, 1.15f)
+        })
+        return row
     }
 
     private fun charPhoto(id: String): Bitmap? {

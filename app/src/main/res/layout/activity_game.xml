@@ -848,6 +848,17 @@
                 android:textCursorDrawable="@null"
                 android:textSize="22sp" />
 
+            <ImageView
+                android:id="@+id/gender_preview"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/oval_photo_bg"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

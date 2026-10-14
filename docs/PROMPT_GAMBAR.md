@@ -169,6 +169,33 @@ Wearing a simple dark navy hoodie over a white t-shirt.
 IMPORTANT DETAIL: a thin bracelet made of red thread tied on his left wrist, clearly visible.
 ```
 
+### Tokoh utama — `pemain_l` (laki-laki) dan `pemain_p` (perempuan)
+Tidak tampil di adegan (layar = mata tokoh). Fotonya dipakai di **halaman isi nama** (saat memilih jenis kelamin),
+**Status**, dan **Kontak → Saya**. Cukup kirim gambar badannya; foto `pemain_l_foto.jpg` / `pemain_p_foto.jpg` dipotong otomatis.
+Lampirkan gambar Ayah sebagai acuan gaya.
+
+**Laki-laki (`pemain_l.png`):**
+```
+Match the exact art style, lineart, coloring and shading of the attached image, but draw a completely different person as described below.
+Indonesian teenage boy, 15 years old, just graduated from junior high school, from a small coastal fishing village.
+Short messy black hair, determined but kind eyes with a hint of longing, light tan sun-kissed skin, slim build.
+Wearing a plain white t-shirt under an open short-sleeve dark green shirt, simple dark jeans.
+IMPORTANT DETAIL: a thin bracelet made of red thread tied on his left wrist, clearly visible.
+Expression: neutral calm face with a slight hopeful smile.
+Single character, waist-up to thigh-up portrait, facing slightly toward the viewer, centered, plain pure white background, no text, full head visible with space above the head.
+```
+
+**Perempuan (`pemain_p.png`):**
+```
+Match the exact art style, lineart, coloring and shading of the attached image, but draw a completely different person as described below.
+Indonesian teenage girl, 15 years old, just graduated from junior high school, from a small coastal fishing village.
+Shoulder-length black hair tied in a low half ponytail, determined but kind eyes with a hint of longing, light tan sun-kissed skin.
+Wearing a plain white t-shirt under an open short-sleeve dark green shirt, simple dark jeans, modest casual clothes.
+IMPORTANT DETAIL: a thin bracelet made of red thread tied on her left wrist, clearly visible.
+Expression: neutral calm face with a slight hopeful smile.
+Single character, waist-up to thigh-up portrait, facing slightly toward the viewer, centered, plain pure white background, no text, full head visible with space above the head.
+```
+
 ### Sosok misterius — `sosok`
 (dipakai di adegan Stasiun Besar, terlihat dari belakang)
 ```
