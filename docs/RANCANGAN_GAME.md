@@ -228,8 +228,31 @@ keluarga (masalah orang tua, saudara butuh bantuan), sekolah (nilai jatuh, perun
 
 ---
 
-## 16. Ending 📝
-Ending cerita utama ditentukan oleh: hubungan dengan sahabat masa kecil, pasangan, keluarga, karier, keuangan, dan sikap terhadap "hidup paralel".
+## 16. Ending ✅ (konsep disetujui 14 Okt 2026)
+
+Ending = **gabungan tiga sumbu**, terbentuk dari semua pilihan selama permainan.
+
+| Sumbu | Kemungkinan |
+|---|---|
+| **Sahabat masa kecil** | Tidak pernah ditemukan · Ditemukan tapi berpisah jalan · Kembali bersahabat · Bersama sampai menikah |
+| **Hubungan cinta** | Sendiri · Menikah dengan orang lain · Banyak pasangan (harmonis bila semua bersifat terbuka / retak bila ada yang setia & cemburu) |
+| **Kondisi hidup** | Melarat · Biasa saja · Mapan · Kaya |
+
+Contoh ending:
+- **Benang yang Tersambung:** menemukan sahabat, mengungkap alasan kepergiannya, menikah dengannya.
+- **Janji dengan Cara Lain:** kembali bersahabat, tapi menikah dengan orang lain.
+- **Lampu yang Padam:** tak pernah menemukannya; sendiri & melarat di Kota Sakala.
+- **Istana yang Sepi:** kaya raya tapi sendiri; pesan dari nomor itu tak pernah terbalas.
+- **Rumah yang Ramai:** banyak pasangan yang saling menerima, hidup harmonis.
+- **Retak:** banyak pasangan, ketahuan selingkuh, keluarga berantakan, dijauhi orang terdekat.
+- **Game over:** tokoh meninggal sebelum ending.
+
+**Mimpi terakhir (khas "Living Parallel"):** di setiap ending, tokoh melihat dirinya di jalur yang tidak dipilih,
+lalu memilih **menyesal** atau **berdamai** → menentukan nada akhir (pahit / haru / hangat).
+
+**Sahabat tidak dijamin ditemukan.** Ada petunjuk yang harus dikejar (membalas pesan, mencari di kawasan tertentu,
+bertanya ke orang yang mengenalnya). Pemain yang terlalu sibuk bisa kehilangan jejaknya.
+
 Setelah ending → bermain bebas.
 
 ---

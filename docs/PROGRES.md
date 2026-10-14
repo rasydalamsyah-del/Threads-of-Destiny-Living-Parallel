@@ -94,6 +94,7 @@
 | 14 Okt 2026 | Karier terbentuk dari pilihan pemain |
 | 14 Okt 2026 | Bar Kesehatan, Lapar, Haus, Kewarasan; makanan bisa kedaluwarsa; game over saat meninggal |
 | 14 Okt 2026 | Disetujui: Desa Tanjung Lentera → Kota Sakala; cerita "hidup paralel" lewat mimpi & sahabat masa kecil; usia 15–25 dalam 4 bab + bermain bebas; keluarga: Ayah (nelayan), Ibu (warung), adik Laras |
+| 14 Okt 2026 | Ending = gabungan sahabat masa kecil × hubungan cinta × kondisi hidup, ditutup mimpi terakhir (menyesal/berdamai). Sahabat tidak dijamin ditemukan |
 | 14 Okt 2026 | Bahasa Indonesia dulu. Gambar dibuat pemilik lewat AI, Claude bantu prompt. Dimainkan sendiri dulu |
 
 ---
