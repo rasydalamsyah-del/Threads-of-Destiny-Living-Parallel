@@ -5,6 +5,10 @@ name: Build APK
 on:
   push:
     branches: [ main ]
+    # Perubahan dokumen saja tidak perlu membuat APK baru
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
   workflow_dispatch:
 
 permissions:

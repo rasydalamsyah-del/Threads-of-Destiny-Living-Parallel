@@ -2,6 +2,10 @@
 
 Game Android (portrait) oleh **Valerius Games**. Aplikasi Android native (Kotlin), tanpa web.
 
+> 📘 **Rancangan game:** [docs/RANCANGAN_GAME.md](docs/RANCANGAN_GAME.md) ·
+> 📋 **Catatan progres & rencana:** [docs/PROGRES.md](docs/PROGRES.md) ·
+> ✍️ **Cara menulis naskah:** [docs/NASKAH.md](docs/NASKAH.md)
+
 ## Alur pembuka
 
 1. **Splash** – gambar pembuka tampil 3 detik.
