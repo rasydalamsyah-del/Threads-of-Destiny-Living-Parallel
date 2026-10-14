@@ -1,70 +1,123 @@
 # ==========================================================
-#  TUTORIAL: penjelasan cara bermain (tanpa bermain/demo).
-#  Selesai → langsung ke cerita masa lalu (prolog.txt).
+#  TUTORIAL INTERAKTIF (bisa dicoba langsung)
+#  @tunjuk menampilkan bagian layar yang sedang dijelaskan.
+#  Di akhir, @mulai_ulang menghapus semua hasil latihan,
+#  lalu cerita sungguhan dimulai dari prolog.
 # ==========================================================
 
 @latar kamar_pagi
-@terang 1000
-Pemandu: Halo, {nama}! Aku akan menjelaskan cara bermain secara singkat. Ketuk layar untuk lanjut.
+@terang 1200
+Pemandu: Halo, {nama}! Aku pemandumu. Di sini kamu boleh mencoba apa saja. Semua hasil latihan akan dihapus sebelum cerita dimulai.
 
+# ---------- 1. DIALOG & MENU ----------
 @waktu 1 · Membaca cerita
-Pemandu: Ketuk layar di mana saja untuk lanjut ke kalimat berikutnya. Kalau teks sedang berjalan, ketukan pertama langsung menampilkan semuanya.
-Pemandu: Tombol ☰ di pojok kanan atas membuka menu: Simpan, Muat, Riwayat dialog, Pengaturan, dan Menu Utama.
-Pemandu: Progres juga tersimpan otomatis. Tombol CONTINUE di menu utama melanjutkan dari simpanan terakhir.
+Pemandu: Ketuk layar di mana saja untuk lanjut. Kalau teks sedang berjalan, ketukan pertama langsung menampilkan semuanya.
+@tunjuk menu | Ini tombol ☰ MENU (pojok kanan atas).<br>Isinya: Lanjutkan, Simpan, Muat, Riwayat dialog, Pengaturan, Menu Utama.<br><br>Contoh: lupa tadi Bayu bilang apa? Buka Riwayat dialog.
+Pemandu: Progresmu juga tersimpan otomatis. Tombol CONTINUE di menu utama melanjutkan dari simpanan terakhir.
 
-@waktu 2 · Pilihan & hubungan
-Pemandu: Di cerita akan muncul tombol pilihan jawaban. Setiap pilihan punya akibat.
-Pemandu: Setiap karakter punya 💛 Cinta dan 🤝 Kepercayaan. Saat seseorang bicara, panel di pojok kiri atas menampilkan foto, tingkat hubungan, dan kedua angka itu.
-Pemandu: Bersikap baik dan menepati janji menaikkannya. Bersikap kasar, menghindar, mengabaikan chat, atau ingkar janji menurunkannya.
-Pemandu: Kabar itu menyebar. Kalau kamu menyakiti seseorang, orang-orang terdekatnya ikut kecewa. Sahabatnya bahkan bisa melarang dia bertemu denganmu.
-Pemandu: Kebohongan tercatat. Kalau suatu hari terbongkar, Cinta dan Kepercayaan bisa jatuh drastis.
-Pemandu: Hubungan berkembang: kenalan → teman → teman dekat → sahabat. Saat sudah dewasa (18 tahun ke atas), bisa juga pacaran → tunangan → menikah.
+# ---------- 2. PILIHAN & AKIBAT ----------
+@waktu 2 · Pilihan memengaruhi orang lain
+@latar rumah_warung
+@kenal bayu
+@tampil bayu biasa
+Bayu: Woy, {nama}! Bantuin aku angkat jaring, dong. Berat banget nih!
+@tunjuk panel bawah | Saat seseorang bicara, panel di pojok kiri atas menampilkan: foto, tingkat hubungan, 💛 Cinta, dan 🤝 Kepercayaan.<br><br>Perhatikan angkanya sebelum dan sesudah kamu memilih.
+Pemandu: Sekarang coba pilih. Setiap pilihan punya akibat.
+@pilihan
+> "Sini, aku bantu!" -> bantu
+> "Malas ah, angkat sendiri." -> kasar
 
-@waktu 3 · Ending
+:: bantu
+@perilaku bayu membantu
+@tampil bayu senyum
+Bayu: Nah, gitu dong! Kamu memang teman sejati.
+Pemandu: Lihat panel kiri atas: Cinta dan Kepercayaan Bayu naik.
+@lompat sebar
+
+:: kasar
+@perilaku bayu kasar
+Bayu: ...Ya udah. Nggak usah ketus gitu juga.
+Pemandu: Lihat panel kiri atas: Cinta dan Kepercayaan Bayu turun.
+
+:: sebar
+@sembunyi semua
+Pemandu: Contoh akibat lain: kamu ingkar janji pada Sekar. Bayu, sahabat Sekar, ikut kecewa padamu. Kabar itu menyebar.
+Pemandu: Contoh lagi: kalau hubunganmu sangat buruk dengan Bayu, dia bisa melarang Sekar bertemu denganmu.
+Pemandu: Kebohongan juga tercatat. Contoh: kamu bilang ke Ibu tidak bekerja, padahal bekerja. Kalau suatu hari ketahuan, Cinta dan Kepercayaan Ibu jatuh drastis.
+Pemandu: Tingkat hubungan: kenalan → teman → teman dekat → sahabat. Saat dewasa (18+): pacaran → tunangan → menikah.
+
+# ---------- 3. ENDING ----------
+@waktu 3 · Jalan hidupmu menentukan ending
 Pemandu: Tidak ada pilihan yang "benar". Semua pilihan kecil menumpuk dan menentukan akhir hidupmu.
-Pemandu: Menemukan sahabat masa kecil dan menikah dengannya, menikah dengan orang lain, punya banyak pasangan, atau hidup sendiri, entah kaya, biasa saja, atau miskin.
-Pemandu: Petunjuk tentang sahabatmu tersebar di cerita, obrolan, dan HP. Kumpulkan sebanyak mungkin.
+Pemandu: Contoh: rajin kerja dan hemat → bisa hidup mapan. Sering foya-foya → bisa berakhir miskin. Rajin mengumpulkan petunjuk → bisa menemukan sahabatmu.
+Pemandu: Ending yang mungkin: bersama sahabat masa kecil, menikah dengan orang lain, punya banyak pasangan, atau hidup sendiri (kaya, biasa, atau miskin).
 
+# ---------- 4. STATUS & BERTAHAN HIDUP ----------
 @waktu 4 · Menjaga tubuh & pikiran
-Pemandu: Setelah cerita berjalan, muncul tombol 📊 di sisi kiri layar. Ketuk untuk menarik panel status, ketuk ‹ untuk menyimpannya.
-Pemandu: ❤️ Kesehatan: kalau habis, tokohmu meninggal dan permainan berakhir.
-Pemandu: 🍚 Kenyang dan 💧 Hidrasi turun seiring waktu. Kalau kosong, kesehatan ikut turun.
-Pemandu: 🧠 Kewarasan turun karena stres dan kerja berat. ⚡ Energi habis karena aktivitas, dan pulih dengan istirahat atau tidur.
-Pemandu: Kalau ada yang kritis, tombol 📊 berubah jadi ⚠️.
-Pemandu: Cara makan & minum: beli di Belanja, lalu buka Status & Tas (ketuk panel status) dan pilih makanannya. Makanan punya tanggal kedaluwarsa, dan yang basi bisa membuatmu sakit.
+@hidup mulai
+@lokasi desa
+@kalender Senin siang
+@uang +50000
+@stat kenyang -45
+@barang roti_sobek 1
+@barang air_mineral 1
+@tunjuk status bawah | Ini PANEL STATUS. Biasanya tersembunyi. Ketuk tombol 📊 di sisi kiri untuk menariknya, ketuk ‹ untuk menyimpannya.<br><br>❤️ Kesehatan: kalau habis, tokohmu MENINGGAL.<br>🍚 Kenyang & 💧 Hidrasi: turun seiring waktu.<br>🧠 Kewarasan: turun karena stres & kerja berat.<br>⚡ Energi: habis karena aktivitas, pulih dengan istirahat/tidur.
+@tunjuk status bawah | Contoh: sekarang 🍚 Kenyang-mu rendah (kuning/merah). Kalau ada yang kritis, tombol 📊 berubah jadi ⚠️.<br><br>Kalau dibiarkan kosong, ❤️ Kesehatan ikut turun.
+@tunjuk tas bawah | Ini STATUS & TAS (ketuk panel status untuk membukanya).<br><br>Contoh cara makan: di tasmu ada Roti sobek. Ketuk "Makan" untuk memakannya.<br>Lihat juga tanggal kedaluwarsanya. Makanan basi bisa membuatmu sakit.
+@tunjuk belanja bawah | Ini BELANJA. Di sini kamu membeli makanan, minuman, obat, dan hadiah.<br><br>Contoh: Air mineral untuk 💧 Hidrasi, nasi bungkus untuk 🍚 Kenyang. Harga di kota lebih mahal daripada di desa.
 
-@waktu 5 · Waktu
-Pemandu: Jam di kanan atas menunjukkan hari, tanggal, dan waktu: Pagi → Siang → Sore → Malam.
-Pemandu: Setiap aktivitas memakan satu waktu. Saat Malam, kamu bisa tidur sampai pagi untuk memulihkan energi.
-Pemandu: Sewa kos, kiriman keluarga, dan gaji berjalan sesuai tanggal. Semuanya tercatat di aplikasi Kalender.
+# ---------- 5. WAKTU ----------
+@waktu 5 · Waktu terus berjalan
+@tunjuk jam bawah | Ini JAM: hari, tanggal, dan waktu.<br>Pagi → Siang → Sore → Malam.<br><br>Contoh: kamu memilih "Bantu Ibu di warung" saat Siang. Setelah selesai, waktunya jadi Sore. Saat Malam, kamu bisa tidur sampai pagi.
+Pemandu: Sewa kos, kiriman keluarga, dan gaji juga berjalan sesuai tanggal. Kamu bisa melihatnya di aplikasi Kalender.
 
+# ---------- 6. WAKTU BEBAS ----------
 @waktu 6 · Waktu bebas
-Pemandu: Di saat-saat tertentu, cerita berhenti dan muncul layar WAKTU BEBAS. Di situlah kamu menjalani hidupmu sendiri.
-Pemandu: Kamu bisa memilih aktivitas (makan, bekerja, istirahat, belajar...), Belanja, Status & Tas, atau Temui seseorang.
-Pemandu: Saat menemui seseorang, kamu bisa mengobrol tentang topik tertentu atau memberi hadiah. Yang tepat menambah Cinta, yang salah membuatnya kesal.
-Pemandu: Jumlah kegiatan ditentukan cerita. Setelah habis, cerita berlanjut.
+@tunjuk bebas atas | Ini layar WAKTU BEBAS. Muncul di saat-saat tertentu, ketika cerita berhenti dan kamu menjalani hidupmu sendiri.<br><br>Atas: sisa kegiatan & waktu sekarang.<br>Daftar AKTIVITAS: makan, bekerja, istirahat, belajar... (masing-masing tertulis efeknya).
+@tunjuk bebas atas | Di bawahnya ada tombol Status & Tas, Belanja, HP, Menu, dan 🔎 Cari kerja.<br><br>"👥 Temui seseorang": ngobrol tentang topik tertentu atau memberi hadiah. Contoh: Bayu suka ngobrol soal laut dan sepak bola, dan senang diberi gorengan. Tapi jangan bahas pelajaran, dia bosan!<br><br>Saat Malam muncul tombol "Tidur sampai pagi".
+Pemandu: Sekarang giliranmu. Coba makan roti di Status & Tas, lalu pilih 2 kegiatan. Misalnya temui Bayu.
+@bebas 2
 
-@waktu 7 · HP
-Pemandu: Saat ada pesan, ikon HP di kanan bawah bergetar. Ketuk untuk membukanya.
-Pemandu: 💬 Chat: balas pesan. Pesan yang dibiarkan 2 hari dianggap mengabaikan. Kamu juga bisa mengajak bertemu, tapi janji harus ditepati.
-Pemandu: 👥 Kontak: hubungan dan kesukaan setiap orang. 📅 Kalender: janji, sewa, kiriman, dan gajian.
-Pemandu: 💼 Lowongan: cari kerja dan urus berkas. 👛 Dompet: riwayat uang. 📝 Catatan: petunjuk penting cerita.
-Pemandu: 📷 Sosmed: lihat kabar teman-teman, dan cari jejak sahabatmu sekali sehari.
+Pemandu: Bagus! Jumlah kegiatan di waktu bebas ditentukan cerita. Setelah habis, cerita berlanjut.
 
+# ---------- 7. HP ----------
+@waktu 7 · HP-mu
+@kiriman 600000
+@catatan Contoh catatan: petunjuk penting dari cerita akan tersimpan di sini.
+@hp tampil
+@hp pesan Bayu | Eh, tadi seru juga ya. Besok main lagi? 😄
+@tunjuk ikon_hp bawah | Ada pesan masuk! Ikon HP di kanan bawah bergetar dan bertitik merah.<br><br>Ketuk ikon itu kapan saja untuk membuka HP.
+@tunjuk hp atas | Ini LAYAR UTAMA HP: jam, notifikasi, dan ikon aplikasi. Angka merah artinya ada yang perlu dilihat.
+@tunjuk hp chat atas | 💬 CHAT: semua obrolan. Contoh: pesan Bayu barusan.<br>Pesan yang dibiarkan 2 hari dianggap MENGABAIKAN (hubungan turun).<br>Di dalam obrolan ada tombol balas & "Ajak ketemu". Janji yang tidak ditepati = ingkar janji!
+@tunjuk hp kontak atas | 👥 KONTAK: semua orang yang kamu kenal. Ketuk seseorang untuk melihat hubungan, usia, dan kesukaan yang sudah kamu ketahui.
+@tunjuk hp kalender atas | 📅 KALENDER: janji temu, bayar kos, kiriman keluarga, gajian, dan batas lamaran kerja.<br><br>Contoh: kiriman keluarga berikutnya terlihat di sini.
+@tunjuk hp lowongan atas | 💼 LOWONGAN: daftar pekerjaan di tempatmu (desa/kota), status lamaran, dan berkas (ijazah, KTP, SKCK...).
+@tunjuk hp dompet atas | 👛 DOMPET: sisa uang dan riwayat uang masuk/keluar. Contoh: uang saku Rp50.000 tadi tercatat di sini.
+@tunjuk hp catatan atas | 📝 CATATAN: petunjuk penting cerita tersimpan otomatis di sini.
+@tunjuk hp sosmed atas | 📷 SOSMED: kabar teman-teman (ketuk 🤍 untuk menyukai, Cinta +1).<br>"🔍 Cari": telusuri jejak sahabatmu sekali sehari. Siapa tahu menemukan petunjuk baru.
+
+# ---------- 8. PEKERJAAN & SEKOLAH ----------
 @waktu 8 · Sekolah & pekerjaan
-Pemandu: Ada dua cara mendapat kerja: tombol "🔎 Cari kerja" saat waktu bebas, atau aplikasi Lowongan.
-Pemandu: Kerja yang mudah bisa langsung dilamar. Kerja yang lebih baik butuh berkas (ijazah, KTP, SKCK...), lalu tes tertulis dan wawancara.
-Pemandu: Saat wawancara kamu boleh berbohong supaya terlihat hebat, tapi bisa ketahuan.
-Pemandu: Punya kenalan di tempat kerja ("orang dalam") dengan Cinta & Kepercayaan tinggi membuat peluang diterima jauh lebih besar.
-Pemandu: Sekolah dan kerja tetap wajib dihadiri sesuai jadwal. Bolos 3 kali dapat peringatan, 6 kali dikeluarkan atau dipecat.
+@tunjuk kerja bawah | Ini CARI KERJA (tombol "🔎 Cari kerja" di waktu bebas). Isinya pekerjaan di tempatmu sekarang.<br><br>Tertulis jadwal, gaji, usia minimal, dan peluang diterima.
+Pemandu: Kerja yang mudah bisa langsung dilamar. Kerja yang lebih baik butuh berkas, lalu tes tertulis dan wawancara.
+Pemandu: Contoh: saat wawancara ditanya "Pernah kerja di kafe?" Kamu boleh berbohong "Pernah!" supaya terlihat hebat. Tapi bisa ketahuan, dan langsung ditolak.
+Pemandu: Contoh orang dalam: Ayah kenal Juragan Darto. Kalau Cinta & Kepercayaan Ayah tinggi, peluangmu diterima di gudang ikan jauh lebih besar.
+Pemandu: Sekolah dan kerja tetap WAJIB dihadiri sesuai jadwal. Bolos 3 kali dapat peringatan, 6 kali dikeluarkan atau dipecat.
 Pemandu: Kariermu terbentuk dari pilihanmu. Rajin di satu bidang membuka pekerjaan yang lebih baik.
 
-@waktu 9 · Rintangan
-Pemandu: Hidup tidak selalu mulus. Sakit, dompet hilang, banjir, keluarga butuh bantuan... Kejadian seperti ini bisa datang kapan saja, dan masing-masing punya pilihan sendiri.
-Pemandu: Simpan uang untuk hal-hal tak terduga.
+# ---------- 9. RINTANGAN ----------
+@waktu 9 · Rintangan tak terduga
+Pemandu: Hidup tidak selalu mulus. Sakit, dompet hilang, banjir, keluarga butuh bantuan... bisa datang kapan saja.
+Pemandu: Contohnya seperti ini. Coba pilih:
+@kejadian flu
+Pemandu: Setiap kejadian punya pilihan dan akibatnya sendiri. Simpan uang untuk hal-hal tak terduga.
 
+# ---------- SELESAI ----------
 @waktu Tutorial selesai
-Pemandu: Itu dasar-dasarnya, {nama}. Sisanya, temukan sendiri sambil menjalani hidupmu.
-Pemandu: Ceritamu dimulai sekarang... dari masa lalu.
+@sembunyi semua
+@hp sembunyi
+Pemandu: Itu semua dasar-dasarnya, {nama}. Sisanya, temukan sendiri sambil menjalani hidupmu.
+Pemandu: Semua hasil latihan tadi akan dihapus. Ceritamu yang sesungguhnya dimulai sekarang... dari masa lalu.
 @gelap 1500
+@mulai_ulang
 @naskah prolog.txt

@@ -102,6 +102,8 @@ object StoryScript {
         data class End(val text: String) : Cmd()
         /** Hapus semua hasil latihan (tutorial): hidup, hubungan, HP, variabel. Nama & kelamin tetap. */
         object ResetState : Cmd()
+        /** Tutorial: tampilkan bagian layar (hp, status, tas, bebas, ...) beserta penjelasan. */
+        data class Show(val target: String, val sub: String?, val top: Boolean, val text: String) : Cmd()
     }
 
     data class Option(val text: String, val label: String)
@@ -347,6 +349,17 @@ object StoryScript {
             "kejadian", "event" -> Cmd.Event(args.firstOrNull() ?: throw ParseError(n, "format: @kejadian id_kejadian"))
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             "mulai_ulang", "reset" -> Cmd.ResetState
+            "tunjuk", "show_ui" -> {
+                val head = rest.substringBefore('|').trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
+                if (head.isEmpty()) throw ParseError(n, "format: @tunjuk hp kalender | penjelasan")
+                val flags = head.drop(1)
+                Cmd.Show(
+                    target = head[0].lowercase(),
+                    sub = flags.firstOrNull { it != "atas" && it != "bawah" }?.lowercase(),
+                    top = "bawah" !in flags,
+                    text = rest.substringAfter('|', "").trim(),
+                )
+            }
             else -> throw ParseError(n, "perintah @$name tidak dikenal")
         }
     }

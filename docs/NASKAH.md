@@ -196,7 +196,14 @@ Jam ini juga dipakai di layar kunci HP.
 ```
 @mulai_ulang                      hapus semua hasil latihan (hidup, hubungan, HP, variabel); nama & kelamin tetap
 ```
-- Urutan file: `mulai.txt` (pilih Tutorial / Lewati) → `tutorial.txt` (penjelasan saja) → `prolog.txt`. `@mulai_ulang` tersedia bila suatu saat dibutuhkan.
+- Urutan file: `mulai.txt` (pilih Tutorial / Lewati) → `tutorial.txt` (diakhiri `@mulai_ulang` + `@naskah prolog.txt`) → `prolog.txt`.
+
+```
+@tunjuk hp kalender | Penjelasan...<br>baris baru      tampilkan bagian layar + kotak penjelasan (ketuk untuk lanjut)
+@tunjuk status bawah | ...                             kotak penjelasan di bawah (default di atas)
+```
+Bagian yang bisa ditunjuk: `menu`, `panel`, `status`, `tas`, `belanja`, `jam`, `bebas`, `ikon_hp`, `hp` (+ nama aplikasi:
+`chat`, `kontak`, `kalender`, `lowongan`, `dompet`, `catatan`, `sosmed`), `kerja`, `kos`.
 
 ### Kejadian & sekolah
 ```

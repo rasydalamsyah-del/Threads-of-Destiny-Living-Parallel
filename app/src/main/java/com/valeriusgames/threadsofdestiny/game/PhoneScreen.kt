@@ -73,7 +73,15 @@ class PhoneScreen(private val overlay: View, private val onClosed: () -> Unit) {
     }
 
     /** Ikon aplikasi di layar utama (3 per baris), dengan angka lencana. */
+    private var knownApps: List<App> = emptyList()
+
+    /** Buka aplikasi tertentu dari kode (dipakai tutorial). */
+    fun openAppById(id: String) {
+        knownApps.firstOrNull { it.id == id }?.let { openApp(it) }
+    }
+
     fun setApps(apps: List<App>, badges: Map<String, Int>) {
+        knownApps = apps
         appsBox.removeAllViews()
         val ctx = overlay.context
         apps.chunked(3).forEach { rowApps ->

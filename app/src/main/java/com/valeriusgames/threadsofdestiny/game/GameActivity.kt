@@ -621,6 +621,7 @@ class GameActivity : Activity() {
                 }
                 is Cmd.End -> { endStory(c.text); return }
                 is Cmd.ResetState -> resetForStory()
+                is Cmd.Show -> { showTour(c); return }
             }
         }
         endStory("Bersambung…")
@@ -1121,13 +1122,14 @@ class GameActivity : Activity() {
         val d = resources.displayMetrics.density
         options.forEachIndexed { i, label ->
             val item = TextView(this).apply {
-                text = "${i + 1}. $label"
+                text = label
                 setBackgroundResource(R.drawable.choice_item)
-                setTextColor(0xFF22222A.toInt())
+                setTextColor(0xFF3B2A12.toInt())
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, (settings.fontSizeSp - 1f).coerceAtLeast(14f))
-                typeface = GameSettings.typeface(this@GameActivity, settings.fontStyle, false)
+                typeface = android.graphics.Typeface.create(
+                    GameSettings.typeface(this@GameActivity, settings.fontStyle, false), android.graphics.Typeface.BOLD)
                 minHeight = (50 * d).toInt()
-                gravity = android.view.Gravity.CENTER_VERTICAL
+                gravity = android.view.Gravity.CENTER
                 setPadding((18 * d).toInt(), (10 * d).toInt(), (18 * d).toInt(), (10 * d).toInt())
                 elevation = 3 * d
                 alpha = 0f
@@ -1141,9 +1143,19 @@ class GameActivity : Activity() {
                 .setStartDelay(120L + i * 90L).setDuration(320)
                 .setInterpolator(DecelerateInterpolator()).start()
         }
+        // Posisi: di tengah layar bila layar masih gelap (tanpa latar), selain itu di bawah.
+        // Margin kiri-kanan sama agar tombol tepat di tengah; naik sedikit bila ikon HP tampil.
+        val centered = bgName == null
+        (choiceList.layoutParams as FrameLayout.LayoutParams).apply {
+            gravity = if (centered) android.view.Gravity.CENTER_VERTICAL else android.view.Gravity.BOTTOM
+            marginStart = (28 * d).toInt()
+            marginEnd = (28 * d).toInt()
+            bottomMargin = ((if (!centered && phoneIcon.visibility == View.VISIBLE) 136 else 22) * d).toInt()
+            choiceList.layoutParams = this
+        }
         choiceList.visibility = View.VISIBLE
         // Geser kotak dialog ke atas bila tertimpa daftar pilihan
-        choiceList.post {
+        if (!centered) choiceList.post {
             val overlap = dialog.bottom + (10 * d) - choiceList.top
             dialog.animate().translationY(if (overlap > 0) -overlap else 0f).setDuration(250).start()
         }
@@ -2061,6 +2073,125 @@ class GameActivity : Activity() {
             "kelas" -> gameData.jobs[id]?.let { runSchoolYear(it, done) } ?: done()
             else -> done()
         }
+    }
+
+    // ---------------- tutorial: tampilkan bagian layar ----------------
+
+    private var tourOverlay: FrameLayout? = null
+    private var tourTarget: String? = null
+
+    private fun tourLayer(): FrameLayout {
+        tourOverlay?.let { return it }
+        val d = resources.displayMetrics.density
+        val layer = FrameLayout(this).apply {
+            isClickable = true
+            visibility = View.GONE
+            elevation = 40 * d
+        }
+        val card = LinearLayout(this).apply {
+            tag = "tour_card"
+            orientation = LinearLayout.VERTICAL
+            setPadding((16 * d).toInt(), (12 * d).toInt(), (16 * d).toInt(), (10 * d).toInt())
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 16 * d
+                setColor(0xF2141B33.toInt())
+                setStroke((1.5f * d).toInt(), 0xFFD2AE62.toInt())
+            }
+        }
+        card.addView(TextView(this).apply {
+            tag = "tour_text"
+            setTextColor(0xFFF6E7C8.toInt())
+            textSize = 14.5f
+            setLineSpacing(0f, 1.15f)
+        })
+        card.addView(TextView(this).apply {
+            text = "Ketuk untuk lanjut ▸"
+            setTextColor(0xFFD2AE62.toInt())
+            textSize = 11.5f
+            gravity = android.view.Gravity.END
+            setPadding(0, (6 * d).toInt(), 0, 0)
+        })
+        layer.addView(card, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+        layer.setOnClickListener { tourTap() }
+        findViewById<ViewGroup>(android.R.id.content).addView(layer,
+            FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        tourOverlay = layer
+        return layer
+    }
+
+    private fun showTour(c: Cmd.Show) {
+        wait = Wait.BUSY
+        if (dialog.alpha > 0f) hideDialog()
+        if (tourTarget != null && tourTarget != c.target) closeTourTarget()
+        when (c.target) {
+            "hp" -> {
+                refreshPhoneHome()
+                if (!phone.isOpen) phone.open()
+                if (c.sub != null) phone.openAppById(c.sub) else phone.showHome()
+            }
+            "status" -> setHudOpen(true)
+            "tas" -> openStatus(returnTo = null)
+            "belanja" -> openShop()
+            "kerja" -> openJobSearch()
+            "kos" -> openKosSearch()
+            "bebas" -> {
+                pendingEvents.clear()
+                freeLeft = 2
+                showFreeSheet()
+                wait = Wait.BUSY
+            }
+            "jam" -> pulse(clock)
+            "menu" -> pulse(burger)
+            "ikon_hp" -> pulse(phoneIcon)
+            "panel" -> pulse(charPanel)
+        }
+        tourTarget = c.target
+        val layer = tourLayer()
+        val d = resources.displayMetrics.density
+        val card = layer.findViewWithTag<View>("tour_card")
+        layer.findViewWithTag<TextView>("tour_text").text = fill(c.text).replace("<br>", "\n")
+        (card.layoutParams as FrameLayout.LayoutParams).apply {
+            gravity = if (c.top) android.view.Gravity.TOP else android.view.Gravity.BOTTOM
+            setMargins((14 * d).toInt(), ((if (c.top) 38 else 0) * d).toInt(), (14 * d).toInt(), ((if (c.top) 0 else 26) * d).toInt())
+            card.layoutParams = this
+        }
+        layer.bringToFront()
+        layer.visibility = View.VISIBLE
+        card.alpha = 0f
+        card.translationY = (if (c.top) -12 else 12) * d
+        card.animate().alpha(1f).translationY(0f).setStartDelay(250).setDuration(260).start()
+    }
+
+    private fun tourTap() {
+        val layer = tourOverlay ?: return
+        if (layer.findViewWithTag<View>("tour_card").alpha < 1f) return
+        layer.visibility = View.GONE
+        val nextShow = script.getOrNull(pc) as? Cmd.Show
+        if (nextShow?.target != tourTarget) closeTourTarget()
+        handler.postDelayed({ next() }, if (nextShow?.target == tourTarget) 0L else 280L)
+    }
+
+    private fun closeTourTarget() {
+        when (tourTarget) {
+            "hp" -> phone.close()
+            "status" -> setHudOpen(false)
+            "bebas" -> { freeLeft = 0; closeSheet() }
+            "tas", "belanja", "kerja", "kos" -> closeSheet()
+        }
+        tourTarget = null
+        wait = Wait.BUSY
+    }
+
+    /** Denyut kecil untuk menunjuk sebuah elemen layar. */
+    private fun pulse(v: View) {
+        v.animate().cancel()
+        v.animate().scaleX(1.35f).scaleY(1.35f).setDuration(260).withEndAction {
+            v.animate().scaleX(1f).scaleY(1f).setDuration(260).withEndAction {
+                v.animate().scaleX(1.25f).scaleY(1.25f).setDuration(220).withEndAction {
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(220).start()
+                }.start()
+            }.start()
+        }.start()
     }
 
     /** Bersihkan semua hasil tutorial sebelum cerita sungguhan dimulai. */
