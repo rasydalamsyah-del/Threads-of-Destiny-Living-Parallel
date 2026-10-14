@@ -12,7 +12,7 @@ Pemandu: Halo, {nama}! Aku pemandumu. Di sini kamu boleh mencoba apa saja. Semua
 # ---------- 1. DIALOG & MENU ----------
 @waktu 1 · Membaca cerita
 Pemandu: Ketuk layar di mana saja untuk lanjut. Kalau teks sedang berjalan, ketukan pertama langsung menampilkan semuanya.
-@tunjuk menu | Ini tombol ☰ MENU (pojok kanan atas).<br>Isinya: Lanjutkan, Simpan, Muat, Riwayat dialog, Pengaturan, Menu Utama.<br><br>Contoh: lupa tadi Bayu bilang apa? Buka Riwayat dialog.
+@tunjuk menu bawah | Ini tombol ☰ MENU (pojok kanan atas).<br>Isinya: Lanjutkan, Simpan, Muat, Riwayat dialog, Pengaturan, Menu Utama.<br><br>Contoh: lupa tadi Bayu bilang apa? Buka Riwayat dialog.
 Pemandu: Progresmu juga tersimpan otomatis. Tombol CONTINUE di menu utama melanjutkan dari simpanan terakhir.
 
 # ---------- 2. PILIHAN & AKIBAT ----------
@@ -21,7 +21,7 @@ Pemandu: Progresmu juga tersimpan otomatis. Tombol CONTINUE di menu utama melanj
 @kenal bayu
 @tampil bayu biasa
 Bayu: Woy, {nama}! Bantuin aku angkat jaring, dong. Berat banget nih!
-@tunjuk panel bawah | Saat seseorang bicara, panel di pojok kiri atas menampilkan: foto, tingkat hubungan, 💛 Cinta, dan 🤝 Kepercayaan.<br><br>Perhatikan angkanya sebelum dan sesudah kamu memilih.
+@tunjuk panel bawah | Saat seseorang bicara, panel di pojok kiri atas menampilkan: foto, tingkat hubungan, 💛 Akrab (keakraban), dan 🤝 Kepercayaan.<br>💗 Cinta hanya untuk lawan jenis yang bisa dipacari, setelah kalian berdua berumur 18 tahun.<br><br>Perhatikan angkanya sebelum dan sesudah kamu memilih.
 Pemandu: Sekarang coba pilih. Setiap pilihan punya akibat.
 @pilihan
 > "Sini, aku bantu!" -> bantu
@@ -31,21 +31,21 @@ Pemandu: Sekarang coba pilih. Setiap pilihan punya akibat.
 @perilaku bayu membantu
 @tampil bayu senyum
 Bayu: Nah, gitu dong! Kamu memang teman sejati.
-Pemandu: Lihat panel kiri atas: Cinta dan Kepercayaan Bayu naik.
+Pemandu: Lihat panel kiri atas: Keakraban dan Kepercayaan Bayu naik.
 @lompat sebar
 
 :: kasar
 @perilaku bayu kasar
 Bayu: ...Ya udah. Nggak usah ketus gitu juga.
-Pemandu: Lihat panel kiri atas: Cinta dan Kepercayaan Bayu turun.
+Pemandu: Lihat panel kiri atas: Keakraban dan Kepercayaan Bayu turun.
 
 :: sebar
 @sembunyi semua
 Pemandu: Contoh akibat lain: kamu ingkar janji pada Sekar. Bayu, sahabat Sekar, ikut kecewa padamu. Kabar itu menyebar.
 Pemandu: Contoh lagi: kalau hubunganmu sangat buruk dengan Bayu, dia bisa melarang Sekar bertemu denganmu.
-Pemandu: Kebohongan juga tercatat. Contoh: kamu bilang ke Ibu tidak bekerja, padahal bekerja. Kalau suatu hari ketahuan, Cinta dan Kepercayaan Ibu jatuh drastis.
+Pemandu: Kebohongan juga tercatat. Contoh: kamu bilang ke Ibu tidak bekerja, padahal bekerja. Kalau suatu hari ketahuan, Keakraban dan Kepercayaan Ibu jatuh drastis.
 Pemandu: Tingkat hubungan: kenalan → teman → teman dekat → sahabat. Saat dewasa (18+): pacaran → tunangan → menikah.
-@tunjuk karakter_detail bayu bawah | Ini halaman KARAKTER (☰ Menu → Karakter). Isinya: gambar, usia, tingkat hubungan, bar 💛 Cinta & 🤝 Kepercayaan, sifat, kesukaan, hobi, cita-cita, dan kisah hidupnya.<br><br>Yang bergembok 🔒 belum kamu ketahui.
+@tunjuk karakter_detail bayu bawah | Ini halaman KARAKTER (☰ Menu → Karakter). Isinya: gambar, usia, tingkat hubungan, bar 💛 Akrab & 🤝 Kepercayaan, sifat, kesukaan, hobi, cita-cita, dan kisah hidupnya.<br><br>Yang bergembok 🔒 belum kamu ketahui.
 @tunjuk karakter_detail bayu bawah | Cara membukanya: makin sering ngobrol dan makin akrab, makin banyak yang ia ceritakan. Kisah terdalam butuh kepercayaan tinggi.<br><br>Contoh: Sekar, sahabat Bayu, bisa saja bercerita tentang cita-cita Bayu sebelum Bayu sendiri menceritakannya.
 @tunjuk karakter bawah | Daftar semua karakter. Yang belum kamu kenal tampil 🔒 ???. Mereka terbuka saat kalian bertemu, atau saat ada orang lain yang bercerita tentang mereka.
 
@@ -91,7 +91,7 @@ Pemandu: Bagus! Jumlah kegiatan di waktu bebas ditentukan cerita. Setelah habis,
 @catatan Contoh catatan: petunjuk penting dari cerita akan tersimpan di sini.
 @hp tampil
 @hp pesan Bayu | Eh, tadi seru juga ya. Besok main lagi? 😄
-@tunjuk ikon_hp bawah | Ada pesan masuk! Ikon HP di kanan bawah bergetar dan bertitik merah.<br><br>Ketuk ikon itu kapan saja untuk membuka HP.
+@tunjuk ikon_hp bawah | Ada pesan masuk! Ikon HP di KANAN ATAS (di samping tombol ☰) bergetar dan bertitik merah.<br><br>Ketuk ikon itu kapan saja untuk membuka HP.
 @tunjuk hp atas | Ini LAYAR UTAMA HP: jam, notifikasi, dan ikon aplikasi. Angka merah artinya ada yang perlu dilihat.
 @tunjuk hp chat atas | 💬 CHAT: semua obrolan. Contoh: pesan Bayu barusan.<br>Pesan yang dibiarkan 2 hari dianggap MENGABAIKAN (hubungan turun).<br>Di dalam obrolan ada tombol balas & "Ajak ketemu". Janji yang tidak ditepati = ingkar janji!
 @tunjuk hp kontak atas | 👥 KONTAK: semua orang yang kamu kenal. Ketuk seseorang untuk melihat hubungan, usia, dan kesukaan yang sudah kamu ketahui.
@@ -99,14 +99,14 @@ Pemandu: Bagus! Jumlah kegiatan di waktu bebas ditentukan cerita. Setelah habis,
 @tunjuk hp lowongan atas | 💼 LOWONGAN: daftar pekerjaan di tempatmu (desa/kota), status lamaran, dan berkas (ijazah, KTP, SKCK...).
 @tunjuk hp dompet atas | 👛 DOMPET: sisa uang dan riwayat uang masuk/keluar. Contoh: uang saku Rp50.000 tadi tercatat di sini.
 @tunjuk hp catatan atas | 📝 CATATAN: petunjuk penting cerita tersimpan otomatis di sini.
-@tunjuk hp sosmed atas | 📷 SOSMED: kabar teman-teman (ketuk 🤍 untuk menyukai, Cinta +1).<br>"🔍 Cari": telusuri jejak sahabatmu sekali sehari. Siapa tahu menemukan petunjuk baru.
+@tunjuk hp sosmed atas | 📷 SOSMED: kabar teman-teman (ketuk 🤍 untuk menyukai, Keakraban +1).<br>"🔍 Cari": telusuri jejak sahabatmu sekali sehari. Siapa tahu menemukan petunjuk baru.
 
 # ---------- 8. PEKERJAAN & SEKOLAH ----------
 @waktu 8 · Sekolah & pekerjaan
 @tunjuk kerja bawah | Ini CARI KERJA (tombol "🔎 Cari kerja" di waktu bebas). Isinya pekerjaan di tempatmu sekarang.<br><br>Tertulis jadwal, gaji, usia minimal, dan peluang diterima.
 Pemandu: Kerja yang mudah bisa langsung dilamar. Kerja yang lebih baik butuh berkas, lalu tes tertulis dan wawancara.
 Pemandu: Contoh: saat wawancara ditanya "Pernah kerja di kafe?" Kamu boleh berbohong "Pernah!" supaya terlihat hebat. Tapi bisa ketahuan, dan langsung ditolak.
-Pemandu: Contoh orang dalam: Ayah kenal Juragan Darto. Kalau Cinta & Kepercayaan Ayah tinggi, peluangmu diterima di gudang ikan jauh lebih besar.
+Pemandu: Contoh orang dalam: Ayah kenal Juragan Darto. Kalau Keakraban & Kepercayaan Ayah tinggi, peluangmu diterima di gudang ikan jauh lebih besar.
 Pemandu: Sekolah dan kerja tetap WAJIB dihadiri sesuai jam. Di waktu bebas, kewajibanmu muncul di "📌 Jadwalmu sekarang" mulai 1 jam sebelum jam masuk.
 Pemandu: Bolos 3 kali dapat peringatan, 6 kali dikeluarkan atau dipecat. Sering terlambat juga menurunkan nilai dan kinerja.
 Pemandu: Kariermu terbentuk dari pilihanmu. Rajin di satu bidang membuka pekerjaan yang lebih baik.

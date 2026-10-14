@@ -88,6 +88,30 @@ class TimeSystemTest {
         ).forEach { (t, s) -> assertEquals("jam $t", s, Slot.of(LifeState.parseClock(t)!!)) }
     }
 
+    @Test fun shortClockForTopBar() {
+        val l = life("Senin", "07:30")
+        assertEquals("Sen, 13 Jul · 07:30 ☀️", l.shortClockText)
+        l.setCalendar("Senin", "22:05")
+        assertEquals("Sen, 13 Jul · 22:05 🌙", l.shortClockText)
+    }
+
+    /** Meter 💗 Cinta hanya untuk lawan jenis yang bisa dipacari & keduanya 18+; selain itu 💛 Akrab. */
+    @Test fun romanceOnlyOppositeSexAdults() {
+        fun ch(gender: String, age: Int, romanceable: Boolean) = GameData.CharacterDef(
+            id = "x", name = "X", gender = gender, baseAge = age, role = "", loyal = true, romanceable = romanceable,
+            places = setOf("desa"), slots = setOf("semua"), meetable = true, loveStart = 20, trustStart = 40,
+            likeTopics = emptySet(), hateTopics = emptySet(), likeItems = emptySet(), hateItems = emptySet(),
+            text = emptyMap(), color = 0,
+        )
+        val social = com.valeriusgames.threadsofdestiny.life.SocialState()
+        val male = "laki-laki"; val female = "perempuan"
+        assertFalse("sesama jenis", social.canRomance(ch(male, 18, true), 18, male))
+        assertFalse("pemain belum 18", social.canRomance(ch(female, 15, true), 15, male))
+        assertFalse("karakter tidak bisa dipacari (mis. keluarga)", social.canRomance(ch(female, 41, false), 18, male))
+        assertTrue("lawan jenis, sama-sama 18+", social.canRomance(ch(female, 15, true), 18, male))  // usia ikut bertambah
+        assertTrue(social.canRomance(ch(male, 15, true), 18, female))
+    }
+
     @Test fun calendarSetsWeekdayAndTime() {
         val l = life("Senin", "pagi")
         assertEquals("Senin", l.weekday)

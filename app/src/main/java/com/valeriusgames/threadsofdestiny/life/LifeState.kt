@@ -221,6 +221,11 @@ class LifeState {
         get() = date()?.let { "$weekday, ${it.dayOfMonth} ${MONTHS[it.monthValue - 1].take(3)} · $timeText ${slot.icon}" }
             ?: "$weekday · $timeText ${slot.icon}"
 
+    /** Versi pendek untuk jam di layar: "Sen, 13 Jul · 07:30 ☀️". */
+    val shortClockText: String
+        get() = date()?.let { "${weekday.take(3)}, ${it.dayOfMonth} ${MONTHS[it.monthValue - 1].take(3)} · $timeText ${slot.icon}" }
+            ?: "${weekday.take(3)} · $timeText ${slot.icon}"
+
     /** "@kalender Senin pagi" atau "@kalender Senin 07:30". */
     fun setCalendar(weekdayName: String, slotName: String) {
         val wd = WEEKDAYS.indexOfFirst { it.equals(weekdayName, true) }

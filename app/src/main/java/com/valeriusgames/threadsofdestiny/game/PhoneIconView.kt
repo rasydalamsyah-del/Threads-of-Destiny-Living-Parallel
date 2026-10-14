@@ -14,7 +14,7 @@ import android.view.animation.LinearInterpolator
 import kotlin.math.PI
 import kotlin.math.sin
 
-/** Ikon HP di pojok kanan bawah. Saat ada pesan: bergetar, layar menyala, ada titik merah. */
+/** Ikon HP di kanan atas (di samping tombol menu). Saat ada pesan: bergetar, layar menyala, ada titik merah. */
 class PhoneIconView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -84,7 +84,7 @@ class PhoneIconView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        val pad = 7f * dp
+        val pad = minOf(7f * dp, w * 0.15f)
         body.set(pad, pad, w - pad, h - pad)
         val inset = 3f * dp
         screen.set(body.left + inset, body.top + inset, body.right - inset, body.bottom - inset)
@@ -104,7 +104,7 @@ class PhoneIconView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val r = 11f * dp
+        val r = minOf(11f * dp, body.width() * 0.3f)
         canvas.drawRoundRect(body, r, r, bodyPaint)
         canvas.drawRoundRect(body, r, r, rimPaint)
         canvas.drawRoundRect(screen, r * 0.75f, r * 0.75f, screenPaint)
@@ -120,8 +120,8 @@ class PhoneIconView @JvmOverloads constructor(
         if (ringing) {
             val bx = body.right - 1f * dp
             val by = body.top + 1f * dp
-            canvas.drawCircle(bx, by, 6f * dp, badgePaint)
-            canvas.drawCircle(bx, by, 6f * dp, badgeRim)
+            canvas.drawCircle(bx, by, 5f * dp, badgePaint)
+            canvas.drawCircle(bx, by, 5f * dp, badgeRim)
         }
     }
 }

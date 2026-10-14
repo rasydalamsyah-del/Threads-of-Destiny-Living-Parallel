@@ -132,6 +132,12 @@ Cara info terbuka:
 | Hadiah basi | Cinta −8, Kepercayaan −6 |
 | Pamit | Memakai 1 kesempatan waktu bebas, Energi −5, Kewarasan +2 sampai +5 |
 
+### Nama meter di layar
+- 💛 **Akrab**: rasa sayang sebagai teman/keluarga (sesama jenis, keluarga, anak-anak, atau belum 18 tahun).
+- 💗 **Cinta**: hanya untuk lawan jenis dengan `bisa_dipacari = ya`, setelah pemain & karakter sama-sama 18+.
+- ❤️ **Cinta (pasangan)**: setelah resmi berpacaran.
+Nilainya sama (kolom Cinta di data/naskah, mis. `@cinta bayu +5`); yang berubah hanya namanya.
+
 ### Tingkat hubungan
 `Belum kenal → Kenalan (<30) → Teman (30+) → Teman dekat (60+) → Sahabat (85+ & percaya 60+)`
 Cinta di bawah 15 atau Kepercayaan di bawah 10 → **Bermusuhan**.

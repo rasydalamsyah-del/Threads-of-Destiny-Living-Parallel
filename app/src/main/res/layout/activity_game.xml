@@ -29,24 +29,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Jam (pojok kanan atas) -->
+    <!--
+      TATA LETAK ATAS (tetap, tidak bergeser walau teks memanjang):
+        kiri  : panel karakter yang bicara (lebar dibatasi, teks satu baris + "…")
+        kanan : baris 1 = tombol HP + tombol menu ☰ · baris 2 = jam · baris 3 = petunjuk "ketuk HP"
+        sisi kiri, di bawah panel: tombol 📊 laci status
+      TATA LETAK BAWAH: kotak dialog menempel di bawah; tombol pilihan selalu DI ATAS kotak dialog.
+    -->
+
+    <!-- Jam (kanan atas, baris ke-2) -->
     <TextView
         android:id="@+id/clock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_marginTop="34dp"
-        android:layout_marginEnd="70dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="12dp"
         android:alpha="0"
         android:background="@drawable/clock_pill"
         android:elevation="2dp"
+        android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
-        android:paddingStart="14dp"
-        android:paddingTop="7dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="7dp"
+        android:maxWidth="230dp"
+        android:paddingStart="12dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="5dp"
+        android:singleLine="true"
         android:textColor="#FF2A2A2E"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <!-- Kotak dialog -->
     <FrameLayout
@@ -54,9 +65,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="132dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="16dp"
         android:alpha="0">
 
         <LinearLayout
@@ -104,6 +115,9 @@
             android:paddingEnd="16dp"
             android:paddingBottom="6dp"
             android:textColor="#FF1E1E22"
+            android:ellipsize="end"
+            android:maxWidth="260dp"
+            android:singleLine="true"
             android:textSize="18sp"
             android:textStyle="bold" />
     </FrameLayout>
@@ -114,9 +128,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="92dp"
-        android:layout_marginBottom="22dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="24dp"
         android:orientation="vertical"
         android:visibility="gone" />
 
@@ -125,9 +139,9 @@
         android:id="@+id/phone_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="84dp"
-        android:layout_marginBottom="60dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="12dp"
         android:alpha="0"
         android:background="@drawable/hint_pill"
         android:elevation="3dp"
@@ -142,11 +156,12 @@
 
     <com.valeriusgames.threadsofdestiny.game.PhoneIconView
         android:id="@+id/phone_icon"
-        android:layout_width="70dp"
-        android:layout_height="112dp"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="14dp"
+        android:layout_width="40dp"
+        android:layout_height="56dp"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="22dp"
+        android:layout_marginEnd="62dp"
+        android:elevation="3dp"
         android:visibility="gone" />
 
     <!-- Panel status kehidupan (pojok kiri atas) -->
@@ -156,7 +171,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|start"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="98dp"
         android:elevation="4dp"
         android:gravity="top"
         android:orientation="horizontal"
@@ -179,63 +194,67 @@
             android:textSize="17sp" />
     </LinearLayout>
 
-    <!-- Panel karakter yang sedang bicara: foto, nama, tingkat hubungan, meter -->
+    <!-- Panel karakter yang sedang bicara: foto, nama, tingkat hubungan, meter (tinggi tetap 56dp) -->
     <LinearLayout
         android:id="@+id/char_panel"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_gravity="top|start"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="22dp"
         android:alpha="0"
         android:background="@drawable/char_panel_bg"
         android:elevation="3dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="6dp"
-        android:paddingTop="6dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="6dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="12dp"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/char_panel_photo"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:background="@drawable/oval_mask"
             android:clipToOutline="true"
             android:contentDescription="@null"
             android:scaleType="centerCrop" />
 
         <LinearLayout
+            android:id="@+id/char_panel_texts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="8dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/char_panel_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:fontFamily="sans-serif-medium"
+                android:singleLine="true"
                 android:textColor="#FF1E1E22"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/char_panel_stage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="#FF6B6B73"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/char_panel_meters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:textColor="#FF2A2A2E"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -248,6 +267,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="150dp"
         android:layout_marginEnd="24dp"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:alpha="0"
         android:background="@drawable/hint_pill"
         android:elevation="6dp"
@@ -265,8 +286,8 @@
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:layout_gravity="top|end"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/burger_bg"
         android:contentDescription="@string/menu_title"
         android:elevation="3dp"

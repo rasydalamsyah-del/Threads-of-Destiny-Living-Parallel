@@ -203,6 +203,15 @@ class GameActivity : Activity() {
         nameSparkles = findViewById(R.id.name_sparkles)
         choiceList = findViewById(R.id.choice_list)
         lifeHud = findViewById(R.id.life_hud)
+        // Panel karakter: lebar teks dibatasi supaya tidak menabrak tombol HP & menu di kanan
+        run {
+            val dm = resources.displayMetrics
+            val maxText = (dm.widthPixels - (12 + 5 + 44 + 8 + 12 + 124) * dm.density).toInt()
+                .coerceAtLeast((90 * dm.density).toInt())
+            listOf(R.id.char_panel_name, R.id.char_panel_stage, R.id.char_panel_meters).forEach {
+                findViewById<TextView>(it).maxWidth = maxText
+            }
+        }
         lifeDrawer = findViewById(R.id.life_drawer)
         lifeTab = findViewById(R.id.life_tab)
         lifeTab.setOnClickListener { setHudOpen(!hudOpen) }
@@ -1168,19 +1177,23 @@ class GameActivity : Activity() {
         // Posisi: di tengah layar bila layar masih gelap (tanpa latar), selain itu di bawah.
         // Margin kiri-kanan sama agar tombol tepat di tengah; naik sedikit bila ikon HP tampil.
         val centered = bgName == null
-        (choiceList.layoutParams as FrameLayout.LayoutParams).apply {
-            gravity = if (centered) android.view.Gravity.CENTER_VERTICAL else android.view.Gravity.BOTTOM
-            marginStart = (28 * d).toInt()
-            marginEnd = (28 * d).toInt()
-            bottomMargin = ((if (!centered && phoneIcon.visibility == View.VISIBLE) 136 else 22) * d).toInt()
-            choiceList.layoutParams = this
+        fun place() {
+            (choiceList.layoutParams as FrameLayout.LayoutParams).apply {
+                gravity = if (centered) android.view.Gravity.CENTER_VERTICAL else android.view.Gravity.BOTTOM
+                marginStart = (28 * d).toInt()
+                marginEnd = (28 * d).toInt()
+                // selalu di atas kotak dialog (tidak menimpa teks pertanyaan)
+                val parentH = (choiceList.parent as View).height
+                val dialogSpace = if (dialog.alpha > 0f && dialog.height > 0 && parentH > 0)
+                    (parentH - dialog.top).coerceAtLeast(0) else 0
+                bottomMargin = if (centered) 0 else maxOf((24 * d).toInt(), dialogSpace + (12 * d).toInt())
+                choiceList.layoutParams = this
+            }
         }
+        place()
         choiceList.visibility = View.VISIBLE
-        // Geser kotak dialog ke atas bila tertimpa daftar pilihan
-        if (!centered) choiceList.post {
-            val overlap = dialog.bottom + (10 * d) - choiceList.top
-            dialog.animate().translationY(if (overlap > 0) -overlap else 0f).setDuration(250).start()
-        }
+        // ukur ulang setelah teks pertanyaan selesai ditata
+        dialog.post { place() }
     }
 
     private fun pickButton(index: Int, view: View, onPick: (Int) -> Unit) {
@@ -1225,7 +1238,7 @@ class GameActivity : Activity() {
                 vars["bulan"] = d.monthValue.toString()
                 vars["musim"] = if (d.monthValue >= 11 || d.monthValue <= 3) "hujan" else "kemarau"
             }
-            if (clockText != life.clockText) setClock(life.clockText)
+            if (clockText != life.shortClockText) setClock(life.shortClockText)
         }
     }
 
@@ -1434,7 +1447,7 @@ class GameActivity : Activity() {
             sheetList.addView(sectionLabel("👥 Temui seseorang"))
             people.forEach { c ->
                 val r = social.rel(c)
-                val loveText = if (social.isPartner(c)) "❤️ ${r.romance}" else "💛 ${r.love}"
+                val loveText = loveText(c)
                 sheetList.addView(card(
                     title = c.name,
                     sub = "${c.role}\n${social.stageOf(c).label}   ·   $loveText   🤝 ${r.trust}",
@@ -2298,6 +2311,25 @@ class GameActivity : Activity() {
         }.start()
     }
 
+    // ================================================================== label meter
+
+    /**
+     * Nama meter rasa sayang:
+     *  ❤️ Cinta → sudah berpacaran (nilai Cinta pasangan)
+     *  💗 Cinta → lawan jenis yang bisa dipacari & keduanya sudah 18+
+     *  💛 Akrab → selain itu (sesama jenis, keluarga, anak-anak, atau belum dewasa)
+     */
+    private fun loveLabel(c: GameData.CharacterDef, partnerMeter: Boolean = true): String = when {
+        partnerMeter && social.isPartner(c) -> "❤️ Cinta"
+        social.canRomance(c, playerAge(), playerGender) -> "💗 Cinta"
+        else -> "💛 Akrab"
+    }
+
+    private fun loveText(c: GameData.CharacterDef): String {
+        val r = social.rel(c)
+        return loveLabel(c) + " " + (if (social.isPartner(c)) r.romance else r.love)
+    }
+
     // ================================================================== profil karakter
 
     /** Info profil & syarat terbukanya: Cinta minimal, jumlah obrolan, Kepercayaan, bisa diceritakan orang lain. */
@@ -2368,7 +2400,7 @@ class GameActivity : Activity() {
         all.forEach { c ->
             if (profileVisible(c)) {
                 val r = social.rel(c)
-                val love = if (social.isPartner(c)) "❤️ ${r.romance}" else "💛 ${r.love}"
+                val love = loveText(c)
                 val known = facts.count { c.text[it.key] != null && knowsFact(c, it.key) }
                 val total = facts.count { c.text[it.key] != null }
                 sheetList.addView(card(
@@ -2419,7 +2451,7 @@ class GameActivity : Activity() {
                     progressBackgroundTintList = android.content.res.ColorStateList.valueOf(0x40FFFFFF)
                 }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (10 * d).toInt()))
             }
-            bar("💛 Cinta", r.love, 0xFFE0A93B.toInt())
+            bar(loveLabel(c, partnerMeter = false), r.love, 0xFFE0A93B.toInt())
             if (social.isPartner(c)) bar("❤️ Cinta pasangan", r.romance, 0xFFE0556B.toInt())
             bar("🤝 Kepercayaan", r.trust, 0xFF4C9FD6.toInt())
             c.text["sifat"]?.let {
@@ -2892,7 +2924,7 @@ class GameActivity : Activity() {
         if (known.isEmpty()) phone.content.addView(pText("Belum ada kontak.", 13f, 0xFF8A8A93.toInt()))
         known.forEach { c ->
             val r = social.rel(c)
-            val love = if (social.isPartner(c)) "❤️ ${r.romance}" else "💛 ${r.love}"
+            val love = loveText(c)
             phone.content.addView(pCard(c.name, "${social.stageOf(c).label} · $love · 🤝 ${r.trust}", null) { renderContact(c) })
         }
         phone.scrollToTop()
@@ -2918,7 +2950,7 @@ class GameActivity : Activity() {
         }
         phone.content.addView(pText(c.role, 13f, 0xFF6B6B73.toInt()).apply { gravity = android.view.Gravity.CENTER })
         phone.content.addView(pSection("HUBUNGAN"))
-        val love = if (social.isPartner(c)) "❤️ Cinta ${r.romance}%" else "💛 Cinta ${r.love}%"
+        val love = loveText(c)
         phone.content.addView(pCard(social.stageOf(c).label, "$love   ·   🤝 Kepercayaan ${r.trust}%"))
         val playerAge = playerAge()
         phone.content.addView(pText("Usia ${social.ageOf(c, playerAge)} tahun", 12.5f, 0xFF6B6B73.toInt()))
@@ -3157,7 +3189,7 @@ class GameActivity : Activity() {
             val r = social.rel(ref)
             val ok = r.love >= 60 && r.trust >= 60
             phone.content.addView(pCard("🤝 Orang dalam: ${ref.name}",
-                if (ok) "Bisa merekomendasikanmu — langsung ke wawancara" else "Perlu Cinta & Kepercayaan ≥ 60 (sekarang ${r.love} / ${r.trust})"))
+                if (ok) "Bisa merekomendasikanmu — langsung ke wawancara" else "Perlu Keakraban & Kepercayaan ≥ 60 (sekarang ${r.love} / ${r.trust})"))
         }
         val applied = phoneData.apps.any { it.jobId == j.id && it.stage in setOf("dikirim", "tes", "wawancara") }
         val held = life.jobs.any { it.id == j.id }
@@ -3630,7 +3662,7 @@ class GameActivity : Activity() {
         }
         findViewById<TextView>(R.id.char_panel_stage).text = social.stageOf(def).label
         findViewById<TextView>(R.id.char_panel_meters).text =
-            (if (social.isPartner(def)) "❤️ Cinta ${r.romance}%" else "💛 ${r.love}%") + "   🤝 ${r.trust}%"
+            loveText(def) + "   🤝 ${r.trust}"
     }
 
     // ---------------- bertemu: ngobrol & hadiah ----------------
