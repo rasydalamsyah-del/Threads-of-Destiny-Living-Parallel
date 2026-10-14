@@ -1,0 +1,58 @@
+# ==========================================================
+#  THREADS OF DESTINY: LIVING PARALLEL
+#  Naskah: PROLOG  (teks sementara — silakan diganti)
+#  Panduan menulis naskah: docs/NASKAH.md
+#  {nama} otomatis diganti dengan nama pemain.
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  BAGIAN 1 — KISAH MASA LALU
+# ----------------------------------------------------------
+
+@latar kota_kecil kenangan gerak
+@terang 2000
+* Dulu, di sebuah kota kecil di tepi laut, ada seorang anak bernama {nama}.
+* Setiap sore, {nama} berlari ke dermaga, menunggu matahari tenggelam bersama seseorang yang paling berarti baginya.
+
+@latar sekolah kenangan gerak
+* Mereka tumbuh bersama. Satu sekolah, satu jalan pulang, satu mimpi yang sama.
+* "Suatu hari nanti, kita pergi ke kota besar sama-sama, ya," katanya waktu itu, sambil tersenyum.
+
+@latar stasiun_hujan kenangan gerak
+* Tapi hidup tidak selalu menepati janji.
+* Di hari yang hujan itu, sebuah kereta membawanya pergi... tanpa sempat mengucapkan selamat tinggal.
+
+@latar kota_besar kenangan gerak
+* Bertahun-tahun berlalu. {nama} akhirnya tiba di kota besar, sendirian.
+* Ribuan langkah setiap hari. Ribuan wajah asing yang lewat begitu saja.
+* Dan benang takdir yang dulu terputus... diam-diam mulai terhubung kembali.
+
+@gelap 2500
+
+
+# ----------------------------------------------------------
+#  BAGIAN 2 — MASA KINI: BANGUN TIDUR
+# ----------------------------------------------------------
+
+@waktu Sabtu, 07:12
+@latar plafon
+@jam Sabtu, 07:12 ☀️
+@kedip
+
+{nama}: ...Mimpi itu lagi.
+{nama}: Sudah berapa tahun, ya? Kenapa masih terasa begitu nyata...
+
+@latar kamar_pagi naik
+* {nama} bangkit dan duduk di tepi ranjang. Cahaya pagi menembus tirai jendela.
+{nama}: Hari Sabtu. Tidak ada kuliah, tidak ada kerja paruh waktu.
+{nama}: Hari ini mau ngapain, ya...
+
+@hp tampil
+@hp pesan Nomor Tidak Dikenal | Lama tidak bertemu, {nama}. Kamu masih ingat aku?
+{nama}: Hm? HP-ku bergetar.
+@tunggu_hp
+
+{nama}: ...Siapa ini?
+
+@tamat Bersambung…

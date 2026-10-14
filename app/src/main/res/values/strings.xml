@@ -13,4 +13,24 @@
     <string name="version_format">v%1$s · © 2026 Valerius Games</string>
     <string name="coming_soon">%1$s — segera hadir</string>
     <string name="cd_skip_video">Ketuk untuk melewati video</string>
+
+    <!-- Isi nama -->
+    <string name="name_title">Siapa namamu?</string>
+    <string name="name_subtitle">Nama ini akan dipakai sepanjang cerita.</string>
+    <string name="name_hint">Nama</string>
+    <string name="name_error">Nama tidak boleh kosong</string>
+    <string name="name_ok">MULAI</string>
+
+    <!-- HP -->
+    <string name="phone_hint">Ketuk HP 📱</string>
+    <string name="phone_empty">Tidak ada notifikasi</string>
+    <string name="phone_close_hint">Ketuk di luar HP untuk menutup</string>
+    <string name="phone_app_messages">PESAN · sekarang</string>
+
+    <!-- Kembali ke menu -->
+    <string name="quit_title">Kembali ke menu utama?</string>
+    <string name="quit_message">Progres cerita saat ini belum bisa disimpan.</string>
+    <string name="quit_yes">Kembali</string>
+    <string name="quit_no">Lanjut main</string>
+    <string name="script_error">Naskah bermasalah: %1$s</string>
 </resources>

@@ -2,10 +2,12 @@ package com.valeriusgames.threadsofdestiny
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
 import android.widget.Toast
+import com.valeriusgames.threadsofdestiny.game.GameActivity
 
 /**
  * Halaman utama: judul, tombol START GAME / CONTINUE / LOAD DATA / SETTINGS.
@@ -31,7 +33,7 @@ class MainMenu(private val activity: Activity, private val root: View) {
         root.findViewById<TextView>(R.id.version).text =
             activity.getString(R.string.version_format, BuildConfig.VERSION_NAME)
 
-        btnStart.setOnClickListener { comingSoon(R.string.btn_start) }
+        btnStart.setOnClickListener { startGame() }
         btnContinue.setOnClickListener { comingSoon(R.string.btn_continue) }
         btnLoad.setOnClickListener { comingSoon(R.string.btn_load) }
         btnSettings.setOnClickListener { comingSoon(R.string.btn_settings) }
@@ -88,6 +90,12 @@ class MainMenu(private val activity: Activity, private val root: View) {
         btnContinue.isEnabled = hasSave
         btnContinue.subLabel =
             if (hasSave) null else activity.getString(R.string.btn_continue_empty)
+    }
+
+    private fun startGame() {
+        activity.startActivity(Intent(activity, GameActivity::class.java))
+        @Suppress("DEPRECATION")
+        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     private fun comingSoon(labelRes: Int) {

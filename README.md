@@ -9,6 +9,19 @@ Game Android (portrait) oleh **Valerius Games**. Aplikasi Android native (Kotlin
 3. **Halaman utama** – setelah video selesai: judul, START GAME, CONTINUE, LOAD DATA, SETTINGS.
    CONTINUE tampil redup bertuliskan *(No Save Data Found)* selama belum ada data simpanan.
 
+## Alur permainan (Start Game)
+
+1. **Isi nama** pemain (dipakai di seluruh cerita lewat `{nama}`).
+2. **Prolog masa lalu** – narator bercerita, background berganti per adegan dengan efek kenangan.
+3. **Masa kini** – layar gelap, teks waktu, lalu **efek bangun tidur** (mata berkedip, menatap plafon).
+4. **Duduk di ranjang** – kamera seolah bangkit, pemandangan kamar.
+5. **HP** – pesan masuk, ikon HP bergetar; ketuk untuk membuka layar HP.
+
+Cerita ditulis di **`app/src/main/assets/naskah/prolog.txt`**, background di
+**`app/src/main/assets/latar/`**. Cara menulisnya: **[docs/NASKAH.md](docs/NASKAH.md)**.
+
+Gambar background yang ada sekarang masih **sementara**: ganti dengan file bernama sama.
+
 ## Cara mendapatkan APK (dari HP)
 
 Setiap ada perubahan di branch `main`, GitHub Actions otomatis membuat APK.
