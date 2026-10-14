@@ -91,6 +91,8 @@ warna       = #2E8B57
 ```
 - Tambahan untuk HP: `chat` (pesan yang kadang ia kirim, pisahkan `|`), `chat_balas` (balasannya), `ajak_ya` / `ajak_tidak` (jawaban saat diajak ketemu).
   Karakter yang sudah dikenal dan Cintanya ≥ 25 kadang mengirim pesan (maks. 2 pesan per hari dari semua karakter).
+- `kelamin = lawan` + `nama_l` / `nama_p`: karakter yang jenis kelamin & namanya menyesuaikan pemain (contoh: sahabat masa kecil Arka/Alya).
+  Gambarnya: `id_l.png` / `id_p.png` (dan `id_l_foto.jpg` / `id_p_foto.jpg`). Di naskah pakai `{nama_<id>}`, mis. `{nama_sahabat}`.
 - `nama` juga dipakai sebagai **nama pembicara** di naskah (`Bayu: ...`). Saat karakter bicara, panel foto + nama + meter muncul di pojok kiri atas (setelah dikenal lewat `@kenal`).
 - `usia` bertambah bersama usia pemain. **Romansa hanya terbuka bila pemain dan karakter sama-sama 18 tahun ke atas**, lawan jenis, dan `bisa_dipacari = ya`.
 
@@ -127,6 +129,25 @@ kalimat = Kemarin aku lihat kapal besar lewat dekat mercusuar.
 ```
 Saat ngobrol, pemain memilih 1 dari 3 topik acak.
 
+## kejadian.txt (rintangan & kejadian acak)
+```
+[dompet_hilang]
+judul   = Dompet hilang!
+ikon    = 👛
+tempat  = kota
+peluang = 3                      (persen per hari; 0 = hanya lewat naskah @kejadian)
+syarat  = uang >= 30000          (gabungkan dengan &&, mis. musim == hujan && kos == kos_rel_utara)
+sekali  = ya                     (opsional: hanya sekali seumur permainan)
+teks    = Cerita kejadiannya
+efek    = uang -40%, kewarasan -12
+pilih_a = Teks tombol | efek | teks hasil
+pilih_b = ...
+catatan = (opsional) masuk ke aplikasi Catatan
+```
+- Setiap ganti hari, **paling banyak satu** kejadian terjadi; tampil di waktu bebas berikutnya.
+- Efek bisa: bar (`kesehatan`, `kenyang`, …), `uang` (angka atau **persen**: `uang -40%`), `cinta_<id>` / `percaya_<id>` karakter, atau variabel lain.
+- Variabel berguna untuk `syarat`: `uang`, `lokasi`, `kos`, `musim` (`hujan` Nov–Mar / `kemarau`), `bulan`, `usia`, `jalur`, `kenal_<id>`, `cinta_<id>`, `kerja_<id>`.
+
 ## pekerjaan.txt (sekolah & pekerjaan)
 ```
 [kurir_paket]
@@ -150,6 +171,7 @@ teks        = Narasi setiap kali kerja
 | `sekolah`, `tetap` | **Wajib hadir** sesuai hari & waktu. Tidak hadir saat waktu bebas = bolos/absen (kinerja −8). 3× → surat peringatan, 6× → **dikeluarkan/dipecat** |
 | `paruh_waktu`, `harian` | Datang kapan saja sesuai jadwal. Dibayar setiap kali kerja |
 | `tetap` | Digaji setiap 30 hari sejak mulai, besarnya tergantung kinerja |
+| `sekolah` + `ujian_tiap = 45` | Ujian setiap 45 hari (4 soal; nilai naik/turun). Setiap 365 hari: **naik kelas** (nilai ≥ 40 & bolos < 6), **tinggal kelas**, atau **lulus** setelah kelas 12 (dapat `ijazah_sma`) |
 
 - Kinerja: +3 tiap kerja (−4 bila energi < 20). Kinerja < 15 → diberhentikan (bukan sekolah).
 - `cara = langsung` / `lamar` muncul di **🔎 Cari kerja** saat waktu bebas; `cara = cerita` hanya lewat naskah.

@@ -197,7 +197,7 @@ Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, h
 
 ---
 
-## 12. Sekolah 🔨 (jadwal wajib, bolos, nilai ✅ build 10; ujian & kenaikan kelas 📝)
+## 12. Sekolah ✅ (jadwal wajib, bolos, nilai build 10; ujian, naik/tinggal kelas, lulus build 12)
 - SMA di Kota Sakala (perlu kos & biaya) atau sekolah sambil kerja.
 - Jadwal sekolah, PR/ujian (dipengaruhi Akademik), teman sekelas, guru.
 - Nilai & kelulusan memengaruhi pilihan setelahnya (kuliah/beasiswa/pekerjaan).
@@ -213,7 +213,7 @@ Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, h
 
 ---
 
-## 14. Rintangan 📝
+## 14. Rintangan ✅ (kejadian acak dari data/kejadian.txt, build 12)
 Semua jenis, bertahap: ekonomi (uang habis, telat bayar, kena tipu), pekerjaan (gagal tes, ditegur, PHK),
 kesehatan (sakit, makanan basi), hubungan (cemburu, gosip, kebohongan terbongkar, saingan),
 keluarga (masalah orang tua, saudara butuh bantuan), sekolah (nilai jatuh, perundungan), kejadian kota (banjir, macet, HP rusak).

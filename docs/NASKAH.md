@@ -192,6 +192,19 @@ Jam ini juga dipakai di layar kunci HP.
 - Pemain bisa **mengajak ketemu** lewat Chat. Datang = `menepati_janji`, tidak datang = `ingkar_janji` (+ pesan kecewa).
 - Variabel otomatis: `misterius_dibalas` (pemain membalas Nomor Tidak Dikenal), `bohong_wawancara_<id_pekerjaan>`.
 
+### Kejadian & sekolah
+```
+@kejadian flu                     jalankan kejadian dari data/kejadian.txt sekarang
+@atur kelas = 10                  kelas awal SMA (naik otomatis setiap 365 hari)
+```
+- Variabel otomatis: `kejadian_terakhir`, `kejadian_<id>` (bila `sekali = ya`), `nilai_ujian_terakhir`, `kelas`,
+  `tinggal_kelas`, `lulus_sma`, `musim`, `bulan`, `nama_<id>` (nama tampil karakter, mis. `{nama_sahabat}`).
+
+### Pemeriksaan otomatis
+Setiap build, GitHub Actions menjalankan **Cek naskah & data** (`tools/cek_naskah.py`). Kalau ada perintah salah tulis,
+label hilang, atau id karakter/barang/pekerjaan/latar yang tidak ada, build gagal dan **baris yang salah** ditampilkan
+di tab Actions → build tersebut → bagian Annotations.
+
 ### Akhir
 ```
 @tamat Bersambung…

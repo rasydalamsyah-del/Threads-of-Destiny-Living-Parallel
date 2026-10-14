@@ -14,6 +14,7 @@
 | 14 Okt 2026 | 4 | START GAME: isi nama → prolog masa lalu (efek kenangan, gerak kamera) → layar gelap + teks waktu → efek bangun tidur (kedip, buram) → duduk di ranjang → pesan HP masuk + layar HP. Mesin naskah teks (`assets/naskah/prolog.txt`), background sementara |
 | 14 Okt 2026 | 5 | Tombol burger di masa kini (Lanjutkan, Simpan, Muat, Riwayat, Pengaturan, Menu Utama). Simpan/Muat 1 slot otomatis + 6 manual. CONTINUE & LOAD DATA berfungsi. Halaman Pengaturan (tema, ukuran & gaya huruf, kepekatan kotak, kecepatan teks, volume musik/efek, getar, lewati intro, hapus data). Perintah naskah `@musik`, `@suara` |
 | 14 Okt 2026 | — | Dokumen rancangan game & catatan progres ini dibuat |
+| 14 Okt 2026 | 12 | **Rintangan & cerita:** kejadian acak dari data (sakit, kehujanan, panas, dompet hilang, kena tipu, dipalak, banjir, nemu uang, keluarga/teman minta tolong) dengan pilihan & akibat. Ujian sekolah berkala, naik/tinggal kelas, lulus SMA. Sahabat masa kecil (Arka/Alya, menyesuaikan pemain), gelang benang merah. **Bab 3** jalur kota (album Nadia, petunjuk #2–#3, Stasiun Besar) & desa (Ibu sakit, hutang ke Juragan Darto). Pemeriksa naskah otomatis di GitHub Actions |
 | 14 Okt 2026 | 11 | **HP lengkap:** layar utama dengan ikon aplikasi. **Chat** (karakter mengirim pesan, balas/abaikan, ajak ketemu → janji temu, ingkar/menepati janji), **Kontak** (hubungan & kesukaan yang diketahui), **Kalender** (janji, sewa, kiriman, gajian, batas lamaran), **Lowongan** (dokumen diurus dengan biaya & waktu, kirim lamaran, seleksi berkas, tes tertulis, wawancara dengan opsi bohong, orang dalam), **Dompet** (riwayat uang), **Catatan** (petunjuk cerita) |
 | 14 Okt 2026 | 10 | **Sekolah & pekerjaan:** kalender bertanggal, usia bertambah, kos (sewa 30 hari, tunggakan, diusir), kiriman keluarga, sekolah & pekerjaan dari data (jadwal wajib, bolos/absen, surat peringatan, dikeluarkan/dipecat, kinerja, gaji), Cari kerja & lamar (orang dalam), Cari kos. **Bab 2**: jalur kota (stasiun, pilih kos, minggu pertama di Sakala, hari pertama SMA, Dimas & Nadia, petunjuk pertama tentang sahabat) dan jalur desa (kerja di Juragan Darto lewat Ayah) |
 | 14 Okt 2026 | 9 | **Sistem hubungan:** data karakter (keluarga + Bayu & Sekar), hubungan antar karakter, topik obrolan. Meter Cinta (teman/pasangan) & Kepercayaan, tingkat hubungan, kabar menyebar, karakter bisa dilarang bertemu oleh sahabatnya, perilaku buruk & kebohongan tercatat, pengakuan (hanya 18+). Gambar karakter (sementara) + panel nama & meter. Waktu bebas: Temui seseorang → ngobrol/hadiah |
@@ -66,8 +67,9 @@
 - [x] Chat, Kontak, Kalender, Lowongan, Dompet, Catatan (Peta & Belanja online menyusul; belanja lewat waktu bebas)
 
 ### Tahap F — Rintangan, cerita, ending
-- [ ] Kejadian rintangan (acak & terjadwal)
-- [ ] Alur keluarga, alur tiap karakter, cerita utama
+- [x] Kejadian rintangan (acak dari data & lewat naskah)
+- [~] Alur keluarga, alur tiap karakter, cerita utama (Bab 1–3 selesai; Bab 4 dst. menyusul)
+- [x] Ujian & kenaikan kelas, lulus SMA
 - [ ] Ending
 
 ### Uji coba pertama ("potongan kecil yang lengkap")
@@ -109,13 +111,17 @@
 ---
 
 ## 🔜 Langkah berikutnya (urutan)
-1. **Tahap F — Rintangan & cerita**: kejadian acak (sakit, kehilangan uang, banjir, kena tipu), alur pencarian sahabat (petunjuk berlanjut), ujian & kenaikan kelas, Bab 3.
-2. Naik jabatan & risiko orang dalam; kebohongan wawancara yang terbongkar; transportasi.
-3. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa).
+1. **Bab 4**: bertemu langsung dengan sahabat masa kecil, rahasia keluarganya; jalur desa menuju Sakala (atau sahabat yang pulang).
+2. **Loncatan waktu antar bab** (ringkasan bulan-bulan rutin) agar cerita bisa sampai usia 18+.
+3. Hutang & cicilan (potong upah), naik jabatan & risiko orang dalam, kebohongan wawancara yang terbongkar, transportasi.
+4. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa), sistem ending & mimpi terakhir.
+5. **Prompt gambar AI** untuk semua karakter & latar (pemilik membuat gambar asli).
 
 ## 🐞 Catatan teknis
 - Bar "Lapar" & "Haus" ditampilkan sebagai **Kenyang** & **Hidrasi** (bar penuh = baik), agar semua bar searah.
 - Angka penurunan bar per slot masih perkiraan awal; perlu diuji dan disesuaikan (lihat DATA.md).
+- Kejadian yang menunggu tampil (belum muncul) tidak ikut tersimpan bila game ditutup.
+- `hutang_darto` baru tercatat sebagai variabel; cicilan/potong upah belum ada.
 - Tampilan belum pernah dicek langsung di HP oleh Claude (tidak bisa menjalankan Android di lingkungan kerjanya). Pemilik mengecek & mengirim screenshot bila ada yang tidak pas.
 - Data simpanan mengingat nomor baris naskah; menambah baris sebelum posisi simpanan bisa menggeser posisi muat.
 - Volume musik/efek baru berpengaruh ke video intro sampai ada file audio.
