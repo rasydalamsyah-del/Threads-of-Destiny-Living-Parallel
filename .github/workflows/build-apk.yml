@@ -37,6 +37,18 @@ jobs:
       - name: Siapkan Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Uji logika game (unit test)
+        run: |
+          chmod +x ./gradlew
+          set -o pipefail
+          ./gradlew testDebugUnitTest --console=plain 2>&1 | tee test.log || {
+            # Error kompilasi & tes yang gagal ditampilkan sebagai anotasi agar mudah dibaca
+            grep -E "^e: |What went wrong" -A2 test.log | head -30 | while IFS= read -r line; do echo "::error::${line}"; done
+            python3 tools/laporan_tes.py app/build/test-results/testDebugUnitTest || true
+            exit 1
+          }
+          python3 tools/laporan_tes.py app/build/test-results/testDebugUnitTest --ringkas || true
+
       - name: Build APK
         run: |
           chmod +x ./gradlew

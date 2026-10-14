@@ -50,7 +50,11 @@ object StoryScript {
         /** Atur hari & waktu, contoh: @kalender Senin pagi */
         data class Calendar(val weekday: String, val slot: String) : Cmd()
         /** Waktu bebas sebanyak n kesempatan. */
-        data class Free(val count: Int) : Cmd()
+        /**
+         * Waktu bebas. count = jumlah kesempatan (tidur mengakhiri waktu bebas),
+         * days = selama N hari, atau untilWeekday/untilClock = sampai hari & jam tertentu (tidur tidak mengakhiri).
+         */
+        data class Free(val count: Int, val days: Int = 0, val untilWeekday: String? = null, val untilClock: String? = null) : Cmd()
         /** Majukan waktu n kali (Pagi → Siang → Sore → Malam → tidur → Pagi). */
         data class Advance(val count: Int, val minutes: Int = 0) : Cmd()
         /** Ubah uang. */
@@ -277,7 +281,15 @@ object StoryScript {
                 if (args.size < 2) throw ParseError(n, "format: @kalender Senin pagi")
                 Cmd.Calendar(args[0], args[1])
             }
-            "bebas", "free" -> Cmd.Free(args.firstOrNull()?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
+            "bebas", "free" -> when {
+                args.getOrNull(1) == "hari" ->
+                    Cmd.Free(1, days = args[0].toIntOrNull()?.coerceAtLeast(1) ?: throw ParseError(n, "format: @bebas 5 hari"))
+                args.firstOrNull() == "sampai" -> {
+                    val wd = args.getOrNull(1) ?: throw ParseError(n, "format: @bebas sampai Sabtu 15:00")
+                    Cmd.Free(1, untilWeekday = wd, untilClock = args.getOrNull(2) ?: "18:00")
+                }
+                else -> Cmd.Free(args.firstOrNull()?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
+            }
             "maju", "advance" -> {
                 val nArg = args.firstOrNull()?.replace(',', '.')
                 val unit = args.getOrNull(1)

@@ -233,6 +233,82 @@ class LifeState {
     /** Menit sampai tengah malam berikutnya. */
     val minutesToMidnight: Int get() = 1440 - minute
 
+    /** Waktu mutlak dalam menit sejak hari pertama (untuk membandingkan "sampai kapan"). */
+    val absMinute: Long get() = day * 1440L + minute
+
+    /** Waktu mutlak untuk hari [weekdayName] berikutnya pukul [clockMin] (hari ini bila jamnya belum lewat). */
+    fun absNext(weekdayName: String, clockMin: Int): Long {
+        val wd = WEEKDAYS.indexOfFirst { it.equals(weekdayName, true) }.takeIf { it >= 0 } ?: weekdayIndex
+        var ahead = (wd - weekdayIndex + 7) % 7
+        if (ahead == 0 && clockMin <= minute) ahead = 7
+        return (day + ahead) * 1440L + clockMin
+    }
+
+    /**
+     * "@kalender Senin pagi" / "@kalender Senin 07:30".
+     * Bila tanggal sudah diatur dan harinya berbeda: loncat hari demi hari ([onNewDay] tiap hari baru).
+     * Bila harinya sama dan jamnya lebih sore: waktu berjalan sungguhan lewat [passForward] (menit).
+     * Bila jamnya lebih pagi di hari yang sama: jam langsung diatur.
+     */
+    fun calendarJump(weekdayName: String, slotName: String, onNewDay: () -> Unit, passForward: (Int) -> Unit) {
+        val target = WEEKDAYS.indexOfFirst { it.equals(weekdayName, true) }
+        if (startEpochDay != 0L && target >= 0) {
+            var guard = 0
+            while (weekdayIndex != target && guard++ < 7) {
+                day++
+                onNewDay()
+            }
+        }
+        val targetMin = parseClock(slotName) ?: Slot.values().firstOrNull { it.label.equals(slotName, true) }?.set
+        if (active && (target < 0 || target == weekdayIndex) && targetMin != null && targetMin > minute) {
+            passForward(targetMin - minute)
+        }
+        setCalendar(weekdayName, slotName)
+    }
+
+    /** "@maju 1": menit menuju awal bagian hari berikutnya, dan apakah itu tidur (dari Malam → 06:00). */
+    fun nextPeriodStep(): Pair<Int, Boolean> {
+        val s = slot
+        return if (s == Slot.MALAM) {
+            val target = 6 * 60
+            (if (minute < 4 * 60) target - minute else minutesToMidnight + target) to true
+        } else {
+            (s.end - minute) to false
+        }
+    }
+
+    /**
+     * Sekolah/kerja wajib di hari ke-[d] yang harus dicatat bolos/absen sekarang.
+     * [wholeDay] = hari itu sudah berakhir. Batas datang: 1 jam sebelum pulang. Hari pertama tidak dihitung.
+     */
+    fun dueAbsences(defs: Map<String, GameData.JobDef>, d: Int, wholeDay: Boolean): List<Pair<Job, GameData.JobDef>> =
+        jobs.mapNotNull { job ->
+            val def = defs[job.id] ?: return@mapNotNull null
+            when {
+                !def.mandatory || weekdayOf(d) !in def.days -> null
+                d <= job.startDay || hasAttended(def.id, d) || isMarkedAbsent(def.id, d) -> null
+                !wholeDay && minute <= def.endMin - 60 -> null
+                else -> job to def
+            }
+        }
+
+    /**
+     * Majukan waktu [min] menit, dipecat per tengah malam. [onMidnight] dipanggil dengan nomor hari
+     * yang baru saja berakhir (sebelum hal-hal harian hari berikutnya dijalankan).
+     */
+    fun advance(min: Int, sleeping: Boolean = false, onMidnight: (endedDay: Int) -> Unit = {}): List<String> {
+        val out = mutableListOf<String>()
+        var left = min
+        while (left > 0 && !dead) {
+            val chunk = minOf(left, minutesToMidnight)
+            val before = day
+            out += pass(chunk, sleeping)
+            left -= chunk
+            if (day != before) onMidnight(before)
+        }
+        return out.distinct()
+    }
+
     /**
      * Majukan waktu [min] menit (tidak melewati tengah malam — pemanggil memecahnya).
      * Mengembalikan peringatan baru (mis. "Kamu mulai lapar").

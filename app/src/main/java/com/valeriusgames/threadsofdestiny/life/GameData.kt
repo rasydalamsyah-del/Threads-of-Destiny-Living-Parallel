@@ -190,6 +190,10 @@ class GameData private constructor(
     )
 
     companion object {
+        /** Untuk unit test: data kosong. */
+        internal fun forTest(): GameData = GameData(emptyList(), emptyMap(), emptyMap(), emptyList(), emptyMap(),
+            emptyMap(), emptyMap(), emptyMap(), emptyList(), emptyList(), emptyList())
+
         @Volatile private var cached: GameData? = null
 
         fun get(ctx: Context): GameData = cached ?: load(ctx).also { cached = it }
@@ -375,7 +379,7 @@ class GameData private constructor(
         }
 
         /** "45 menit", "2 jam", "1,5 jam", "1 jam 30 menit", "90" → menit. */
-        private fun minutes(v: String?): Int? {
+        internal fun minutes(v: String?): Int? {
             val t = v?.trim()?.lowercase()?.replace(',', '.') ?: return null
             if (t.isEmpty()) return null
             t.toIntOrNull()?.let { return it }
@@ -388,7 +392,7 @@ class GameData private constructor(
         }
 
         /** "07:00-14:00" → (420, 840). Tanpa jam: dari bagian hari (pagi, siang, sore, malam). */
-        private fun hours(v: String?, slots: Set<String>): Pair<Int, Int>? {
+        internal fun hours(v: String?, slots: Set<String>): Pair<Int, Int>? {
             v?.split('-', '–')?.map { it.trim() }?.takeIf { it.size == 2 }?.let { (a, b) ->
                 val s = LifeState.parseClock(a); val e = LifeState.parseClock(b)
                 if (s != null && e != null && e > s) return s to e

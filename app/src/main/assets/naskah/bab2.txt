@@ -81,11 +81,14 @@ Laras: Kak... nanti pulang, kan? Janji?
 * HP-mu kini berisi aplikasi Chat, Kontak, Kalender, Lowongan, Dompet, Catatan, dan Sosmed. Buka lewat ikon HP, atau tombol 📱 HP saat waktu bebas.
 @bebas 1
 
+@kalender Sabtu 20:00
 @latar kos_kamar
 * Malam pertama di Kota Sakala terasa panjang.
 @hp pesan Ibu | Sudah sampai, Nak? Sudah makan belum? Jangan lupa kunci pintu.
 @tunggu_hp
 {nama}: Sudah, Bu... Aku baik-baik saja.
+@maju 1
+@waktu Minggu, 12 Juli 2026
 * Hari Minggu sebelum sekolah dimulai. Waktunya mengenal kota ini, atau mencari jejak seseorang.
 @bebas 4
 
@@ -147,8 +150,9 @@ Dimas: Terserah kamu mau jadi yang mana. Tapi uang kiriman itu cepat habis, lho.
 :: minggu_pertama
 @maju 2
 * Sore pertama setelah sekolah. Hidup di Kota Sakala benar-benar dimulai.
-* Ingat: sekolah wajib dihadiri setiap Senin–Sabtu, pagi dan siang. Bolos tercatat, dan bisa dikeluarkan.
-@bebas 9
+* Ingat: sekolah setiap Senin–Sabtu, pukul 07:00–14:00. Terlambat dan bolos tercatat; bolos 6 kali = dikeluarkan.
+* Waktu bebasmu berjalan sampai Sabtu sore. Atur sendiri: sekolah, kerja, makan, tidur, dan mencari jejak.
+@bebas sampai Sabtu 15:00
 
 @gelap 1500
 * Satu minggu pertama di Kota Sakala telah berlalu.
@@ -177,7 +181,7 @@ Ayah: Dia anak yang rajin, Juragan. Saya yang jamin.
 @lamar buruh_ikan -> diterima, ditolak
 
 :: diterima
-Juragan Darto: ...Baiklah. Karena bapakmu yang minta. Datang Senin sampai Sabtu, pagi dan siang. Upah dibayar tiap selesai kerja.
+Juragan Darto: ...Baiklah. Karena bapakmu yang minta. Datang Senin sampai Sabtu, jam tujuh pagi sampai jam dua siang. Upah dibayar tiap selesai kerja.
 Juragan Darto: Tapi kalau malas, kamu keluar. Paham?
 {nama}: Paham, Juragan. Terima kasih.
 @cinta ayah +5
@@ -199,7 +203,8 @@ Ayah: Tidak apa-apa. Masih ada laut. Ikut melaut saja kalau mau cari uang.
 * Teman-teman seangkatan satu per satu pergi ke kota. Desa terasa semakin sepi. Tapi di sini, setidaknya, ada keluarga.
 * Malam hari, setelah lelah bekerja, {nama} selalu membuka HP. Mengetik nama yang sama di kolom pencarian.
 * (Aplikasi 📷 Sosmed di HP: lihat kabar teman-teman, dan cari jejak sahabatmu sekali sehari. Siapa tahu suatu hari ada yang muncul.)
-@bebas 8
+* Waktu bebasmu berjalan selama 6 hari. Atur sendiri: kerja, makan, tidur, dan mencari kabar.
+@bebas 6 hari
 
 @gelap 1500
 * Satu minggu berlalu di Tanjung Lentera.

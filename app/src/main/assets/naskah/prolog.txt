@@ -172,7 +172,8 @@ Ayah: Ini hadiah kelulusan dari Ayah. Simpan baik-baik, ya.
 
 :: malam
 @gelap 1800
-@waktu Senin, malam
+@kalender Senin 20:00
+@waktu Senin, 20:00
 @latar kamar_pagi
 @terang 1500
 * Malam itu, {nama} menatap pesan di HP-nya lama sekali.

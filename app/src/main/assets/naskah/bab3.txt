@@ -76,7 +76,8 @@ Nadia: ...Begitu.
 @catatan Petunjuk #3 — Kata Nadia: anak bergelang merah lewat Stasiun Besar, naik kereta jurusan Pelabuhan, biasanya Sabtu sore.
 
 :: bebas_kedua
-@bebas 10
+* Waktu bebasmu berjalan sampai Sabtu sore.
+@bebas sampai Sabtu 15:00
 
 # ---------- Stasiun Besar ----------
 @gelap 1500
@@ -181,7 +182,7 @@ Laras: Kak, aku nemu ini di laci Kakak. Gelang benang merah. Punya siapa?
 @hp pesan Nomor Tidak Dikenal | Kamu masih di Tanjung Lentera, ya? Kalau kamu tidak datang ke Sakala... mungkin suatu hari aku yang akan pulang.
 @tunggu_hp
 @catatan Nomor misterius: "Kalau kamu tidak datang ke Sakala, mungkin suatu hari aku yang akan pulang."
-@bebas 10
+@bebas 6 hari
 
 @gelap 1500
 * Di Tanjung Lentera, mercusuar tua itu masih padam.
