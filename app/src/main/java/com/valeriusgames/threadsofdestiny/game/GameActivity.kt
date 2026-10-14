@@ -70,6 +70,7 @@ class GameActivity : Activity() {
         const val PREFS = "player"
         const val KEY_NAME = "name"
         const val KEY_GENDER = "gender"
+        const val CHAR_BASE_HEIGHT = 0.72f
         const val GENDER_MALE = "laki-laki"
         const val GENDER_FEMALE = "perempuan"
 
@@ -882,7 +883,9 @@ class GameActivity : Activity() {
             nameTag.visibility = View.VISIBLE
             nameTag.text = who
         }
-        updateCharPanel(who?.let { w -> gameData.findCharacter(w) ?: speakerIdFromRaw(speaker) })
+        val speakerDef = who?.let { w -> gameData.findCharacter(w) ?: speakerIdFromRaw(speaker) }
+        updateCharPanel(speakerDef)
+        highlightSpeaker(speakerDef?.id)
 
         if (dialog.alpha < 1f) {
             dialog.animate().cancel()
@@ -2960,6 +2963,9 @@ class GameActivity : Activity() {
         return loadAsset(names.flatMap { n -> listOf("karakter/$n.png", "karakter/$n.webp") })
     }
 
+    /** Karakter yang sedang bicara (untuk disorot); null = narasi / pemain. */
+    private var speakingCharId: String? = null
+
     private fun showCharacter(id: String, expr: String, pos: String, animate: Boolean = true) {
         val bmp = charBitmap(id, expr) ?: return
         val d = resources.displayMetrics.density
@@ -2970,39 +2976,91 @@ class GameActivity : Activity() {
             scaleType = android.widget.ImageView.ScaleType.FIT_END
         }
         iv.setImageBitmap(bmp)
-        val screenH = (charLayer.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels)
-        val screenW = (charLayer.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels)
-        if (existing == null) {
+        val isNew = existing == null
+        if (isNew) {
+            val screenH = (charLayer.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels)
             charLayer.addView(iv, FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, (screenH * 0.72f).toInt(),
+                ViewGroup.LayoutParams.WRAP_CONTENT, (screenH * CHAR_BASE_HEIGHT).toInt(),
                 android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL,
             ))
+            if (animate) iv.translationY = 24 * d
         }
-        val targetX = when (pos) {
-            "kiri" -> -screenW * 0.26f
-            "kanan" -> screenW * 0.26f
-            else -> 0f
-        }
-        if (existing == null && animate) {
-            iv.alpha = 0f
-            iv.translationX = targetX
-            iv.translationY = 24 * d
-            iv.animate().alpha(1f).translationY(0f).setDuration(350).start()
-        } else {
-            iv.animate().translationX(targetX).setDuration(250).start()
-        }
+        // posisi baru selalu ditaruh paling akhir supaya urutan kiri→kanan stabil
+        shownChars.remove(id)
         shownChars[id] = expr to pos
         vars["_tampil"] = shownChars.entries.joinToString(";") { "${it.key}:${it.value.first}:${it.value.second}" }
+        layoutCharacters(animate, newId = if (isNew && animate) id else null)
+    }
+
+    /**
+     * Menata semua karakter yang tampil supaya tidak bertumpuk:
+     * 1 orang di tengah, 2 orang kiri–kanan, 3+ dibagi rata. Urutan mengikuti posisi
+     * yang diminta naskah (kiri / tengah / kanan). Yang bicara di depan & terang,
+     * yang lain sedikit lebih kecil dan redup.
+     */
+    private fun layoutCharacters(animate: Boolean, newId: String? = null) {
+        val w = (charLayer.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels).toFloat()
+        val h = (charLayer.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels).toFloat()
+        val rank = mapOf("kiri" to 0, "tengah" to 1, "kanan" to 2)
+        val order = shownChars.entries.withIndex()
+            .sortedWith(compareBy({ rank[it.value.value.second] ?: 1 }, { it.index }))
+            .map { it.value.key }
+        val n = order.size
+        if (n == 0) return
+        val heightFrac = when (n) { 1 -> 0.72f; 2 -> 0.66f; else -> 0.60f }
+        val spread = when (n) { 1 -> 0f; 2 -> 0.46f; 3 -> 0.62f; else -> 0.72f } * w
+        val speaker = speakingCharId?.takeIf { it in shownChars }
+        order.forEachIndexed { i, id ->
+            val iv = charLayer.findViewWithTag<android.widget.ImageView>("char_$id") ?: return@forEachIndexed
+            val x = if (n == 1) 0f else -spread / 2 + spread * i / (n - 1)
+            val dim = n > 1 && speaker != null && speaker != id
+            val scale = heightFrac / CHAR_BASE_HEIGHT * (if (dim) 0.95f else 1f)
+            // perkecil dari tengah-bawah (kaki tetap di bawah layar)
+            val viewH = h * CHAR_BASE_HEIGHT
+            val dr = iv.drawable
+            val viewW = if (dr != null && dr.intrinsicHeight > 0)
+                minOf(w, viewH * dr.intrinsicWidth / dr.intrinsicHeight) else w
+            iv.pivotX = viewW / 2
+            iv.pivotY = viewH
+            iv.colorFilter = if (dim) android.graphics.PorterDuffColorFilter(
+                0x66000000, android.graphics.PorterDuff.Mode.SRC_ATOP) else null
+            iv.translationZ = if (id == speaker) 2f else 0f
+            iv.animate().cancel()
+            if (id == newId) {
+                iv.alpha = 0f
+                iv.translationX = x
+                iv.scaleX = scale; iv.scaleY = scale
+                iv.animate().alpha(1f).translationY(0f).setDuration(350).start()
+            } else if (animate) {
+                iv.animate().alpha(1f).translationX(x).translationY(0f).scaleX(scale).scaleY(scale)
+                    .setDuration(260).start()
+            } else {
+                iv.alpha = 1f; iv.translationX = x; iv.translationY = 0f
+                iv.scaleX = scale; iv.scaleY = scale
+            }
+        }
+    }
+
+    /** Dipanggil saat dialog berganti pembicara. */
+    private fun highlightSpeaker(id: String?) {
+        if (speakingCharId == id) return
+        speakingCharId = id
+        if (shownChars.size > 1) layoutCharacters(animate = true)
     }
 
     private fun hideCharacter(id: String?) {
         val ids = if (id == null) shownChars.keys.toList() else listOf(id)
         ids.forEach { cid ->
-            val iv = charLayer.findViewWithTag<View>("char_$cid") ?: return@forEach
-            iv.animate().alpha(0f).setDuration(250).withEndAction { charLayer.removeView(iv) }.start()
             shownChars.remove(cid)
+            val iv = charLayer.findViewWithTag<View>("char_$cid") ?: return@forEach
+            // lepas tag dulu: kalau karakter yang sama langsung dimunculkan lagi,
+            // dibuat gambar baru, bukan gambar yang sedang menghilang
+            iv.tag = null
+            iv.animate().cancel()
+            iv.animate().alpha(0f).setDuration(220).withEndAction { charLayer.removeView(iv) }.start()
         }
         vars["_tampil"] = shownChars.entries.joinToString(";") { "${it.key}:${it.value.first}:${it.value.second}" }
+        if (shownChars.isNotEmpty()) layoutCharacters(animate = true)
     }
 
     private fun restoreShownCharacters() {
