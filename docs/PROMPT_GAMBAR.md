@@ -237,6 +237,59 @@ Tempel kalimat pengunci, lalu SATU baris berikut:
 | `id_malu.png` *(opsional)* | `Change only the facial expression to shy: soft blush on cheeks, eyes looking away to the side, small smile.` |
 | `id_menangis.png` *(opsional)* | `Change only the facial expression to crying quietly: teary eyes, a single tear on one cheek, trembling lips.` |
 
+### Daftar ekspresi per karakter (checklist)
+Prioritas: ★ = dipakai sistem ngobrol/hadiah untuk semua orang (😊 saat senang, 😠 saat topik/hadiah dibenci) atau sudah dipakai cerita · ☆ = untuk adegan cerita berikutnya · ○ = opsional.
+Ekspresi yang belum ada otomatis memakai gambar biasa (tidak error).
+
+| Karakter | senyum | sedih | kesal | kaget | malu | menangis |
+|---|---|---|---|---|---|---|
+| ayah | ★ | ☆ (Ibu sakit, hutang perahu) | ★ (tegas/marah) | ☆ | — | — |
+| ibu | ★ | ★ (sudah dipakai) | ★ (cerewet) | ☆ | — | ☆ (anak pergi ke kota) |
+| laras | — (gambar biasa sudah tersenyum lebar) | ★ (sudah dipakai) | ★ (cemberut/ngambek) | ☆ | — | ☆ |
+| bayu | ★ (sudah dipakai) | ☆ (utang bapaknya) | ★ | ☆ | ☆ (soal Sekar) | — |
+| sekar | ★ | ☆ | ★ | ☆ | ☆ | ☆ (cerita di stasiun) |
+| darto | ★ (senyum tipis) | ○ (kisah anaknya) | ★ | ☆ | — | — |
+| dimas | ★ (sudah dipakai) | ☆ (rumah digusur) | ★ | ☆ | — | — |
+| nadia | ★ (sudah dipakai) | ☆ (ibunya di luar negeri) | ★ | ☆ | ☆ | — |
+| sahabat_l / sahabat_p | ★ | ★ | ○ | ★ (bertemu lagi) | ☆ | ★ |
+| sosok | — | — | — | — | — | — |
+
+Nama file: `id_ekspresi.png`, contoh `ayah_kesal.png`, `sahabat_p_menangis.png`. Selalu lampirkan **gambar biasa karakter itu** (`ayah.png`, `sahabat_p.png`, dst.).
+
+**Prompt lengkap per ekspresi** (sama untuk semua karakter, yang beda hanya gambar yang dilampirkan):
+
+`id_senyum.png`
+```
+Use the attached image as the exact reference for this character. Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth, same hairstyle and hair color, same skin tone, same body proportions, same outfit and colors, same accessories, same art style, same framing, same camera angle, same plain pure white background. This is an edit of the attached image, not a new character. Change ONLY the facial expression to: a warm happy smile, eyes slightly closed, cheeks lightly raised.
+```
+Khusus Darto (juragan yang jarang tersenyum) ganti akhir kalimat: `a thin satisfied smile on one side of the mouth, eyes calm and sharp.`
+
+`id_sedih.png`
+```
+Use the attached image as the exact reference for this character. Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth, same hairstyle and hair color, same skin tone, same body proportions, same outfit and colors, same accessories, same art style, same framing, same camera angle, same plain pure white background. This is an edit of the attached image, not a new character. Change ONLY the facial expression to: sad, eyebrows tilted up in the middle, eyes looking down, small frown, lips pressed together.
+```
+
+`id_kesal.png`
+```
+Use the attached image as the exact reference for this character. Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth, same hairstyle and hair color, same skin tone, same body proportions, same outfit and colors, same accessories, same art style, same framing, same camera angle, same plain pure white background. This is an edit of the attached image, not a new character. Change ONLY the facial expression to: annoyed, eyebrows lowered and drawn together, slight frown, lips pressed together.
+```
+Khusus Laras (anak-anak) ganti akhir kalimat: `pouting like a sulking child, cheeks puffed, lips pushed out, eyebrows lowered.`
+
+`id_kaget.png`
+```
+Use the attached image as the exact reference for this character. Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth, same hairstyle and hair color, same skin tone, same body proportions, same outfit and colors, same accessories, same art style, same framing, same camera angle, same plain pure white background. This is an edit of the attached image, not a new character. Change ONLY the facial expression to: surprised, eyes wide open, eyebrows raised high, mouth slightly open.
+```
+
+`id_malu.png`
+```
+Use the attached image as the exact reference for this character. Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth, same hairstyle and hair color, same skin tone, same body proportions, same outfit and colors, same accessories, same art style, same framing, same camera angle, same plain pure white background. This is an edit of the attached image, not a new character. Change ONLY the facial expression to: shy and embarrassed, soft pink blush on the cheeks, eyes looking away to the side, small awkward smile.
+```
+
+`id_menangis.png`
+```
+Use the attached image as the exact reference for this character. Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth, same hairstyle and hair color, same skin tone, same body proportions, same outfit and colors, same accessories, same art style, same framing, same camera angle, same plain pure white background. This is an edit of the attached image, not a new character. Change ONLY the facial expression to: crying quietly, teary glistening eyes, tears running down both cheeks, eyebrows raised in the middle, trembling lips.
+```
+
 **Contoh lengkap (Bayu senyum):**
 ```
 [lampirkan bayu.png]
@@ -320,6 +373,40 @@ Tempel **blok gaya** + **tambahan background** di setiap prompt.
 | `taman_kota.jpg` | `A city park in Indonesia at dusk, benches, street lamps turning on, trees, distant skyscrapers, couples and joggers only as tiny silhouettes far away.` |
 | `minimarket.jpg` | `Interior of a small Indonesian convenience store at night, bright fluorescent lights, shelves of snacks and drinks, cashier counter, glass door showing a dark street.` |
 | `dermaga_malam.jpg` | `The old wooden pier of a small fishing village at night, the dark silent lighthouse, starry sky reflected in calm water, a red thread bracelet lying on the wooden planks.` |
+
+---
+
+### Stasiun dengan kereta (edit dari gambar yang sudah ada)
+Lampirkan gambar stasiunnya sendiri, lalu kirim prompt. Simpan dengan **nama file yang sama** (menggantikan yang lama).
+
+`stasiun_desa.jpg` (lampirkan `stasiun_desa.jpg`) — dipakai pagi hari saat berangkat ke Kota Sakala:
+```
+Use the attached image as the exact reference background. Keep EVERYTHING identical: same composition, same camera angle, same platform, same "TANJUNG LENTERA" sign, same benches, same hills and sea in the distance, same morning sky and lighting, same art style. This is an edit of the attached image, not a new picture. ADD ONLY: a small old Indonesian passenger train arriving at the platform from the distance, slowing down on the track beside the platform, its headlight on, a little dust and wind around the wheels. Keep the train on the side of the image along the track, and keep the platform in the center empty and open. No people, no text other than the existing sign, vertical 9:16.
+```
+
+`stasiun_besar.jpg` (lampirkan `stasiun_besar.jpg`) — dipakai Sabtu sore di Bab 3:
+```
+Use the attached image as the exact reference background. Keep EVERYTHING identical: same composition, same camera angle, same platforms, same steel roof, same departure boards, same evening warm lighting, same art style. This is an edit of the attached image, not a new picture. ADD ONLY: a modern Indonesian commuter train arriving at one platform, slowing down with its headlights glowing, light reflections on its windows and on the floor. The crowd stays as soft blurred silhouettes far away. Keep the train on one side of the image, and keep the platform floor in the front center empty and open. No clear faces, no readable text, vertical 9:16.
+```
+
+### Kamar kos (3 jenis, sesuai kos yang dipilih pemain)
+Game otomatis memakai gambar kos yang disewa; kalau belum ada, memakai `kos_kamar.jpg`.
+Tempel blok gaya + tambahan background, lalu prompt di bawah. Lampirkan `kos_kamar.jpg` sebagai **referensi gaya** (bukan isi).
+
+`kos_rel_utara.jpg` — Kos Bu Ratmi, Rp400.000 (murah, bising, kereta lewat tiap jam):
+```
+Style: modern Japanese anime visual novel art, clean thin lineart, soft cel shading, warm cinematic lighting, gentle pastel colors, detailed but clean, high quality. Background art only, no people, no characters, no text, vertical 9:16 composition, visual novel background. Use the attached image only as a style reference. A tiny cramped cheap rented room (kos) in a dense Indonesian city neighborhood next to railway tracks, about 2x3 meters, eye-level view from the doorway, a thin mattress on the floor with a faded blanket, an old standing fan, peeling painted walls with small cracks and water stains, a single bare bulb hanging from the ceiling, clothes hanging on a nail, a small window with rusty bars showing railway tracks and tangled electric wires very close outside, a travel bag still unpacked on the floor, evening light mixed with a dim yellow lamp, humble but hopeful mood, open empty floor space in the center.
+```
+
+`kos_cendana.jpg` — Kos Melati, Rp650.000 (bersih, tenang, dekat sekolah):
+```
+Style: modern Japanese anime visual novel art, clean thin lineart, soft cel shading, warm cinematic lighting, gentle pastel colors, detailed but clean, high quality. Background art only, no people, no characters, no text, vertical 9:16 composition, visual novel background. Use the attached image only as a style reference. A clean neat modest rented room (kos) in a quiet Indonesian city residential area, about 3x3 meters, eye-level view from the doorway, a simple single bed with a light blue bedsheet, a small wooden study desk with a desk lamp, a plastic wardrobe, a wall clock, light cream painted walls, tiled floor, a window with clean white curtains showing a quiet street with trees and neighboring houses, a small sign on the wall about curfew at 10 pm, a travel bag still unpacked on the floor, soft evening light and a warm desk lamp, calm tidy mood, open empty floor space in the center.
+```
+
+`kos_pusat.jpg` — Sakala Residence, Rp1.300.000 (mewah):
+```
+Style: modern Japanese anime visual novel art, clean thin lineart, soft cel shading, warm cinematic lighting, gentle pastel colors, detailed but clean, high quality. Background art only, no people, no characters, no text, vertical 9:16 composition, visual novel background. Use the attached image only as a style reference. A modern exclusive boarding room (kos) in the center of a big Indonesian city, spacious about 4x5 meters, eye-level view from the doorway, a queen-size bed with white sheets, an air conditioner on the wall, a wooden work desk with a chair, a built-in wardrobe, a small fridge, a glass door to a private bathroom, warm LED strip lighting, a large window showing skyscrapers and city lights at dusk, a travel bag still unpacked on the floor looking out of place, luxurious but lonely mood, open empty floor space in the center.
+```
 
 ---
 

@@ -824,6 +824,15 @@ class GameActivity : Activity() {
 
     private fun loadBackground(name: String): Bitmap? {
         val opts = BitmapFactory.Options().apply { inPreferredConfig = Bitmap.Config.ARGB_8888 }
+        // "kos_kamar" = kamar kos yang sedang disewa (latar/kos_rel_utara.jpg, dst.) bila gambarnya ada
+        if (name == "kos_kamar" && life.kosId.isNotEmpty()) {
+            for (ext in listOf("jpg", "jpeg", "png", "webp")) {
+                try {
+                    return assets.open("latar/${life.kosId}.$ext").use { BitmapFactory.decodeStream(it, null, opts) }
+                } catch (_: Exception) {
+                }
+            }
+        }
         for (ext in listOf("jpg", "jpeg", "png", "webp")) {
             try {
                 return assets.open("latar/$name.$ext").use { BitmapFactory.decodeStream(it, null, opts) }
