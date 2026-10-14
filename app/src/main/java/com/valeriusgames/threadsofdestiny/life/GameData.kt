@@ -13,14 +13,52 @@ import android.content.Context
 class GameData private constructor(
     val activities: List<ActivityDef>,
     val items: Map<String, ItemDef>,
-    val characters: Map<String, CharacterDef>,
+    private val baseCharacters: Map<String, CharacterDef>,
     val relations: List<RelationDef>,
     val topics: Map<String, TopicDef>,
     val jobs: Map<String, JobDef>,
     val housing: Map<String, KosDef>,
     val documents: Map<String, DocDef>,
     val interview: List<InterviewQ>,
+    val events: List<EventDef>,
 ) {
+
+    /**
+     * Karakter yang nama/jenis kelaminnya menyesuaikan pemain (kolom nama_l / nama_p,
+     * kelamin = lawan). Diatur ulang lewat [applyPlayerGender].
+     */
+    var characters: Map<String, CharacterDef> = baseCharacters
+        private set
+
+    fun applyPlayerGender(playerGender: String) {
+        val female = playerGender == "perempuan"
+        characters = baseCharacters.mapValues { (_, c) ->
+            val nl = c.text["nama_l"]
+            val np = c.text["nama_p"]
+            if (nl == null && np == null && c.gender != "lawan") return@mapValues c
+            val g = if (c.gender == "lawan") (if (female) "laki-laki" else "perempuan") else c.gender
+            val name = if (g == "perempuan") (np ?: c.name) else (nl ?: c.name)
+            c.copy(name = name, gender = g)
+        }
+    }
+
+    /** Pilihan dalam kejadian: teks tombol, efek, teks hasil. */
+    data class EventOption(val label: String, val effects: Map<String, Long>, val result: String)
+
+    /** Kejadian acak / rintangan (data/kejadian.txt). */
+    data class EventDef(
+        val id: String,
+        val title: String,
+        val icon: String,
+        val places: Set<String>,
+        val chance: Int,
+        val condition: String?,
+        val text: String,
+        val effects: Map<String, Long>,
+        val options: List<EventOption>,
+        val onceOnly: Boolean,
+        val note: String?,
+    )
 
     data class DocDef(
         val id: String,
@@ -59,6 +97,8 @@ class GameData private constructor(
         val desc: String,
         val documents: List<String>,
         val hasTest: Boolean,
+        /** Sekolah: ujian setiap N hari (0 = tidak ada). */
+        val examEvery: Int,
     ) {
         /** Sekolah & pekerjaan tetap wajib dihadiri; bolos/absen tercatat. */
         val mandatory: Boolean get() = kind == "sekolah" || kind == "tetap"
@@ -210,6 +250,7 @@ class GameData private constructor(
                     desc = m["keterangan"] ?: "",
                     documents = list(m["berkas"]).toList(),
                     hasTest = (m["tes"] ?: "tidak").trim().lowercase() == "ya",
+                    examEvery = m["ujian_tiap"]?.trim()?.toIntOrNull() ?: 0,
                 )
             }
             val kos = readSections(ctx, "data/kos.txt").associate { (id, m) ->
@@ -246,7 +287,26 @@ class GameData private constructor(
                 }
                 if (answers.isEmpty()) null else InterviewQ(id, q, answers)
             }
-            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions)
+            val events = readSections(ctx, "data/kejadian.txt").map { (id, m) ->
+                val opts = listOf("pilih_a", "pilih_b", "pilih_c").mapNotNull { k ->
+                    val parts = m[k]?.split('|')?.map { it.trim() } ?: return@mapNotNull null
+                    EventOption(parts[0], effects(parts.getOrNull(1)), parts.getOrNull(2) ?: "")
+                }
+                EventDef(
+                    id = id,
+                    title = m["judul"] ?: id,
+                    icon = m["ikon"] ?: "⚡",
+                    places = list(m["tempat"]).ifEmpty { setOf("semua") },
+                    chance = m["peluang"]?.trim()?.toIntOrNull() ?: 0,
+                    condition = m["syarat"]?.takeIf { it.isNotBlank() },
+                    text = m["teks"] ?: "",
+                    effects = effects(m["efek"]),
+                    options = opts,
+                    onceOnly = (m["sekali"] ?: "tidak").trim().lowercase() == "ya",
+                    note = m["catatan"]?.takeIf { it.isNotBlank() },
+                )
+            }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {
@@ -310,8 +370,9 @@ class GameData private constructor(
         private fun effects(v: String?): Map<String, Long> {
             if (v.isNullOrBlank()) return emptyMap()
             return v.split(',').mapNotNull { part ->
-                val m = Regex("^\\s*(\\w+)\\s*([+-]?\\d+)\\s*$").find(part.replace(".", "")) ?: return@mapNotNull null
-                m.groupValues[1].lowercase() to m.groupValues[2].removePrefix("+").toLong()
+                val m = Regex("^\\s*(\\w+)\\s*([+-]?\\d+)\\s*(%)?\\s*$").find(part.replace(".", "")) ?: return@mapNotNull null
+                val key = m.groupValues[1].lowercase() + (if (m.groupValues[3] == "%") "_persen" else "")
+                key to m.groupValues[2].removePrefix("+").toLong()
             }.toMap()
         }
     }

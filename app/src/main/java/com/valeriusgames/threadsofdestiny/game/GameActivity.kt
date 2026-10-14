@@ -123,6 +123,9 @@ class GameActivity : Activity() {
     private var meetingTalked = false
     private var meetingGifted = false
 
+    /** Kejadian yang menunggu ditampilkan: "ev:<id>", "ujian:<id_sekolah>", "kelas:<id_sekolah>". */
+    private val pendingEvents = ArrayDeque<String>()
+
     // ---- isi HP ----
     private var phoneData = PhoneState()
 
@@ -427,6 +430,7 @@ class GameActivity : Activity() {
             .putString(KEY_NAME, name)
             .putString(KEY_GENDER, playerGender)
             .apply()
+        gameData.applyPlayerGender(playerGender)
         vars.clear()
 
         (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
@@ -591,6 +595,13 @@ class GameActivity : Activity() {
                     syncSocialVars()
                     pc = labels[if (ok) c.okLabel else c.noLabel] ?: pc
                 }
+                is Cmd.Event -> {
+                    val ev = gameData.events.firstOrNull { it.id == c.id }
+                    if (ev != null) {
+                        runEvent(ev) { next() }
+                        return
+                    }
+                }
                 is Cmd.End -> { endStory(c.text); return }
             }
         }
@@ -694,6 +705,7 @@ class GameActivity : Activity() {
         playerGender = d.vars["kelamin"]
             ?: getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_GENDER, GENDER_MALE)
             ?: GENDER_MALE
+        gameData.applyPlayerGender(playerGender)
         loadScript(d.script)
         storyStarted = true
         wait = Wait.BUSY
@@ -1151,6 +1163,10 @@ class GameActivity : Activity() {
             vars["hari"] = life.weekday
             vars["waktu"] = life.slot.label
             vars["hari_ke"] = (life.day + 1).toString()
+            life.date()?.let { d ->
+                vars["bulan"] = d.monthValue.toString()
+                vars["musim"] = if (d.monthValue >= 11 || d.monthValue <= 3) "hujan" else "kemarau"
+            }
             if (clockText != life.clockText) setClock(life.clockText)
         }
     }
@@ -1237,6 +1253,13 @@ class GameActivity : Activity() {
     private fun showFreeSheet() {
         if (freeLeft <= 0) {
             endFree()
+            return
+        }
+        // Kejadian yang menunggu (rintangan, ujian, dll.) tampil dulu
+        val pending = pendingEvents.removeFirstOrNull()
+        if (pending != null) {
+            closeSheet()
+            runPending(pending) { showFreeSheet() }
             return
         }
         wait = Wait.FREE
@@ -1376,10 +1399,11 @@ class GameActivity : Activity() {
     }
 
     /** Syarat aktivitas, contoh "jalur != kerja" atau "usia >= 18". */
-    private fun checkCondition(cond: String): Boolean {
-        val m = Regex("^\\s*(\\w+)\\s*(==|!=|>=|<=|>|<)\\s*(.+?)\\s*$").find(cond) ?: return true
+    /** Syarat, contoh "jalur != kerja" atau gabungan "musim == hujan && kos == kos_rel_utara". */
+    private fun checkCondition(cond: String): Boolean = cond.split("&&").all { part ->
+        val m = Regex("^\\s*(\\w+)\\s*(==|!=|>=|<=|>|<)\\s*(.+?)\\s*$").find(part) ?: return@all true
         val (v, op, value) = m.destructured
-        return check(Cmd.JumpIf(v, op, value, ""))
+        check(Cmd.JumpIf(v, op, value, ""))
     }
 
     private fun effectSummary(effects: Map<String, Long>): String {
@@ -1810,6 +1834,8 @@ class GameActivity : Activity() {
     /** Hal-hal yang terjadi setiap ganti hari: ulang tahun, sewa kos, kiriman, gaji bulanan. */
     private fun onNewDay() {
         processPhoneDaily()
+        rollDailyEvent()
+        checkSchool()
         if (life.day > 0 && life.day % 365 == 0) {
             vars["usia"] = (playerAge() + 1).toString()
             notice("🎂 Selamat ulang tahun! Usiamu sekarang ${playerAge()} tahun.")
@@ -1944,6 +1970,177 @@ class GameActivity : Activity() {
             ))
         }
         sheetButtonRow(getString(R.string.btn_back) to { showFreeSheet() })
+    }
+
+    // ================================================================== kejadian, ujian, kenaikan kelas
+
+    /** Setiap ganti hari: paling banyak satu kejadian acak. */
+    private fun rollDailyEvent() {
+        if (!life.active) return
+        val place = vars["lokasi"] ?: "desa"
+        val candidates = gameData.events.filter { e ->
+            e.chance > 0 &&
+                ("semua" in e.places || place in e.places) &&
+                (!e.onceOnly || vars["kejadian_${e.id}"] != "1") &&
+                (e.condition == null || checkCondition(e.condition))
+        }.shuffled()
+        candidates.firstOrNull { kotlin.random.Random.nextInt(100) < it.chance }?.let { pendingEvents.addLast("ev:${it.id}") }
+    }
+
+    /** Ujian berkala & kenaikan kelas untuk sekolah yang sedang dijalani. */
+    private fun checkSchool() {
+        life.jobs.toList().forEach { j ->
+            val def = gameData.jobs[j.id] ?: return@forEach
+            if (def.kind != "sekolah") return@forEach
+            val days = life.day - j.startDay
+            if (days <= 0) return@forEach
+            if (def.examEvery > 0 && days % def.examEvery == 0) pendingEvents.addLast("ujian:${def.id}")
+            if (days % 365 == 0) pendingEvents.addLast("kelas:${def.id}")
+        }
+    }
+
+    private fun runPending(key: String, done: () -> Unit) {
+        val kind = key.substringBefore(':')
+        val id = key.substringAfter(':')
+        when (kind) {
+            "ev" -> gameData.events.firstOrNull { it.id == id }?.let { runEvent(it, done) } ?: done()
+            "ujian" -> gameData.jobs[id]?.let { runExam(it, done) } ?: done()
+            "kelas" -> gameData.jobs[id]?.let { runSchoolYear(it, done) } ?: done()
+            else -> done()
+        }
+    }
+
+    /** Terapkan efek kejadian: bar, uang (+ persen), cinta_x / percaya_x, dan variabel lain. */
+    private fun applyEventEffects(effects: Map<String, Long>, desc: String) {
+        val lifeEffects = mutableMapOf<String, Long>()
+        effects.forEach { (k, v) ->
+            when {
+                k.startsWith("cinta_") -> announce(social.changeLove(gameData, k.removePrefix("cinta_"), v.toInt()))
+                k.startsWith("percaya_") -> {
+                    social.changeTrust(gameData, k.removePrefix("percaya_"), v.toInt())
+                    syncSocialVars()
+                }
+                else -> lifeEffects[k] = v
+            }
+        }
+        val before = life.money
+        addExtraVars(life.applyEffects(lifeEffects))
+        val diff = life.money - before
+        if (diff != 0L) {
+            logMoney(desc, diff)
+            notice((if (diff > 0) "💰 +" else "💸 -") + rupiah(kotlin.math.abs(diff)))
+        }
+        refreshLife()
+    }
+
+    private fun runEvent(e: GameData.EventDef, done: () -> Unit) {
+        if (e.onceOnly) vars["kejadian_${e.id}"] = "1"
+        vars["kejadian_terakhir"] = e.id
+        e.note?.let { phoneData.notes += PhoneState.Note(life.day, fill(it)) }
+        hideDialog()
+        fun finish() {
+            if (checkDeath()) return
+            done()
+        }
+        afterTap = {
+            if (e.effects.isNotEmpty()) applyEventEffects(e.effects, e.title)
+            if (life.dead) {
+                checkDeath()
+            } else if (e.options.isEmpty()) {
+                finish()
+            } else {
+                showButtons(e.options.map { fill(it.label) }) { i ->
+                    val o = e.options[i]
+                    applyEventEffects(o.effects, e.title)
+                    if (life.dead) {
+                        checkDeath()
+                    } else if (o.result.isNotEmpty()) {
+                        afterTap = { finish() }
+                        showLine(null, fill(o.result))
+                    } else {
+                        finish()
+                    }
+                }
+            }
+        }
+        showLine(null, "${e.icon} ${e.title} — ${fill(e.text)}")
+    }
+
+    /** Ujian: 4 soal. Nilai sekolah naik/turun sesuai jumlah benar. */
+    private fun runExam(def: GameData.JobDef, done: () -> Unit) {
+        val job = life.jobs.firstOrNull { it.id == def.id } ?: return done()
+        val rnd = kotlin.random.Random
+        val akademik = vars["akademik"]?.toIntOrNull() ?: 0
+        val questions = List(4) { i ->
+            when (i % 4) {
+                0 -> { val x = rnd.nextInt(15, 90); val y = rnd.nextInt(15, 90); "Berapa $x + $y?" to (x + y) }
+                1 -> { val x = rnd.nextInt(4, 15); val y = rnd.nextInt(4, 15); "Berapa $x × $y?" to (x * y) }
+                2 -> { val x = rnd.nextInt(40, 120); val y = rnd.nextInt(5, 39); "Berapa $x − $y?" to (x - y) }
+                else -> { val st = rnd.nextInt(2, 9); val step = rnd.nextInt(2, 8)
+                    "Lanjutkan deret: $st, ${st + step}, ${st + 2 * step}, …" to (st + 3 * step) }
+            }
+        }
+        var correct = 0
+        fun ask(i: Int) {
+            if (i >= questions.size) {
+                // Belajar (akademik) membantu nilai
+                val score = (correct * 25 + akademik).coerceAtMost(100)
+                val change = when {
+                    score >= 80 -> 10
+                    score >= 60 -> 4
+                    score >= 40 -> -4
+                    else -> -10
+                }
+                job.performance = (job.performance + change).coerceIn(0, 100)
+                vars["nilai_ujian_terakhir"] = score.toString()
+                addExtraVars(life.applyEffects(mapOf("energi" to -10L, "kewarasan" to (if (change > 0) 6L else -8L))))
+                refreshLife()
+                afterTap = { done() }
+                showLine(null, "📊 Nilai ujianmu: $score (${correct} dari 4 benar). Nilai ${def.name} sekarang ${job.performance}." +
+                    (if (score < 40) " Kamu harus lebih giat belajar!" else ""))
+                return
+            }
+            val (q, ans) = questions[i]
+            showLine(null, "📝 Ujian ${def.name} — Soal ${i + 1}/4: $q", record = false, instant = true)
+            val opts = listOf(ans, ans + rnd.nextInt(1, 6), ans - rnd.nextInt(1, 6), ans + rnd.nextInt(7, 15)).shuffled()
+            showButtons(opts.map { it.toString() }) { k ->
+                if (opts[k] == ans) correct++
+                ask(i + 1)
+            }
+        }
+        afterTap = { ask(0) }
+        showLine(null, "📝 Hari ini ujian di ${def.name}! Jawab soal-soal berikut. (Rajin belajar menambah nilai.)")
+    }
+
+    /** Akhir tahun ajaran: naik kelas, tinggal kelas, atau lulus. */
+    private fun runSchoolYear(def: GameData.JobDef, done: () -> Unit) {
+        val job = life.jobs.firstOrNull { it.id == def.id } ?: return done()
+        val kelas = vars["kelas"]?.toIntOrNull() ?: 10
+        val pass = job.performance >= 40 && job.absences < 6
+        val text = when {
+            !pass -> {
+                vars["tinggal_kelas"] = ((vars["tinggal_kelas"]?.toIntOrNull() ?: 0) + 1).toString()
+                addExtraVars(life.applyEffects(mapOf("kewarasan" to -20L)))
+                "📄 Rapor dibagikan... Nilaimu terlalu rendah. Kamu tinggal kelas di kelas $kelas."
+            }
+            kelas >= 12 -> {
+                life.jobs.remove(job)
+                vars["lulus_sma"] = "1"
+                phoneData.docs += "ijazah_sma"
+                addExtraVars(life.applyEffects(mapOf("kewarasan" to 20L)))
+                "🎓 Selamat! Kamu LULUS dari ${def.name}! Ijazah SMA sudah di tanganmu."
+            }
+            else -> {
+                vars["kelas"] = (kelas + 1).toString()
+                job.performance = 50
+                job.absences = 0
+                addExtraVars(life.applyEffects(mapOf("kewarasan" to 10L)))
+                "📗 Rapor dibagikan. Kamu naik ke kelas ${kelas + 1}!"
+            }
+        }
+        refreshLife()
+        afterTap = { done() }
+        showLine(null, text)
     }
 
     // ================================================================== aplikasi HP
@@ -2229,7 +2426,7 @@ class GameActivity : Activity() {
         phone.backHandler = { renderContacts() }
         val d = resources.displayMetrics.density
         val r = social.rel(c)
-        val photo = loadAsset(listOf("karakter/${c.id}_foto.jpg", "karakter/${c.id}_foto.png", "karakter/${c.id}_foto.webp"))
+        val photo = charPhoto(c.id)
         if (photo != null) {
             phone.content.addView(android.widget.ImageView(this).apply {
                 setImageBitmap(photo)
@@ -2658,6 +2855,7 @@ class GameActivity : Activity() {
             vars["percaya_${c.id}"] = r.trust.toString()
             vars["tingkat_${c.id}"] = social.stageOf(c).name.lowercase()
             vars["kenal_${c.id}"] = if (r.met) "1" else "0"
+            vars["nama_${c.id}"] = c.name
         }
         panelCharId?.let { id -> gameData.characters[id]?.let { fillCharPanel(it) } }
     }
@@ -2688,8 +2886,22 @@ class GameActivity : Activity() {
         return null
     }
 
+    /** Akhiran gambar untuk karakter yang jenis kelaminnya menyesuaikan pemain: _l / _p. */
+    private fun genderSuffix(id: String): String? {
+        val c = gameData.characters[id] ?: return null
+        if (c.text["nama_l"] == null && c.text["nama_p"] == null) return null
+        return if (c.gender == "perempuan") "p" else "l"
+    }
+
+    private fun charPhoto(id: String): Bitmap? {
+        val g = genderSuffix(id)
+        val names = (if (g != null) listOf("${id}_${g}_foto") else emptyList()) + "${id}_foto"
+        return loadAsset(names.flatMap { n -> listOf("karakter/$n.jpg", "karakter/$n.png", "karakter/$n.webp") })
+    }
+
     private fun charBitmap(id: String, expr: String): Bitmap? {
-        val names = listOf("${id}_$expr", id)
+        val g = genderSuffix(id)
+        val names = (if (g != null) listOf("${id}_${g}_$expr", "${id}_$g") else emptyList()) + listOf("${id}_$expr", id)
         return loadAsset(names.flatMap { n -> listOf("karakter/$n.png", "karakter/$n.webp") })
     }
 
@@ -2768,8 +2980,7 @@ class GameActivity : Activity() {
 
     private fun fillCharPanel(def: GameData.CharacterDef) {
         val r = social.rel(def)
-        val photo = loadAsset(listOf("karakter/${def.id}_foto.jpg", "karakter/${def.id}_foto.png", "karakter/${def.id}_foto.webp"))
-            ?: charBitmap(def.id, "biasa")
+        val photo = charPhoto(def.id) ?: charBitmap(def.id, "biasa")
         findViewById<android.widget.ImageView>(R.id.char_panel_photo).setImageBitmap(photo)
         findViewById<TextView>(R.id.char_panel_name).apply {
             text = def.name

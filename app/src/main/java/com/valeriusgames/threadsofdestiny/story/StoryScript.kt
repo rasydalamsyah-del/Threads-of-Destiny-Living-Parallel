@@ -96,6 +96,8 @@ object StoryScript {
         data class Note(val text: String) : Cmd()
         /** Pemain mendapat dokumen (mis. ijazah_sma). */
         data class Doc(val id: String) : Cmd()
+        /** Jalankan kejadian dari data/kejadian.txt sekarang juga. */
+        data class Event(val id: String) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
     }
@@ -340,6 +342,7 @@ object StoryScript {
             }
             "catatan", "note" -> Cmd.Note(rest.ifEmpty { throw ParseError(n, "format: @catatan isi catatan") })
             "dokumen", "doc" -> Cmd.Doc(args.firstOrNull() ?: throw ParseError(n, "format: @dokumen id_dokumen"))
+            "kejadian", "event" -> Cmd.Event(args.firstOrNull() ?: throw ParseError(n, "format: @kejadian id_kejadian"))
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             else -> throw ParseError(n, "perintah @$name tidak dikenal")
         }

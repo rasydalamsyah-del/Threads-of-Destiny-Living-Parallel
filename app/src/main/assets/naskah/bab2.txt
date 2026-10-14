@@ -95,6 +95,7 @@ Laras: Kak... nanti pulang, kan? Janji?
 @waktu Senin, 13 Juli 2026
 @kalender Senin pagi
 @kerja_mulai sma_sakala
+@atur kelas = 10
 @latar kelas_sma
 @terang 1200
 * SMA Negeri 3 Sakala. Kelas X-3. Tiga puluh enam wajah asing, dan satu bangku kosong di dekat jendela.
@@ -127,7 +128,7 @@ Nadia: ...Tanjung Lentera?
 Nadia: Dulu, waktu SMP, ada murid pindahan dari desa itu juga di sekolahku. Pendiam. Suka duduk di dekat jendela.
 {nama}: Siapa namanya?!
 Nadia: Aku lupa... Dia cuma setahun, lalu pindah lagi. Kenapa? Kamu kenal?
-@atur petunjuk_sahabat = 1
+@tambah petunjuk_sahabat +1
 @catatan Petunjuk #1 — Kata Nadia, dulu ada murid pindahan dari Tanjung Lentera di SMP-nya. Pendiam, suka duduk dekat jendela. Hanya setahun, lalu pindah lagi.
 * Jantung {nama} berdegup kencang. Mungkinkah...
 @sembunyi semua
@@ -151,7 +152,7 @@ Dimas: Coba cari kerja paruh waktu. Banyak, kok, asal kuat capeknya.
 @gelap 1500
 * Satu minggu pertama di Kota Sakala telah berlalu.
 * Di suatu sudut kota ini, seseorang mungkin sedang menunggu... atau sedang menghindarinya.
-@tamat Bab 2 — Bersambung…
+@naskah bab3.txt
 
 
 # ==========================================================
@@ -200,4 +201,4 @@ Ayah: Tidak apa-apa. Masih ada laut. Ikut melaut saja kalau mau cari uang.
 @gelap 1500
 * Satu minggu berlalu di Tanjung Lentera.
 * Pesan dari nomor misterius itu masih tersimpan di HP-nya. Belum dibalas.
-@tamat Bab 2 — Bersambung…
+@naskah bab3.txt

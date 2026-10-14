@@ -4,7 +4,8 @@
 #
 #  [id]                 → id unik (dipakai di naskah: @tampil bayu senyum)
 #  nama        = nama yang tampil (dan dipakai sebagai nama pembicara di naskah)
-#  kelamin     = laki-laki / perempuan
+#  kelamin     = laki-laki / perempuan / lawan (= lawan jenis pemain)
+#  nama_l / nama_p = (opsional) nama bila karakter laki-laki / perempuan
 #  usia        = usia saat cerita dimulai (ikut bertambah bersama usia pemain)
 #  peran       = keterangan singkat
 #  sifat       = keterangan sifat (untuk penulis)
@@ -281,3 +282,40 @@ chat        = Jangan lupa tugas kelompok besok.|Kamu udah makan?|Lagi baca apa?
 chat_balas  = Oke.|Hmm, terima kasih.
 ajak_ya     = Boleh. Jangan telat.
 ajak_tidak  = Aku lagi jaga toko.
+
+# ---------------- SAHABAT MASA KECIL ----------------
+# Jenis kelaminnya lawan jenis pemain. Namanya menyesuaikan: Arka (laki-laki) / Alya (perempuan).
+# Belum bisa ditemui di waktu bebas sampai cerita mempertemukan kalian.
+
+[sahabat]
+nama        = Alya
+nama_l      = Arka
+nama_p      = Alya
+kelamin     = lawan
+usia        = 15
+peran       = Sahabat masa kecil dari Tanjung Lentera
+sifat       = lembut, pendiam, menyimpan rahasia keluarga yang berat
+pandangan   = setia
+bisa_dipacari = ya
+tempat      = kota
+waktu       = sore
+ditemui     = tidak
+cinta_awal  = 55
+percaya_awal = 30
+suka_topik  = laut, keluarga, masa_depan
+benci_topik = gosip
+suka_barang = teh_manis, pisang
+benci_barang = ikan_asin
+sapa        = ...Kamu datang lagi.
+respon_suka = Senyum kecil itu... masih sama seperti dulu.
+respon_biasa = Begitu, ya.
+respon_benci = Aku nggak mau bahas itu.
+hadiah_suka = Kamu masih ingat kesukaanku...
+hadiah_biasa = Terima kasih.
+hadiah_benci = Maaf... aku nggak bisa.
+larangan    = Belum waktunya kita bertemu.
+warna       = #B23A48
+chat        = Kamu sudah makan?|Hari ini hujan. Kamu ingat dermaga kita?
+chat_balas  = ...Terima kasih sudah membalas.|Aku senang.
+ajak_ya     = Baiklah. Aku akan datang.
+ajak_tidak  = Belum sekarang. Maaf.

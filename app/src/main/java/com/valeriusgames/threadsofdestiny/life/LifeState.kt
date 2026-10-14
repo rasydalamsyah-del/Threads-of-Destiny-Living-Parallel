@@ -246,6 +246,7 @@ class LifeState {
             when {
                 stat != null -> change(stat, v.toInt())
                 k == "uang" -> money = (money + v).coerceAtLeast(0)
+                k == "uang_persen" -> money = (money + money * v / 100).coerceAtLeast(0)
                 else -> rest[k] = v
             }
         }

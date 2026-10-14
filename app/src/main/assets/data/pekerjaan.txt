@@ -21,6 +21,7 @@
 #  orang_dalam = id karakter yang bisa merekomendasikan (Cinta & Kepercayaan ≥ 60)
 #  berkas      = (untuk cara = lamar) dokumen yang wajib ada, dari dokumen.txt
 #  tes         = ya / tidak  (untuk cara = lamar: ada tes tertulis sebelum wawancara)
+#  ujian_tiap  = (sekolah) ujian setiap N hari. Setiap 365 hari: naik kelas / tinggal kelas / lulus
 #  keterangan  = penjelasan singkat
 #  teks        = narasi setiap kali hadir
 # ==========================================================
@@ -36,6 +37,7 @@ hari        = senin-sabtu
 waktu       = pagi, siang
 efek        = energi -15, kenyang -6, hidrasi -6, kewarasan -2, akademik +2
 cara        = cerita
+ujian_tiap  = 45
 keterangan  = Sekolah negeri di Kawasan Pendidikan Cendana.
 teks        = Kamu duduk di bangku kelas, mencatat pelajaran sambil sesekali melirik jam dinding.
 

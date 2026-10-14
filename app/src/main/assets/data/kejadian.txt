@@ -1,0 +1,141 @@
+# ==========================================================
+#  KEJADIAN ACAK & RINTANGAN
+#  Setiap ganti hari, paling banyak SATU kejadian bisa terjadi.
+#  Muncul saat waktu bebas berikutnya. Bisa juga dipanggil dari naskah: @kejadian id
+#
+#  [id]
+#  judul    = judul singkat
+#  ikon     = emoji
+#  tempat   = desa / kota / semua
+#  peluang  = persen kemungkinan per hari (0 = hanya lewat naskah)
+#  syarat   = (opsional) contoh: uang >= 30000   ·   gabungkan dengan &&
+#             variabel berguna: uang, lokasi, kos, musim (hujan/kemarau), bulan, usia,
+#             kenal_<id>, cinta_<id>, jalur, kerja_<id>
+#  sekali   = ya (hanya terjadi sekali seumur permainan)
+#  teks     = cerita kejadian
+#  efek     = efek langsung (bar, uang, uang -40%, cinta_ibu +5, percaya_bayu -5, variabel lain)
+#  pilih_a / pilih_b / pilih_c = Teks tombol | efek | teks hasil
+#  catatan  = (opsional) tambahkan catatan ke aplikasi Catatan
+# ==========================================================
+
+# ---------------- KESEHATAN ----------------
+
+[flu]
+judul   = Demam & flu
+ikon    = 🤒
+tempat  = semua
+peluang = 4
+teks    = Kepalamu berat, badanmu panas. Sepertinya kamu kena flu.
+efek    = kesehatan -12, energi -15
+pilih_a = Beli obat di warung (Rp9.000) | uang -9000, kesehatan +12 | Setelah minum obat dan tidur sebentar, badanmu terasa lebih ringan.
+pilih_b = Tahan saja, minum air hangat | energi +5, kewarasan -4 | Kamu meringkuk di balik selimut. Semoga cepat sembuh...
+
+[kehujanan]
+judul   = Kehujanan
+ikon    = 🌧️
+tempat  = semua
+peluang = 6
+syarat  = musim == hujan
+teks    = Hujan deras turun tiba-tiba. Kamu basah kuyup sebelum sempat berteduh.
+efek    = kesehatan -6, energi -6, kewarasan -2
+
+[panas_terik]
+judul   = Panas menyengat
+ikon    = ☀️
+tempat  = desa
+peluang = 5
+syarat  = musim == kemarau
+teks    = Matahari kemarau membakar kulit. Tenggorokanmu cepat sekali kering.
+efek    = hidrasi -20
+
+# ---------------- UANG & KOTA ----------------
+
+[dompet_hilang]
+judul   = Dompet hilang!
+ikon    = 👛
+tempat  = kota
+peluang = 3
+syarat  = uang >= 30000
+teks    = Di kereta komuter yang penuh sesak, kamu baru sadar... dompetmu sudah tidak ada di saku.
+efek    = uang -40%, kewarasan -12
+catatan = Dompet hilang di kereta. Lain kali taruh di saku depan.
+
+[tawaran_hp]
+judul   = Tawaran mencurigakan
+ikon    = 📱
+tempat  = kota
+peluang = 3
+syarat  = uang >= 150000
+teks    = Seorang pria menawarkan HP bagus seharga Rp150.000 saja. "Butuh uang cepat, Dek. Masih mulus."
+pilih_a = Beli | uang -150000, kewarasan -12 | Begitu dicoba di kos... HP itu mati total. Kamu kena tipu.
+pilih_b = Tolak dan pergi | kewarasan +2 | Kamu menggeleng dan berjalan cepat. Terlalu bagus untuk jadi kenyataan.
+
+[preman_gang]
+judul   = Dipalak di gang
+ikon    = 😠
+tempat  = kota
+peluang = 4
+syarat  = kos == kos_rel_utara
+teks    = Dua pemuda menghadang di gang sempit dekat rel. "Bagi duit dong, anak baru."
+pilih_a = Serahkan Rp20.000 | uang -20000, kewarasan -8 | Mereka tertawa dan pergi. Kamu gemetar sampai tiba di kos.
+pilih_b = Lari sekencang-kencangnya | energi -20, hidrasi -10 | Napasmu tersengal, tapi kamu berhasil lolos.
+pilih_c = Melawan | kesehatan -18, kewarasan +4 | Kamu babak belur, tapi sejak itu mereka tak pernah mengganggumu lagi.
+
+[banjir]
+judul   = Banjir!
+ikon    = 🌊
+tempat  = kota
+peluang = 5
+syarat  = musim == hujan && kos == kos_rel_utara
+teks    = Air dari selokan meluap masuk ke kamar kos. Barang-barangmu basah, tidurmu terganggu semalaman.
+efek    = energi -20, kewarasan -10, kesehatan -5
+
+[nemu_uang]
+judul   = Uang di jalan
+ikon    = 💵
+tempat  = semua
+peluang = 2
+teks    = Ada selembar uang lima puluh ribuan tergeletak di trotoar. Tak ada orang di sekitar.
+pilih_a = Ambil saja | uang +50000, kewarasan -3 | Kamu memasukkannya ke saku. Rasanya sedikit tidak enak.
+pilih_b = Serahkan ke pos satpam | kewarasan +6, jujur +1 | Pak satpam tersenyum. "Jarang ada anak sejujur kamu."
+
+# ---------------- KELUARGA & TEMAN ----------------
+
+[kiriman_mendadak]
+judul   = Pesan dari Ibu
+ikon    = 💌
+tempat  = kota
+peluang = 3
+syarat  = uang >= 60000
+teks    = Ibu menelepon. Laras butuh uang untuk beli buku sekolah, tapi warung sedang sepi.
+pilih_a = Kirim Rp50.000 untuk Laras | uang -50000, cinta_ibu +6, cinta_laras +8 | "Makasih, Nak..." Suara Ibu bergetar.
+pilih_b = Bilang uangmu juga pas-pasan | cinta_ibu -2 | "Iya, Ibu ngerti. Jaga dirimu, ya."
+
+[bayu_pinjam]
+judul   = Bayu minta tolong
+ikon    = 🙏
+tempat  = desa
+peluang = 3
+syarat  = kenal_bayu == 1 && uang >= 20000
+teks    = Bayu datang dengan wajah kusut. Jaring bapaknya robek dan dia butuh pinjaman Rp20.000.
+pilih_a = Pinjamkan | uang -20000, cinta_bayu +7, percaya_bayu +5 | "Kamu memang teman sejati! Nanti aku ganti, sumpah."
+pilih_b = Tolak | cinta_bayu -3 | "Oh... ya udah, nggak apa-apa." Bayu pergi sambil menunduk.
+
+[dimas_traktir]
+judul   = Ditraktir Dimas
+ikon    = 🍜
+tempat  = kota
+peluang = 3
+syarat  = kenal_dimas == 1 && cinta_dimas >= 35
+teks    = "Aku lagi dapat bonus ngantar paket! Ayo makan bakso, aku yang traktir!" kata Dimas.
+efek    = kenyang +35, kewarasan +6, cinta_dimas +3
+
+[laras_rindu]
+judul   = Telepon dari Laras
+ikon    = 📞
+tempat  = kota
+peluang = 3
+syarat  = kenal_laras == 1
+teks    = Laras menelepon sambil terisak. "Kakak kapan pulang? Rumah sepi..."
+pilih_a = Hibur dia lama-lama | energi -5, kewarasan +3, cinta_laras +6 | Kalian mengobrol sampai Laras tertawa lagi.
+pilih_b = "Kakak sibuk, nanti saja ya." | cinta_laras -4, percaya_laras -3 | Telepon ditutup. Kamu menatap layar HP lama sekali.

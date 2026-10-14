@@ -1,0 +1,189 @@
+# ==========================================================
+#  THREADS OF DESTINY: LIVING PARALLEL
+#  Naskah: BAB 3 — BENANG MERAH
+#  {nama_sahabat} = nama sahabat masa kecil (Arka / Alya, menyesuaikan pemain)
+# ==========================================================
+
+@sembunyi semua
+@gelap 1500
+@jika jalur == kerja -> desa
+
+
+# ==========================================================
+#  JALUR KOTA
+# ==========================================================
+
+@waktu Minggu kedua di Kota Sakala
+@kalender Senin pagi
+@latar kelas_sma
+@terang 1500
+* Seminggu berlalu. Rutinitas mulai terbentuk: bangun pagi, sekolah, mengatur uang... dan diam-diam mencari.
+
+@jika misterius_dibalas == 1 -> balasan_misterius
+@hp pesan Nomor Tidak Dikenal | Kamu sudah sampai di Sakala, ya. Aku melihatmu di stasiun minggu lalu.
+@lompat baca_pesan
+
+:: balasan_misterius
+@hp pesan Nomor Tidak Dikenal | Aku sudah membaca pesanmu. Maaf... aku belum bisa menjawab. Tolong, jangan cari aku dulu.
+
+:: baca_pesan
+@tunggu_hp
+{nama}: Dia ada di kota ini... dan dia melihatku.
+@catatan Nomor misterius ada di Kota Sakala. Dia melihatku di stasiun.
+
+# ---------- Album Nadia ----------
+@kenal nadia
+@tampil nadia biasa
+Nadia: {nama}, tunggu. Aku cari-cari di rumah semalam... ini album angkatan SMP-ku.
+Nadia: Anak dari Tanjung Lentera yang kuceritakan. Ini fotonya, waktu pentas seni.
+* Fotonya buram. Wajahnya tertutup bayangan lampu panggung... tapi di pergelangan tangannya, terlihat jelas seutas gelang merah.
+{nama}: Gelang benang merah...
+Nadia: Di bawah fotonya cuma tertulis inisial: "A."
+@tambah petunjuk_sahabat +1
+@catatan Petunjuk #2 — Album SMP Nadia: murid berinisial "A.", memakai gelang benang merah yang sama denganku.
+
+@pilihan
+> Ceritakan semuanya pada Nadia -> cerita_nadia
+> Simpan rahasia ini sendiri -> rahasia
+
+:: cerita_nadia
+{nama}: Dia sahabatku waktu kecil. Dia pergi tanpa pamit, tiga tahun lalu.
+@tampil nadia senyum
+Nadia: ...Aku akan bantu cari. Toko buku ayahku ada di depan Stasiun Besar. Ribuan orang lewat setiap hari.
+Nadia: Kalau aku lihat orang dengan gelang seperti itu, aku kabari kamu.
+@cinta nadia +8
+@percaya nadia +6
+@atur nadia_membantu = 1
+@tambah petunjuk_sahabat +1
+@catatan Nadia membantu mengawasi dari toko buku ayahnya di depan Stasiun Besar.
+@lompat minggu_kedua
+
+:: rahasia
+{nama}: Bukan siapa-siapa. Cuma mirip temanku.
+Nadia: ...Begitu.
+* Nadia menatapmu sedikit lebih lama, lalu memasukkan album itu kembali ke tasnya.
+@perilaku nadia menghindar
+
+:: minggu_kedua
+@sembunyi semua
+@maju 2
+* Hari-hari berjalan. Petunjuk bisa dicari lewat aktivitas "Mencari jejak sahabat lama" di waktu bebas — kalau kamu sempat di antara sekolah, kerja, dan bertahan hidup.
+@jika nadia_membantu == 1 -> pesan_nadia
+@lompat bebas_kedua
+
+:: pesan_nadia
+@hp pesan Nadia | Tadi sore ada anak pakai gelang merah lewat depan toko. Dia naik kereta jurusan Pelabuhan. Sabtu sore biasanya dia lewat lagi, kata ayahku.
+@catatan Petunjuk #3 — Kata Nadia: anak bergelang merah lewat Stasiun Besar, naik kereta jurusan Pelabuhan, biasanya Sabtu sore.
+
+:: bebas_kedua
+@bebas 10
+
+# ---------- Stasiun Besar ----------
+@gelap 1500
+@waktu Sabtu sore — Stasiun Besar Sakala
+@kalender Sabtu sore
+@latar kota_besar
+@terang 1500
+* Stasiun Besar Sakala, jam pulang kerja. Ribuan orang berdesakan.
+@jika petunjuk_sahabat >= 4 -> stasiun_dekat
+* Di tengah kerumunan, sekilas kamu melihat seutas gelang merah... lalu hilang ditelan arus manusia.
+{nama}: Tunggu...!
+* Kamu terlambat. Sosok itu sudah lenyap.
+* Kalau saja kamu tahu lebih banyak tentang ke mana dia biasa pergi...
+@lompat akhir_kota
+
+:: stasiun_dekat
+* Berkat petunjuk-petunjuk yang kamu kumpulkan, kamu tahu: setiap Sabtu sore, dia lewat peron jurusan Pelabuhan.
+@tampil sosok biasa
+* Di ujung peron, seseorang berdiri memunggungimu. Di pergelangan tangannya... gelang benang merah.
+{nama}: {nama_sahabat}...?
+* Sosok itu tersentak. Tanpa menoleh, ia melangkah masuk ke kereta yang pintunya mulai menutup.
+@sembunyi sosok
+* Kereta melaju. Tapi kali ini kamu yakin.
+@atur melihat_sahabat = 1
+@catatan Aku melihatnya di peron jurusan Pelabuhan, Sabtu sore. Gelang benang merah itu. Itu benar-benar {nama_sahabat}.
+@hp pesan Nomor Tidak Dikenal | ...Maaf. Aku belum siap. Tapi aku senang kamu masih memakai gelang itu.
+@tunggu_hp
+
+:: akhir_kota
+@gelap 1500
+* Benang merah itu belum putus. Dia ada di kota ini.
+* Dan entah kenapa... dia sedang menghindar.
+@tamat Bab 3 — Bersambung…
+
+
+# ==========================================================
+#  JALUR DESA
+# ==========================================================
+
+:: desa
+@waktu Minggu kedua di Tanjung Lentera
+@kalender Senin pagi
+@latar rumah_warung
+@terang 1500
+* Seminggu bekerja. Tanganmu mulai kapalan, tapi kamu mulai terbiasa dengan bau garam dan panas matahari.
+@tampil laras sedih tengah
+Laras: Kak! Kak! Ibu... Ibu pingsan di warung!
+@sembunyi semua
+@latar kamar_pagi
+@tampil ibu sedih
+Ibu: Ibu nggak apa-apa... cuma capek.
+* Kata mantri desa, Ibu kelelahan dan tekanan darahnya tinggi. Ibu butuh obat dan harus istirahat. Biayanya Rp150.000.
+
+@pilihan
+> Bayar dengan uangmu sendiri (Rp150.000) -> bayar_sendiri
+> Pinjam ke Juragan Darto -> pinjam_darto
+> Serahkan pada Ayah -> serahkan_ayah
+
+:: bayar_sendiri
+@jika uang < 150000 -> uang_kurang
+@uang -150000
+@cinta ibu +12
+@cinta ayah +6
+Ibu: Uang hasil kerjamu... Nak, Ibu jadi malu.
+{nama}: Sekarang giliranku menjaga Ibu.
+@lompat setelah_ibu
+
+:: uang_kurang
+* Kamu menghitung uangmu berkali-kali. Tidak cukup.
+{nama}: Aku... harus pinjam.
+
+:: pinjam_darto
+@kenal darto
+@sembunyi ibu
+@tampil darto biasa
+Juragan Darto: Seratus lima puluh ribu? ...Ibumu orang baik. Saya bayarkan ke mantri langsung.
+Juragan Darto: Tapi itu hutang. Kerja yang rajin sampai lunas.
+@atur hutang_darto = 150000
+@percaya darto +5
+@cinta ibu +8
+@catatan Hutang ke Juragan Darto Rp150.000 untuk obat Ibu.
+@lompat setelah_ibu
+
+:: serahkan_ayah
+@sembunyi ibu
+@tampil ayah biasa
+Ayah: Biar Ayah yang urus. Ayah jual semua hasil tangkapan minggu ini.
+* Malam itu, Ayah melaut lebih jauh dari biasanya. Kamu tidak bisa tidur memikirkannya.
+@cinta ayah +3
+@stat kewarasan -8
+
+:: setelah_ibu
+@sembunyi semua
+* Ibu berangsur pulih. Tapi kejadian ini membuatmu sadar: hidup di desa pun tidak mudah.
+
+@latar rumah_warung
+@tampil laras biasa
+Laras: Kak, aku nemu ini di laci Kakak. Gelang benang merah. Punya siapa?
+{nama}: Itu... janji lama.
+@tambah petunjuk_sahabat +1
+@sembunyi semua
+@hp pesan Nomor Tidak Dikenal | Kamu masih di Tanjung Lentera, ya? Kalau kamu tidak datang ke Sakala... mungkin suatu hari aku yang akan pulang.
+@tunggu_hp
+@catatan Nomor misterius: "Kalau kamu tidak datang ke Sakala, mungkin suatu hari aku yang akan pulang."
+@bebas 10
+
+@gelap 1500
+* Di Tanjung Lentera, mercusuar tua itu masih padam.
+* Tapi seseorang di kota sana... masih mengingat janjinya.
+@tamat Bab 3 — Bersambung…
