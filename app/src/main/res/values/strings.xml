@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Threads of Destiny</string>
+    <string name="title_main">Threads of Destiny</string>
+    <string name="title_sub">Living Parallel</string>
+
+    <string name="btn_start">START GAME</string>
+    <string name="btn_continue">CONTINUE</string>
+    <string name="btn_continue_empty">(No Save Data Found)</string>
+    <string name="btn_load">LOAD DATA</string>
+    <string name="btn_settings">SETTINGS</string>
+
+    <string name="version_format">v%1$s · © 2026 Valerius Games</string>
+    <string name="coming_soon">%1$s — segera hadir</string>
+    <string name="cd_skip_video">Ketuk untuk melewati video</string>
+</resources>
