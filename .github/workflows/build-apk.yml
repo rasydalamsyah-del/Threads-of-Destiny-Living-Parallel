@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Siapkan Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -33,7 +33,14 @@ jobs:
       - name: Build APK
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace
+          set -o pipefail
+          ./gradlew assembleDebug 2>&1 | tee build.log || {
+            # Tampilkan error kompilasi sebagai anotasi agar mudah dibaca
+            grep -E "^e: |error:|ERROR:|What went wrong" -A2 build.log | head -40 | while IFS= read -r line; do
+              echo "::error::${line}"
+            done
+            exit 1
+          }
 
       - name: Beri nama APK
         id: apk

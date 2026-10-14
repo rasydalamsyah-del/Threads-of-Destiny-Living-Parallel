@@ -52,7 +52,7 @@ class PhoneIconView @JvmOverloads constructor(
         contentDescription = "HP"
     }
 
-    fun setRinging(on: Boolean) {
+    fun ring(on: Boolean) {
         if (ringing == on) return
         ringing = on
         anim?.cancel()

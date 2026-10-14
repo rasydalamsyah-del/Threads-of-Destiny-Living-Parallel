@@ -248,7 +248,7 @@ class GameActivity : Activity() {
                 is Cmd.PhoneMessage -> {
                     setPhoneIconVisible(true)
                     phone.addMessage(fill(c.sender), fill(c.text))
-                    phoneIcon.setRinging(true)
+                    phoneIcon.ring(true)
                 }
                 is Cmd.WaitForPhone -> { waitForPhone(); return }
                 is Cmd.End -> { endStory(c.text); return }
@@ -335,7 +335,7 @@ class GameActivity : Activity() {
             start()
         }
 
-        fun run(i: Int) {
+        fun step(i: Int) {
             if (i >= steps.size) {
                 eyelid.visibility = View.GONE
                 bg.setBlur(0f)
@@ -347,11 +347,11 @@ class GameActivity : Activity() {
                 duration = ms
                 interpolator = AccelerateDecelerateInterpolator()
                 addUpdateListener { eyelid.openness = it.animatedValue as Float }
-                withEnd { run(i + 1) }
+                withEnd { step(i + 1) }
                 start()
             }
         }
-        run(0)
+        step(0)
     }
 
     private fun setClock(text: String?) {
@@ -479,7 +479,7 @@ class GameActivity : Activity() {
 
     private fun openPhone() {
         if (wait == Wait.BUSY && !phoneIcon.ringing) return
-        phoneIcon.setRinging(false)
+        phoneIcon.ring(false)
         phoneHint.animate().cancel()
         phoneHint.alpha = 0f
         phone.open()
@@ -505,7 +505,7 @@ class GameActivity : Activity() {
     private fun endStory(text: String) {
         wait = Wait.BUSY
         hideDialog()
-        phoneIcon.setRinging(false)
+        phoneIcon.ring(false)
         fadeBlack(1f, 1800) {
             showTimecard(text) { leaveToMenu() }
         }
