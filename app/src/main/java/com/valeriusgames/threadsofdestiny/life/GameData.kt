@@ -21,6 +21,7 @@ class GameData private constructor(
     val documents: Map<String, DocDef>,
     val interview: List<InterviewQ>,
     val events: List<EventDef>,
+    val posts: List<PostDef>,
 ) {
 
     /**
@@ -46,6 +47,19 @@ class GameData private constructor(
     data class EventOption(val label: String, val effects: Map<String, Long>, val result: String)
 
     /** Kejadian acak / rintangan (data/kejadian.txt). */
+    /** Unggahan teman di Sosmed (jenis = unggahan) atau hasil pencarian sahabat (jenis = cari). */
+    data class PostDef(
+        val id: String,
+        val search: Boolean,
+        val author: String?,
+        val text: String,
+        val minDay: Int,
+        val need: Int,
+        val condition: String?,
+        val note: String?,
+        val clue: Int,
+    )
+
     data class EventDef(
         val id: String,
         val title: String,
@@ -306,7 +320,20 @@ class GameData private constructor(
                     note = m["catatan"]?.takeIf { it.isNotBlank() },
                 )
             }
-            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events)
+            val posts = readSections(ctx, "data/sosmed.txt").map { (id, m) ->
+                PostDef(
+                    id = id,
+                    search = (m["jenis"] ?: "").trim().lowercase() == "cari",
+                    author = m["penulis"]?.trim()?.takeIf { it.isNotEmpty() },
+                    text = m["isi"] ?: "",
+                    minDay = m["hari"]?.trim()?.toIntOrNull() ?: 0,
+                    need = m["butuh"]?.trim()?.toIntOrNull() ?: 1,
+                    condition = m["syarat"]?.takeIf { it.isNotBlank() },
+                    note = m["catatan"]?.takeIf { it.isNotBlank() },
+                    clue = m["petunjuk"]?.trim()?.toIntOrNull() ?: 0,
+                )
+            }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {

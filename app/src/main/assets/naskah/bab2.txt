@@ -24,16 +24,17 @@
 @tampil ayah biasa kanan
 Ibu: Jangan lupa makan. Jangan tidur malam-malam. Kalau ada apa-apa, telepon Ibu.
 Ayah: Ini bekal dari Ayah. Pakai untuk bayar kos bulan pertama. Hemat-hemat.
-@jika jalur == keduanya -> bekal_keduanya
+@jika rencana_kerja == terbuka -> bekal_kerja
 @uang +700000
 @kiriman 600000
 Ayah: Tiap bulan Ayah sama Ibu kirim enam ratus ribu. Cukup-cukupkan, ya.
 @lompat pamit
 
-:: bekal_keduanya
-@uang +400000
-@kiriman 300000
-Ayah: Kamu bilang mau sambil kerja... Jadi tiap bulan Ayah kirim tiga ratus ribu dulu. Sisanya kamu usahakan sendiri.
+:: bekal_kerja
+@uang +600000
+@kiriman 450000
+Ayah: Kamu bilang mau sambil kerja... Jadi tiap bulan Ayah kirim empat ratus lima puluh ribu dulu. Sisanya Ayah tabung untuk Laras.
+Ayah: Tapi kalau kerjamu mengganggu sekolah, bilang. Ayah tidak marah.
 
 :: pamit
 @tampil laras sedih tengah
@@ -77,7 +78,7 @@ Laras: Kak... nanti pulang, kan? Janji?
 @latar kos_kamar
 * {nama} meletakkan tas di lantai. Untuk pertama kalinya, tidak ada suara Ibu dari dapur. Tidak ada Laras yang merecoki.
 * Di kota ini, tidak ada yang akan memasakkan makanan untukmu. Belanjalah di minimarket, dan jaga uangmu baik-baik.
-* HP-mu kini berisi aplikasi Chat, Kontak, Kalender, Lowongan, Dompet, dan Catatan. Buka lewat ikon HP, atau tombol 📱 HP saat waktu bebas.
+* HP-mu kini berisi aplikasi Chat, Kontak, Kalender, Lowongan, Dompet, Catatan, dan Sosmed. Buka lewat ikon HP, atau tombol 📱 HP saat waktu bebas.
 @bebas 1
 
 @latar kos_kamar
@@ -133,15 +134,15 @@ Nadia: Aku lupa... Dia cuma setahun, lalu pindah lagi. Kenapa? Kamu kenal?
 * Jantung {nama} berdegup kencang. Mungkinkah...
 @sembunyi semua
 * Hari pertama sekolah berlalu dengan cepat.
-@jika jalur == keduanya -> info_kerja
-@lompat minggu_pertama
 
 :: info_kerja
 @tampil dimas biasa
-Dimas: Eh, katanya kamu mau sekolah sambil kerja? Aku juga, jadi kurir paket tiap sore.
-Dimas: Coba cari kerja paruh waktu. Banyak, kok, asal kuat capeknya.
+Dimas: Eh, pulang sekolah mau ke mana? Aku sih langsung kerja, jadi kurir paket tiap sore.
+Dimas: Anak kos di sini macam-macam. Ada yang kerja kayak aku, ada yang tiap malam nongkrong di mal pakai uang kiriman.
+Dimas: Terserah kamu mau jadi yang mana. Tapi uang kiriman itu cepat habis, lho.
 @sembunyi dimas
-* (Buka "🔎 Cari kerja" di waktu bebas untuk melamar pekerjaan paruh waktu.)
+* Di kota ini, tidak ada yang mengawasimu. Kamu bebas bekerja, belajar, atau bersenang-senang. Setiap pilihan ada harganya.
+* (Lowongan kerja paruh waktu ada di "🔎 Cari kerja" saat waktu bebas, atau aplikasi Lowongan di HP.)
 
 :: minggu_pertama
 @maju 2
@@ -196,6 +197,8 @@ Ayah: Tidak apa-apa. Masih ada laut. Ikut melaut saja kalau mau cari uang.
 @tunggu_hp
 {nama}: Dasar Bayu...
 * Teman-teman seangkatan satu per satu pergi ke kota. Desa terasa semakin sepi. Tapi di sini, setidaknya, ada keluarga.
+* Malam hari, setelah lelah bekerja, {nama} selalu membuka HP. Mengetik nama yang sama di kolom pencarian.
+* (Aplikasi 📷 Sosmed di HP: lihat kabar teman-teman, dan cari jejak sahabatmu sekali sehari. Siapa tahu suatu hari ada yang muncul.)
 @bebas 8
 
 @gelap 1500

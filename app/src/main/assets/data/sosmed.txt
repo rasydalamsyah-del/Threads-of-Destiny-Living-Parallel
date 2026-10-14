@@ -1,0 +1,106 @@
+# ==========================================================
+#  APLIKASI SOSMED DI HP
+#  Panduan lengkap: docs/DATA.md
+#
+#  --- Unggahan teman (beranda) ---
+#  [id]
+#  penulis = id karakter (hanya tampil bila pemain sudah kenal)
+#  isi     = isi unggahan ({nama} = nama pemain)
+#  hari    = mulai tampil pada hari ke-sekian (0 = sejak awal hidup dimulai)
+#  syarat  = (opsional) contoh: jalur == kerja   ·   lokasi == kota
+#  Pemain bisa menyukai unggahan sekali → Cinta penulis +1.
+#
+#  --- Hasil pencarian sahabat ---
+#  [id]
+#  jenis    = cari
+#  butuh    = ditemukan pada pencarian ke-sekian (pemain hanya bisa mencari 1x sehari)
+#  syarat   = (opsional)
+#  isi      = apa yang ditemukan ({nama_sahabat} = nama sahabat)
+#  catatan  = disimpan ke aplikasi Catatan
+#  petunjuk = tambahan petunjuk_sahabat
+# ==========================================================
+
+# ---------------- UNGGAHAN ----------------
+
+[bayu_lulus]
+penulis = bayu
+hari    = 0
+isi     = LULUS JUGA AKHIRNYA!!! 🎓 Makasih guru-guru yang sabar banget ngadepin aku 😂
+
+[sekar_buku]
+penulis = sekar
+hari    = 1
+isi     = Daftar bacaan liburan: 7 buku. Target: habis sebelum tahun ajaran baru. 📚
+
+[laras_kucing]
+penulis = laras
+hari    = 2
+isi     = Kucing tetangga tidur di warung Ibu lagi 🐱 namanya aku kasih Gorengan
+
+[bayu_dermaga]
+penulis = bayu
+hari    = 6
+isi     = Sore di dermaga. Makin sepi aja, satu-satu pada ke kota 😔
+
+[ibu_warung]
+penulis = ibu
+hari    = 8
+isi     = Pisang goreng hari ini habis sebelum jam 9. Alhamdulillah. 🍌
+
+[dimas_paket]
+penulis = dimas
+hari    = 7
+syarat  = lokasi == kota
+isi     = 47 paket hari ini. Betis udah kayak pemain bola 🚲💨
+
+[nadia_toko]
+penulis = nadia
+hari    = 9
+syarat  = lokasi == kota
+isi     = Jaga toko buku Ayah sambil ngerjain PR. Hujan, kopi, dan antrean kereta di seberang jalan. ☔
+
+[sekar_rindu]
+penulis = sekar
+hari    = 10
+isi     = Kelas kosong rasanya aneh. Semoga kalian yang di kota baik-baik aja ya.
+
+[laras_kangen]
+penulis = laras
+hari    = 12
+syarat  = jalur == sma
+isi     = Kak {nama} kapan pulang?? Kamar Kakak aku pakai buat main boneka ya 😝
+
+[bayu_kerja]
+penulis = bayu
+hari    = 12
+syarat  = jalur == kerja
+isi     = Kerja bareng {nama} di gudang Juragan Darto. Tangan bau ikan seharian, tapi seru juga 😂🐟
+
+[darto_lowongan]
+penulis = darto
+hari    = 4
+syarat  = lokasi == desa
+isi     = DICARI: tenaga angkut & jemur ikan. Rajin, jujur, tahan panas. Hubungi gudang Darto.
+
+# ---------------- PENCARIAN SAHABAT ----------------
+
+[cari_1]
+jenis    = cari
+butuh    = 2
+isi      = Di antara puluhan akun bernama sama, ada satu akun lama dengan foto profil gelang benang merah. Unggahan terakhirnya dua tahun lalu: foto langit Kota Sakala.
+catatan  = Sosmed: akun lama {nama_sahabat} (foto profil gelang merah). Unggahan terakhir dua tahun lalu, di Kota Sakala.
+petunjuk = 1
+
+[cari_2]
+jenis    = cari
+butuh    = 5
+isi      = Di foto kelulusan sebuah SMP di Sakala, ada komentar dari akun guru: "Semoga {nama_sahabat} betah di sekolah barunya." Akun lama itu ditandai di sana.
+catatan  = Sosmed: {nama_sahabat} pernah sekolah di SMP Sakala, lalu pindah lagi.
+petunjuk = 1
+
+[cari_3]
+jenis    = cari
+butuh    = 9
+isi      = Sebuah akun baru tanpa nama mengikuti akun lama itu. Isinya hanya satu foto: dermaga kayu dan mercusuar yang padam. Persis seperti di Tanjung Lentera.
+catatan  = Sosmed: akun tanpa nama, satu-satunya foto adalah dermaga & mercusuar padam. Mungkinkah dia?
+petunjuk = 1

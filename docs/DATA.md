@@ -145,8 +145,26 @@ pilih_b = ...
 catatan = (opsional) masuk ke aplikasi Catatan
 ```
 - Setiap ganti hari, **paling banyak satu** kejadian terjadi; tampil di waktu bebas berikutnya.
-- Efek bisa: bar (`kesehatan`, `kenyang`, …), `uang` (angka atau **persen**: `uang -40%`), `cinta_<id>` / `percaya_<id>` karakter, atau variabel lain.
-- Variabel berguna untuk `syarat`: `uang`, `lokasi`, `kos`, `musim` (`hujan` Nov–Mar / `kemarau`), `bulan`, `usia`, `jalur`, `kenal_<id>`, `cinta_<id>`, `kerja_<id>`.
+- Efek bisa: bar (`kesehatan`, `kenyang`, …), `uang` (angka atau **persen**: `uang -40%`), `cinta_<id>` / `percaya_<id>` karakter, `terbongkar_<kode> 1` (kebohongan dari `@bohong` terbongkar), atau variabel lain (mis. `foya +1`).
+- Variabel berguna untuk `syarat`: `uang`, `lokasi`, `kos`, `musim` (`hujan` Nov–Mar / `kemarau`), `bulan`, `usia`, `jalur` (`sma` / `kerja`), `rencana_kerja` (`tidak` / `rahasia` / `terbuka` / `desa`), `kerja_aktif` (jumlah pekerjaan selain sekolah), `foya`, `hidup_baik`, `minta_ortu`, `kenal_<id>`, `cinta_<id>`, `kerja_<id>`.
+
+## sosmed.txt (aplikasi Sosmed di HP)
+```
+[bayu_dermaga]            unggahan teman (beranda)
+penulis = bayu            id karakter — hanya tampil bila pemain sudah kenal
+hari    = 6               mulai tampil pada hari ke-6
+syarat  = jalur == kerja  (opsional)
+isi     = Sore di dermaga. Makin sepi aja 😔
+
+[cari_1]                  hasil pencarian sahabat
+jenis    = cari
+butuh    = 2              ditemukan pada pencarian ke-2 (pemain mencari 1x sehari)
+isi      = Yang ditemukan ({nama_sahabat} = nama sahabat)
+catatan  = Masuk ke aplikasi Catatan
+petunjuk = 1              tambahan petunjuk_sahabat
+```
+- Menyukai unggahan (sekali per unggahan) → Cinta penulis +1.
+- Variabel: `sosmed_cari` (jumlah pencarian), `sosmed_<id>` = 1 bila temuan sudah didapat.
 
 ## pekerjaan.txt (sekolah & pekerjaan)
 ```

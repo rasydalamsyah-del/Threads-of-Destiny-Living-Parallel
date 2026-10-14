@@ -104,5 +104,23 @@ for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
         if j not in labels:
             err(f, n, f"Label ':: {j}' tidak ditemukan")
 
+# data/sosmed.txt: penulis harus karakter yang ada
+sos = os.path.join(data, "sosmed.txt")
+if os.path.exists(sos):
+    for n, raw in enumerate(open(sos, encoding="utf-8"), 1):
+        l = raw.strip()
+        if l.lower().startswith("penulis") and "=" in l:
+            who = l.split("=", 1)[1].strip()
+            if who and who not in chars:
+                err(sos, n, f"Penulis '{who}' tidak ada di data/karakter.txt")
+# data/pekerjaan.txt: orang_dalam harus karakter yang ada
+pk = os.path.join(data, "pekerjaan.txt")
+for n, raw in enumerate(open(pk, encoding="utf-8"), 1):
+    l = raw.strip()
+    if l.lower().startswith("orang_dalam") and "=" in l:
+        who = l.split("=", 1)[1].strip()
+        if who and who not in chars:
+            err(pk, n, f"Orang dalam '{who}' tidak ada di data/karakter.txt")
+
 print(f"Pemeriksaan naskah selesai: {errors} kesalahan.")
 sys.exit(1 if errors else 0)

@@ -97,3 +97,48 @@ tempat = kota
 waktu  = siang, sore
 efek   = energi -15, kewarasan -2, petunjuk_sahabat +1
 teks   = Kamu bertanya ke beberapa orang di sekitar stasiun. Tak ada yang tahu... tapi seorang tukang parkir sepertinya mengingat sesuatu.
+
+# ---------------- KOTA: HIDUP BAIK ----------------
+
+[perpustakaan]
+nama   = Belajar di perpustakaan kota
+ikon   = 🏛️
+tempat = kota
+waktu  = siang, sore
+syarat = jalur == sma
+efek   = energi -12, hidrasi -6, kewarasan -1, akademik +3, hidup_baik +1
+teks   = Perpustakaan kota sunyi dan sejuk. Kamu mengerjakan soal-soal sampai lampu baca mulai berkedip.
+
+[lari_pagi]
+nama   = Lari pagi keliling taman
+ikon   = 🏃
+tempat = kota
+waktu  = pagi
+efek   = energi -10, hidrasi -12, kesehatan +3, kewarasan +6, hidup_baik +1
+teks   = Udara pagi kota belum terlalu kotor. Napasmu terengah, tapi kepalamu terasa jernih.
+
+# ---------------- KOTA: FOYA-FOYA ----------------
+
+[nongkrong_mal]
+nama   = Nongkrong & belanja di mal
+ikon   = 🛍️
+tempat = kota
+waktu  = siang, sore, malam
+efek   = uang -120000, kewarasan +15, energi -10, kenyang +15, foya +1
+teks   = Lampu-lampu mal menyilaukan. Kamu membeli baju yang sebenarnya tidak perlu, lalu makan di restoran cepat saji. Rasanya menyenangkan... untuk sementara.
+
+[kafe_kekinian]
+nama   = Ngopi di kafe kekinian
+ikon   = 🧋
+tempat = kota
+waktu  = siang, sore, malam
+efek   = uang -45000, kewarasan +8, hidrasi +20, foya +1
+teks   = Segelas kopi susu seharga makan dua hari di desa. Kamu memotretnya dulu sebelum diminum.
+
+[begadang_game]
+nama   = Begadang main game di warnet
+ikon   = 🎮
+tempat = kota
+waktu  = malam
+efek   = uang -20000, kewarasan +10, energi -25, kesehatan -3, akademik -1, foya +1
+teks   = "Satu ronde lagi," katamu, untuk kesepuluh kalinya. Saat keluar warnet, langit sudah mulai terang.

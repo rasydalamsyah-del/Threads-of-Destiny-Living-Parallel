@@ -91,30 +91,57 @@ Ibu: {nama}? Kok melamun? Jadi bagaimana, Nak?
 # ----------------------------------------------------------
 
 @pilihan
-> Lanjut SMA di Kota Sakala -> sma
-> Tetap di desa dan bekerja -> kerja
-> SMA di Kota Sakala sambil bekerja -> keduanya
+> Sekolah: lanjut SMA di Kota Sakala -> sma
+> Tetap di desa: bekerja & membantu keluarga -> kerja
 
 :: sma
 @atur jalur = sma
 {nama}: Aku mau lanjut SMA di Kota Sakala, Yah, Bu.
+* Ayah dan Ibu saling berpandangan. Lama sekali tidak ada yang bicara.
 Ayah: ...Baik. Kalau itu pilihanmu, Ayah akan usahakan biayanya.
-Ibu: Tapi janji, kamu belajar yang benar di sana, ya.
+@tampil ibu sedih kiri
+Ibu: Tapi, Nak... di kota itu semuanya bayar. Kos, makan, ongkos. Kamu sendirian di sana.
+Ibu: Ayah sama Ibu cuma bisa kirim seadanya. Ibu takut kamu kekurangan, terus tidak bilang.
+Ayah: Hasil laut sekarang tidak menentu, {nama}. Ayah tidak mau janji yang tidak bisa Ayah tepati.
+* {nama} melihat tangan Ayah yang kasar, dan kerutan baru di wajah Ibu. Bagaimana kamu menjawabnya?
+@pilihan
+> "Aku akan hemat. Cukup dengan kiriman Ayah dan Ibu." -> uang_ortu
+> "Iya, Bu. Aku pasti baik-baik saja." (diam-diam berencana kerja) -> kerja_rahasia
+> "Aku juga mau cari kerja paruh waktu di sana, biar tidak memberatkan." -> kerja_terbuka
+
+:: uang_ortu
+@atur rencana_kerja = tidak
+{nama}: Aku akan hemat, Bu. Cukup dengan yang Ayah sama Ibu kirim. Aku mau fokus sekolah.
+Ibu: ...Ya sudah. Tapi kalau kurang, bilang. Jangan ditahan-tahan.
+@cinta ibu +3
+@lompat siang
+
+:: kerja_rahasia
+@atur rencana_kerja = rahasia
+{nama}: Iya, Bu. Aku pasti baik-baik saja. Ibu jangan khawatir.
+* Di dalam hati, {nama} sudah memutuskan: di kota nanti, ia akan mencari kerja sendiri. Tapi kalau Ibu tahu, Ibu pasti makin cemas.
+@bohong kerja_rahasia ibu ayah
+Ibu: Syukurlah... Anak Ibu sudah besar, ya.
+@lompat siang
+
+:: kerja_terbuka
+@atur rencana_kerja = terbuka
+{nama}: Aku juga mau cari kerja paruh waktu di sana, Yah. Biar tidak semuanya Ayah sama Ibu yang tanggung.
+Ayah: Sekolah sambil kerja itu berat, {nama}. Kamu sanggup?
+{nama}: Aku sanggup, Yah. Tapi sekolah tetap nomor satu. Janji.
+Ibu: ...Anak ini memang keras kepala, persis ayahnya.
+Ayah: Kalau begitu Ayah kirim sedikit lebih kecil, sisanya Ayah tabung untuk Laras. Tapi kalau capek, berhenti. Paham?
+@percaya ayah +6
+@percaya ibu +6
 @lompat siang
 
 :: kerja
 @atur jalur = kerja
-{nama}: Aku mau kerja dulu saja, Yah. Bantu Ayah dan Ibu.
+@atur rencana_kerja = desa
+{nama}: Aku mau tetap di desa, Yah. Kerja, bantu Ayah dan Ibu, dan pelan-pelan memperbaiki hidup kita.
 Ibu: Kamu yakin, Nak? Ibu tidak mau kamu menyesal nanti.
 Ayah: Hidup di laut itu keras. Tapi Ayah bangga kamu mau bantu.
-@lompat siang
-
-:: keduanya
-@atur jalur = keduanya
-{nama}: Aku mau sekolah di Sakala, tapi aku juga mau kerja di sana. Supaya tidak terlalu memberatkan Ayah dan Ibu.
-Ayah: Sekolah sambil kerja itu berat, {nama}. Kamu sanggup?
-{nama}: Aku sanggup, Yah.
-Ibu: ...Anak ini memang keras kepala, persis ayahnya.
+{nama}: (Dan aku tidak akan berhenti mencarinya. Kalau tidak bisa ke kota, aku cari lewat internet.)
 
 
 # ----------------------------------------------------------
@@ -131,7 +158,7 @@ Ayah: Ini hadiah kelulusan dari Ayah. Simpan baik-baik, ya.
 @uang +50000
 @barang air_mineral 1
 * Mulai sekarang, hidupmu ada di tanganmu sendiri. Jaga perutmu, minummu, tenagamu, dan pikiranmu.
-* Ketuk panel di pojok kiri atas kapan saja untuk melihat status dan isi tas.
+* Ketuk tombol 📊 di sisi kiri layar kapan saja untuk menarik panel status. Ketuk panelnya untuk melihat isi tas.
 @kenal bayu
 @kenal sekar
 @hp pesan Bayu | Woy {nama}! Selamat lulus, {bro|cuy}! Aku sama Sekar nongkrong di dermaga, nyusul ya kalau sempat.

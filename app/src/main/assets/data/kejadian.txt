@@ -139,3 +139,61 @@ syarat  = kenal_laras == 1
 teks    = Laras menelepon sambil terisak. "Kakak kapan pulang? Rumah sepi..."
 pilih_a = Hibur dia lama-lama | energi -5, kewarasan +3, cinta_laras +6 | Kalian mengobrol sampai Laras tertawa lagi.
 pilih_b = "Kakak sibuk, nanti saja ya." | cinta_laras -4, percaya_laras -3 | Telepon ditutup. Kamu menatap layar HP lama sekali.
+
+# ---------------- HIDUP DI KOTA: PILIHAN & AKIBAT ----------------
+
+[ortu_tahu_kerja]
+judul   = Ibu tahu kamu bekerja
+ikon    = 📞
+tempat  = kota
+peluang = 6
+syarat  = rencana_kerja == rahasia && kerja_aktif >= 1
+sekali  = ya
+teks    = Ibu menelepon, suaranya pelan. "Tadi tetangga cerita, anaknya lihat kamu kerja di Sakala... Kenapa tidak bilang sama Ibu, Nak?"
+efek    = terbongkar_kerja_rahasia 1, kewarasan -6
+pilih_a = Minta maaf dan jujur | percaya_ibu +10, percaya_ayah +6, cinta_ibu +3, rencana_kerja_jujur 1 | "Ibu cuma takut kamu kecapekan... Lain kali bilang, ya. Ibu tidak marah, Ibu khawatir."
+pilih_b = "Itu cuma bantu teman sebentar, Bu." | percaya_ibu -10, cinta_ibu -4, bohong_lagi 1 | Ibu diam lama. "...Ya sudah." Telepon ditutup lebih cepat dari biasanya.
+
+[uang_menipis]
+judul   = Dompet menipis
+ikon    = 🪫
+tempat  = kota
+peluang = 18
+syarat  = uang < 60000 && jalur == sma
+teks    = Kamu menghitung isi dompet. Kiriman berikutnya masih lama, dan uangmu tinggal sedikit sekali.
+pilih_a = Minta tambahan ke Ibu | uang +150000, percaya_ibu -3, minta_ortu +1 | Ibu mengirim uang malam itu juga. Belakangan kamu tahu, itu uang belanja warung untuk seminggu.
+pilih_b = Tahan, makan seadanya | kewarasan -6, hidup_baik +1 | Mi instan lagi. Tapi setidaknya, kamu tidak menambah beban di rumah.
+
+[ortu_curiga_foya]
+judul   = Ibu bertanya soal uang
+ikon    = 💸
+tempat  = kota
+peluang = 35
+syarat  = foya >= 6 && minta_ortu >= 2
+sekali  = ya
+teks    = "Nak, kok uangmu cepat sekali habis? Ayah sampai pinjam ke Juragan Darto bulan ini..." Suara Ibu terdengar lelah.
+pilih_a = Mengaku sering jajan & nongkrong | percaya_ibu +4, cinta_ayah -3, kewarasan -8, foya -3 | Ibu menghela napas. "Ibu tidak melarang kamu senang-senang. Tapi ingat, uang itu dari keringat Ayahmu di laut."
+pilih_b = "Harga di kota memang mahal, Bu." | percaya_ibu -8, percaya_ayah -5 | "...Iya. Ibu ngerti." Tapi nadanya jelas tidak percaya.
+
+[teguran_wali_kelas]
+judul   = Dipanggil wali kelas
+ikon    = 🧑‍🏫
+tempat  = kota
+peluang = 25
+syarat  = foya >= 8 && jalur == sma
+sekali  = ya
+teks    = Wali kelas memanggilmu ke ruang guru. "Kamu sering mengantuk di kelas. Nilaimu turun. Ada masalah di rumah?"
+efek    = kewarasan -8, akademik -2
+pilih_a = Berjanji memperbaiki diri | hidup_baik +2, foya -2 | "Bapak pegang janjimu." Kamu keluar ruangan dengan wajah panas.
+pilih_b = Diam saja | percaya_nadia -3 | Kamu menunduk sampai bel berbunyi. Nadia, yang kebetulan lewat, melihat semuanya.
+
+[dimas_ajak_kerja]
+judul   = Tawaran dari Dimas
+ikon    = 📦
+tempat  = kota
+peluang = 6
+syarat  = kenal_dimas == 1 && kerja_aktif == 0 && cinta_dimas >= 30
+sekali  = ya
+teks    = "Gudang paket tempatku kerja lagi cari orang. Kalau mau, aku bilangin ke bos," kata Dimas sambil mengunyah gorengan.
+pilih_a = "Boleh, tolong bilangin ya." | cinta_dimas +3, percaya_dimas +4 | "Sip! Lamar aja lewat Lowongan, sebut namaku." (Dimas jadi orang dalammu untuk Kurir paket.)
+pilih_b = "Nanti dulu, deh." | cinta_dimas -1 | "Oke, kabarin aja kalau berubah pikiran."

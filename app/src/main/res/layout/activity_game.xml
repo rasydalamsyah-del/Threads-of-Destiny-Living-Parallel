@@ -150,14 +150,34 @@
         android:visibility="gone" />
 
     <!-- Panel status kehidupan (pojok kiri atas) -->
-    <com.valeriusgames.threadsofdestiny.life.LifeHudView
-        android:id="@+id/life_hud"
+    <!-- Laci status: tersembunyi di luar kiri, ditarik lewat tombol pemicu -->
+    <LinearLayout
+        android:id="@+id/life_drawer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|start"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="29dp"
-        android:visibility="gone" />
+        android:layout_marginTop="104dp"
+        android:elevation="4dp"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.valeriusgames.threadsofdestiny.life.LifeHudView
+            android:id="@+id/life_hud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/life_tab"
+            android:layout_width="38dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/life_tab_bg"
+            android:contentDescription="Status"
+            android:gravity="center"
+            android:text="📊"
+            android:textSize="17sp" />
+    </LinearLayout>
 
     <!-- Panel karakter yang sedang bicara: foto, nama, tingkat hubungan, meter -->
     <LinearLayout

@@ -90,6 +90,7 @@ efek        = energi -25, hidrasi -15, kenyang -6, kewarasan -3, komunikasi +1
 usia_min    = 15
 cara        = langsung
 sulit       = 25
+orang_dalam = dimas
 keterangan  = Mengantar paket kecil di sekitar Kampung Rel Utara dengan sepeda pinjaman.
 teks        = Kamu mengayuh sepeda menembus gang-gang sempit, mencocokkan alamat satu per satu.
 

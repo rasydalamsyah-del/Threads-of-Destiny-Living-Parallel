@@ -106,6 +106,9 @@ class GameActivity : Activity() {
     private lateinit var nameSparkles: SparkleView
     private lateinit var choiceList: LinearLayout
     private lateinit var lifeHud: LifeHudView
+    private lateinit var lifeDrawer: LinearLayout
+    private lateinit var lifeTab: TextView
+    private var hudOpen = false
     private lateinit var lifeNotice: TextView
     private lateinit var sheet: View
     private lateinit var sheetTitle: TextView
@@ -200,6 +203,9 @@ class GameActivity : Activity() {
         nameSparkles = findViewById(R.id.name_sparkles)
         choiceList = findViewById(R.id.choice_list)
         lifeHud = findViewById(R.id.life_hud)
+        lifeDrawer = findViewById(R.id.life_drawer)
+        lifeTab = findViewById(R.id.life_tab)
+        lifeTab.setOnClickListener { setHudOpen(!hudOpen) }
         lifeNotice = findViewById(R.id.life_notice)
         sheet = findViewById(R.id.sheet_overlay)
         sheetTitle = findViewById(R.id.sheet_title)
@@ -599,11 +605,7 @@ class GameActivity : Activity() {
                     social.lies[c.code] = c.ids.toMutableList()
                     vars["bohong_${c.code}"] = "1"
                 }
-                is Cmd.Reveal -> {
-                    val ids = social.lies[c.code].orEmpty()
-                    ids.forEach { announce(social.behave(gameData, it, "bohong_ketahuan")) }
-                    vars["terbongkar_${c.code}"] = "1"
-                }
+                is Cmd.Reveal -> revealLie(c.code)
                 is Cmd.Confess -> {
                     val def = gameData.characters[c.id]
                     val ok = def != null && social.confess(def, playerAge(), playerGender)
@@ -1167,16 +1169,19 @@ class GameActivity : Activity() {
     /** Perbarui panel status, jam, dan variabel kehidupan. */
     private fun refreshLife() {
         val show = life.active && storyStarted && !memoryMode
-        if (show && lifeHud.visibility != View.VISIBLE) {
-            lifeHud.visibility = View.VISIBLE
-            lifeHud.alpha = 0f
-            lifeHud.animate().alpha(1f).setDuration(400).start()
+        if (show && lifeDrawer.visibility != View.VISIBLE) {
+            lifeDrawer.visibility = View.VISIBLE
+            lifeDrawer.alpha = 0f
+            lifeDrawer.animate().alpha(1f).setDuration(400).start()
+            lifeDrawer.post { setHudOpen(hudOpen, animate = false) }
         } else if (!show) {
-            lifeHud.visibility = View.GONE
+            lifeDrawer.visibility = View.GONE
         }
         lifeHud.bind(life)
+        refreshHudTab()
         if (life.active) {
             vars["uang"] = life.money.toString()
+            vars["kerja_aktif"] = life.jobs.count { gameData.jobs[it.id]?.kind != "sekolah" }.toString()
             vars["hari"] = life.weekday
             vars["waktu"] = life.slot.label
             vars["hari_ke"] = (life.day + 1).toString()
@@ -1186,6 +1191,28 @@ class GameActivity : Activity() {
             }
             if (clockText != life.clockText) setClock(life.clockText)
         }
+    }
+
+    /** Buka / tutup laci status di kiri layar. */
+    private fun setHudOpen(open: Boolean, animate: Boolean = true) {
+        hudOpen = open
+        val w = lifeHud.width.takeIf { it > 0 } ?: lifeHud.measuredWidth
+        val x = if (open) 0f else -w.toFloat()
+        lifeDrawer.animate().cancel()
+        if (animate) lifeDrawer.animate().translationX(x).setDuration(260)
+            .setInterpolator(DecelerateInterpolator()).start()
+        else lifeDrawer.translationX = x
+        refreshHudTab()
+    }
+
+    private fun refreshHudTab() {
+        lifeTab.text = when {
+            hudOpen -> "‹"
+            lifeHud.critical() -> "⚠️"
+            else -> "📊"
+        }
+        lifeTab.textSize = if (hudOpen) 22f else 17f
+        lifeTab.setTextColor(0xFF3A3A40.toInt())
     }
 
     /** Pemberitahuan singkat di layar, antre satu per satu. */
@@ -1827,6 +1854,12 @@ class GameActivity : Activity() {
         phoneData.appts.filter { it.day < life.day || (it.day == life.day && it.slot == life.slot.name) }.forEach { a ->
             phoneData.appts.remove(a)
             gameData.characters[a.charId]?.let { c ->
+                val place = (vars["lokasi"] ?: "desa").lowercase()
+                if ("semua" !in c.places && place !in c.places) {
+                    // pemain sudah pindah tempat (mis. berangkat ke kota): janji batal baik-baik
+                    receiveMessage(c.name, "Oh iya, kamu udah pindah ya. Janjinya nanti aja kalau kamu pulang 🙂")
+                    return@let
+                }
                 announce(social.behave(gameData, c.id, "ingkar_janji"))
                 notice("💔 Kamu tidak datang ke janji dengan ${c.name}")
                 receiveMessage(c.name, "Aku nungguin kamu tadi... Kok nggak datang?")
@@ -2029,12 +2062,22 @@ class GameActivity : Activity() {
         }
     }
 
-    /** Terapkan efek kejadian: bar, uang (+ persen), cinta_x / percaya_x, dan variabel lain. */
+    /** Kebohongan terbongkar: semua yang dibohongi kecewa. */
+    private fun revealLie(code: String) {
+        if (vars["terbongkar_$code"] == "1") return
+        val ids = social.lies[code].orEmpty()
+        ids.forEach { announce(social.behave(gameData, it, "bohong_ketahuan")) }
+        vars["terbongkar_$code"] = "1"
+        syncSocialVars()
+    }
+
+    /** Terapkan efek kejadian: bar, uang (+ persen), cinta_x / percaya_x, terbongkar_x, dan variabel lain. */
     private fun applyEventEffects(effects: Map<String, Long>, desc: String) {
         val lifeEffects = mutableMapOf<String, Long>()
         effects.forEach { (k, v) ->
             when {
                 k.startsWith("cinta_") -> announce(social.changeLove(gameData, k.removePrefix("cinta_"), v.toInt()))
+                k.startsWith("terbongkar_") -> revealLie(k.removePrefix("terbongkar_"))
                 k.startsWith("percaya_") -> {
                     social.changeTrust(gameData, k.removePrefix("percaya_"), v.toInt())
                     syncSocialVars()
@@ -2172,6 +2215,7 @@ class GameActivity : Activity() {
             PhoneScreen.App("lowongan", "💼", "Lowongan", 0xFF8E5CF7.toInt()),
             PhoneScreen.App("dompet", "👛", "Dompet", 0xFF2EB5A0.toInt()),
             PhoneScreen.App("catatan", "📝", "Catatan", 0xFFE0A33B.toInt()),
+            PhoneScreen.App("sosmed", "📷", "Sosmed", 0xFFE1306C.toInt()),
         )
     }
 
@@ -2185,7 +2229,9 @@ class GameActivity : Activity() {
     private fun refreshPhoneHome() {
         val actionable = phoneData.apps.count { it.stage == "tes" || it.stage == "wawancara" }
         val apptsToday = phoneData.appts.count { it.day == life.day }
-        phone.setApps(phoneApps, mapOf("chat" to phoneData.unreadTotal, "lowongan" to actionable, "kalender" to apptsToday))
+        val canSearch = if (vars["sosmed_hari"] != life.day.toString()) 1 else 0
+        phone.setApps(phoneApps, mapOf("chat" to phoneData.unreadTotal, "lowongan" to actionable,
+            "kalender" to apptsToday, "sosmed" to canSearch))
     }
 
     private fun renderApp(id: String) {
@@ -2196,6 +2242,7 @@ class GameActivity : Activity() {
             "lowongan" -> renderJobs()
             "dompet" -> renderWallet()
             "catatan" -> renderNotes()
+            "sosmed" -> renderSosmed()
         }
     }
 
@@ -2347,8 +2394,10 @@ class GameActivity : Activity() {
                     Triple("😊 Balas hangat", canReply) { replyChat(c, t, warm = true) },
                     Triple("Balas singkat", canReply) { replyChat(c, t, warm = false) },
                 )
-                val canMeet = c.meetable && social.rel(c).met && phoneData.appts.none { it.charId == c.id }
-                pButtons(Triple("📅 Ajak ketemu", canMeet) { chooseMeetTime(c, t) })
+                val place = (vars["lokasi"] ?: "desa").lowercase()
+                val sameArea = "semua" in c.places || place in c.places
+                val canMeet = sameArea && c.meetable && social.rel(c).met && phoneData.appts.none { it.charId == c.id }
+                pButtons(Triple(if (sameArea) "📅 Ajak ketemu" else "📍 Beda tempat — tidak bisa ketemu", canMeet) { chooseMeetTime(c, t) })
             }
             key == "Nomor Tidak Dikenal" -> {
                 val replied = vars["misterius_dibalas"] == "1"
@@ -2556,6 +2605,79 @@ class GameActivity : Activity() {
         if (phoneData.notes.isEmpty()) phone.content.addView(pText("Belum ada catatan.", 13f, 0xFF8A8A93.toInt()))
         phoneData.notes.reversed().forEach { n -> phone.content.addView(pCard(n.text, dayLabel(n.day))) }
         phone.scrollToTop()
+    }
+
+    // ---------- Sosmed: kabar teman & mencari sahabat ----------
+
+    private fun renderSosmed() {
+        phone.clearApp()
+        phone.setTitle("📷  Sosmed")
+        phone.backHandler = null
+        val friend = vars["nama_sahabat"] ?: "sahabat"
+        val searchedToday = vars["sosmed_hari"] == life.day.toString()
+        val count = vars["sosmed_cari"]?.toIntOrNull() ?: 0
+        phone.content.addView(pSection("CARI ORANG"))
+        phone.content.addView(pCard(
+            "🔍  Cari \"$friend\"",
+            if (searchedToday) "Sudah mencari hari ini. Coba lagi besok."
+            else "Telusuri akun, foto, dan komentar lama (1× sehari)",
+            if (count > 0) "${count}×" else null,
+        ) { if (!searchedToday) searchFriend() })
+        val found = gameData.posts.filter { it.search && vars["sosmed_${it.id}"] == "1" }
+        found.forEach { p -> phone.content.addView(pCard("📌 Temuan", fill(p.text))) }
+
+        phone.content.addView(pSection("BERANDA"))
+        val feed = gameData.posts.filter { p ->
+            !p.search && p.minDay <= life.day &&
+                (p.author == null || gameData.characters[p.author]?.let { social.rel(it).met } == true) &&
+                (p.condition == null || checkCondition(p.condition))
+        }.sortedByDescending { it.minDay }
+        if (feed.isEmpty()) phone.content.addView(pText("Belum ada unggahan dari teman-temanmu.", 13f, 0xFF8A8A93.toInt()))
+        feed.forEach { p ->
+            val author = p.author?.let { gameData.characters[it] }
+            val liked = vars["suka_${p.id}"] == "1"
+            val ago = (life.day - p.minDay).let { if (it <= 0) "hari ini" else "$it hari lalu" }
+            phone.content.addView(pCard(
+                author?.name ?: "Akun",
+                fill(p.text) + "\n" + ago,
+                if (liked) "❤️" else "🤍",
+            ) {
+                if (!liked && author != null) {
+                    vars["suka_${p.id}"] = "1"
+                    announce(social.changeLove(gameData, author.id, 1))
+                    renderSosmed()
+                }
+            })
+        }
+        phone.scrollToTop()
+    }
+
+    /** Satu kali pencarian per hari. Temuan baru muncul pada pencarian ke-N (data/sosmed.txt). */
+    private fun searchFriend() {
+        val count = (vars["sosmed_cari"]?.toIntOrNull() ?: 0) + 1
+        vars["sosmed_cari"] = count.toString()
+        vars["sosmed_hari"] = life.day.toString()
+        val hit = gameData.posts.filter { p ->
+            p.search && vars["sosmed_${p.id}"] != "1" && p.need <= count &&
+                (p.condition == null || checkCondition(p.condition))
+        }.minByOrNull { it.need }
+        if (hit != null) {
+            vars["sosmed_${hit.id}"] = "1"
+            if (hit.clue != 0) {
+                val now = vars["petunjuk_sahabat"]?.toIntOrNull() ?: 0
+                vars["petunjuk_sahabat"] = (now + hit.clue).toString()
+            }
+            hit.note?.let { phoneData.notes += PhoneState.Note(life.day, fill(it)) }
+            notice("📌 Temuan baru di Sosmed!")
+        } else {
+            notice(listOf(
+                "🔍 Tidak ada hasil baru hari ini...",
+                "🔍 Puluhan akun bernama sama. Tak satu pun dia.",
+                "🔍 Akun-akun itu bukan dia. Besok coba lagi.",
+            ).random())
+        }
+        refreshPhoneHome()
+        renderSosmed()
     }
 
     // ---------- Lowongan: lamaran, dokumen, tes, wawancara ----------
@@ -3081,13 +3203,11 @@ class GameActivity : Activity() {
                 charPanel.visibility = View.VISIBLE
                 charPanel.animate().alpha(1f).setDuration(220).start()
             }
-            lifeHud.animate().alpha(0f).setDuration(150).start()
         } else if (panelCharId != null) {
             panelCharId = null
             charPanel.animate().alpha(0f).setDuration(200).withEndAction {
                 if (panelCharId == null) charPanel.visibility = View.GONE
             }.start()
-            lifeHud.animate().alpha(1f).setDuration(200).start()
         }
     }
 

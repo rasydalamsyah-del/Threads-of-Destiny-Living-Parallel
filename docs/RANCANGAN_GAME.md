@@ -84,7 +84,7 @@ Masa yang penting dimainkan **hari per hari**; masa yang rutin dilompati (**lonc
 
 | Bab | Usia | Isi |
 |---|---|---|
-| 1. Lulus SMP | 15 | Desa, keluarga, pilihan besar: SMA di kota / kerja / keduanya |
+| 1. Lulus SMP | 15 | Desa, keluarga, pilihan besar: **sekolah di kota** (lalu bebas bekerja/foya-foya/hidup baik) / **hidup di desa** (bekerja, memperbaiki hidup, mencari sahabat lewat sosmed) |
 | 2. Masa SMA atau masa kerja muda | 15–18 | Sekolah, kerja sampingan, pertemanan, mulai merantau. **Tanpa romansa** |
 | 3. Dewasa muda | 18–21 | Lulus SMA → kuliah/kerja; **romansa mulai terbuka**; pencarian sahabat masa kecil |
 | 4. Mapan | 21–25 | Karier, pacaran → tunangan → menikah, keluarga sendiri, puncak cerita utama |
@@ -275,7 +275,7 @@ Perintah naskah baru (rencana): `@pilihan`, `@jika`, `@cinta hana +5`, `@percaya
 
 ## 19. Jawaban pemilik (14 Okt 2026)
 1. Kota fiktif dengan nama & kondisi → usulan §2 (desa → kota).
-2. Mulai lulus SMP; pilih SMA, kerja, atau keduanya.
+2. Mulai lulus SMP; pilih SMA, kerja, atau keduanya. *(Diperbarui 14 Okt: pilihan awal jadi 2 — sekolah di kota / hidup di desa. Di kota, soal kerja ditentukan lewat obrolan dengan orang tua: cukup kiriman / kerja diam-diam / bilang terus terang. Di kota pemain bebas: hidup baik atau foya-foya, masing-masing ada akibatnya.)*
 3. Minta penjelasan konsep cerita → usulan §3.
 4. Minta saran durasi → usulan §4.
 5. Keluarga tokoh utama + keluarga karakter lain.
