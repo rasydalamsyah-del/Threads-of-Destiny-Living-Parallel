@@ -14,9 +14,9 @@ Penjelasan dalam bahasa Indonesia. Salin bagian di dalam kotak kode.
 
 **Supaya karakter konsisten di semua ekspresi:**
 1. Buat dulu gambar **utama** tiap karakter (ekspresi biasa) sampai benar-benar pas.
-2. Untuk ekspresi lain, pakai fitur **gambar referensi / image-to-image / "edit"** dari gambar utama tadi,
-   lalu ganti hanya bagian ekspresinya. Kalau AI-nya punya **seed**, pakai seed yang sama.
-3. Jangan ubah deskripsi pakaian & rambut di antara ekspresi.
+2. Untuk ekspresi & variasi lain, **lampirkan gambar utama** lalu pakai **prompt lanjutan** di bagian **3b**.
+   Prompt lanjutan hanya mengubah ekspresi/baju dan mengunci semua bagian fisik.
+3. Jangan tulis ulang deskripsi fisik di prompt lanjutan.
 
 **Latar transparan:** kebanyakan AI tidak bisa membuat PNG transparan. Minta latar **putih polos**
 (sudah ada di prompt), lalu hapus latarnya dengan aplikasi penghapus background (banyak yang gratis di HP),
@@ -176,6 +176,92 @@ A teenage figure seen from behind in a crowded train station, face not visible, 
 left wrist with a thin red thread bracelet clearly visible, slightly blurred, mysterious mood,
 plain pure white background.
 ```
+
+---
+
+## 3b. Prompt lanjutan DENGAN GAMBAR REFERENSI (untuk ekspresi & variasi)
+
+**Alurnya:**
+1. Buat **gambar utama** dengan prompt karakter di atas (+ blok gaya + tambahan karakter + `Expression: neutral calm face.`).
+2. Kalau sudah pas, **simpan** gambar itu. Inilah "gambar referensi" karakter tersebut.
+3. Untuk setiap ekspresi / variasi: **lampirkan gambar referensi**, lalu kirim **salah satu prompt di bawah**.
+   Jangan tulis ulang deskripsi fisik karakter (supaya AI tidak "menafsirkan ulang" wajahnya).
+4. Kalau hasilnya tetap berubah, ulangi dengan menambahkan kalimat penguat (bagian **Penguat** di bawah).
+
+### Kalimat pengunci (selalu ada di depan prompt lanjutan)
+```
+Use the attached image as the exact reference for this character.
+Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth shape,
+same hairstyle, hair length and hair color, same skin tone, same body proportions and height,
+same outfit, same colors, same accessories, same art style, same lineart and shading,
+same framing, same camera angle, same plain pure white background.
+Change ONLY what is described below.
+```
+
+### Ekspresi
+Tempel kalimat pengunci, lalu SATU baris berikut:
+
+| Simpan sebagai | Prompt |
+|---|---|
+| `id_senyum.png` | `Change only the facial expression to a warm happy smile, eyes slightly closed, cheeks lightly raised.` |
+| `id_sedih.png` | `Change only the facial expression to sad: eyebrows tilted up in the middle, eyes looking down, small frown.` |
+| `id_kesal.png` | `Change only the facial expression to annoyed: eyebrows lowered, slight frown, lips pressed together.` |
+| `id_kaget.png` | `Change only the facial expression to surprised: eyes wide open, eyebrows raised, mouth slightly open.` |
+| `id_malu.png` *(opsional)* | `Change only the facial expression to shy: soft blush on cheeks, eyes looking away to the side, small smile.` |
+| `id_menangis.png` *(opsional)* | `Change only the facial expression to crying quietly: teary eyes, a single tear on one cheek, trembling lips.` |
+
+**Contoh lengkap (Bayu senyum):**
+```
+[lampirkan bayu.png]
+
+Use the attached image as the exact reference for this character.
+Keep EVERYTHING identical: same face shape, same eyes and eye color, same nose and mouth shape,
+same hairstyle, hair length and hair color, same skin tone, same body proportions and height,
+same outfit, same colors, same accessories, same art style, same lineart and shading,
+same framing, same camera angle, same plain pure white background.
+Change ONLY what is described below.
+
+Change only the facial expression to a warm happy smile, eyes slightly closed, cheeks lightly raised.
+```
+
+### Foto profil (`id_foto.jpg`)
+Cara termudah: **potong (crop)** wajah dari gambar utama menjadi persegi, tanpa AI.
+Kalau ingin dibuat AI:
+```
+[kalimat pengunci]
+Create a square close-up portrait of the same character: head and shoulders only, centered,
+same neutral expression, soft light pastel background.
+```
+
+### Ganti baju (mis. Bayu pakai seragam SMA, atau baju tidur), fisik tetap sama
+```
+[kalimat pengunci — tapi hapus "same outfit, same colors, same accessories"]
+Keep the face, hair, skin tone and body exactly the same.
+Change only the clothes to: <tulis bajunya, mis. Indonesian public high school uniform, white short-sleeve shirt, grey trousers>.
+```
+Simpan dengan nama ekspresi khusus, mis. `bayu_seragam.png`, lalu pakai di naskah: `@tampil bayu seragam`.
+
+### Karakter tumbuh dewasa (untuk bab usia 18+)
+```
+[lampirkan gambar utama]
+Use the attached image as the reference for this character's identity.
+Show the SAME person 3 years older (18 years old): keep the same face identity, eye shape, eye color,
+hair color, skin tone and overall look so they are clearly recognizable as the same person,
+only slightly more mature facial features and taller proportions.
+Outfit: <tulis bajunya>. Same art style, plain pure white background.
+```
+Simpan sebagai gambar baru (mis. `sahabat_p_dewasa.png`) — gambar versi dewasa akan dipakai lewat naskah nanti.
+
+### Penguat (kalau hasilnya masih berubah)
+Tambahkan di akhir:
+```
+This is an edit of the attached image, not a new character. Do not redesign the character.
+If unsure, keep the original pixels as much as possible and only modify the face.
+```
+Tips tambahan:
+- Kalau AI-nya punya pilihan **"edit area" / "inpaint"**, tandai **hanya bagian wajah** lalu tulis baris ekspresinya saja → paling konsisten.
+- Kalau ada pengaturan **kekuatan referensi** / *image strength*, pasang tinggi (± 0,7–0,85).
+- Selalu bandingkan berdampingan dengan gambar utama sebelum disimpan.
 
 ---
 
