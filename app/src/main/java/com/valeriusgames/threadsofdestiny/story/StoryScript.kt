@@ -61,6 +61,24 @@ object StoryScript {
         data class GiveItem(val id: String, val count: Int) : Cmd()
         /** Tempat pemain sekarang (menentukan aktivitas & toko): desa, kota, ... */
         data class Location(val place: String) : Cmd()
+        /** Tampilkan gambar karakter: @tampil bayu senyum kiri */
+        data class ShowChar(val id: String, val expression: String, val position: String) : Cmd()
+        /** Sembunyikan karakter (null = semua). */
+        data class HideChar(val id: String?) : Cmd()
+        /** Pemain mengenal karakter ini (muncul di daftar & panel). */
+        data class Meet(val id: String) : Cmd()
+        /** Ubah Cinta karakter. */
+        data class Love(val id: String, val delta: Int) : Cmd()
+        /** Ubah Kepercayaan karakter. */
+        data class Trust(val id: String, val delta: Int) : Cmd()
+        /** Catat perilaku: menghindar, ingkar_janji, abaikan_chat, kasar, jujur, membantu, menepati_janji */
+        data class Behave(val id: String, val kind: String) : Cmd()
+        /** Catat kebohongan (belum ketahuan). */
+        data class Lie(val code: String, val ids: List<String>) : Cmd()
+        /** Kebohongan terbongkar. */
+        data class Reveal(val code: String) : Cmd()
+        /** Ungkapkan perasaan → lompat ke label diterima / ditolak. */
+        data class Confess(val id: String, val okLabel: String, val noLabel: String) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
     }
@@ -121,6 +139,10 @@ object StoryScript {
                         when (cmd) {
                             is Cmd.Jump -> jumps += cmd.label to n
                             is Cmd.JumpIf -> jumps += cmd.label to n
+                            is Cmd.Confess -> {
+                                jumps += cmd.okLabel to n
+                                jumps += cmd.noLabel to n
+                            }
                             else -> Unit
                         }
                         out += cmd
@@ -243,6 +265,35 @@ object StoryScript {
                 Cmd.GiveItem(id, args.getOrNull(1)?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
             }
             "lokasi", "location" -> Cmd.Location(args.firstOrNull() ?: throw ParseError(n, "format: @lokasi desa"))
+            "tampil", "show" -> {
+                val id = args.firstOrNull() ?: throw ParseError(n, "format: @tampil id_karakter ekspresi [kiri/tengah/kanan]")
+                val pos = args.drop(1).firstOrNull { it in setOf("kiri", "tengah", "kanan") } ?: "tengah"
+                val expr = args.drop(1).firstOrNull { it !in setOf("kiri", "tengah", "kanan") } ?: "biasa"
+                Cmd.ShowChar(id, expr, pos)
+            }
+            "sembunyi", "hide" -> Cmd.HideChar(args.firstOrNull()?.takeIf { it != "semua" && it != "all" })
+            "kenal", "meet" -> Cmd.Meet(args.firstOrNull() ?: throw ParseError(n, "format: @kenal id_karakter"))
+            "cinta", "love", "percaya", "trust" -> {
+                val m = Regex("^(\\w+)\\s+([+-]?\\d+)$").find(rest)
+                    ?: throw ParseError(n, "format: @$name id_karakter +5  (atau -5)")
+                val id = m.groupValues[1].lowercase()
+                val d = m.groupValues[2].removePrefix("+").toInt()
+                if (name == "cinta" || name == "love") Cmd.Love(id, d) else Cmd.Trust(id, d)
+            }
+            "perilaku", "behave" -> {
+                if (args.size < 2) throw ParseError(n, "format: @perilaku id_karakter menghindar")
+                Cmd.Behave(args[0], args[1])
+            }
+            "bohong", "lie" -> {
+                if (args.size < 2) throw ParseError(n, "format: @bohong kode_bohong id_karakter [id_lain ...]")
+                Cmd.Lie(args[0], args.drop(1))
+            }
+            "terbongkar", "reveal" -> Cmd.Reveal(args.firstOrNull() ?: throw ParseError(n, "format: @terbongkar kode_bohong"))
+            "ungkapkan", "confess" -> {
+                val m = Regex("^(\\w+)\\s*->\\s*(\\w+)\\s*,\\s*(\\w+)$").find(rest)
+                    ?: throw ParseError(n, "format: @ungkapkan id_karakter -> label_diterima, label_ditolak")
+                Cmd.Confess(m.groupValues[1].lowercase(), m.groupValues[2], m.groupValues[3])
+            }
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             else -> throw ParseError(n, "perintah @$name tidak dikenal")
         }

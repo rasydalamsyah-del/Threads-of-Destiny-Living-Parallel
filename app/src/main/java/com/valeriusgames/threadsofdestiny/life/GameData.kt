@@ -13,7 +13,36 @@ import android.content.Context
 class GameData private constructor(
     val activities: List<ActivityDef>,
     val items: Map<String, ItemDef>,
+    val characters: Map<String, CharacterDef>,
+    val relations: List<RelationDef>,
+    val topics: Map<String, TopicDef>,
 ) {
+
+    data class CharacterDef(
+        val id: String,
+        val name: String,
+        val gender: String,
+        val baseAge: Int,
+        val role: String,
+        val loyal: Boolean,
+        val romanceable: Boolean,
+        val places: Set<String>,
+        val slots: Set<String>,
+        val meetable: Boolean,
+        val loveStart: Int,
+        val trustStart: Int,
+        val likeTopics: Set<String>,
+        val hateTopics: Set<String>,
+        val likeItems: Set<String>,
+        val hateItems: Set<String>,
+        val text: Map<String, String>,
+        val color: Int,
+    )
+
+    data class RelationDef(val a: String, val b: String, val kind: String, val strength: Int)
+
+    data class TopicDef(val id: String, val name: String, val icon: String, val line: String)
+
 
     data class ActivityDef(
         val id: String,
@@ -65,7 +94,48 @@ class GameData private constructor(
                     icon = m["ikon"] ?: "•",
                 )
             }
-            return GameData(acts, items)
+            val chars = readSections(ctx, "data/karakter.txt").associate { (id, m) ->
+                id to CharacterDef(
+                    id = id,
+                    name = m["nama"] ?: id,
+                    gender = (m["kelamin"] ?: "").lowercase(),
+                    baseAge = m["usia"]?.trim()?.toIntOrNull() ?: 15,
+                    role = m["peran"] ?: "",
+                    loyal = (m["pandangan"] ?: "setia").lowercase() != "terbuka",
+                    romanceable = (m["bisa_dipacari"] ?: "tidak").lowercase() == "ya",
+                    places = list(m["tempat"]).ifEmpty { setOf("semua") },
+                    slots = list(m["waktu"]).ifEmpty { setOf("semua") },
+                    meetable = (m["ditemui"] ?: "ya").lowercase() != "tidak",
+                    loveStart = m["cinta_awal"]?.trim()?.toIntOrNull() ?: 20,
+                    trustStart = m["percaya_awal"]?.trim()?.toIntOrNull() ?: 40,
+                    likeTopics = list(m["suka_topik"]),
+                    hateTopics = list(m["benci_topik"]),
+                    likeItems = list(m["suka_barang"]),
+                    hateItems = list(m["benci_barang"]),
+                    text = m,
+                    color = runCatching { android.graphics.Color.parseColor(m["warna"]?.trim()) }
+                        .getOrDefault(0xFF1E1E22.toInt()),
+                )
+            }
+            val rels = readLines(ctx, "data/hubungan.txt").mapNotNull { line ->
+                val r = Regex("^(\\w+)\\s*-\\s*(\\w+)\\s*=\\s*(\\w+)\\s*(\\d+)?$").find(line) ?: return@mapNotNull null
+                RelationDef(
+                    r.groupValues[1].lowercase(), r.groupValues[2].lowercase(),
+                    r.groupValues[3].lowercase(), r.groupValues[4].toIntOrNull() ?: 50,
+                )
+            }
+            val topics = readSections(ctx, "data/topik.txt").associate { (id, m) ->
+                id to TopicDef(id, m["nama"] ?: id, m["ikon"] ?: "💬", m["kalimat"] ?: (m["nama"] ?: id))
+            }
+            return GameData(acts, items, chars, rels, topics)
+        }
+
+        private fun readLines(ctx: Context, path: String): List<String> = try {
+            ctx.assets.open(path).bufferedReader().use { r ->
+                r.readLines().map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }
+            }
+        } catch (_: Exception) {
+            emptyList()
         }
 
         private fun readSections(ctx: Context, path: String): List<Pair<String, Map<String, String>>> {
@@ -109,4 +179,19 @@ class GameData private constructor(
 
     fun shopFor(place: String): List<ItemDef> =
         items.values.filter { "semua" in it.places || place.lowercase() in it.places }
+
+    /** Cari karakter dari id atau nama tampilnya (dipakai untuk mencocokkan nama pembicara). */
+    fun findCharacter(key: String): CharacterDef? {
+        val k = key.trim().lowercase()
+        return characters[k] ?: characters.values.firstOrNull { it.name.lowercase() == k }
+    }
+
+    fun relationsOf(id: String): List<Pair<String, RelationDef>> =
+        relations.mapNotNull { r ->
+            when (id) {
+                r.a -> r.b to r
+                r.b -> r.a to r
+                else -> null
+            }
+        }
 }

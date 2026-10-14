@@ -23,6 +23,12 @@
         android:layout_height="match_parent"
         android:alpha="0" />
 
+    <!-- Gambar karakter (kiri / tengah / kanan) -->
+    <FrameLayout
+        android:id="@+id/char_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <!-- Jam (pojok kanan atas) -->
     <TextView
         android:id="@+id/clock"
@@ -152,6 +158,66 @@
         android:layout_marginStart="14dp"
         android:layout_marginTop="29dp"
         android:visibility="gone" />
+
+    <!-- Panel karakter yang sedang bicara: foto, nama, tingkat hubungan, meter -->
+    <LinearLayout
+        android:id="@+id/char_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="29dp"
+        android:alpha="0"
+        android:background="@drawable/char_panel_bg"
+        android:elevation="3dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="6dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/char_panel_photo"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:background="@drawable/oval_mask"
+            android:clipToOutline="true"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/char_panel_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="#FF1E1E22"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/char_panel_stage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FF6B6B73"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/char_panel_meters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textColor="#FF2A2A2E"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- Pemberitahuan singkat (lapar, haus, uang bertambah, dll.) -->
     <TextView

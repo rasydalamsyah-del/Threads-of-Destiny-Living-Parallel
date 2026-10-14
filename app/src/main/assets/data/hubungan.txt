@@ -1,0 +1,19 @@
+# ==========================================================
+#  HUBUNGAN ANTAR KARAKTER
+#  Format:  id_a - id_b = jenis kekuatan
+#  jenis    : keluarga, sahabat, teman, pasangan, saingan, mantan, rekan
+#  kekuatan : 0-100 (makin besar, makin kuat pengaruhnya)
+#
+#  Pengaruhnya:
+#  - Kabar menyebar: kalau pemain menyakiti A, orang dekat A ikut menilai buruk
+#    (sebagian, sesuai kekuatan hubungan; tidak berlaku untuk saingan/mantan).
+#  - Ikut campur: kalau A sangat tidak suka pemain (cinta < 25) dan hubungan
+#    A dengan B kuat (>= 60), B bisa dilarang bertemu pemain.
+# ==========================================================
+
+ayah - ibu   = pasangan 90
+ayah - laras = keluarga 85
+ibu - laras  = keluarga 90
+bayu - sekar = sahabat 75
+bayu - ayah  = teman 30
+sekar - ibu  = teman 25

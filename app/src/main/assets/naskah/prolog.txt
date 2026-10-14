@@ -56,8 +56,14 @@ Ibu: {nama}! Sudah bangun belum? Sarapan dulu, nanti keburu dingin!
 
 @latar rumah_warung
 @jam Senin, 06:45 ☀️
+@kenal ayah
+@kenal ibu
+@kenal laras
+@tampil ibu senyum kiri
+@tampil ayah biasa kanan
 * Di warung kecil depan rumah, Ibu sudah sibuk menata gorengan. Ayah baru pulang melaut, bajunya masih basah.
 Ayah: Nah, ini dia {jagoan|putri} Ayah yang baru lulus.
+@tampil laras senyum tengah
 Laras: Kak {nama} kemarin nangis waktu perpisahan sekolah, lho!
 {nama}: Laras! Jangan ngarang!
 Ibu: Sudah, sudah. Duduk sini, makan.
@@ -114,6 +120,7 @@ Ibu: ...Anak ini memang keras kepala, persis ayahnya.
 # ----------------------------------------------------------
 
 :: siang
+@sembunyi semua
 * Selesai sarapan, Ayah menyelipkan beberapa lembar uang ke tangan {nama}.
 Ayah: Ini hadiah kelulusan dari Ayah. Simpan baik-baik, ya.
 @hidup mulai
@@ -123,6 +130,10 @@ Ayah: Ini hadiah kelulusan dari Ayah. Simpan baik-baik, ya.
 @barang air_mineral 1
 * Mulai sekarang, hidupmu ada di tanganmu sendiri. Jaga perutmu, minummu, tenagamu, dan pikiranmu.
 * Ketuk panel di pojok kiri atas kapan saja untuk melihat status dan isi tas.
+@kenal bayu
+@kenal sekar
+@hp pesan Bayu | Woy {nama}! Selamat lulus, {bro|cuy}! Aku sama Sekar nongkrong di dermaga, nyusul ya kalau sempat.
+* Di waktu bebas, kamu bisa menemui keluarga atau teman-temanmu. Ngobrol dan memberi hadiah akan mendekatkan hubungan, tapi topik atau hadiah yang salah bisa membuat mereka kesal.
 @bebas 2
 
 

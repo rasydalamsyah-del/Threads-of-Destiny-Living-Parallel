@@ -1,0 +1,163 @@
+# ==========================================================
+#  DAFTAR KARAKTER
+#  Panduan lengkap: docs/DATA.md
+#
+#  [id]                 → id unik (dipakai di naskah: @tampil bayu senyum)
+#  nama        = nama yang tampil (dan dipakai sebagai nama pembicara di naskah)
+#  kelamin     = laki-laki / perempuan
+#  usia        = usia saat cerita dimulai (ikut bertambah bersama usia pemain)
+#  peran       = keterangan singkat
+#  sifat       = keterangan sifat (untuk penulis)
+#  pandangan   = setia / terbuka   (sikap bila pasangannya punya pasangan lain)
+#  bisa_dipacari = ya / tidak      (romansa hanya bila pemain & karakter sudah 18+)
+#  tempat      = di mana bisa ditemui: desa / kota
+#  waktu       = kapan bisa ditemui: pagi, siang, sore, malam
+#  ditemui     = ya / tidak        (muncul di daftar "Temui seseorang" saat waktu bebas)
+#  cinta_awal, percaya_awal = nilai awal 0-100
+#  suka_topik, benci_topik   = id dari topik.txt
+#  suka_barang, benci_barang = id dari barang.txt
+#  sapa        = kalimat saat ditemui
+#  respon_suka / respon_biasa / respon_benci = jawaban saat diajak ngobrol
+#  hadiah_suka / hadiah_biasa / hadiah_benci = jawaban saat diberi hadiah
+#  larangan    = kalimat saat ia dilarang bertemu oleh orang dekatnya
+#  warna       = warna nama (#RRGGBB)
+# ==========================================================
+
+# ---------------- KELUARGA ----------------
+
+[ayah]
+nama        = Ayah
+kelamin     = laki-laki
+usia        = 44
+peran       = Ayah, nelayan Tanjung Lentera
+sifat       = pendiam, pekerja keras, jarang memuji tapi sangat sayang keluarga
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = desa
+waktu       = siang, sore, malam
+ditemui     = ya
+cinta_awal  = 70
+percaya_awal = 65
+suka_topik  = laut, masa_depan
+benci_topik = gosip
+suka_barang = kopi_sachet, ikan_asin
+benci_barang = teh_manis
+sapa        = Hm. Ada apa, Nak?
+respon_suka = Ayah mengangguk pelan. Matanya berbinar walau bibirnya hanya tersenyum tipis.
+respon_biasa = Ayah mendengarkan sambil memperbaiki jaring.
+respon_benci = Sudahlah, tidak usah bicarakan orang lain.
+hadiah_suka = Wah... kamu tahu saja kesukaan Ayah.
+hadiah_biasa = Terima kasih, Nak.
+hadiah_benci = Ayah tidak terlalu suka ini, tapi terima kasih sudah ingat Ayah.
+larangan    = Ayah sedang tidak ingin diganggu.
+warna       = #3F6E8C
+
+[ibu]
+nama        = Ibu
+kelamin     = perempuan
+usia        = 41
+peran       = Ibu, pemilik warung gorengan
+sifat       = cerewet, hangat, gampang khawatir
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = desa
+waktu       = pagi, siang, sore, malam
+ditemui     = ya
+cinta_awal  = 75
+percaya_awal = 70
+suka_topik  = masak, sekolah, keluarga
+benci_topik = kota
+suka_barang = pisang, roti_tawar
+benci_barang = mi_instan
+sapa        = Kenapa, Nak? Lapar lagi?
+respon_suka = Ibu tertawa dan malah bercerita panjang lebar.
+respon_biasa = Iya, iya... Ibu dengar kok.
+respon_benci = Kota itu keras, Nak. Ibu tidak suka kamu jauh-jauh.
+hadiah_suka = Aduh, anak Ibu perhatian sekali!
+hadiah_biasa = Makasih, ya. Nanti Ibu simpan.
+hadiah_benci = Ini kan tidak sehat. Jangan sering-sering makan begini.
+larangan    = Ibu sedang sibuk sekali di warung.
+warna       = #B5546A
+
+[laras]
+nama        = Laras
+kelamin     = perempuan
+usia        = 11
+peran       = Adik perempuan, kelas 5 SD
+sifat       = jahil, ceria, diam-diam sangat bergantung pada kakaknya
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = desa
+waktu       = siang, sore, malam
+ditemui     = ya
+cinta_awal  = 65
+percaya_awal = 70
+suka_topik  = layangan, kota, sekolah
+benci_topik = pelajaran
+suka_barang = roti_sobek, teh_manis, pisang
+benci_barang = ikan_asin
+sapa        = Kakak! Main yuk!
+respon_suka = Laras melompat-lompat kegirangan.
+respon_biasa = Hmm... terus, terus?
+respon_benci = Ih, jangan ngomongin pelajaran! Bosen!
+hadiah_suka = Buat aku?! Kakak terbaik sedunia!
+hadiah_biasa = Makasih, Kak.
+hadiah_benci = Ihh, aku nggak suka ini!
+larangan    = Laras lagi ngambek. Katanya nggak mau main.
+warna       = #D9822B
+
+# ---------------- TEMAN DESA ----------------
+
+[bayu]
+nama        = Bayu
+kelamin     = laki-laki
+usia        = 15
+peran       = Teman sekelas, anak nelayan
+sifat       = ceria, setia kawan, tidak suka dibohongi
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = desa
+waktu       = siang, sore
+ditemui     = ya
+cinta_awal  = 45
+percaya_awal = 55
+suka_topik  = laut, sepak_bola, kota
+benci_topik = pelajaran
+suka_barang = gorengan, kopi_sachet
+benci_barang = obat_flu
+sapa        = Woy! Akhirnya muncul juga kamu.
+respon_suka = Nah, itu dia! Kamu memang paling ngerti, {nama}!
+respon_biasa = Oh, gitu ya.
+respon_benci = Aduh, jangan bahas itu dong. Udah lulus, masih aja.
+hadiah_suka = Mantap! Ini baru teman!
+hadiah_biasa = Makasih, ya.
+hadiah_benci = Ngapain ngasih ginian? Aku nggak sakit.
+larangan    = Sori, {nama}... Sekar bilang aku jangan main sama kamu dulu.
+warna       = #2E8B57
+
+[sekar]
+nama        = Sekar
+kelamin     = perempuan
+usia        = 15
+peran       = Teman sekelas, juara kelas
+sifat       = pintar, serius, perasa, sangat menjaga sahabatnya
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = desa
+waktu       = pagi, siang, sore
+ditemui     = ya
+cinta_awal  = 35
+percaya_awal = 50
+suka_topik  = pelajaran, masa_depan, kota
+benci_topik = gosip, sepak_bola
+suka_barang = roti_tawar, teh_manis
+benci_barang = gorengan
+sapa        = Oh, {nama}. Ada apa?
+respon_suka = Sekar tersenyum kecil. "Aku juga sering mikirin itu."
+respon_biasa = Hmm. Iya.
+respon_benci = Sekar menghela napas. "Kamu nggak ada obrolan lain, ya?"
+hadiah_suka = Eh... makasih. Kok tahu aku suka ini?
+hadiah_biasa = Makasih.
+hadiah_benci = Aku lagi jaga makan. Kamu aja deh.
+larangan    = Bayu bilang Sekar lagi nggak mau ketemu kamu.
+warna       = #7A5BC2

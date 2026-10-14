@@ -1,0 +1,57 @@
+# ==========================================================
+#  TOPIK OBROLAN
+#  [id]  → dipakai di karakter.txt (suka_topik / benci_topik)
+#  nama     = nama topik yang tampil di pilihan
+#  ikon     = emoji
+#  kalimat  = kalimat yang diucapkan pemain
+# ==========================================================
+
+[laut]
+nama    = Laut & melaut
+ikon    = 🌊
+kalimat = Kemarin aku lihat kapal besar lewat dekat mercusuar. Keren banget.
+
+[kota]
+nama    = Kota Sakala
+ikon    = 🏙️
+kalimat = Katanya di Kota Sakala gedungnya tinggi-tinggi sampai nyentuh awan.
+
+[sekolah]
+nama    = Kenangan sekolah
+ikon    = 🏫
+kalimat = Nggak kerasa, ya, tiga tahun di SMP sudah lewat.
+
+[pelajaran]
+nama    = Pelajaran & ujian
+ikon    = 📐
+kalimat = Soal matematika ujian kemarin susah banget, menurutku.
+
+[masa_depan]
+nama    = Cita-cita & masa depan
+ikon    = 🌟
+kalimat = Kadang aku bingung, nanti mau jadi apa, ya.
+
+[gosip]
+nama    = Gosip desa
+ikon    = 🗣️
+kalimat = Eh, katanya anak Pak Kades pacaran sama orang kota, lho.
+
+[sepak_bola]
+nama    = Sepak bola
+ikon    = ⚽
+kalimat = Pertandingan bola antar-desa minggu depan, kamu nonton?
+
+[masak]
+nama    = Masakan
+ikon    = 🍳
+kalimat = Sambal ikan bakar tadi enak banget. Gimana bikinnya?
+
+[keluarga]
+nama    = Keluarga
+ikon    = 🏠
+kalimat = Aku senang kita bisa makan bareng kayak tadi pagi.
+
+[layangan]
+nama    = Layang-layang
+ikon    = 🪁
+kalimat = Angin sore ini kencang. Pas buat main layangan!

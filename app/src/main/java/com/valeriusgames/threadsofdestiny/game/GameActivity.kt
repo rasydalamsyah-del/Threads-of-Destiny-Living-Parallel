@@ -41,6 +41,7 @@ import com.valeriusgames.threadsofdestiny.enterImmersiveMode
 import com.valeriusgames.threadsofdestiny.life.GameData
 import com.valeriusgames.threadsofdestiny.life.LifeHudView
 import com.valeriusgames.threadsofdestiny.life.LifeState
+import com.valeriusgames.threadsofdestiny.life.SocialState
 import com.valeriusgames.threadsofdestiny.life.rupiah
 import com.valeriusgames.threadsofdestiny.save.SaveData
 import com.valeriusgames.threadsofdestiny.save.SaveLoadActivity
@@ -110,6 +111,16 @@ class GameActivity : Activity() {
     private lateinit var sheetList: LinearLayout
     private lateinit var sheetButtons: LinearLayout
     private lateinit var deathOverlay: View
+    private lateinit var charLayer: FrameLayout
+    private lateinit var charPanel: View
+
+    // ---- hubungan ----
+    private var social = SocialState()
+    /** Karakter yang sedang tampil: id → (ekspresi, posisi). */
+    private val shownChars = linkedMapOf<String, Pair<String, String>>()
+    private var panelCharId: String? = null
+    private var meetingTalked = false
+    private var meetingGifted = false
 
     // ---- sistem kehidupan ----
     private var life = LifeState()
@@ -188,6 +199,9 @@ class GameActivity : Activity() {
         sheetList = findViewById(R.id.sheet_list)
         sheetButtons = findViewById(R.id.sheet_buttons)
         deathOverlay = findViewById(R.id.death_overlay)
+        charLayer = findViewById(R.id.char_layer)
+        charPanel = findViewById(R.id.char_panel)
+        findViewById<View>(R.id.char_panel_photo).clipToOutline = true
         lifeHud.setOnClickListener { if (wait != Wait.BUSY) openStatus(returnTo = currentSheetReturn()) }
         sheet.setOnClickListener { sheetBack?.invoke() }
         findViewById<View>(R.id.death_load).setOnClickListener { openSaveLoad(SaveLoadActivity.MODE_LOAD, null) }
@@ -438,6 +452,7 @@ class GameActivity : Activity() {
     }
 
     private fun startScript() {
+        syncSocialVars()
         storyStarted = true
         pc = 0
         wait = Wait.BUSY
@@ -495,6 +510,36 @@ class GameActivity : Activity() {
                     }
                 }
                 is Cmd.Location -> vars["lokasi"] = c.place
+                is Cmd.ShowChar -> showCharacter(c.id, c.expression, c.position)
+                is Cmd.HideChar -> hideCharacter(c.id)
+                is Cmd.Meet -> {
+                    gameData.characters[c.id]?.let { social.rel(it).met = true }
+                    syncSocialVars()
+                }
+                is Cmd.Love -> announce(social.changeLove(gameData, c.id, c.delta))
+                is Cmd.Trust -> {
+                    social.changeTrust(gameData, c.id, c.delta)
+                    gameData.characters[c.id]?.let {
+                        notice((if (c.delta >= 0) "🤝 " else "⚠️ ") + "${it.name}: kepercayaan " + (if (c.delta >= 0) "+" else "") + c.delta)
+                    }
+                    syncSocialVars()
+                }
+                is Cmd.Behave -> announce(social.behave(gameData, c.id, c.kind))
+                is Cmd.Lie -> {
+                    social.lies[c.code] = c.ids.toMutableList()
+                    vars["bohong_${c.code}"] = "1"
+                }
+                is Cmd.Reveal -> {
+                    val ids = social.lies[c.code].orEmpty()
+                    ids.forEach { announce(social.behave(gameData, it, "bohong_ketahuan")) }
+                    vars["terbongkar_${c.code}"] = "1"
+                }
+                is Cmd.Confess -> {
+                    val def = gameData.characters[c.id]
+                    val ok = def != null && social.confess(def, playerAge(), playerGender)
+                    syncSocialVars()
+                    pc = labels[if (ok) c.okLabel else c.noLabel] ?: pc
+                }
                 is Cmd.End -> { endStory(c.text); return }
             }
         }
@@ -581,6 +626,7 @@ class GameActivity : Activity() {
             savedAt = System.currentTimeMillis(),
             vars = vars.toMap() + mapOf("nama" to playerName, "kelamin" to playerGender),
             life = life.toJson(),
+            social = social.toJson(),
         )
     }
 
@@ -622,6 +668,9 @@ class GameActivity : Activity() {
         log.clear()
         log.addAll(d.log)
         life = LifeState.fromJson(d.life)
+        social = SocialState.fromJson(d.social)
+        syncSocialVars()
+        restoreShownCharacters()
         refreshLife()
         updateBurger()
         applyDialogStyle()
@@ -754,6 +803,7 @@ class GameActivity : Activity() {
             nameTag.visibility = View.VISIBLE
             nameTag.text = who
         }
+        updateCharPanel(who?.let { w -> gameData.findCharacter(w) ?: speakerIdFromRaw(speaker) })
 
         if (dialog.alpha < 1f) {
             dialog.animate().cancel()
@@ -968,14 +1018,25 @@ class GameActivity : Activity() {
     // ================================================================== pilihan
 
     private fun showChoices(c: Cmd.Choice) {
+        showButtons(c.options.map { fill(it.text) }) { i ->
+            log.addLast("➤ Pilihanmu" to fill(c.options[i].text))
+            while (log.size > LOG_LIMIT) log.removeFirst()
+            pc = labels[c.options[i].label] ?: pc
+            next()
+        }
+    }
+
+    /** Tampilkan tombol-tombol pilihan bernomor di bawah kotak dialog. */
+    private fun showButtons(options: List<String>, onPick: (Int) -> Unit) {
         wait = Wait.CHOICE
         if (typing) finishTyping()
         setIndicator(false)
+        choiceList.bringToFront()
         choiceList.removeAllViews()
         val d = resources.displayMetrics.density
-        c.options.forEachIndexed { i, opt ->
+        options.forEachIndexed { i, label ->
             val item = TextView(this).apply {
-                text = "${i + 1}. ${fill(opt.text)}"
+                text = "${i + 1}. $label"
                 setBackgroundResource(R.drawable.choice_item)
                 setTextColor(0xFF22222A.toInt())
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, (settings.fontSizeSp - 1f).coerceAtLeast(14f))
@@ -986,7 +1047,7 @@ class GameActivity : Activity() {
                 elevation = 3 * d
                 alpha = 0f
                 translationY = 16 * d
-                setOnClickListener { pickChoice(c, i, this) }
+                setOnClickListener { pickButton(i, this, onPick) }
             }
             choiceList.addView(item, LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
@@ -1003,13 +1064,9 @@ class GameActivity : Activity() {
         }
     }
 
-    private fun pickChoice(c: Cmd.Choice, index: Int, view: View) {
+    private fun pickButton(index: Int, view: View, onPick: (Int) -> Unit) {
         if (wait != Wait.CHOICE) return
         wait = Wait.BUSY
-        val opt = c.options[index]
-        log.addLast("➤ Pilihanmu" to fill(opt.text))
-        while (log.size > LOG_LIMIT) log.removeFirst()
-
         view.animate().scaleX(1.03f).scaleY(1.03f).setDuration(120).withEndAction {
             for (i in 0 until choiceList.childCount) {
                 choiceList.getChildAt(i).animate().alpha(0f).setDuration(220).start()
@@ -1018,8 +1075,7 @@ class GameActivity : Activity() {
             handler.postDelayed({
                 choiceList.visibility = View.GONE
                 choiceList.removeAllViews()
-                pc = labels[opt.label] ?: pc
-                next()
+                onPick(index)
             }, 260)
         }.start()
     }
@@ -1149,6 +1205,23 @@ class GameActivity : Activity() {
             getString(R.string.btn_status) to { openStatus(returnTo = { showFreeSheet() }) },
             getString(R.string.btn_shop) to { openShop() },
         )
+        val people = gameData.characters.values.filter { c ->
+            c.meetable && social.rel(c).met &&
+                ("semua" in c.places || place.lowercase() in c.places) &&
+                ("semua" in c.slots || life.slot.label.lowercase() in c.slots)
+        }
+        if (people.isNotEmpty()) {
+            sheetList.addView(sectionLabel("👥 Temui seseorang"))
+            people.forEach { c ->
+                val r = social.rel(c)
+                val loveText = if (social.isPartner(c)) "❤️ ${r.romance}" else "💛 ${r.love}"
+                sheetList.addView(card(
+                    title = c.name,
+                    sub = "${c.role}\n${social.stageOf(c).label}   ·   $loveText   🤝 ${r.trust}",
+                    note = if (r.lastGiftDay == life.day) "🎁 Sudah diberi hadiah hari ini" else null,
+                ) { meetCharacter(c) })
+            }
+        }
         if (life.slot == LifeState.Slot.MALAM) {
             sheetButtonRow(
                 getString(R.string.btn_sleep) to { sleepUntilMorning() },
@@ -1464,6 +1537,254 @@ class GameActivity : Activity() {
         }
         if (onClick != null && enabled) box.setOnClickListener { onClick() }
         return box
+    }
+
+    // ================================================================== hubungan
+
+    private fun playerAge(): Int = vars["usia"]?.toIntOrNull() ?: 15
+
+    private fun speakerIdFromRaw(raw: String?): GameData.CharacterDef? =
+        raw?.let { gameData.findCharacter(it.trim().removePrefix("{").removeSuffix("}")) }
+
+    /** Variabel hubungan untuk @jika: cinta_bayu, percaya_bayu, tingkat_bayu, kenal_bayu. */
+    private fun syncSocialVars() {
+        gameData.characters.values.forEach { c ->
+            val r = social.rel(c)
+            vars["cinta_${c.id}"] = (if (social.isPartner(c)) r.romance else r.love).toString()
+            vars["percaya_${c.id}"] = r.trust.toString()
+            vars["tingkat_${c.id}"] = social.stageOf(c).name.lowercase()
+            vars["kenal_${c.id}"] = if (r.met) "1" else "0"
+        }
+        panelCharId?.let { id -> gameData.characters[id]?.let { fillCharPanel(it) } }
+    }
+
+    /** Tampilkan perubahan Cinta (dan kabar yang menyebar) sebagai pemberitahuan. */
+    private fun announce(changes: List<Pair<GameData.CharacterDef, Int>>) {
+        changes.forEachIndexed { i, (c, d) ->
+            if (d == 0) return@forEachIndexed
+            val sign = if (d > 0) "+" else ""
+            notice(
+                if (i == 0) (if (d > 0) "💛 " else "💔 ") + "${c.name} $sign$d"
+                else "🗣️ Kabar menyebar ke ${c.name} ($sign$d)"
+            )
+        }
+        syncSocialVars()
+    }
+
+    // ---------------- gambar karakter ----------------
+
+    private fun loadAsset(paths: List<String>, sample: Int = 1): Bitmap? {
+        val opts = BitmapFactory.Options().apply { inSampleSize = sample }
+        for (p in paths) {
+            try {
+                return assets.open(p).use { BitmapFactory.decodeStream(it, null, opts) }
+            } catch (_: Exception) {
+            }
+        }
+        return null
+    }
+
+    private fun charBitmap(id: String, expr: String): Bitmap? {
+        val names = listOf("${id}_$expr", id)
+        return loadAsset(names.flatMap { n -> listOf("karakter/$n.png", "karakter/$n.webp") })
+    }
+
+    private fun showCharacter(id: String, expr: String, pos: String, animate: Boolean = true) {
+        val bmp = charBitmap(id, expr) ?: return
+        val d = resources.displayMetrics.density
+        val existing = charLayer.findViewWithTag<android.widget.ImageView>("char_$id")
+        val iv = existing ?: android.widget.ImageView(this).apply {
+            tag = "char_$id"
+            adjustViewBounds = true
+            scaleType = android.widget.ImageView.ScaleType.FIT_END
+        }
+        iv.setImageBitmap(bmp)
+        val screenH = (charLayer.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels)
+        val screenW = (charLayer.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels)
+        if (existing == null) {
+            charLayer.addView(iv, FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, (screenH * 0.72f).toInt(),
+                android.view.Gravity.BOTTOM or android.view.Gravity.CENTER_HORIZONTAL,
+            ))
+        }
+        val targetX = when (pos) {
+            "kiri" -> -screenW * 0.26f
+            "kanan" -> screenW * 0.26f
+            else -> 0f
+        }
+        if (existing == null && animate) {
+            iv.alpha = 0f
+            iv.translationX = targetX
+            iv.translationY = 24 * d
+            iv.animate().alpha(1f).translationY(0f).setDuration(350).start()
+        } else {
+            iv.animate().translationX(targetX).setDuration(250).start()
+        }
+        shownChars[id] = expr to pos
+        vars["_tampil"] = shownChars.entries.joinToString(";") { "${it.key}:${it.value.first}:${it.value.second}" }
+    }
+
+    private fun hideCharacter(id: String?) {
+        val ids = if (id == null) shownChars.keys.toList() else listOf(id)
+        ids.forEach { cid ->
+            val iv = charLayer.findViewWithTag<View>("char_$cid") ?: return@forEach
+            iv.animate().alpha(0f).setDuration(250).withEndAction { charLayer.removeView(iv) }.start()
+            shownChars.remove(cid)
+        }
+        vars["_tampil"] = shownChars.entries.joinToString(";") { "${it.key}:${it.value.first}:${it.value.second}" }
+    }
+
+    private fun restoreShownCharacters() {
+        vars["_tampil"]?.split(';')?.forEach { e ->
+            val parts = e.split(':')
+            if (parts.size == 3) showCharacter(parts[0], parts[1], parts[2], animate = false)
+        }
+    }
+
+    // ---------------- panel karakter ----------------
+
+    private fun updateCharPanel(def: GameData.CharacterDef?) {
+        val show = def != null && !memoryMode && social.rel(def).met
+        if (show && def != null) {
+            if (panelCharId != def.id) fillCharPanel(def)
+            panelCharId = def.id
+            if (charPanel.visibility != View.VISIBLE || charPanel.alpha < 1f) {
+                charPanel.visibility = View.VISIBLE
+                charPanel.animate().alpha(1f).setDuration(220).start()
+            }
+            lifeHud.animate().alpha(0f).setDuration(150).start()
+        } else if (panelCharId != null) {
+            panelCharId = null
+            charPanel.animate().alpha(0f).setDuration(200).withEndAction {
+                if (panelCharId == null) charPanel.visibility = View.GONE
+            }.start()
+            lifeHud.animate().alpha(1f).setDuration(200).start()
+        }
+    }
+
+    private fun fillCharPanel(def: GameData.CharacterDef) {
+        val r = social.rel(def)
+        val photo = loadAsset(listOf("karakter/${def.id}_foto.jpg", "karakter/${def.id}_foto.png", "karakter/${def.id}_foto.webp"))
+            ?: charBitmap(def.id, "biasa")
+        findViewById<android.widget.ImageView>(R.id.char_panel_photo).setImageBitmap(photo)
+        findViewById<TextView>(R.id.char_panel_name).apply {
+            text = def.name
+            setTextColor(def.color)
+        }
+        findViewById<TextView>(R.id.char_panel_stage).text = social.stageOf(def).label
+        findViewById<TextView>(R.id.char_panel_meters).text =
+            (if (social.isPartner(def)) "❤️ Cinta ${r.romance}%" else "💛 ${r.love}%") + "   🤝 ${r.trust}%"
+    }
+
+    // ---------------- bertemu: ngobrol & hadiah ----------------
+
+    private fun meetCharacter(c: GameData.CharacterDef) {
+        closeSheet()
+        val blocker = social.blockedBy(gameData, c)
+        if (blocker != null) {
+            afterTap = { showFreeSheet() }
+            showLine(null, c.text["larangan"] ?: "${c.name} tidak bisa ditemui sekarang.")
+            notice("🚫 ${blocker.name} melarang ${c.name} bertemu denganmu")
+            return
+        }
+        social.rel(c).met = true
+        meetingTalked = false
+        meetingGifted = social.rel(c).lastGiftDay == life.day
+        showCharacter(c.id, "biasa", "tengah")
+        afterTap = { meetingMenu(c) }
+        showLine(c.name, c.text["sapa"] ?: "Halo.")
+    }
+
+    private fun meetingMenu(c: GameData.CharacterDef) {
+        val opts = mutableListOf<Pair<String, () -> Unit>>()
+        if (!meetingTalked) opts += "💬 Ngobrol" to { chooseTopic(c) }
+        if (!meetingGifted) opts += "🎁 Beri hadiah" to { chooseGift(c) }
+        opts += "👋 Pamit" to { endMeeting(c) }
+        showButtons(opts.map { it.first }) { i -> opts[i].second() }
+    }
+
+    private fun chooseTopic(c: GameData.CharacterDef) {
+        val topics = gameData.topics.values.shuffled().take(3)
+        if (topics.isEmpty()) {
+            meetingMenu(c)
+            return
+        }
+        showButtons(topics.map { "${it.icon} ${it.name}" }) { i ->
+            val t = topics[i]
+            meetingTalked = true
+            val r = social.rel(c)
+            val repeatToday = r.lastTalkDay == life.day
+            r.lastTalkDay = life.day
+            val (delta, key) = when (t.id) {
+                in c.likeTopics -> (if (repeatToday) 3 else 6) to "respon_suka"
+                in c.hateTopics -> -5 to "respon_benci"
+                else -> (if (repeatToday) 1 else 2) to "respon_biasa"
+            }
+            afterTap = {
+                announce(social.changeLove(gameData, c.id, delta))
+                showCharacter(c.id, if (delta > 2) "senyum" else if (delta < 0) "kesal" else "biasa", "tengah")
+                afterTap = { meetingMenu(c) }
+                showLine(c.name, c.text[key] ?: "...")
+            }
+            showLine("{nama}", t.line)
+        }
+    }
+
+    private fun chooseGift(c: GameData.CharacterDef) {
+        if (life.items.isEmpty()) {
+            notice("🎒 Tasmu kosong. Belanja dulu di warung.")
+            meetingMenu(c)
+            return
+        }
+        hideDialog()
+        openSheet("🎁 Beri hadiah", "Untuk ${c.name}   ·   1 hadiah per hari") { closeSheet(); showLine(c.name, c.text["sapa"] ?: "...", record = false, instant = true); meetingMenu(c) }
+        life.items.sortedBy { it.expiresDay }.forEach { item ->
+            val def = gameData.items[item.id] ?: return@forEach
+            sheetList.addView(card(
+                title = "${def.icon}  ${def.name}",
+                sub = if (life.isExpired(item)) "⚠️ Basi" else "",
+                actions = listOf("Beri" to { giveGift(c, item, def) }),
+            ))
+        }
+        sheetButtonRow(getString(R.string.btn_back) to {
+            closeSheet()
+            showLine(c.name, c.text["sapa"] ?: "...", record = false, instant = true)
+            meetingMenu(c)
+        })
+    }
+
+    private fun giveGift(c: GameData.CharacterDef, item: LifeState.Item, def: GameData.ItemDef) {
+        closeSheet()
+        life.items.remove(item)
+        meetingGifted = true
+        social.rel(c).lastGiftDay = life.day
+        refreshLife()
+        val expired = life.isExpired(item)
+        val (delta, key) = when {
+            expired -> -8 to "hadiah_benci"
+            def.id in c.likeItems -> 10 to "hadiah_suka"
+            def.id in c.hateItems -> -6 to "hadiah_benci"
+            else -> 3 to "hadiah_biasa"
+        }
+        announce(social.changeLove(gameData, c.id, delta))
+        if (expired) {
+            social.changeTrust(gameData, c.id, -6)
+            syncSocialVars()
+        }
+        showCharacter(c.id, if (delta > 3) "senyum" else if (delta < 0) "kesal" else "biasa", "tengah")
+        afterTap = { meetingMenu(c) }
+        showLine(c.name, if (expired) "Ini... sudah basi, kan? Kamu serius ngasih ini ke aku?" else (c.text[key] ?: "Terima kasih."))
+    }
+
+    private fun endMeeting(c: GameData.CharacterDef) {
+        hideCharacter(c.id)
+        updateCharPanel(null)
+        life.applyEffects(mapOf("energi" to -5L, "kewarasan" to (if (social.rel(c).love >= 50) 5L else 2L)))
+        freeLeft--
+        vars["_bebas_sisa"] = freeLeft.toString()
+        advanceTime()
+        if (life.dead) return
+        continueFree()
     }
 
     // ================================================================== HP
