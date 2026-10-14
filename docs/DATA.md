@@ -63,6 +63,78 @@ teks   = Kamu menggoreng pisang dan melayani pembeli seharian.
 - Bila `energi` yang dibutuhkan lebih besar dari energi pemain → tampil **"Terlalu lelah"** dan tidak bisa dipilih.
 - Setiap aktivitas memakan **satu** kesempatan dan memajukan waktu satu slot.
 
+## karakter.txt
+
+Setiap karakter punya data seperti ini (contoh lengkap ada di file-nya):
+```
+[bayu]
+nama        = Bayu
+kelamin     = laki-laki
+usia        = 15
+peran       = Teman sekelas, anak nelayan
+pandangan   = setia            (setia / terbuka — sikap bila pasangannya punya pasangan lain)
+bisa_dipacari = tidak          (ya / tidak)
+tempat      = desa
+waktu       = siang, sore      (kapan bisa ditemui di waktu bebas)
+ditemui     = ya
+cinta_awal  = 45
+percaya_awal = 55
+suka_topik  = laut, sepak_bola, kota
+benci_topik = pelajaran
+suka_barang = gorengan, kopi_sachet
+benci_barang = obat_flu
+sapa        = Woy! Akhirnya muncul juga kamu.
+respon_suka / respon_biasa / respon_benci = jawaban saat diajak ngobrol
+hadiah_suka / hadiah_biasa / hadiah_benci = jawaban saat diberi hadiah
+larangan    = kalimat saat ia dilarang bertemu oleh orang dekatnya
+warna       = #2E8B57
+```
+- `nama` juga dipakai sebagai **nama pembicara** di naskah (`Bayu: ...`). Saat karakter bicara, panel foto + nama + meter muncul di pojok kiri atas (setelah dikenal lewat `@kenal`).
+- `usia` bertambah bersama usia pemain. **Romansa hanya terbuka bila pemain dan karakter sama-sama 18 tahun ke atas**, lawan jenis, dan `bisa_dipacari = ya`.
+
+### Ngobrol & hadiah (waktu bebas → Temui seseorang)
+| Aksi | Akibat ke Cinta |
+|---|---|
+| Topik disukai | +6 (+3 bila sudah ngobrol hari itu) |
+| Topik biasa | +2 (+1) |
+| Topik dibenci | −5 |
+| Hadiah disukai / biasa / dibenci | +10 / +3 / −6 (maks. 1 hadiah per karakter per hari) |
+| Hadiah basi | Cinta −8, Kepercayaan −6 |
+| Pamit | Memakai 1 kesempatan waktu bebas, Energi −5, Kewarasan +2 sampai +5 |
+
+### Tingkat hubungan
+`Belum kenal → Kenalan (<30) → Teman (30+) → Teman dekat (60+) → Sahabat (85+ & percaya 60+)`
+Cinta di bawah 15 atau Kepercayaan di bawah 10 → **Bermusuhan**.
+Tingkat romantis (`Pacar → Tunangan → Pasangan hidup`) hanya lewat cerita (`@ungkapkan`).
+
+## hubungan.txt
+```
+bayu - sekar = sahabat 75
+ayah - ibu   = pasangan 90
+```
+- Jenis: `keluarga`, `sahabat`, `teman`, `pasangan`, `saingan`, `mantan`, `rekan`. Kekuatan 0–100.
+- **Kabar menyebar:** setiap penurunan Cinta/Kepercayaan ke A ikut menurunkan orang dekat A sebesar ±45% × kekuatan (tidak untuk saingan/mantan).
+- **Ikut campur:** bila A sudah dikenal, Cinta A < 25, dan hubungan A–B ≥ 60, maka B **dilarang** bertemu pemain (muncul kalimat `larangan` B).
+
+## topik.txt
+```
+[laut]
+nama    = Laut & melaut
+ikon    = 🌊
+kalimat = Kemarin aku lihat kapal besar lewat dekat mercusuar.
+```
+Saat ngobrol, pemain memilih 1 dari 3 topik acak.
+
+## Gambar karakter
+Folder `app/src/main/assets/karakter/`:
+| File | Isi |
+|---|---|
+| `bayu.png` | Gambar utama (PNG transparan, badan dari kepala sampai pinggang/lutut, portrait) |
+| `bayu_senyum.png`, `bayu_sedih.png`, `bayu_kesal.png`, `bayu_kaget.png` | Ekspresi (opsional; bila tidak ada, dipakai `bayu.png`) |
+| `bayu_foto.jpg` | Foto wajah persegi untuk panel & daftar kontak |
+
+Ekspresi yang dipakai otomatis saat ngobrol/memberi hadiah: `senyum`, `kesal`, `biasa`.
+
 ## Aturan waktu & kebutuhan (sementara, bisa disesuaikan)
 | Kejadian | Akibat |
 |---|---|

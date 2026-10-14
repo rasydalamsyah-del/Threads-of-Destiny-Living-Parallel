@@ -141,6 +141,32 @@ Jam ini juga dipakai di layar kunci HP.
 - Kalau Kesehatan habis, tokoh **meninggal** (game over).
 - Cara menambah barang & aktivitas: **[DATA.md](DATA.md)**.
 
+### Karakter & hubungan
+```
+@kenal bayu                      pemain mengenal karakter (muncul di panel & "Temui seseorang")
+@tampil bayu senyum kiri         tampilkan gambar karakter (posisi: kiri / tengah / kanan)
+@sembunyi bayu                   sembunyikan satu karakter   (@sembunyi semua = semua)
+@cinta bayu +5                   ubah Cinta (bila sudah pacaran → Cinta pasangan)
+@percaya bayu -10                ubah Kepercayaan
+@perilaku bayu menghindar        catat perilaku (lihat tabel di bawah)
+@bohong kode_bohong bayu sekar   catat kebohongan ke karakter tsb (belum ketahuan)
+@terbongkar kode_bohong          kebohongan terbongkar → Cinta −10, Kepercayaan −25 ke yang dibohongi
+@ungkapkan bayu -> diterima, ditolak   ungkapkan perasaan, lompat ke label sesuai hasil
+```
+| `@perilaku` | Cinta | Kepercayaan |
+|---|---|---|
+| `menghindar` | −3 | −5 |
+| `ingkar_janji` | −6 | −15 |
+| `abaikan_chat` | −2 | −3 |
+| `kasar` | −8 | −4 |
+| `selingkuh_ketahuan` | −40 | −50 |
+| `jujur` / `membantu` / `menepati_janji` | +2 / +5 / +3 | +5 / +4 / +6 |
+
+- Penurunan ikut **menyebar** ke orang dekat karakter (lihat `data/hubungan.txt`).
+- Variabel otomatis untuk `@jika`: `cinta_bayu`, `percaya_bayu`, `tingkat_bayu` (kenalan/teman/teman_dekat/sahabat/pacaran/…/musuh), `kenal_bayu`, `bohong_kode`, `terbongkar_kode`.
+- `@ungkapkan` **selalu ditolak** bila pemain atau karakter belum 18 tahun, sesama jenis, atau karakter tidak bisa dipacari.
+  Selain itu: Cinta < 50 hampir pasti ditolak; makin tinggi Cinta & Kepercayaan, makin besar peluang diterima.
+
 ### Akhir
 ```
 @tamat Bersambung…

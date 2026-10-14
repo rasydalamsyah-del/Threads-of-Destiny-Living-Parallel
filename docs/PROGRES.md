@@ -14,6 +14,7 @@
 | 14 Okt 2026 | 4 | START GAME: isi nama → prolog masa lalu (efek kenangan, gerak kamera) → layar gelap + teks waktu → efek bangun tidur (kedip, buram) → duduk di ranjang → pesan HP masuk + layar HP. Mesin naskah teks (`assets/naskah/prolog.txt`), background sementara |
 | 14 Okt 2026 | 5 | Tombol burger di masa kini (Lanjutkan, Simpan, Muat, Riwayat, Pengaturan, Menu Utama). Simpan/Muat 1 slot otomatis + 6 manual. CONTINUE & LOAD DATA berfungsi. Halaman Pengaturan (tema, ukuran & gaya huruf, kepekatan kotak, kecepatan teks, volume musik/efek, getar, lewati intro, hapus data). Perintah naskah `@musik`, `@suara` |
 | 14 Okt 2026 | — | Dokumen rancangan game & catatan progres ini dibuat |
+| 14 Okt 2026 | 9 | **Sistem hubungan:** data karakter (keluarga + Bayu & Sekar), hubungan antar karakter, topik obrolan. Meter Cinta (teman/pasangan) & Kepercayaan, tingkat hubungan, kabar menyebar, karakter bisa dilarang bertemu oleh sahabatnya, perilaku buruk & kebohongan tercatat, pengakuan (hanya 18+). Gambar karakter (sementara) + panel nama & meter. Waktu bebas: Temui seseorang → ngobrol/hadiah |
 | 14 Okt 2026 | 8 | **Sistem kehidupan:** kalender Pagi/Siang/Sore/Malam, bar Kesehatan/Kenyang/Hidrasi/Kewarasan/Energi, uang, tas dengan kedaluwarsa, waktu bebas (aktivitas), Status & Tas, Belanja, game over saat meninggal. Data `aktivitas.txt` & `barang.txt`. Bab 1: siang setelah lulus memakai sistem baru |
 | 14 Okt 2026 | 7 | Prolog ditulis ulang (Bab 1: masa kecil di Tanjung Lentera, sahabat pergi, lulus SMP, sarapan bersama keluarga, pesan misterius). Pilih jenis kelamin di layar isi nama. Pilihan jawaban (`@pilihan`), label & lompat, variabel (`@atur`, `@tambah`), syarat (`@jika`), teks sesuai jenis kelamin. Pilihan besar pertama: SMA / kerja / keduanya |
 | 14 Okt 2026 | — | Jawaban gambaran besar pemilik dimasukkan ke rancangan; usulan dunia (Desa Tanjung Lentera → Kota Sakala), cerita utama ("hidup paralel" lewat mimpi), dan fase hidup usia 15–25 |
@@ -29,26 +30,26 @@
 
 ### Tahap A — Fondasi hubungan
 - [x] Pilih jenis kelamin di layar isi nama (aturan pasangan menyusul bersama sistem hubungan)
-- [ ] File data karakter (`assets/data/karakter.txt`) + hubungan antar karakter
+- [x] File data karakter (`assets/data/karakter.txt`) + hubungan antar karakter + topik obrolan
 - [x] Perintah `@pilihan` (pilihan jawaban), label, `@lompat`, `@atur`, `@tambah`, `@jika`
-- [ ] Meter **Cinta (teman)**, **Cinta (pasangan)**, **Kepercayaan** + tahapan hubungan
-- [ ] Romansa terkunci sampai tokoh berusia 18; pengakuan bisa ditolak
-- [ ] Sifat karakter (setia/cemburuan vs terbuka) untuk akibat banyak pasangan
-- [ ] Tampilan karakter di layar (gambar + ekspresi) dan panel nama + meter di pojok kiri atas
-- [ ] Pencatatan perilaku: bohong, menghindar, ingkar janji, abaikan chat
-- [ ] Data simpanan ikut menyimpan semua hal di atas
+- [x] Meter **Cinta (teman)**, **Cinta (pasangan)**, **Kepercayaan** + tahapan hubungan
+- [x] Romansa terkunci sampai tokoh & karakter berusia 18; pengakuan bisa ditolak
+- [~] Sifat karakter (setia/terbuka) sudah ada di data; deteksi "ketahuan punya pasangan lain" menyusul (Tahap B/E)
+- [x] Tampilan karakter di layar (gambar + ekspresi) dan panel nama + meter di pojok kiri atas
+- [x] Pencatatan perilaku: bohong, menghindar, ingkar janji, abaikan chat
+- [x] Data simpanan ikut menyimpan semua hal di atas
 
 ### Tahap B — Waktu & waktu bebas
 - [x] Kalender + slot Pagi/Siang/Sore/Malam (tanggal, gajian, tahun ajaran menyusul)
 - [x] Layar pilih aktivitas waktu bebas (ajak ketemu karakter menyusul bersama sistem hubungan)
-- [ ] Jadwal karakter (kapan bisa ditemui)
-- [ ] Efek jaringan: kabar menyebar & karakter ikut campur (melarang, menjelekkan)
+- [x] Jadwal karakter (tempat & waktu bisa ditemui)
+- [x] Efek jaringan: kabar menyebar & karakter ikut campur (melarang bertemu). Menjelekkan/memaksa memilih lewat adegan cerita
 
 ### Tahap C — Bertahan hidup, ekonomi & barang
 - [x] Bar Kesehatan, Kenyang (lapar), Hidrasi (haus), Kewarasan, Energi + game over saat meninggal
 - [x] Makanan & minuman dengan kedaluwarsa
 - [ ] Status: Uang, Kemampuan, Reputasi
-- [x] Tas/inventori & toko (beri & terima hadiah menyusul bersama sistem hubungan)
+- [x] Tas/inventori & toko, beri hadiah (terima hadiah dari karakter lewat `@barang` di naskah)
 - [ ] Kebutuhan hidup (kos, makan, transport) + tagihan
 
 ### Tahap D — Sekolah & pekerjaan
@@ -104,6 +105,11 @@
 - (kosong) — usulan dunia, cerita utama, durasi, dan keluarga **disetujui pemilik 14 Okt 2026**
 
 ---
+
+## 🔜 Langkah berikutnya (urutan)
+1. **Tahap D — Sekolah & pekerjaan**: lanjut cerita jalur SMA / kerja / keduanya (pindah ke Kota Sakala, cari kos, hari pertama), pekerjaan paruh waktu.
+2. **Tahap E — HP lengkap**: Chat & Kontak (karakter mengirim pesan, membalas/mengabaikan memengaruhi hubungan).
+3. Kalender bertanggal (usia bertambah, tahun ajaran, gajian, bayar kos).
 
 ## 🐞 Catatan teknis
 - Bar "Lapar" & "Haus" ditampilkan sebagai **Kenyang** & **Hidrasi** (bar penuh = baik), agar semua bar searah.

@@ -138,7 +138,7 @@ Setiap hari dalam game dimainkan ± 3–8 menit.
 
 ---
 
-## 8. Hubungan 📝
+## 8. Hubungan 🔨 (meter, tingkat, menyebar, larangan, perilaku, pengakuan ✅ build 9; deteksi selingkuh 📝)
 
 ### 8.1 Meter per karakter
 | Meter | Arti |
@@ -182,7 +182,7 @@ Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, h
 
 ---
 
-## 10. Obrolan & pilihan 📝
+## 10. Obrolan & pilihan ✅ (build 7–9: pilihan cerita, ngobrol pilih topik, panel karakter)
 - Pilihan jawaban 2–3 opsi, termasuk opsi bohong & menghindar.
 - Karakter punya sifat, topik favorit & tidak disukai.
 - Panel karakter saat bicara: foto + nama + meter (seperti gambar Hana).
@@ -258,7 +258,7 @@ Setelah ending → bermain bebas.
 ---
 
 ## 17. Data (file teks, bisa diedit dari HP) 📝
-`assets/data/barang.txt` ✅ · `aktivitas.txt` ✅ · `karakter.txt` · `hubungan.txt` · `pekerjaan.txt` · `tempat.txt` · `sekolah.txt` 📝 — panduan: [DATA.md](DATA.md)
+`assets/data/barang.txt` ✅ · `aktivitas.txt` ✅ · `karakter.txt` ✅ · `hubungan.txt` ✅ · `topik.txt` ✅ · `pekerjaan.txt` · `tempat.txt` · `sekolah.txt` 📝 — panduan: [DATA.md](DATA.md)
 `assets/karakter/` (gambar karakter) · `assets/latar/` (background) · `assets/naskah/` (cerita)
 
 Perintah naskah baru (rencana): `@pilihan`, `@jika`, `@cinta hana +5`, `@percaya hana -10`, `@bohong`, `@terbongkar`,
