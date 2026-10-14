@@ -71,3 +71,29 @@ tempat = semua
 waktu  = semua
 efek   = energi +25, kewarasan +3
 teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristirahat.
+
+# ---------------- KOTA SAKALA ----------------
+
+[taman_kota]
+nama   = Jalan-jalan di Taman Kota
+ikon   = 🌳
+tempat = kota
+waktu  = pagi, sore, malam
+efek   = kewarasan +10, energi -8, hidrasi -6
+teks   = Lampu-lampu taman mulai menyala. Orang-orang berlalu-lalang, tak satu pun yang kamu kenal.
+
+[jelajah_kota]
+nama   = Menjelajah sudut kota
+ikon   = 🧭
+tempat = kota
+waktu  = siang, sore
+efek   = energi -15, hidrasi -10, kewarasan +4, wawasan_kota +1
+teks   = Kamu menyusuri jalan-jalan Sakala, menghafal arah dan nama-nama gang.
+
+[cari_jejak]
+nama   = Mencari jejak sahabat lama
+ikon   = 🔍
+tempat = kota
+waktu  = siang, sore
+efek   = energi -15, kewarasan -2, petunjuk_sahabat +1
+teks   = Kamu bertanya ke beberapa orang di sekitar stasiun. Tak ada yang tahu... tapi seorang tukang parkir sepertinya mengingat sesuatu.

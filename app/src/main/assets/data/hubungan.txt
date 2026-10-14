@@ -17,3 +17,5 @@ ibu - laras  = keluarga 90
 bayu - sekar = sahabat 75
 bayu - ayah  = teman 30
 sekar - ibu  = teman 25
+darto - ayah = teman 50
+dimas - nadia = teman 50

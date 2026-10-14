@@ -16,7 +16,52 @@ class GameData private constructor(
     val characters: Map<String, CharacterDef>,
     val relations: List<RelationDef>,
     val topics: Map<String, TopicDef>,
+    val jobs: Map<String, JobDef>,
+    val housing: Map<String, KosDef>,
 ) {
+
+    /**
+     * Kegiatan rutin: sekolah atau pekerjaan.
+     * jenis: sekolah, tetap, paruh_waktu, harian
+     */
+    data class JobDef(
+        val id: String,
+        val name: String,
+        val kind: String,
+        val places: Set<String>,
+        val days: Set<Int>,
+        val slots: Set<String>,
+        val pay: Long,
+        val effects: Map<String, Long>,
+        val condition: String?,
+        val minAge: Int,
+        val way: String,
+        val difficulty: Int,
+        val referrer: String?,
+        val text: String,
+        val icon: String,
+        val desc: String,
+    ) {
+        /** Sekolah & pekerjaan tetap wajib dihadiri; bolos/absen tercatat. */
+        val mandatory: Boolean get() = kind == "sekolah" || kind == "tetap"
+        val kindLabel: String
+            get() = when (kind) {
+                "sekolah" -> "Sekolah"
+                "tetap" -> "Pekerjaan tetap"
+                "paruh_waktu" -> "Paruh waktu"
+                else -> "Pekerjaan harian"
+            }
+    }
+
+    data class KosDef(
+        val id: String,
+        val name: String,
+        val price: Long,
+        val places: Set<String>,
+        val sleepEnergy: Int,
+        val sleepSanity: Int,
+        val text: String,
+    )
 
     data class CharacterDef(
         val id: String,
@@ -127,7 +172,38 @@ class GameData private constructor(
             val topics = readSections(ctx, "data/topik.txt").associate { (id, m) ->
                 id to TopicDef(id, m["nama"] ?: id, m["ikon"] ?: "💬", m["kalimat"] ?: (m["nama"] ?: id))
             }
-            return GameData(acts, items, chars, rels, topics)
+            val jobs = readSections(ctx, "data/pekerjaan.txt").associate { (id, m) ->
+                id to JobDef(
+                    id = id,
+                    name = m["nama"] ?: id,
+                    kind = (m["jenis"] ?: "harian").lowercase(),
+                    places = list(m["tempat"]).ifEmpty { setOf("semua") },
+                    days = days(m["hari"]),
+                    slots = list(m["waktu"]).ifEmpty { setOf("semua") },
+                    pay = m["gaji"]?.filter { it.isDigit() }?.toLongOrNull() ?: 0L,
+                    effects = effects(m["efek"]),
+                    condition = m["syarat"]?.takeIf { it.isNotBlank() },
+                    minAge = m["usia_min"]?.trim()?.toIntOrNull() ?: 0,
+                    way = (m["cara"] ?: "cerita").lowercase(),
+                    difficulty = m["sulit"]?.trim()?.toIntOrNull() ?: 30,
+                    referrer = m["orang_dalam"]?.trim()?.lowercase()?.takeIf { it.isNotEmpty() },
+                    text = m["teks"] ?: "",
+                    icon = m["ikon"] ?: "💼",
+                    desc = m["keterangan"] ?: "",
+                )
+            }
+            val kos = readSections(ctx, "data/kos.txt").associate { (id, m) ->
+                id to KosDef(
+                    id = id,
+                    name = m["nama"] ?: id,
+                    price = m["harga"]?.filter { it.isDigit() }?.toLongOrNull() ?: 0L,
+                    places = list(m["tempat"]).ifEmpty { setOf("semua") },
+                    sleepEnergy = m["tidur_energi"]?.trim()?.removePrefix("+")?.toIntOrNull() ?: 0,
+                    sleepSanity = m["tidur_kewarasan"]?.trim()?.removePrefix("+")?.toIntOrNull() ?: 0,
+                    text = m["keterangan"] ?: "",
+                )
+            }
+            return GameData(acts, items, chars, rels, topics, jobs, kos)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {
@@ -156,6 +232,32 @@ class GameData private constructor(
                 }
             }
             return out
+        }
+
+        private val DAY_NAMES = listOf("senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu")
+
+        /** "senin-sabtu", "senin, rabu, jumat", "setiap hari" → indeks hari (0 = Senin). */
+        private fun days(v: String?): Set<Int> {
+            val t = v?.trim()?.lowercase() ?: return (0..6).toSet()
+            if (t.isEmpty() || t == "setiap hari" || t == "semua") return (0..6).toSet()
+            val out = mutableSetOf<Int>()
+            t.split(',').map { it.trim() }.forEach { part ->
+                if (part.contains('-')) {
+                    val a = DAY_NAMES.indexOf(part.substringBefore('-').trim())
+                    val b = DAY_NAMES.indexOf(part.substringAfter('-').trim())
+                    if (a >= 0 && b >= 0) {
+                        var i = a
+                        while (true) {
+                            out += i
+                            if (i == b) break
+                            i = (i + 1) % 7
+                        }
+                    }
+                } else {
+                    DAY_NAMES.indexOf(part).takeIf { it >= 0 }?.let { out += it }
+                }
+            }
+            return out.ifEmpty { (0..6).toSet() }
         }
 
         private fun list(v: String?): Set<String> =
@@ -194,4 +296,8 @@ class GameData private constructor(
                 else -> null
             }
         }
+
+    /** Kegiatan yang dijadwalkan pada hari & waktu tertentu. */
+    fun scheduled(job: JobDef, weekdayIndex: Int, slot: LifeState.Slot): Boolean =
+        weekdayIndex in job.days && ("semua" in job.slots || slot.label.lowercase() in job.slots)
 }

@@ -79,6 +79,19 @@ object StoryScript {
         data class Reveal(val code: String) : Cmd()
         /** Ungkapkan perasaan → lompat ke label diterima / ditolak. */
         data class Confess(val id: String, val okLabel: String, val noLabel: String) : Cmd()
+        /** Pindah ke file naskah lain (bab berikutnya). */
+        data class LoadScript(val file: String) : Cmd()
+        /** Atur tanggal hari ini: @tanggal 6 Juli 2026 */
+        data class SetDate(val text: String) : Cmd()
+        /** Pindah ke kos (bayar bulan pertama). id kosong = tidak punya tempat tinggal. */
+        data class Kos(val id: String) : Cmd()
+        /** Kiriman uang bulanan dari keluarga (0 = berhenti). */
+        data class Allowance(val amount: Long) : Cmd()
+        /** Mulai / berhenti sekolah atau pekerjaan. */
+        data class JobStart(val id: String) : Cmd()
+        data class JobStop(val id: String) : Cmd()
+        /** Melamar → lompat ke label diterima / ditolak. */
+        data class Apply(val id: String, val okLabel: String, val noLabel: String) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
     }
@@ -140,6 +153,10 @@ object StoryScript {
                             is Cmd.Jump -> jumps += cmd.label to n
                             is Cmd.JumpIf -> jumps += cmd.label to n
                             is Cmd.Confess -> {
+                                jumps += cmd.okLabel to n
+                                jumps += cmd.noLabel to n
+                            }
+                            is Cmd.Apply -> {
                                 jumps += cmd.okLabel to n
                                 jumps += cmd.noLabel to n
                             }
@@ -293,6 +310,29 @@ object StoryScript {
                 val m = Regex("^(\\w+)\\s*->\\s*(\\w+)\\s*,\\s*(\\w+)$").find(rest)
                     ?: throw ParseError(n, "format: @ungkapkan id_karakter -> label_diterima, label_ditolak")
                 Cmd.Confess(m.groupValues[1].lowercase(), m.groupValues[2], m.groupValues[3])
+            }
+            "naskah", "script" -> {
+                val f = rest.trim().takeIf { it.isNotEmpty() } ?: throw ParseError(n, "format: @naskah bab2.txt")
+                Cmd.LoadScript(if (f.contains('.')) f else "$f.txt")
+            }
+            "tanggal", "date" -> {
+                if (rest.split(Regex("\\s+")).size < 3) throw ParseError(n, "format: @tanggal 6 Juli 2026")
+                Cmd.SetDate(rest)
+            }
+            "kos" -> Cmd.Kos(args.firstOrNull()?.takeIf { it != "kosong" && it != "tidak_ada" } ?: "")
+            "kiriman", "allowance" -> {
+                val v = rest.replace(".", "").replace(" ", "").removePrefix("+").toLongOrNull()
+                    ?: throw ParseError(n, "format: @kiriman 500000  (0 = berhenti)")
+                Cmd.Allowance(v)
+            }
+            "kerja_mulai", "sekolah_mulai", "job_start" ->
+                Cmd.JobStart(args.firstOrNull() ?: throw ParseError(n, "format: @kerja_mulai id_pekerjaan"))
+            "kerja_berhenti", "sekolah_berhenti", "job_stop" ->
+                Cmd.JobStop(args.firstOrNull() ?: throw ParseError(n, "format: @kerja_berhenti id_pekerjaan"))
+            "lamar", "apply" -> {
+                val m = Regex("^(\\w+)\\s*->\\s*(\\w+)\\s*,\\s*(\\w+)$").find(rest)
+                    ?: throw ParseError(n, "format: @lamar id_pekerjaan -> label_diterima, label_ditolak")
+                Cmd.Apply(m.groupValues[1].lowercase(), m.groupValues[2], m.groupValues[3])
             }
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             else -> throw ParseError(n, "perintah @$name tidak dikenal")

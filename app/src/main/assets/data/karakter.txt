@@ -161,3 +161,88 @@ hadiah_biasa = Makasih.
 hadiah_benci = Aku lagi jaga makan. Kamu aja deh.
 larangan    = Bayu bilang Sekar lagi nggak mau ketemu kamu.
 warna       = #7A5BC2
+
+# ---------------- DESA: PEKERJAAN ----------------
+
+[darto]
+nama        = Juragan Darto
+kelamin     = laki-laki
+usia        = 52
+peran       = Juragan pengolahan ikan asin
+sifat       = tegas, perhitungan, menghargai orang yang rajin
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = desa
+waktu       = pagi, siang
+ditemui     = ya
+cinta_awal  = 25
+percaya_awal = 35
+suka_topik  = laut, masa_depan
+benci_topik = gosip, layangan
+suka_barang = kopi_sachet
+benci_barang = teh_manis
+sapa        = Kerja itu yang benar, jangan setengah-setengah.
+respon_suka = Hm. Kamu tahu juga soal itu.
+respon_biasa = Ya, ya.
+respon_benci = Buang-buang waktu saja.
+hadiah_suka = Kopi... boleh juga.
+hadiah_biasa = Taruh saja di situ.
+hadiah_benci = Saya tidak minum yang manis-manis.
+larangan    = Juragan Darto sedang sibuk menghitung hasil.
+warna       = #6B5A3A
+
+# ---------------- KOTA: SMA NEGERI 3 SAKALA ----------------
+
+[dimas]
+nama        = Dimas
+kelamin     = laki-laki
+usia        = 15
+peran       = Teman sebangku, anak Kampung Rel Utara
+sifat       = humoris, cuek di luar, peduli di dalam; kerja sambilan bantu ibunya
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = kota
+waktu       = siang, sore
+ditemui     = ya
+cinta_awal  = 30
+percaya_awal = 40
+suka_topik  = sepak_bola, kota, masa_depan
+benci_topik = gosip
+suka_barang = mi_instan, roti_sobek
+benci_barang = obat_flu
+sapa        = Eh, anak desa! Udah hafal jalan belum?
+respon_suka = Wah, nyambung juga kita!
+respon_biasa = Hmm, iya sih.
+respon_benci = Aku nggak suka ngomongin orang, Bro.
+hadiah_suka = Serius buat aku? Mantap, rezeki anak soleh!
+hadiah_biasa = Thanks, ya.
+hadiah_benci = Nggak usah repot-repot gitu.
+larangan    = Dimas bilang dia lagi nggak bisa ketemu.
+warna       = #C2512E
+
+[nadia]
+nama        = Nadia
+kelamin     = perempuan
+usia        = 15
+peran       = Ketua kelas, anak pemilik toko buku
+sifat       = tegas, rapi, ingin tahu, diam-diam kesepian
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = kota
+waktu       = siang, sore
+ditemui     = ya
+cinta_awal  = 25
+percaya_awal = 40
+suka_topik  = pelajaran, masa_depan, keluarga
+benci_topik = sepak_bola, gosip
+suka_barang = roti_tawar, teh_manis
+benci_barang = ikan_asin
+sapa        = Oh, kamu. Ada perlu?
+respon_suka = Nadia menutup bukunya. "Ceritakan lebih banyak."
+respon_biasa = Begitu, ya.
+respon_benci = Nadia kembali membaca bukunya tanpa menjawab.
+hadiah_suka = Eh... terima kasih. Aku suka ini.
+hadiah_biasa = Terima kasih.
+hadiah_benci = Maaf, aku nggak bisa makan ini.
+larangan    = Nadia sedang tidak mau diganggu.
+warna       = #2F6DB5

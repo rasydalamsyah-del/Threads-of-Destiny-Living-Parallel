@@ -1,0 +1,37 @@
+# ==========================================================
+#  TEMPAT TINGGAL (KOS)
+#  [id]
+#  nama            = nama yang tampil
+#  harga           = sewa per 30 hari
+#  tempat          = kota / desa
+#  tidur_energi    = tambahan/kurangan energi saat tidur (bising = minus)
+#  tidur_kewarasan = tambahan/kurangan kewarasan saat tidur
+#  keterangan      = penjelasan
+#
+#  Sewa dibayar saat pindah, lalu setiap 30 hari otomatis dari uang pemain.
+#  Telat bayar 2 kali → diusir (tidur di emperan: energi & kewarasan turun).
+# ==========================================================
+
+[kos_rel_utara]
+nama            = Kos Bu Ratmi (Kampung Rel Utara)
+harga           = 400000
+tempat          = kota
+tidur_energi    = -15
+tidur_kewarasan = -2
+keterangan      = Kamar 2×3 m, kipas angin, kamar mandi bersama. Murah, tapi kereta lewat setiap jam.
+
+[kos_cendana]
+nama            = Kos Melati (Kawasan Cendana)
+harga           = 650000
+tempat          = kota
+tidur_energi    = 0
+tidur_kewarasan = 1
+keterangan      = Bersih, tenang, 10 menit jalan kaki ke SMA. Ibu kos galak soal jam malam.
+
+[kos_pusat]
+nama            = Kos Eksklusif Sakala Residence
+harga           = 1300000
+tempat          = kota
+tidur_energi    = 10
+tidur_kewarasan = 3
+keterangan      = AC, kamar mandi dalam, Wi-Fi kencang. Jauh di luar kemampuan anak desa... kecuali punya uang.

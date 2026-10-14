@@ -2,6 +2,7 @@ package com.valeriusgames.threadsofdestiny.life
 
 import org.json.JSONArray
 import org.json.JSONObject
+import java.time.LocalDate
 import kotlin.random.Random
 
 /**
@@ -28,8 +29,32 @@ class LifeState {
 
     data class Item(val id: String, val boughtDay: Int, val expiresDay: Int)
 
+    /** Kegiatan yang sedang dijalani pemain (sekolah / pekerjaan). */
+    data class Job(
+        val id: String,
+        val startDay: Int,
+        var performance: Int = 50,
+        var absences: Int = 0,
+        var shifts: Int = 0,
+    )
+
     companion object {
         val WEEKDAYS = listOf("Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu")
+        val MONTHS = listOf(
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+        )
+
+        /** "6 Juli 2026" → epoch day, atau null bila tidak terbaca. */
+        fun parseDate(text: String): Long? {
+            val p = text.trim().split(Regex("\\s+"))
+            if (p.size < 3) return null
+            val d = p[0].toIntOrNull() ?: return null
+            val m = MONTHS.indexOfFirst { it.equals(p[1], true) || it.take(3).equals(p[1].take(3), true) } + 1
+            val y = p[2].toIntOrNull() ?: return null
+            if (m <= 0) return null
+            return runCatching { LocalDate.of(y, m, d).toEpochDay() }.getOrNull()
+        }
 
         /** Penurunan tiap pergantian waktu (saat terjaga). */
         private const val DECAY_KENYANG = 10
@@ -48,6 +73,21 @@ class LifeState {
                 st.money = o.optLong("money", 0)
                 st.dead = o.optBoolean("dead")
                 st.deathReason = o.optString("deathReason")
+                st.startEpochDay = o.optLong("startEpochDay", 0L)
+                st.kosId = o.optString("kosId")
+                st.rent = o.optLong("rent")
+                st.rentDueDay = o.optInt("rentDueDay", -1)
+                st.arrears = o.optInt("arrears")
+                st.sleepEnergy = o.optInt("sleepEnergy")
+                st.sleepSanity = o.optInt("sleepSanity")
+                st.allowance = o.optLong("allowance")
+                st.allowanceNextDay = o.optInt("allowanceNextDay", -1)
+                st.attended = o.optString("attended")
+                val jobs = o.optJSONArray("jobs") ?: JSONArray()
+                for (i in 0 until jobs.length()) {
+                    val j = jobs.getJSONObject(i)
+                    st.jobs += Job(j.getString("id"), j.optInt("start"), j.optInt("perf", 50), j.optInt("abs"), j.optInt("shifts"))
+                }
                 val stats = o.optJSONObject("stats")
                 Stat.values().forEach { k -> stats?.let { st.stats[k] = it.optInt(k.key, st.stats[k] ?: 0) } }
                 val inv = o.optJSONArray("items") ?: JSONArray()
@@ -70,6 +110,41 @@ class LifeState {
     var dead = false
     var deathReason = ""
 
+    // ---- kalender bertanggal ----
+    /** Tanggal hari pertama (epoch day). 0 = belum diatur, pakai hari tanpa tanggal. */
+    var startEpochDay = 0L
+
+    // ---- tempat tinggal & keuangan rutin ----
+    var kosId = ""
+    var rent = 0L
+    var rentDueDay = -1
+    var arrears = 0
+    /** Pengaruh tempat tidur terhadap energi & kewarasan saat tidur. */
+    var sleepEnergy = 0
+    var sleepSanity = 0
+    var allowance = 0L
+    var allowanceNextDay = -1
+
+    // ---- sekolah & pekerjaan ----
+    val jobs = mutableListOf<Job>()
+    /** Penanda kegiatan yang sudah dihadiri: "hari:slot:id;..." */
+    var attended = ""
+
+    fun date(): LocalDate? = if (startEpochDay != 0L) LocalDate.ofEpochDay(startEpochDay + day) else null
+
+    /** Indeks hari dalam seminggu, 0 = Senin. */
+    val weekdayIndex: Int
+        get() = date()?.let { it.dayOfWeek.value - 1 } ?: ((startWeekday + day) % 7)
+
+    val dateText: String
+        get() = date()?.let { "${it.dayOfMonth} ${MONTHS[it.monthValue - 1]} ${it.year}" } ?: "Hari ke-${day + 1}"
+
+    fun attendKey(jobId: String) = "$day:${slot.name}:$jobId"
+    fun hasAttended(jobId: String) = attended.split(';').contains(attendKey(jobId))
+    fun markAttended(jobId: String) {
+        attended = (attended.split(';').filter { it.startsWith("$day:") } + attendKey(jobId)).joinToString(";")
+    }
+
     val stats: MutableMap<Stat, Int> = mutableMapOf(
         Stat.KESEHATAN to 100,
         Stat.KENYANG to 70,
@@ -85,8 +160,10 @@ class LifeState {
         stats[s] = ((stats[s] ?: 0) + delta).coerceIn(0, 100)
     }
 
-    val weekday: String get() = WEEKDAYS[(startWeekday + day) % 7]
-    val clockText: String get() = "$weekday · ${slot.label} ${slot.icon}"
+    val weekday: String get() = WEEKDAYS[weekdayIndex]
+    val clockText: String
+        get() = date()?.let { "$weekday, ${it.dayOfMonth} ${MONTHS[it.monthValue - 1].take(3)} · ${slot.label} ${slot.icon}" }
+            ?: "$weekday · ${slot.label} ${slot.icon}"
 
     fun setCalendar(weekdayName: String, slotName: String) {
         val wd = WEEKDAYS.indexOfFirst { it.equals(weekdayName, true) }
@@ -118,8 +195,8 @@ class LifeState {
         change(Stat.KENYANG, -15)
         change(Stat.HIDRASI, -15)
         val wellFed = this[Stat.KENYANG] >= 20 && this[Stat.HIDRASI] >= 20
-        change(Stat.ENERGI, if (wellFed) 80 else 45)
-        change(Stat.KEWARASAN, if (wellFed) 5 else -3)
+        change(Stat.ENERGI, (if (wellFed) 80 else 45) + sleepEnergy)
+        change(Stat.KEWARASAN, (if (wellFed) 5 else -3) + sleepSanity)
         needsEffect()
     }
 
@@ -208,6 +285,22 @@ class LifeState {
         put("money", money)
         put("dead", dead)
         put("deathReason", deathReason)
+        put("startEpochDay", startEpochDay)
+        put("kosId", kosId)
+        put("rent", rent)
+        put("rentDueDay", rentDueDay)
+        put("arrears", arrears)
+        put("sleepEnergy", sleepEnergy)
+        put("sleepSanity", sleepSanity)
+        put("allowance", allowance)
+        put("allowanceNextDay", allowanceNextDay)
+        put("attended", attended)
+        put("jobs", JSONArray().apply {
+            jobs.forEach {
+                put(JSONObject().put("id", it.id).put("start", it.startDay).put("perf", it.performance)
+                    .put("abs", it.absences).put("shifts", it.shifts))
+            }
+        })
         put("stats", JSONObject().apply { stats.forEach { (k, v) -> put(k.key, v) } })
         put("items", JSONArray().apply {
             items.forEach { put(JSONObject().put("id", it.id).put("bought", it.boughtDay).put("expires", it.expiresDay)) }

@@ -1,0 +1,118 @@
+# ==========================================================
+#  SEKOLAH & PEKERJAAN
+#  Panduan lengkap: docs/DATA.md
+#
+#  [id]
+#  nama        = nama yang tampil
+#  ikon        = emoji
+#  jenis       = sekolah / tetap / paruh_waktu / harian
+#                sekolah & tetap WAJIB hadir sesuai jadwal (bolos/absen tercatat:
+#                3x → surat peringatan, 6x → dikeluarkan/dipecat)
+#                paruh_waktu & harian bebas datang kapan saja sesuai jadwal
+#  tempat      = desa / kota
+#  hari        = senin-sabtu  /  senin, rabu, jumat  /  setiap hari
+#  waktu       = pagi, siang, sore, malam
+#  gaji        = paruh_waktu & harian: per kali kerja · tetap: per 30 hari
+#  efek        = efek setiap kali hadir (energi, kenyang, kewarasan, akademik, dll.)
+#  usia_min    = usia minimal
+#  syarat      = (opsional) syarat lain, contoh: jalur != kerja
+#  cara        = langsung (bisa dicari di "Cari kerja") / lamar / cerita (hanya lewat naskah)
+#  sulit       = 0-100, makin tinggi makin sulit diterima
+#  orang_dalam = id karakter yang bisa merekomendasikan (Cinta & Kepercayaan ≥ 60)
+#  keterangan  = penjelasan singkat
+#  teks        = narasi setiap kali hadir
+# ==========================================================
+
+# ---------------- SEKOLAH ----------------
+
+[sma_sakala]
+nama        = SMA Negeri 3 Sakala
+ikon        = 🏫
+jenis       = sekolah
+tempat      = kota
+hari        = senin-sabtu
+waktu       = pagi, siang
+efek        = energi -15, kenyang -6, hidrasi -6, kewarasan -2, akademik +2
+cara        = cerita
+keterangan  = Sekolah negeri di Kawasan Pendidikan Cendana.
+teks        = Kamu duduk di bangku kelas, mencatat pelajaran sambil sesekali melirik jam dinding.
+
+# ---------------- DESA ----------------
+
+[buruh_ikan]
+nama        = Buruh pengolahan ikan asin
+ikon        = 🐟
+jenis       = harian
+tempat      = desa
+hari        = senin-sabtu
+waktu       = pagi, siang
+gaji        = 35000
+efek        = energi -30, hidrasi -15, kenyang -8, kewarasan -4, keahlian_ikan +1
+usia_min    = 15
+cara        = lamar
+sulit       = 55
+orang_dalam = ayah
+keterangan  = Milik Juragan Darto. Menjemur dan mengasinkan ikan. Bau, panas, tapi upahnya lumayan.
+teks        = Matahari menyengat. Tanganmu perih kena garam, tapi tumpukan ikan di tampah makin rapi.
+
+[bantu_melaut]
+nama        = Ikut melaut (bagi hasil)
+ikon        = 🚣
+jenis       = harian
+tempat      = desa
+hari        = setiap hari
+waktu       = pagi
+gaji        = 45000
+efek        = energi -40, hidrasi -20, kenyang -10, kewarasan -3, keahlian_laut +1
+usia_min    = 15
+cara        = langsung
+sulit       = 10
+keterangan  = Ikut perahu nelayan sebelum subuh. Berat dan berisiko, tapi bagi hasilnya lumayan.
+teks        = Perahu terombang-ambing. Kamu menarik jaring sampai lenganmu gemetar.
+
+# ---------------- KOTA SAKALA ----------------
+
+[kurir_paket]
+nama        = Kurir antar paket (sepeda)
+ikon        = 📦
+jenis       = paruh_waktu
+tempat      = kota
+hari        = setiap hari
+waktu       = sore, malam
+gaji        = 30000
+efek        = energi -25, hidrasi -15, kenyang -6, kewarasan -3, komunikasi +1
+usia_min    = 15
+cara        = langsung
+sulit       = 25
+keterangan  = Mengantar paket kecil di sekitar Kampung Rel Utara dengan sepeda pinjaman.
+teks        = Kamu mengayuh sepeda menembus gang-gang sempit, mencocokkan alamat satu per satu.
+
+[cuci_piring]
+nama        = Cuci piring di Warung Makan Bu Tini
+ikon        = 🍽️
+jenis       = paruh_waktu
+tempat      = kota
+hari        = setiap hari
+waktu       = siang, sore, malam
+gaji        = 25000
+efek        = energi -20, kewarasan -3, kenyang +20, keahlian_masak +1
+usia_min    = 15
+cara        = langsung
+sulit       = 15
+keterangan  = Upah kecil, tapi dapat makan gratis setiap kali kerja.
+teks        = Piring kotor tak ada habisnya. Tapi Bu Tini menyisihkan sepiring nasi hangat untukmu.
+
+[jaga_warnet]
+nama        = Jaga warnet malam
+ikon        = 🖥️
+jenis       = paruh_waktu
+tempat      = kota
+hari        = setiap hari
+waktu       = malam
+gaji        = 35000
+efek        = energi -30, kewarasan -5, akademik +1
+usia_min    = 16
+cara        = lamar
+sulit       = 45
+keterangan  = Menjaga warnet sampai larut. Bisa belajar sambil kerja, tapi kurang tidur.
+teks        = Lampu neon berkedip. Kamu menahan kantuk sambil mencatat jam main pelanggan.

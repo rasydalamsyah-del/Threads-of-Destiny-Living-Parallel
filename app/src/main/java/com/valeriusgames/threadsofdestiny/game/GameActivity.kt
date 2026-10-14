@@ -486,7 +486,19 @@ class GameActivity : Activity() {
                     vars[c.variable] = (now + c.amount).toString()
                 }
                 is Cmd.Life -> { life.active = c.active; refreshLife() }
-                is Cmd.Calendar -> { life.setCalendar(c.weekday, c.slot); refreshLife() }
+                is Cmd.Calendar -> {
+                    val target = LifeState.WEEKDAYS.indexOfFirst { it.equals(c.weekday, true) }
+                    if (life.startEpochDay != 0L && target >= 0) {
+                        // Loncatan waktu ke hari tersebut (tagihan & kiriman tetap berjalan)
+                        var guard = 0
+                        while (life.weekdayIndex != target && guard++ < 7) {
+                            life.day++
+                            onNewDay()
+                        }
+                    }
+                    life.setCalendar(c.weekday, c.slot)
+                    refreshLife()
+                }
                 is Cmd.Free -> { startFree(c.count); return }
                 is Cmd.Advance -> {
                     repeat(c.count) { if (!life.dead) advanceTime() }
@@ -510,6 +522,26 @@ class GameActivity : Activity() {
                     }
                 }
                 is Cmd.Location -> vars["lokasi"] = c.place
+                is Cmd.LoadScript -> {
+                    loadScript("naskah/${c.file}")
+                    pc = 0
+                }
+                is Cmd.SetDate -> {
+                    LifeState.parseDate(c.text)?.let { life.startEpochDay = it - life.day }
+                    refreshLife()
+                }
+                is Cmd.Kos -> moveIn(c.id, fromStory = true)
+                is Cmd.Allowance -> {
+                    life.allowance = c.amount
+                    life.allowanceNextDay = if (c.amount > 0) life.day + 30 else -1
+                    if (c.amount > 0) notice("💌 Keluarga akan mengirim ${rupiah(c.amount)} setiap 30 hari")
+                }
+                is Cmd.JobStart -> startJob(c.id)
+                is Cmd.JobStop -> stopJob(c.id)
+                is Cmd.Apply -> {
+                    val ok = applyJob(c.id, announceResult = false)
+                    pc = labels[if (ok) c.okLabel else c.noLabel] ?: pc
+                }
                 is Cmd.ShowChar -> showCharacter(c.id, c.expression, c.position)
                 is Cmd.HideChar -> hideCharacter(c.id)
                 is Cmd.Meet -> {
@@ -1127,9 +1159,13 @@ class GameActivity : Activity() {
     }
 
     /** Majukan waktu satu slot dan tampilkan peringatan. */
-    private fun advanceTime() {
+    /** fromFree = waktu maju karena pilihan pemain di waktu bebas (bolos/absen dicek). */
+    private fun advanceTime(fromFree: Boolean = false) {
         if (!life.active) return
+        if (fromFree) checkAbsences()
+        val dayBefore = life.day
         val warnings = life.advance()
+        if (life.day != dayBefore) onNewDay()
         refreshLife()
         warnings.forEach { notice(it) }
         checkDeath()
@@ -1189,6 +1225,26 @@ class GameActivity : Activity() {
             getString(R.string.free_sub, life.clockText, freeLeft),
             back = null,
         )
+        // Jadwal sekolah / kerja di waktu ini
+        val duties = life.jobs.mapNotNull { j -> gameData.jobs[j.id] }
+            .filter { gameData.scheduled(it, life.weekdayIndex, life.slot) }
+        if (duties.isNotEmpty()) {
+            sheetList.addView(sectionLabel("📌 Jadwalmu sekarang"))
+            duties.forEach { def ->
+                val needEnergy = -(def.effects["energi"] ?: 0L)
+                val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy / 2
+                sheetList.addView(card(
+                    title = "${def.icon}  ${def.name}",
+                    sub = effectSummary(def.effects + payEffect(def)),
+                    note = if (tooTired) getString(R.string.too_tired)
+                        else if (def.mandatory) "Wajib hadir · tidak hadir = " + (if (def.kind == "sekolah") "bolos" else "absen")
+                        else def.kindLabel,
+                    noteWarn = def.mandatory,
+                    enabled = !tooTired,
+                ) { doJob(def) })
+            }
+            sheetList.addView(sectionLabel("🕊️ Atau lakukan hal lain"))
+        }
         gameData.activitiesFor(place, life.slot)
             .filter { a -> a.condition == null || checkCondition(a.condition) }
             .forEach { a ->
@@ -1230,6 +1286,11 @@ class GameActivity : Activity() {
         } else {
             sheetButtonRow("☰ Menu" to { openGameMenu() })
         }
+        if (place == "kota") {
+            sheetButtonRow("🔎 Cari kerja" to { openJobSearch() }, "🏠 Cari kos" to { openKosSearch() })
+        } else {
+            sheetButtonRow("🔎 Cari kerja" to { openJobSearch() })
+        }
     }
 
     private fun doActivity(a: GameData.ActivityDef) {
@@ -1241,7 +1302,7 @@ class GameActivity : Activity() {
         a.effects["uang"]?.let { if (it != 0L) notice((if (it > 0) "💰 +" else "💸 -") + rupiah(kotlin.math.abs(it))) }
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
-        advanceTime()
+        advanceTime(fromFree = true)
         if (life.dead) return
         afterTap = { continueFree() }
         showLine(null, a.text.ifEmpty { a.name })
@@ -1268,7 +1329,7 @@ class GameActivity : Activity() {
         closeSheet()
         val startDay = life.day
         if (!life.active) life.active = true
-        while (life.day == startDay && !life.dead) advanceTime()
+        while (life.day == startDay && !life.dead) advanceTime(fromFree = true)
         if (life.dead) return
         freeLeft = 0
         vars["_bebas_sisa"] = "0"
@@ -1333,6 +1394,38 @@ class GameActivity : Activity() {
             sheetList.addView(row)
         }
 
+        sheetList.addView(sectionLabel("🏠 Tempat tinggal & keuangan"))
+        val kos = gameData.housing[life.kosId]
+        sheetList.addView(infoText(buildString {
+            append("📅 ").append(life.dateText).append("   ·   Usia ").append(playerAge()).append(" tahun\n")
+            when {
+                kos != null -> append("🏠 ").append(kos.name).append("\n     Sewa ").append(rupiah(life.rent))
+                    .append(" / 30 hari · bayar lagi ").append(dueText(life.rentDueDay))
+                vars["lokasi"] == "kota" -> append("🏚️ Tidak punya tempat tinggal — tidur di emperan")
+                else -> append("🏠 Rumah keluarga di Tanjung Lentera")
+            }
+            if (life.arrears > 0) append("\n⚠️ Tunggakan sewa: ").append(life.arrears).append(" kali")
+            if (life.allowance > 0) append("\n💌 Kiriman keluarga ").append(rupiah(life.allowance))
+                .append(" · berikutnya ").append(dueText(life.allowanceNextDay))
+        }))
+        if (life.jobs.isNotEmpty()) {
+            sheetList.addView(sectionLabel("💼 Sekolah & pekerjaan"))
+            life.jobs.toList().forEach { j ->
+                val def = gameData.jobs[j.id] ?: return@forEach
+                sheetList.addView(card(
+                    title = "${def.icon}  ${def.name}",
+                    sub = "${def.kindLabel} · ${daysText(def.days)} · ${def.slots.joinToString(", ")}" +
+                        (if (def.pay > 0) "\n💰 " + rupiah(def.pay) + (if (def.kind == "tetap") " / 30 hari" else " / kerja") else ""),
+                    note = (if (def.kind == "sekolah") "📊 Nilai " else "📊 Kinerja ") + "${j.performance}   ·   " +
+                        (if (def.kind == "sekolah") "Bolos " else "Absen ") + "${j.absences}×",
+                    noteWarn = j.absences >= 3 || j.performance < 30,
+                    actions = listOf((if (def.kind == "sekolah") "Keluar" else "Berhenti") to {
+                        stopJob(def.id)
+                        openStatus(returnTo)
+                    }),
+                ))
+            }
+        }
         sheetList.addView(sectionLabel("🎒 Tas"))
         if (life.items.isEmpty()) {
             sheetList.addView(TextView(this).apply {
@@ -1537,6 +1630,264 @@ class GameActivity : Activity() {
         }
         if (onClick != null && enabled) box.setOnClickListener { onClick() }
         return box
+    }
+
+    // ================================================================== sekolah, pekerjaan, kos
+
+    private fun payEffect(def: GameData.JobDef): Map<String, Long> =
+        if (def.pay > 0 && def.kind != "tetap" && def.kind != "sekolah") mapOf("uang" to def.pay) else emptyMap()
+
+    private fun daysText(days: Set<Int>): String {
+        val names = LifeState.WEEKDAYS
+        if (days.size == 7) return "Setiap hari"
+        val sorted = days.sorted()
+        val contiguous = sorted.zipWithNext().all { (a, b) -> b == a + 1 }
+        return if (contiguous && sorted.size > 2) "${names[sorted.first()]}–${names[sorted.last()]}"
+        else sorted.joinToString(", ") { names[it] }
+    }
+
+    private fun dueText(dayIndex: Int): String {
+        if (dayIndex < 0) return "-"
+        val left = dayIndex - life.day
+        val d = if (life.startEpochDay != 0L) java.time.LocalDate.ofEpochDay(life.startEpochDay + dayIndex) else null
+        val date = d?.let { "${it.dayOfMonth} ${LifeState.MONTHS[it.monthValue - 1].take(3)}" } ?: "hari ke-${dayIndex + 1}"
+        return "$date (${if (left <= 0) "hari ini" else "$left hari lagi"})"
+    }
+
+    private fun infoText(text: String) = TextView(this).apply {
+        this.text = text
+        setTextColor(0xFFF6E7C8.toInt())
+        textSize = 13.5f
+        setLineSpacing(0f, 1.2f)
+        setPadding(0, 0, 0, (6 * resources.displayMetrics.density).toInt())
+    }
+
+    private fun addExtraVars(extra: Map<String, Long>) {
+        extra.forEach { (k, v) -> vars[k] = ((vars[k]?.toLongOrNull() ?: 0L) + v).toString() }
+    }
+
+    private fun startJob(id: String) {
+        val def = gameData.jobs[id] ?: return
+        if (life.jobs.any { it.id == id }) return
+        life.jobs += LifeState.Job(id, life.day)
+        vars["kerja_$id"] = "1"
+        notice("${def.icon} " + (if (def.kind == "sekolah") "Mulai bersekolah di " else "Mulai bekerja: ") + def.name)
+    }
+
+    private fun stopJob(id: String) {
+        val def = gameData.jobs[id]
+        if (life.jobs.removeAll { it.id == id } && def != null) {
+            vars["kerja_$id"] = "0"
+            notice("${def.icon} " + (if (def.kind == "sekolah") "Berhenti sekolah dari " else "Berhenti dari ") + def.name)
+        }
+    }
+
+    /** Peluang diterima: tingkat kesulitan, kemampuan, skor wawancara, dan orang dalam. */
+    private fun applyJob(id: String, announceResult: Boolean): Boolean {
+        val def = gameData.jobs[id] ?: return false
+        if (playerAge() < def.minAge) {
+            if (announceResult) notice("Usiamu belum cukup (minimal ${def.minAge} tahun)")
+            return false
+        }
+        if (def.condition != null && !checkCondition(def.condition)) return false
+        var chance = 100 - def.difficulty
+        val skill = (vars["akademik"]?.toIntOrNull() ?: 0) + (vars["komunikasi"]?.toIntOrNull() ?: 0)
+        chance += (skill * 2).coerceAtMost(30)
+        chance += vars["skor_wawancara"]?.toIntOrNull() ?: 0
+        if (life[LifeState.Stat.KEWARASAN] < 30) chance -= 15
+        val ref = def.referrer?.let { gameData.characters[it] }
+        var viaInsider = false
+        if (ref != null) {
+            val r = social.rel(ref)
+            if (r.met && r.love >= 60 && r.trust >= 60) {
+                chance += 45
+                viaInsider = true
+            }
+        }
+        val ok = kotlin.random.Random.nextInt(100) < chance.coerceIn(5, 97)
+        vars["lewat_orang_dalam"] = if (viaInsider) "1" else "0"
+        if (ok) {
+            startJob(id)
+            if (viaInsider && ref != null) notice("🤝 Diterima lewat rekomendasi ${ref.name}")
+        } else if (announceResult) {
+            notice("❌ Lamaran ke ${def.name} ditolak")
+        }
+        return ok
+    }
+
+    private fun doJob(def: GameData.JobDef) {
+        closeSheet()
+        val job = life.jobs.firstOrNull { it.id == def.id } ?: return
+        addExtraVars(life.applyEffects(def.effects + payEffect(def)))
+        payEffect(def)["uang"]?.let { notice("💰 +" + rupiah(it)) }
+        job.shifts++
+        job.performance = (job.performance + (if (life[LifeState.Stat.ENERGI] >= 20) 3 else -4)).coerceIn(0, 100)
+        life.markAttended(def.id)
+        if (job.performance < 15 && def.kind != "sekolah") {
+            life.jobs.remove(job)
+            vars["dipecat_${def.id}"] = "1"
+            notice("📄 Kinerjamu terlalu buruk. Kamu diberhentikan dari ${def.name}.")
+        }
+        freeLeft--
+        vars["_bebas_sisa"] = freeLeft.toString()
+        advanceTime(fromFree = true)
+        if (life.dead) return
+        afterTap = { continueFree() }
+        showLine(null, def.text.ifEmpty { def.name })
+    }
+
+    /** Sekolah / kerja tetap yang dijadwalkan di slot ini tapi tidak dihadiri. */
+    private fun checkAbsences() {
+        life.jobs.toList().forEach { job ->
+            val def = gameData.jobs[job.id] ?: return@forEach
+            if (!def.mandatory || !gameData.scheduled(def, life.weekdayIndex, life.slot) || life.hasAttended(def.id)) return@forEach
+            job.absences++
+            job.performance = (job.performance - 8).coerceAtLeast(0)
+            val school = def.kind == "sekolah"
+            notice(if (school) "⚠️ Kamu bolos sekolah (${job.absences}×)" else "⚠️ Kamu tidak masuk kerja (${job.absences}×)")
+            when {
+                job.absences >= 6 -> {
+                    life.jobs.remove(job)
+                    vars[if (school) "dikeluarkan_${def.id}" else "dipecat_${def.id}"] = "1"
+                    notice(if (school) "🏫 Kamu dikeluarkan dari ${def.name}." else "📄 Kamu dipecat dari ${def.name}.")
+                }
+                job.absences == 3 -> notice("📄 Surat peringatan dari ${def.name}!")
+            }
+        }
+    }
+
+    /** Hal-hal yang terjadi setiap ganti hari: ulang tahun, sewa kos, kiriman, gaji bulanan. */
+    private fun onNewDay() {
+        if (life.day > 0 && life.day % 365 == 0) {
+            vars["usia"] = (playerAge() + 1).toString()
+            notice("🎂 Selamat ulang tahun! Usiamu sekarang ${playerAge()} tahun.")
+        }
+        if (life.kosId.isNotEmpty() && life.rentDueDay in 0..life.day) {
+            if (life.money >= life.rent) {
+                life.money -= life.rent
+                life.arrears = 0
+                notice("🏠 Bayar sewa kos " + rupiah(life.rent))
+            } else {
+                life.arrears++
+                notice("⚠️ Uang tidak cukup bayar kos! Tunggakan ${life.arrears}×")
+            }
+            life.rentDueDay += 30
+            if (life.arrears >= 2) evict()
+        }
+        if (life.allowance > 0 && life.allowanceNextDay in 0..life.day) {
+            life.money += life.allowance
+            life.allowanceNextDay += 30
+            notice("💌 Kiriman dari Ayah & Ibu: +" + rupiah(life.allowance))
+        }
+        life.jobs.forEach { j ->
+            val def = gameData.jobs[j.id] ?: return@forEach
+            val worked = life.day - j.startDay
+            if (def.kind == "tetap" && def.pay > 0 && worked > 0 && worked % 30 == 0) {
+                val pay = (def.pay * (0.6 + j.performance / 250.0)).toLong()
+                life.money += pay
+                notice("💼 Gaji dari ${def.name}: +" + rupiah(pay))
+            }
+        }
+    }
+
+    private fun moveIn(id: String, fromStory: Boolean) {
+        val def = gameData.housing[id]
+        if (def == null) {
+            life.kosId = ""
+            life.rent = 0
+            life.rentDueDay = -1
+            life.arrears = 0
+            life.sleepEnergy = 0
+            life.sleepSanity = 0
+            vars["kos"] = ""
+            return
+        }
+        life.kosId = def.id
+        life.rent = def.price
+        life.sleepEnergy = def.sleepEnergy
+        life.sleepSanity = def.sleepSanity
+        life.rentDueDay = life.day + 30
+        vars["kos"] = def.id
+        vars["diusir"] = "0"
+        if (life.money >= def.price) {
+            life.money -= def.price
+            life.arrears = 0
+            notice("🏠 Pindah ke ${def.name} · bayar " + rupiah(def.price))
+        } else {
+            life.arrears = 1
+            notice("🏠 Pindah ke ${def.name} · uangmu kurang, sewa jadi tunggakan!")
+        }
+        refreshLife()
+    }
+
+    private fun evict() {
+        val name = gameData.housing[life.kosId]?.name ?: "kos"
+        life.kosId = ""
+        life.rent = 0
+        life.rentDueDay = -1
+        life.arrears = 0
+        life.sleepEnergy = -40
+        life.sleepSanity = -10
+        vars["kos"] = ""
+        vars["diusir"] = "1"
+        notice("🏚️ Kamu diusir dari $name! Sampai dapat tempat baru, kamu tidur di emperan.")
+    }
+
+    private fun openJobSearch() {
+        val place = vars["lokasi"] ?: "desa"
+        openSheet("🔎 Cari kerja", "Melamar memakai 1 kesempatan waktu bebas") { showFreeSheet() }
+        val list = gameData.jobs.values.filter { j ->
+            j.kind != "sekolah" && (j.way == "langsung" || j.way == "lamar") &&
+                ("semua" in j.places || place in j.places) && life.jobs.none { it.id == j.id }
+        }
+        if (list.isEmpty()) sheetList.addView(infoText("Belum ada lowongan di sini."))
+        list.forEach { j ->
+            val ref = j.referrer?.let { gameData.characters[it] }
+            val notes = mutableListOf<String>()
+            if (j.minAge > 0) notes += "Usia min. ${j.minAge}"
+            notes += if (j.way == "langsung") "Peluang besar" else "Seleksi ketat"
+            if (ref != null && social.rel(ref).met) notes += "Orang dalam: ${ref.name}"
+            sheetList.addView(card(
+                title = "${j.icon}  ${j.name}",
+                sub = "${j.kindLabel} · ${daysText(j.days)} · ${j.slots.joinToString(", ")}\n" +
+                    "💰 " + rupiah(j.pay) + (if (j.kind == "tetap") " / 30 hari" else " / kerja") +
+                    (if (j.desc.isNotEmpty()) "\n" + j.desc else ""),
+                note = notes.joinToString(" · "),
+                actions = listOf("Lamar" to { applyFromSearch(j) }),
+            ))
+        }
+        sheetButtonRow(getString(R.string.btn_back) to { showFreeSheet() })
+    }
+
+    private fun applyFromSearch(j: GameData.JobDef) {
+        closeSheet()
+        val ok = applyJob(j.id, announceResult = true)
+        addExtraVars(life.applyEffects(mapOf("energi" to -5L, "kewarasan" to (if (ok) 5L else -5L))))
+        freeLeft--
+        vars["_bebas_sisa"] = freeLeft.toString()
+        advanceTime(fromFree = true)
+        if (life.dead) return
+        afterTap = { continueFree() }
+        showLine(null, if (ok) "Kamu diterima! ${j.name} — mulai sekarang kamu bisa bekerja sesuai jadwal."
+            else "Lamaranmu ke ${j.name} ditolak. Mungkin lain kali, dengan persiapan yang lebih baik.")
+    }
+
+    private fun openKosSearch() {
+        openSheet("🏠 Cari kos", "💰 ${rupiah(life.money)} · sewa dibayar di muka untuk 30 hari") { showFreeSheet() }
+        gameData.housing.values.filter { "semua" in it.places || "kota" in it.places }.sortedBy { it.price }.forEach { k ->
+            val current = k.id == life.kosId
+            sheetList.addView(card(
+                title = "🏠  ${k.name}",
+                sub = rupiah(k.price) + " / 30 hari\n" + k.text,
+                note = if (current) "Tempat tinggalmu sekarang" else
+                    "Tidur: energi ${if (k.sleepEnergy >= 0) "+" else ""}${k.sleepEnergy}, kewarasan ${if (k.sleepSanity >= 0) "+" else ""}${k.sleepSanity}",
+                actions = if (current) emptyList() else listOf("Pindah" to {
+                    moveIn(k.id, fromStory = false)
+                    openKosSearch()
+                }),
+            ))
+        }
+        sheetButtonRow(getString(R.string.btn_back) to { showFreeSheet() })
     }
 
     // ================================================================== hubungan
@@ -1782,7 +2133,7 @@ class GameActivity : Activity() {
         life.applyEffects(mapOf("energi" to -5L, "kewarasan" to (if (social.rel(c).love >= 50) 5L else 2L)))
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
-        advanceTime()
+        advanceTime(fromFree = true)
         if (life.dead) return
         continueFree()
     }

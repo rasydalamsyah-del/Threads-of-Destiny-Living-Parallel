@@ -1,0 +1,201 @@
+# ==========================================================
+#  THREADS OF DESTINY: LIVING PARALLEL
+#  Naskah: BAB 2 — JALAN YANG DIPILIH
+#  Lanjutan dari prolog.txt (dipanggil dengan @naskah bab2.txt)
+# ==========================================================
+
+@sembunyi semua
+@gelap 2000
+@jika jalur == kerja -> desa
+
+
+# ==========================================================
+#  JALUR KOTA (SMA / SMA SAMBIL KERJA)
+# ==========================================================
+
+@waktu Sabtu, 11 Juli 2026
+@tanggal 11 Juli 2026
+@kalender Sabtu pagi
+@latar stasiun_desa
+@terang 1500
+* Stasiun kecil Tanjung Lentera. Tempat yang sama tempat sahabatnya pergi tiga tahun lalu.
+* Kali ini, {nama} yang berdiri di peron dengan tas besar di punggung.
+@tampil ibu sedih kiri
+@tampil ayah biasa kanan
+Ibu: Jangan lupa makan. Jangan tidur malam-malam. Kalau ada apa-apa, telepon Ibu.
+Ayah: Ini bekal dari Ayah. Pakai untuk bayar kos bulan pertama. Hemat-hemat.
+@jika jalur == keduanya -> bekal_keduanya
+@uang +700000
+@kiriman 600000
+Ayah: Tiap bulan Ayah sama Ibu kirim enam ratus ribu. Cukup-cukupkan, ya.
+@lompat pamit
+
+:: bekal_keduanya
+@uang +400000
+@kiriman 300000
+Ayah: Kamu bilang mau sambil kerja... Jadi tiap bulan Ayah kirim tiga ratus ribu dulu. Sisanya kamu usahakan sendiri.
+
+:: pamit
+@tampil laras sedih tengah
+Laras: Kak... nanti pulang, kan? Janji?
+{nama}: Janji, Laras. Kakak pasti pulang.
+* Kata "janji" itu terasa berat di lidahnya.
+@sembunyi semua
+* Kereta datang. Pintu menutup. Wajah Ayah, Ibu, dan Laras perlahan mengecil di balik jendela.
+
+@gelap 1500
+@waktu Kota Sakala
+@lokasi kota
+@kalender Sabtu siang
+@latar kota_besar
+@terang 1500
+* Kota Sakala. Gedung-gedung menjulang, klakson bersahutan, orang-orang berjalan cepat tanpa saling menyapa.
+{nama}: Jadi... ini kota yang dulu kami janjikan.
+* Hal pertama yang harus {nama} cari: tempat tinggal.
+* Ada tiga kos yang ditawarkan di papan pengumuman stasiun.
+
+@pilihan
+> Kos Bu Ratmi, Rel Utara — Rp400.000 (murah, bising) -> kos_murah
+> Kos Melati, Cendana — Rp650.000 (tenang, dekat sekolah) -> kos_sedang
+> Sakala Residence — Rp1.300.000 (mewah) -> kos_mahal
+
+:: kos_murah
+@kos kos_rel_utara
+* Kamarnya sempit dan dindingnya bergetar setiap kereta lewat. Tapi setidaknya, ini milikmu sendiri.
+@lompat malam_pertama
+
+:: kos_sedang
+@kos kos_cendana
+* Kamarnya bersih dan wangi. Ibu kos menatapmu dari atas ke bawah. "Jam malam pukul sepuluh. Tidak ada tamu lawan jenis."
+@lompat malam_pertama
+
+:: kos_mahal
+@kos kos_pusat
+* Petugas resepsionis tersenyum ramah... lalu menyebutkan harganya sekali lagi, memastikan kamu tidak salah dengar.
+
+:: malam_pertama
+@latar kos_kamar
+* {nama} meletakkan tas di lantai. Untuk pertama kalinya, tidak ada suara Ibu dari dapur. Tidak ada Laras yang merecoki.
+* Di kota ini, tidak ada yang akan memasakkan makanan untukmu. Belanjalah di minimarket, dan jaga uangmu baik-baik.
+@bebas 1
+
+@latar kos_kamar
+* Malam pertama di Kota Sakala terasa panjang.
+@hp pesan Ibu | Sudah sampai, Nak? Sudah makan belum? Jangan lupa kunci pintu.
+@tunggu_hp
+{nama}: Sudah, Bu... Aku baik-baik saja.
+* Hari Minggu sebelum sekolah dimulai. Waktunya mengenal kota ini, atau mencari jejak seseorang.
+@bebas 4
+
+
+# ---------- SENIN: HARI PERTAMA SEKOLAH ----------
+
+@gelap 1200
+@waktu Senin, 13 Juli 2026
+@kalender Senin pagi
+@kerja_mulai sma_sakala
+@latar kelas_sma
+@terang 1200
+* SMA Negeri 3 Sakala. Kelas X-3. Tiga puluh enam wajah asing, dan satu bangku kosong di dekat jendela.
+@kenal dimas
+@tampil dimas senyum
+Dimas: Kosong, kok. Duduk aja. Aku Dimas. Kamu anak baru dari mana?
+{nama}: Dari Tanjung Lentera. Desa di pesisir.
+Dimas: Wih, jauh! Pantesan mukamu kayak orang nyasar.
+@pilihan
+> Ketawa dan balas bercanda -> dimas_canda
+> Diam saja, agak tersinggung -> dimas_diam
+
+:: dimas_canda
+{nama}: Mukamu juga kayak orang belum sarapan.
+Dimas: Hahaha! Bener banget. Kita bakal akur, nih.
+@cinta dimas +8
+@lompat nadia
+
+:: dimas_diam
+* {nama} hanya mengangguk pelan.
+Dimas: Eh, santai... aku cuma bercanda. Maaf, ya.
+@cinta dimas +2
+
+:: nadia
+@sembunyi dimas
+@kenal nadia
+@tampil nadia biasa
+Nadia: Anak baru? Aku Nadia, ketua kelas. Isi formulir ini sebelum jam istirahat.
+Nadia: ...Tanjung Lentera?
+Nadia: Dulu, waktu SMP, ada murid pindahan dari desa itu juga di sekolahku. Pendiam. Suka duduk di dekat jendela.
+{nama}: Siapa namanya?!
+Nadia: Aku lupa... Dia cuma setahun, lalu pindah lagi. Kenapa? Kamu kenal?
+@atur petunjuk_sahabat = 1
+* Jantung {nama} berdegup kencang. Mungkinkah...
+@sembunyi semua
+* Hari pertama sekolah berlalu dengan cepat.
+@jika jalur == keduanya -> info_kerja
+@lompat minggu_pertama
+
+:: info_kerja
+@tampil dimas biasa
+Dimas: Eh, katanya kamu mau sekolah sambil kerja? Aku juga, jadi kurir paket tiap sore.
+Dimas: Coba cari kerja paruh waktu. Banyak, kok, asal kuat capeknya.
+@sembunyi dimas
+* (Buka "🔎 Cari kerja" di waktu bebas untuk melamar pekerjaan paruh waktu.)
+
+:: minggu_pertama
+@maju 2
+* Sore pertama setelah sekolah. Hidup di Kota Sakala benar-benar dimulai.
+* Ingat: sekolah wajib dihadiri setiap Senin–Sabtu, pagi dan siang. Bolos tercatat, dan bisa dikeluarkan.
+@bebas 9
+
+@gelap 1500
+* Satu minggu pertama di Kota Sakala telah berlalu.
+* Di suatu sudut kota ini, seseorang mungkin sedang menunggu... atau sedang menghindarinya.
+@tamat Bab 2 — Bersambung…
+
+
+# ==========================================================
+#  JALUR DESA (KERJA)
+# ==========================================================
+
+:: desa
+@waktu Senin, 6 Juli 2026
+@tanggal 6 Juli 2026
+@kalender Senin pagi
+@lokasi desa
+@latar gudang_ikan
+@terang 1500
+* Dua minggu setelah kelulusan. Bau garam dan ikan menyengat dari gudang di ujung desa.
+@kenal darto
+@tampil ayah biasa kiri
+@tampil darto biasa kanan
+Ayah: Juragan, ini anak saya. Dia mau kerja di sini.
+Juragan Darto: Hm. Anak seumur ini? Kerja di sini berat, bukan main-main.
+Ayah: Dia anak yang rajin, Juragan. Saya yang jamin.
+@lamar buruh_ikan -> diterima, ditolak
+
+:: diterima
+Juragan Darto: ...Baiklah. Karena bapakmu yang minta. Datang Senin sampai Sabtu, pagi dan siang. Upah dibayar tiap selesai kerja.
+Juragan Darto: Tapi kalau malas, kamu keluar. Paham?
+{nama}: Paham, Juragan. Terima kasih.
+@cinta ayah +5
+@lompat hari_kerja
+
+:: ditolak
+Juragan Darto: Maaf, Darman. Tempat saya lagi penuh. Anakmu masih kecil juga.
+* Ayah menghela napas panjang dalam perjalanan pulang.
+Ayah: Tidak apa-apa. Masih ada laut. Ikut melaut saja kalau mau cari uang.
+* (Buka "🔎 Cari kerja" di waktu bebas untuk mencari pekerjaan lain.)
+
+:: hari_kerja
+@sembunyi semua
+@latar rumah_warung
+* Hari-hari {nama} sekarang diisi kerja. Uang mulai terkumpul sedikit demi sedikit.
+@hp pesan Bayu | Woy, katanya kamu kerja di gudang Juragan Darto? Mantap, {bro|cuy}! Sore-sore main ke dermaga, ya.
+@tunggu_hp
+{nama}: Dasar Bayu...
+* Teman-teman seangkatan satu per satu pergi ke kota. Desa terasa semakin sepi. Tapi di sini, setidaknya, ada keluarga.
+@bebas 8
+
+@gelap 1500
+* Satu minggu berlalu di Tanjung Lentera.
+* Pesan dari nomor misterius itu masih tersimpan di HP-nya. Belum dibalas.
+@tamat Bab 2 — Bersambung…
