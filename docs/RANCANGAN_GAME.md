@@ -1,218 +1,265 @@
 # Rancangan Game — Threads of Destiny: Living Parallel
 
 > Dokumen induk semua aturan & sistem game. Setiap keputusan baru dicatat di sini.
-> Status: ✅ sudah dibuat · 🔨 sedang dikerjakan · 📝 direncanakan · ❓ perlu keputusan
+> Status: ✅ sudah dibuat · 🔨 sedang dikerjakan · 📝 direncanakan · 💡 usulan Claude (menunggu persetujuan) · ❓ perlu keputusan
 >
-> Catatan progres harian & daftar tugas ada di **[PROGRES.md](PROGRES.md)**.
-> Cara menulis naskah ada di **[NASKAH.md](NASKAH.md)**.
+> Catatan progres & daftar tugas: **[PROGRES.md](PROGRES.md)** · Cara menulis naskah: **[NASKAH.md](NASKAH.md)**
+>
+> Terakhir diperbarui: 14 Okt 2026 (jawaban gambaran besar dari pemilik game sudah dimasukkan)
 
 ---
 
 ## 1. Visi
 
-Visual novel **+ simulasi kehidupan nyata**, portrait, Android.
-Pemain menjalani hidup sebagai tokoh utama di kota besar: keluarga, pertemanan, cinta, pekerjaan,
-uang, dan rintangan hidup. Setiap pilihan punya akibat, dan **orang-orang di dunia game saling terhubung**:
-perlakuan pemain ke satu orang bisa berdampak ke orang lain.
+Visual novel **+ simulasi kehidupan nyata**, portrait, Android, **bahasa Indonesia**.
+Pemain menjalani hidup tokoh utama sejak **lulus SMP**: memilih sekolah atau kerja, merantau,
+berteman, berkeluarga, jatuh cinta, berkarier, mengatur uang, makan & minum, dan menghadapi rintangan hidup.
+Setiap pilihan punya akibat, dan **orang-orang di dunia game saling terhubung**.
 
 **Pilar desain**
-1. **Hidup terasa nyata.** Ada kebutuhan, waktu terbatas, proses yang realistis (lamaran kerja, berkas, wawancara).
-2. **Pilihan berakibat.** Bohong, menghindar, ingkar janji tercatat dan bisa kembali menghantui.
-3. **Dunia saling terhubung.** Karakter punya hubungan satu sama lain dan bisa ikut campur.
+1. **Hidup terasa nyata.** Kebutuhan dasar, waktu terbatas, proses realistis (sekolah, lamaran kerja, berkas, wawancara), semuanya bertahap.
+2. **Pilihan berakibat.** Bohong, menghindar, ingkar janji, selingkuh tercatat dan bisa kembali menghantui.
+3. **Dunia saling terhubung.** Karakter punya keluarga, sahabat, saingan, dan bisa ikut campur.
 4. **Waktu adalah sumber daya.** Memilih satu hal berarti melewatkan hal lain.
-5. **Bisa dikembangkan dari HP.** Cerita, karakter, barang, pekerjaan ditulis sebagai file teks/data, bukan kode.
+5. **Bisa dikembangkan dari HP.** Cerita, karakter, barang, pekerjaan ditulis sebagai file teks/data.
+
+**Target:** dimainkan sendiri oleh pemilik dulu (belum rilis Play Store).
 
 ---
 
-## 2. Alur pembuka ✅
+## 2. Dunia 💡
 
-1. Splash (gambar, 3 detik) → video intro → menu utama. ✅
-2. START GAME → **isi nama** ✅ → **pilih jenis kelamin** 📝
-3. **Prolog masa lalu** (narator, efek kenangan, background berganti per adegan). ✅
-4. Masa kini: layar gelap → teks waktu → **efek bangun tidur** (kedip, buram) → plafon → duduk di ranjang. ✅
-5. HP bergetar: pesan dari "Nomor Tidak Dikenal". ✅ (cerita lanjutan ❓)
+Usulan: **dua latar dengan transisi** (desa → kota). Pindah ke kota adalah keputusan besar pertama pemain,
+dan desa tetap bisa dikunjungi (pulang kampung).
+
+### Desa Tanjung Lentera — kampung halaman
+- Desa nelayan kecil di pesisir, dengan **mercusuar tua** di ujung tanjung dan dermaga kayu (latar prolog).
+- Tenang, semua orang saling kenal, gosip cepat menyebar.
+- Ekonomi: nelayan, warung, kebun kelapa, pengolahan ikan asin. Uang sedikit, biaya hidup murah.
+- Fasilitas terbatas: hanya ada SMP; **SMA terdekat ada di kota**. Sinyal HP kadang hilang.
+- Keluarga tokoh utama tinggal di sini.
+
+### Kota Sakala — kota besar (± 4 jam naik kereta)
+- Nama dari kata *sakala* (waktu/seketika): kota yang tak pernah berhenti bergerak.
+- Metropolitan: gedung tinggi, jalan layang, kereta komuter, kafe di setiap sudut, macet di jam sibuk.
+- **Kesenjangan nyata:** kawasan elit bersebelahan dengan kampung padat di tepi rel.
+- Biaya hidup mahal: kos, makan, transportasi. Lowongan banyak, persaingan ketat.
+- Kawasan (usulan):
+  - **Pusat Kota Sakala:** perkantoran, mal, kafe mahal.
+  - **Kampung Rel Utara:** kos murah, padat, ramah tapi keras.
+  - **Kawasan Pendidikan Cendana:** SMA, kampus, toko buku, warung murah.
+  - **Pasar Lama Sakala:** pasar tradisional, kuliner, pekerjaan harian.
+  - **Pelabuhan Sakala:** gudang, pekerjaan kasar, kehidupan malam.
+  - **Taman Kota & Stasiun Besar:** tempat bertemu, adegan penting.
 
 ---
 
-## 3. Tokoh utama
+## 3. Cerita utama 💡
 
-| Aspek | Rancangan | Status |
+### Arti "Living Parallel"
+Setiap keputusan besar membelah hidup menjadi dua jalur: yang dipilih, dan yang ditinggalkan.
+Tokoh utama sesekali **bermimpi tentang hidup paralelnya**, yaitu dirinya di jalur yang tidak ia pilih
+(mis. kalau dulu memilih kerja, ia memimpikan dirinya yang bersekolah). Mimpi ini:
+- menjadi penghubung cerita (adegan pendek bergaya kenangan/mimpi),
+- memberi petunjuk samar tentang akibat pilihan,
+- di akhir cerita menjadi pertanyaan besar: *apakah ia menyesali jalannya, atau berdamai dengannya?*
+
+### "Benang takdir" & sosok dari masa lalu
+- Sahabat masa kecil di Tanjung Lentera yang pergi tiba-tiba naik kereta (prolog), tanpa pamit.
+- **Pengirim pesan misterius** = sahabat itu, yang kini tinggal di Kota Sakala dan menyimpan alasan kepergiannya.
+- Alur besar: menemukan kembali sahabat itu, mengungkap kenapa ia pergi (rahasia keluarganya),
+  dan memilih: memperbaiki hubungan, melepaskan, atau (setelah dewasa) menjadikannya pasangan.
+- Jenis kelamin sahabat ini menyesuaikan pilihan pemain, agar tetap bisa menjadi calon pasangan setelah dewasa.
+
+> Catatan: prolog yang sekarang (sudah tiba di kota besar, kuliah & kerja paruh waktu) **perlu ditulis ulang**
+> agar sesuai dengan awal baru: lulus SMP di Tanjung Lentera.
+
+---
+
+## 4. Fase hidup & durasi 💡
+
+Usulan: cerita utama mencakup **± 10 tahun dalam game (usia 15 → 25)**, dibagi bab.
+Masa yang penting dimainkan **hari per hari**; masa yang rutin dilompati (**loncatan waktu**) dengan ringkasan.
+
+| Bab | Usia | Isi |
 |---|---|---|
-| Nama | Diisi pemain, dipakai lewat `{nama}` | ✅ |
-| Jenis kelamin | Laki-laki / Perempuan, dipilih di awal | 📝 |
-| Aturan pasangan | Laki-laki → pasangan hanya perempuan. Perempuan → pasangan hanya laki-laki | 📝 (keputusan final) |
-| Teks menyesuaikan | Panggilan & kalimat bisa beda per jenis kelamin (mis. "Mas"/"Mbak") | 📝 |
-| Usia, status awal, tempat tinggal | ❓ | ❓ |
+| 1. Lulus SMP | 15 | Desa, keluarga, pilihan besar: SMA di kota / kerja / keduanya |
+| 2. Masa SMA atau masa kerja muda | 15–18 | Sekolah, kerja sampingan, pertemanan, mulai merantau. **Tanpa romansa** |
+| 3. Dewasa muda | 18–21 | Lulus SMA → kuliah/kerja; **romansa mulai terbuka**; pencarian sahabat masa kecil |
+| 4. Mapan | 21–25 | Karier, pacaran → tunangan → menikah, keluarga sendiri, puncak cerita utama |
+| Setelah ending | 25+ | **Bermain bebas** (hidup terus berjalan tanpa cerita utama) |
 
-### Status pemain 📝
-| Status | Fungsi |
-|---|---|
-| **Uang** | Bayar kebutuhan, beli barang/hadiah |
-| **Energi** | Habis karena kerja/aktivitas, pulih dengan tidur/istirahat. Energi rendah → kerja buruk, pilihan terbatas |
-| **Suasana hati (Mood)** | Dipengaruhi kejadian & hubungan. Mood buruk → wawancara/obrolan lebih sulit |
-| **Kesehatan** | Bisa turun (kurang tidur, makan tidak teratur) → sakit (rintangan) |
-| **Kemampuan** | Komunikasi, Keahlian kerja (per bidang), Pengetahuan umum… naik lewat aktivitas; dipakai di tes & wawancara |
+Setiap hari dalam game dimainkan ± 3–8 menit.
 
 ---
 
-## 4. Sistem hubungan 📝
+## 5. Alur pembuka ✅/📝
+1. Splash 3 detik → video intro → menu utama. ✅
+2. START GAME → isi nama ✅ → **pilih jenis kelamin** 📝
+3. Prolog masa lalu ✅ (isi perlu ditulis ulang sesuai Bab 1 💡)
+4. Bangun tidur (kedip, buram), duduk di ranjang, pesan HP. ✅
 
-### 4.1 Dua meter per karakter
-| Meter | Arti | Naik karena | Turun karena |
+---
+
+## 6. Tokoh utama 📝
+
+| Aspek | Rancangan |
+|---|---|
+| Nama | Diisi pemain (`{nama}`) ✅ |
+| Jenis kelamin | Laki-laki / Perempuan, dipilih di awal |
+| Awal cerita | **Baru lulus SMP (15 tahun)** di Desa Tanjung Lentera |
+| Pilihan besar pertama | **Lanjut SMA** (di kota, perlu biaya & kos) · **Kerja** · **SMA sambil kerja** |
+| Usia | Bertambah seiring waktu dalam game; memengaruhi apa yang bisa dilakukan |
+
+### Kebutuhan dasar (bertahan hidup) 📝
+| Bar | Turun karena | Dipulihkan dengan | Bila habis |
 |---|---|---|---|
-| **Kedekatan** (0–100) | Seberapa suka/akrab | Ngobrol, jawaban yang cocok, hadiah disukai, menepati janji, membantu | Jawaban tidak disukai, hadiah dibenci, diabaikan lama |
-| **Kepercayaan** (0–100) | Seberapa yakin pada pemain | Jujur, menepati janji, konsisten | **Bohong (kalau ketahuan)**, menghindar, ingkar janji, mengabaikan chat, membocorkan rahasia |
+| **Kesehatan** | Lapar/haus parah, kurang tidur, sakit, makanan basi | Makan layak, istirahat, obat, berobat | **Meninggal → game over** |
+| **Lapar** | Waktu berjalan, kerja berat | Makan | Kesehatan terus turun |
+| **Haus** | Waktu berjalan, cuaca panas, aktivitas | Minum | Kesehatan turun lebih cepat |
+| **Kewarasan** | Stres, konflik, kerja berlebihan, kesepian, kegagalan | Tidur cukup, hobi, ngobrol dengan orang dekat, liburan, konseling | Sulit fokus, kerja & obrolan memburuk, menolak ajakan; tidak menyebabkan kematian |
+| **Energi** | Aktivitas & kerja | Tidur, istirahat | Tidak bisa beraktivitas berat |
 
-### 4.2 Tingkat hubungan
-`Asing → Kenalan → Teman → Teman Dekat → Sahabat / Spesial → Pasangan`
-- **Pasangan** hanya untuk karakter yang boleh dipacari (sesuai aturan jenis kelamin), dan hanya lewat **momen cerita khusus** (mis. pengakuan), butuh Kedekatan **dan** Kepercayaan tinggi.
-- Karakter sesama jenis bisa sampai **Sahabat** dengan alur persahabatannya sendiri.
-- **Keluarga** punya meter sendiri, alurnya tidak ke arah romansa.
+- **Makanan & minuman** dibeli (warung, pasar, minimarket) atau dimasak. Punya **tanggal kedaluwarsa**;
+  yang basi/tidak layak bisa membuat sakit.
+- Game over = **tokoh meninggal** (mis. kelaparan berhari-hari tanpa uang). Hidup keras tapi bertahap:
+  sebelum fatal selalu ada tanda bahaya & kesempatan (minta tolong keluarga/teman, kerja harian, utang).
 
-### 4.3 Perilaku buruk (tercatat) 📝
-| Perilaku | Akibat |
+### Status lain 📝
+**Uang**, **Kemampuan** (Komunikasi, Akademik, Keahlian per bidang, dll.), **Reputasi** (di desa, sekolah, tempat kerja).
+
+---
+
+## 7. Keluarga 📝
+- **Keluarga tokoh utama** (di desa): susunan anggota ❓ (usulan: ayah nelayan, ibu pemilik warung, satu adik).
+- **Karakter lain juga punya keluarga**: orang tua bisa merestui/menolak hubungan, saudara bisa ikut campur,
+  keluarga bisa jadi jalur "orang dalam" pekerjaan.
+
+---
+
+## 8. Hubungan 📝
+
+### 8.1 Meter per karakter
+| Meter | Arti |
 |---|---|
-| **Bohong** | Dicatat sebagai "rahasia". Bisa tidak ketahuan, tapi bila terbongkar → Kepercayaan anjlok, bisa menyebar |
-| **Menghindar** (menolak ketemu, kabur dari topik) | Kepercayaan & Kedekatan turun sedikit; berulang → karakter berhenti mengajak |
-| **Ingkar janji** (tidak datang ke janji temu) | Kepercayaan turun besar |
-| **Mengabaikan chat** | Turun pelan; karakter bisa kirim chat "kamu kenapa?" |
-| **Jawaban yang menyakiti** | Kedekatan turun; bisa memicu konflik |
+| **Cinta (kategori teman)** 0–100 | Rasa sayang & akrab sebagai teman |
+| **Cinta (kategori pasangan)** 0–100 | Rasa sayang romantis, terbuka setelah resmi berpacaran |
+| **Kepercayaan** 0–100 | Turun karena bohong (bila ketahuan), menghindar, ingkar janji, selingkuh |
 
-### 4.4 Jaringan antar karakter 📝
-- Setiap karakter punya hubungan dengan karakter lain: **sahabat, keluarga, saingan, mantan, rekan kerja, atasan**.
-- **Kabar menyebar:** perbuatan ke A ikut memengaruhi penilaian orang-orang dekat A (sebagian, mis. 30–50%).
-- **Ikut campur:** bila A tidak suka pemain dan A dekat dengan B:
-  - A melarang B bertemu pemain → ajakan ke B ditolak dengan alasan.
-  - A menjelekkan pemain → Kepercayaan B turun.
-  - A memaksa B memilih (adegan konflik).
-- **Memperbaiki:** minta maaf (adegan), hadiah, membuktikan lewat tindakan, atau minta karakter lain jadi penengah. Butuh waktu, tidak instan.
-- **Saingan cinta:** karakter lain bisa juga menyukai karakter yang sama.
+Naik lewat: ngobrol, jawaban yang disukai, hadiah, menepati janji, membantu.
+Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, hadiah yang dibenci.
 
----
+### 8.2 Tahapan hubungan romantis (hanya antar orang dewasa)
+`Pendekatan → (ungkapkan perasaan) → Pacaran → Tunangan → Menikah (suami-istri)`
+- **Romansa baru terbuka saat tokoh utama berusia 18 tahun**, dan hanya dengan karakter dewasa.
+  Sebelum itu, hubungan dengan karakter lain berupa pertemanan, persahabatan, dan keluarga.
+- Menikah mengikuti batas usia nikah di Indonesia (19 tahun) dan butuh proses: restu keluarga, biaya, persiapan.
+- **Mengungkapkan perasaan** bisa **ditolak**. Peluang diterima bergantung pada Cinta & Kepercayaan:
+  di bawah ± 50 hampir pasti ditolak; makin penuh, makin besar peluangnya. Ditolak juga berakibat (canggung, Kepercayaan turun sedikit).
+- Setiap tahap butuh waktu & momen khusus; tidak bisa dilompati.
+- Aturan jenis kelamin: tokoh laki-laki → pasangan perempuan; tokoh perempuan → pasangan laki-laki.
 
-## 5. Waktu 📝
-- Hari dibagi: **Pagi · Siang · Sore · Malam** (+ tidur).
-- Kalender: hari dalam seminggu, akhir pekan, hari libur, tanggal gajian, tanggal bayar kos.
-- **Adegan cerita utama** mengisi slot tertentu; sisanya **waktu bebas**.
-- Waktu **maju saat pemain memilih aktivitas** (bukan berjalan sendiri). ❓ (perlu konfirmasi)
-- Durasi total game: ❓
+### 8.3 Lebih dari satu pasangan
+- Pemain **boleh menjalin lebih dari satu hubungan**. Akibatnya bergantung pada **sifat tiap karakter**:
+  - **Setia/cemburuan:** bila tahu ada pasangan lain → cemburu, sakit hati, marah, putus, membalas, menyebarkan ke teman/keluarga.
+  - **Terbuka:** tidak keberatan → tidak ada efek buruk.
+- **Selingkuh yang ketahuan** dari pasangan bersifat setia → efek & tindakan negatif.
+- Ketahuan bisa terjadi lewat: bertemu di tempat umum, chat terlihat, gosip, teman yang melapor.
 
-### Waktu bebas
-Pilihan aktivitas per slot: ajak ketemu karakter · datangi tempat · kerja/shift · belajar/latihan kemampuan · istirahat · bersama keluarga · belanja.
-Karakter punya **jadwal sendiri** (kerja, kuliah, kebiasaan) → tidak selalu bisa ditemui.
-
----
-
-## 6. Obrolan & pilihan 📝
-- Pilihan jawaban 2–3 opsi (seperti gambar Hana).
-- Setiap karakter punya **sifat & topik favorit/tidak disukai** → jawaban dinilai sesuai sifatnya.
-- Ada opsi **bohong** dan **menghindar** yang terlihat menguntungkan sesaat, tapi tercatat.
-- Tampilan saat bicara dengan karakter: foto + nama + meter (pojok kiri atas, seperti gambar Hana).
+### 8.4 Jaringan antar karakter
+- Karakter punya hubungan: keluarga, sahabat, saingan, mantan, rekan kerja, atasan.
+- **Kabar menyebar** ke orang-orang dekat; **ikut campur** (melarang bertemu, menjelekkan, memaksa memilih).
+- **Memperbaiki** butuh waktu: minta maaf, hadiah, bukti tindakan, penengah.
 
 ---
 
-## 7. Barang, hadiah, uang 📝
-- **Tas (inventori)**.
-- Barang didapat dari: **toko** (beli), **diberi karakter**, hadiah acara, hasil kerja.
-- Setiap karakter: barang **disukai / biasa / tidak disukai** (+ barang favorit spesial).
-- Batas **1 hadiah per karakter per hari**.
-- **Kebutuhan hidup:** kos (bulanan), makan, transportasi, pulsa/kuota. Telat bayar → rintangan.
+## 9. Waktu 📝
+- Hari: **Pagi · Siang · Sore · Malam** + tidur. Kalender (hari, akhir pekan, libur, gajian, bayar kos, tahun ajaran sekolah).
+- Waktu **maju saat pemain memilih aktivitas**.
+- Karakter punya jadwal sendiri.
+- Loncatan waktu antar bab (lihat §4).
 
 ---
 
-## 8. Pekerjaan 📝
-| Jenis | Ciri |
+## 10. Obrolan & pilihan 📝
+- Pilihan jawaban 2–3 opsi, termasuk opsi bohong & menghindar.
+- Karakter punya sifat, topik favorit & tidak disukai.
+- Panel karakter saat bicara: foto + nama + meter (seperti gambar Hana).
+
+---
+
+## 11. Barang, makanan, uang 📝
+- Tas/inventori. Barang dari toko, pemberian karakter, hadiah acara, hasil kerja.
+- Hadiah: disukai/biasa/tidak disukai, 1 per karakter per hari.
+- **Makanan & minuman** dengan kedaluwarsa (lihat §6).
+- Kebutuhan hidup: kos, makan, transport, kuota, biaya sekolah.
+
+---
+
+## 12. Sekolah 📝
+- SMA di Kota Sakala (perlu kos & biaya) atau sekolah sambil kerja.
+- Jadwal sekolah, PR/ujian (dipengaruhi Akademik), teman sekelas, guru.
+- Nilai & kelulusan memengaruhi pilihan setelahnya (kuliah/beasiswa/pekerjaan).
+
+---
+
+## 13. Pekerjaan 📝
+- **Karier terbentuk dari pilihan pemain** (mis. sering ke kafe & memilih belajar kopi → jalur dunia kopi: barista → kepala barista → buka kedai sendiri). Tidak ada daftar karier tetap; jalurnya muncul dari minat & pilihan.
+- **Tetap** (gaji bulanan, kinerja, naik jabatan/PHK) & **panggilan/paruh waktu** (per shift).
+- **Jalur resmi:** lowongan → berkas (CV, surat lamaran, KTP, ijazah, SKCK, surat sehat, pas foto) → tes → wawancara → pengumuman.
+- **Jalur orang dalam:** rekomendasi karakter yang dekat & percaya; risiko merusak hubungan bila kinerja buruk.
+- Pekerjaan untuk usia di bawah 18: hanya pekerjaan ringan (bantu warung, nelayan keluarga, jaga toko, kurir).
+
+---
+
+## 14. Rintangan 📝
+Semua jenis, bertahap: ekonomi (uang habis, telat bayar, kena tipu), pekerjaan (gagal tes, ditegur, PHK),
+kesehatan (sakit, makanan basi), hubungan (cemburu, gosip, kebohongan terbongkar, saingan),
+keluarga (masalah orang tua, saudara butuh bantuan), sekolah (nilai jatuh, perundungan), kejadian kota (banjir, macet, HP rusak).
+
+---
+
+## 15. HP
+| Aplikasi | Status |
 |---|---|
-| **Tetap** | Jadwal tetap, gaji bulanan, atasan & rekan kerja (karakter), kinerja dinilai, bisa naik jabatan / ditegur / dipecat |
-| **Panggilan / paruh waktu** | Pilih shift sendiri, bayar per shift, tidak stabil |
-
-### Jalur resmi
-`Lowongan (aplikasi di HP) → Siapkan berkas → Kirim lamaran → Tes → Wawancara → Pengumuman → Kontrak`
-- **Berkas:** CV, surat lamaran, KTP, ijazah/transkrip, SKCK, surat sehat, pas foto (sesuai pekerjaan). Mengurus berkas butuh waktu/biaya (mis. SKCK ke kantor polisi).
-- **Tes:** soal sesuai bidang + psikotes sederhana; dipengaruhi Kemampuan.
-- **Wawancara:** simulasi dialog; menilai jawaban, kejujuran, mood & persiapan. Bisa ditanya hal yang pernah pemain bohongi.
-
-### Jalur orang dalam
-- Bila dekat & **dipercaya** oleh karakter yang bekerja/berkuasa di sana → **rekomendasi** (lewati sebagian tahap / peluang lebih besar).
-- Risiko: kinerja buruk / berhenti mendadak → **hubungan dengan pemberi rekomendasi rusak**, reputasinya di kantor ikut turun.
+| Layar kunci + notifikasi | ✅ |
+| Chat · Kontak · Kalender · Peta · Belanja · Lowongan · Dompet · Catatan kesehatan | 📝 |
 
 ---
 
-## 9. Rintangan 📝 (daftar awal, akan ditambah)
-- **Ekonomi:** uang habis, telat bayar kos, kehilangan dompet, tagihan mendadak, kena tipu.
-- **Pekerjaan:** gagal tes/wawancara, ditegur atasan, kena PHK, rekan kerja menjatuhkan.
-- **Kesehatan:** sakit karena kurang tidur/makan, kelelahan.
-- **Hubungan:** saingan cinta, gosip, ikut campur karakter lain, kebohongan terbongkar, salah paham.
-- **Keluarga:** masalah orang tua, adik/kakak butuh bantuan, tekanan keluarga.
-- **Acak/kejadian kota:** hujan/banjir, macet, HP rusak.
-- Apakah ada **game over** (mis. terusir/bangkrut)? ❓
+## 16. Ending 📝
+Ending cerita utama ditentukan oleh: hubungan dengan sahabat masa kecil, pasangan, keluarga, karier, keuangan, dan sikap terhadap "hidup paralel".
+Setelah ending → bermain bebas.
 
 ---
 
-## 10. HP (pusat permainan)
-| Aplikasi | Fungsi | Status |
-|---|---|---|
-| Layar kunci + notifikasi | Pesan masuk | ✅ |
-| **Chat** | Pesan dari karakter, membalas / mengabaikan / mengajak ketemu | 📝 |
-| **Kontak** | Foto, tingkat hubungan, meter (setelah kenal) | 📝 |
-| **Kalender** | Janji temu, shift, tanggal penting | 📝 |
-| **Peta** | Pilih tempat di waktu bebas | 📝 |
-| **Belanja** | Beli barang/hadiah | 📝 |
-| **Lowongan** | Cari kerja, status lamaran | 📝 |
-| **Dompet** | Uang, tagihan | 📝 |
+## 17. Data (file teks, bisa diedit dari HP) 📝
+`assets/data/karakter.txt` · `hubungan.txt` · `barang.txt` · `makanan.txt` · `pekerjaan.txt` · `tempat.txt` · `sekolah.txt`
+`assets/karakter/` (gambar karakter) · `assets/latar/` (background) · `assets/naskah/` (cerita)
+
+Perintah naskah baru (rencana): `@pilihan`, `@jika`, `@cinta hana +5`, `@percaya hana -10`, `@bohong`, `@terbongkar`,
+`@uang`, `@beri`, `@terima`, `@tampil hana senyum`, `@makan`, `@waktu_maju`, `@usia`.
 
 ---
 
-## 11. Ending 📝
-Ditentukan oleh: pasangan (atau tidak), hubungan keluarga, karier, keuangan, dan keputusan cerita utama. Jenis ending ❓
+## 18. Aset & gambar
+- Gambar dibuat pemilik dengan AI lain; **Claude membantu menulis prompt** (gaya anime konsisten, PNG transparan, beberapa ekspresi).
+- Background sementara: placeholder ✅.
 
 ---
 
-## 12. Data (semua berbasis file teks, bisa diedit dari HP) 📝
-| File | Isi |
-|---|---|
-| `assets/naskah/*.txt` | Naskah cerita ✅ |
-| `assets/data/karakter.txt` | Nama, jenis kelamin, bisa dipacari, sifat, topik favorit, barang disukai, jadwal |
-| `assets/data/hubungan.txt` | Hubungan antar karakter (sahabat, saingan, …) dan kekuatannya |
-| `assets/data/barang.txt` | Nama, harga, kategori, deskripsi |
-| `assets/data/pekerjaan.txt` | Jenis, gaji, jadwal, syarat berkas, tes, kontak orang dalam |
-| `assets/data/tempat.txt` | Tempat di peta, jam buka, siapa yang sering di sana |
-| `assets/latar/`, `assets/karakter/` | Gambar background, gambar karakter (PNG transparan, beberapa ekspresi) |
-
-### Perintah naskah baru yang direncanakan
-`@pilihan` (pilihan jawaban) · `@kedekatan hana +5` · `@percaya hana -10` · `@jika …` (syarat) ·
-`@bohong id` / `@terbongkar id` · `@uang +50000` · `@beri barang` · `@terima barang` · `@tampil hana senyum` · `@waktu_maju`
-
----
-
-## 13. Aset yang dibutuhkan
-- Background: kamar, rumah keluarga, kampus/kantor, kafe, jalan, stasiun, dll. (sementara: placeholder ✅)
-- Karakter: PNG transparan, minimal 3 ekspresi (biasa, senang, sedih/marah) + foto profil.
-- Musik & efek suara (folder sudah siap ✅).
-
----
-
-## 14. Pertanyaan terbuka (jawaban gambaran besar dari pemilik game)
-Jawaban dicatat di bagian **Keputusan** di PROGRES.md.
-
-**Dunia & cerita**
-1. Latar kota: kota nyata atau fiktif di Indonesia? Era sekarang?
-2. Tokoh utama di awal: usia, status (kuliah/baru lulus/kerja), tinggal di mana (kos sendiri / rumah keluarga)?
-3. Cerita utama: siapa sosok dari masa lalu / pengirim pesan misterius? "Living Parallel" itu kiasan, atau ada unsur dunia paralel sungguhan?
-4. Durasi game: berapa lama waktu di dalam game (mis. 1 tahun)? Ada akhir, atau bisa terus main setelah ending?
-
-**Karakter & hubungan**
-5. Keluarga: siapa saja, dan tinggal bersama atau di kampung halaman?
-6. Berapa karakter yang bisa dipacari & berapa teman di awal? Sudah ada nama/sifat?
-7. Hubungan romantis sampai mana: pacaran, tunangan, menikah?
-8. Boleh punya lebih dari satu hubungan sekaligus (dengan konsekuensi kalau ketahuan), atau dibatasi satu?
-
-**Kehidupan & rintangan**
-9. Pekerjaan bidang apa saja yang diinginkan?
-10. Seberapa keras hidupnya: bisa bangkrut / terusir / game over, atau selalu ada jalan keluar?
-11. Rintangan apa yang paling penting menurut Anda?
-
-**Teknis & visual**
-12. Bahasa: Indonesia saja, atau bisa pilih Inggris juga?
-13. Gambar karakter & background dibuat sendiri (mis. pakai AI) dengan gaya anime seperti gambar Hana?
-14. Target: untuk dimainkan sendiri/teman, atau rilis di Play Store?
+## 19. Jawaban pemilik (14 Okt 2026)
+1. Kota fiktif dengan nama & kondisi → usulan §2 (desa → kota).
+2. Mulai lulus SMP; pilih SMA, kerja, atau keduanya.
+3. Minta penjelasan konsep cerita → usulan §3.
+4. Minta saran durasi → usulan §4.
+5. Keluarga tokoh utama + keluarga karakter lain.
+6. Boleh banyak pasangan; akibatnya bergantung sifat karakter (cemburu vs terbuka).
+7. Bisa sampai menikah, bertahap; pengakuan bisa ditolak bila cinta kurang.
+8. Selingkuh ketahuan → efek negatif, kecuali pasangan bersifat terbuka.
+9. Karier terbentuk dari pilihan (contoh: dunia kopi).
+10. Semua rintangan, bertahap. Game over saat meninggal. Bar Kesehatan, Lapar, Haus, Kewarasan. Makanan bisa kedaluwarsa.
+11. Rintangan: semuanya.
+12. Bahasa Indonesia dulu.
+13. Gambar dibuat sendiri lewat AI; Claude bantu prompt.
+14. Dimainkan sendiri dulu.

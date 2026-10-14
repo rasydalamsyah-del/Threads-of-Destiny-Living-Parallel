@@ -14,16 +14,24 @@
 | 14 Okt 2026 | 4 | START GAME: isi nama → prolog masa lalu (efek kenangan, gerak kamera) → layar gelap + teks waktu → efek bangun tidur (kedip, buram) → duduk di ranjang → pesan HP masuk + layar HP. Mesin naskah teks (`assets/naskah/prolog.txt`), background sementara |
 | 14 Okt 2026 | 5 | Tombol burger di masa kini (Lanjutkan, Simpan, Muat, Riwayat, Pengaturan, Menu Utama). Simpan/Muat 1 slot otomatis + 6 manual. CONTINUE & LOAD DATA berfungsi. Halaman Pengaturan (tema, ukuran & gaya huruf, kepekatan kotak, kecepatan teks, volume musik/efek, getar, lewati intro, hapus data). Perintah naskah `@musik`, `@suara` |
 | 14 Okt 2026 | — | Dokumen rancangan game & catatan progres ini dibuat |
+| 14 Okt 2026 | — | Jawaban gambaran besar pemilik dimasukkan ke rancangan; usulan dunia (Desa Tanjung Lentera → Kota Sakala), cerita utama ("hidup paralel" lewat mimpi), dan fase hidup usia 15–25 |
 
 ---
 
 ## 🔨 Rencana kerja (urutan)
 
+### Tahap 0 — Menyesuaikan awal cerita
+- [ ] Tulis ulang prolog: masa kecil di Tanjung Lentera, sahabat pergi naik kereta, kini lulus SMP
+- [ ] Usia tokoh utama tersimpan & bertambah seiring waktu
+- [ ] Pilihan besar pertama: SMA di kota / kerja / SMA sambil kerja
+
 ### Tahap A — Fondasi hubungan
 - [ ] Pilih jenis kelamin di layar isi nama (aturan pasangan lawan jenis)
 - [ ] File data karakter (`assets/data/karakter.txt`) + hubungan antar karakter
 - [ ] Perintah `@pilihan` (pilihan jawaban) dan `@jika` (syarat)
-- [ ] Meter **Kedekatan** & **Kepercayaan** + tingkat hubungan
+- [ ] Meter **Cinta (teman)**, **Cinta (pasangan)**, **Kepercayaan** + tahapan hubungan
+- [ ] Romansa terkunci sampai tokoh berusia 18; pengakuan bisa ditolak
+- [ ] Sifat karakter (setia/cemburuan vs terbuka) untuk akibat banyak pasangan
 - [ ] Tampilan karakter di layar (gambar + ekspresi) dan panel nama + meter di pojok kiri atas
 - [ ] Pencatatan perilaku: bohong, menghindar, ingkar janji, abaikan chat
 - [ ] Data simpanan ikut menyimpan semua hal di atas
@@ -34,12 +42,16 @@
 - [ ] Jadwal karakter (kapan bisa ditemui)
 - [ ] Efek jaringan: kabar menyebar & karakter ikut campur (melarang, menjelekkan)
 
-### Tahap C — Ekonomi & barang
-- [ ] Status pemain: Uang, Energi, Mood, Kesehatan, Kemampuan
+### Tahap C — Bertahan hidup, ekonomi & barang
+- [ ] Bar Kesehatan, Lapar, Haus, Kewarasan, Energi + game over saat meninggal
+- [ ] Makanan & minuman dengan kedaluwarsa
+- [ ] Status: Uang, Kemampuan, Reputasi
 - [ ] Tas/inventori, toko, beri & terima hadiah
 - [ ] Kebutuhan hidup (kos, makan, transport) + tagihan
 
-### Tahap D — Pekerjaan
+### Tahap D — Sekolah & pekerjaan
+- [ ] Sekolah (SMA): jadwal, ujian, teman sekelas
+- [ ] Jalur karier yang terbentuk dari pilihan (contoh: dunia kopi)
 - [ ] Pekerjaan paruh waktu (shift)
 - [ ] Lowongan → berkas → tes → wawancara → pengumuman
 - [ ] Jalur orang dalam (rekomendasi + risikonya)
@@ -72,12 +84,23 @@
 | 14 Okt 2026 | Dua meter hubungan: Kedekatan & Kepercayaan. Bohong/menghindar/ingkar janji tercatat |
 | 14 Okt 2026 | Karakter saling terhubung dan bisa ikut campur (mis. melarang bertemu) |
 | 14 Okt 2026 | Pekerjaan tetap & panggilan; jalur resmi (berkas, tes, wawancara) atau orang dalam |
-| 14 Okt 2026 | Ada rintangan hidup |
+| 14 Okt 2026 | Ada rintangan hidup (semua jenis, bertahap) |
+| 14 Okt 2026 | Kota & desa fiktif. Tokoh mulai sebagai lulusan SMP; pilih SMA, kerja, atau keduanya |
+| 14 Okt 2026 | Keluarga tokoh utama + karakter lain juga punya keluarga |
+| 14 Okt 2026 | Boleh lebih dari satu pasangan; akibat bergantung sifat karakter (cemburu vs terbuka) |
+| 14 Okt 2026 | Hubungan bertahap sampai menikah; pengakuan bisa ditolak bila cinta kurang |
+| 14 Okt 2026 | Romansa hanya antar orang dewasa: terbuka saat tokoh berusia 18 (ditetapkan Claude) |
+| 14 Okt 2026 | Karier terbentuk dari pilihan pemain |
+| 14 Okt 2026 | Bar Kesehatan, Lapar, Haus, Kewarasan; makanan bisa kedaluwarsa; game over saat meninggal |
+| 14 Okt 2026 | Bahasa Indonesia dulu. Gambar dibuat pemilik lewat AI, Claude bantu prompt. Dimainkan sendiri dulu |
 
 ---
 
-## ❓ Menunggu jawaban
-Lihat **Pertanyaan terbuka** di [RANCANGAN_GAME.md](RANCANGAN_GAME.md#14-pertanyaan-terbuka-jawaban-gambaran-besar-dari-pemilik-game).
+## ❓ Menunggu persetujuan pemilik
+- Usulan dunia: Desa Tanjung Lentera & Kota Sakala (RANCANGAN §2)
+- Usulan cerita utama & arti "Living Parallel" (RANCANGAN §3)
+- Usulan durasi: usia 15 → 25, dibagi 4 bab + bermain bebas (RANCANGAN §4)
+- Susunan keluarga tokoh utama (usulan: ayah nelayan, ibu pemilik warung, satu adik)
 
 ---
 
