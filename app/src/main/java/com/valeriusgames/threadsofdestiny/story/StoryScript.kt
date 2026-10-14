@@ -31,6 +31,10 @@ object StoryScript {
         data class PhoneMessage(val sender: String, val text: String) : Cmd()
         /** Tunggu sampai pemain membuka (lalu menutup) HP. */
         object WaitForPhone : Cmd()
+        /** Musik latar (null = berhenti). */
+        data class Music(val name: String?) : Cmd()
+        /** Efek suara sekali. */
+        data class Sound(val name: String) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
     }
@@ -105,6 +109,16 @@ object StoryScript {
                 }
             }
             "tunggu_hp", "wait_phone" -> Cmd.WaitForPhone
+            "musik", "music" -> {
+                val file = rest.split(Regex("\\s+")).firstOrNull()?.takeIf { it.isNotEmpty() }
+                    ?: throw ParseError(n, "@musik butuh nama file, atau: @musik stop")
+                Cmd.Music(if (file.equals("stop", true) || file.equals("berhenti", true)) null else file)
+            }
+            "suara", "sound", "sfx" -> {
+                val file = rest.split(Regex("\\s+")).firstOrNull()?.takeIf { it.isNotEmpty() }
+                    ?: throw ParseError(n, "@suara butuh nama file")
+                Cmd.Sound(file)
+            }
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             else -> throw ParseError(n, "perintah @$name tidak dikenal")
         }

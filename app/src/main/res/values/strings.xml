@@ -29,8 +29,62 @@
 
     <!-- Kembali ke menu -->
     <string name="quit_title">Kembali ke menu utama?</string>
-    <string name="quit_message">Progres cerita saat ini belum bisa disimpan.</string>
+    <string name="quit_message">Progres disimpan otomatis. Lanjutkan nanti dengan CONTINUE.</string>
     <string name="quit_yes">Kembali</string>
     <string name="quit_no">Lanjut main</string>
     <string name="script_error">Naskah bermasalah: %1$s</string>
+
+    <!-- Menu dalam game -->
+    <string name="menu_title">MENU</string>
+    <string name="menu_resume">LANJUTKAN</string>
+    <string name="menu_save">SIMPAN</string>
+    <string name="menu_load">MUAT</string>
+    <string name="menu_log">RIWAYAT</string>
+    <string name="menu_settings">PENGATURAN</string>
+    <string name="menu_main">MENU UTAMA</string>
+    <string name="log_title">RIWAYAT</string>
+    <string name="log_empty">Belum ada dialog.</string>
+    <string name="save_wait">Tunggu sampai dialog muncul untuk menyimpan.</string>
+
+    <!-- Simpan / Muat -->
+    <string name="save_title">SIMPAN</string>
+    <string name="load_title">MUAT DATA</string>
+    <string name="slot_auto">Simpan Otomatis</string>
+    <string name="slot_manual">Slot %1$d</string>
+    <string name="slot_empty">— Kosong —</string>
+    <string name="slot_saved">Tersimpan di %1$s</string>
+    <string name="slot_overwrite">Timpa %1$s?</string>
+    <string name="slot_delete">Hapus %1$s?</string>
+    <string name="slot_auto_readonly">Slot ini diisi otomatis oleh game</string>
+    <string name="slot_hint_save">Ketuk slot untuk menyimpan · Tahan untuk menghapus</string>
+    <string name="slot_hint_load">Ketuk slot untuk memuat · Tahan untuk menghapus</string>
+    <string name="yes">Ya</string>
+    <string name="no">Batal</string>
+    <string name="load_failed">Data simpanan tidak bisa dibaca</string>
+
+    <!-- Pengaturan -->
+    <string name="settings_title">PENGATURAN</string>
+    <string name="settings_reset">KEMBALIKAN DEFAULT</string>
+    <string name="settings_reset_done">Pengaturan dikembalikan ke default</string>
+    <string name="settings_preview">Latte di sini enak banget! Untung kita jadi ke sini.</string>
+    <string name="sec_display">Tampilan</string>
+    <string name="sec_text">Teks</string>
+    <string name="sec_audio">Suara</string>
+    <string name="sec_other">Lainnya</string>
+    <string name="sec_data">Data</string>
+    <string name="set_theme">Tema kotak dialog</string>
+    <string name="set_theme_desc">Otomatis: gelap saat kenangan, terang di masa kini</string>
+    <string name="set_font_size">Ukuran huruf</string>
+    <string name="set_font_style">Gaya huruf</string>
+    <string name="set_box_opacity">Kepekatan kotak dialog</string>
+    <string name="set_text_speed">Kecepatan teks</string>
+    <string name="set_music">Volume musik</string>
+    <string name="set_sfx">Volume efek suara</string>
+    <string name="set_vibration">Getar</string>
+    <string name="set_vibration_desc">HP bergetar saat ada pesan masuk di dalam cerita</string>
+    <string name="set_skip_intro">Lewati video intro</string>
+    <string name="set_skip_intro_desc">Langsung ke menu utama setelah gambar pembuka</string>
+    <string name="set_delete_data">Hapus semua data simpanan</string>
+    <string name="set_delete_confirm">Semua slot simpanan dan nama pemain akan dihapus. Lanjutkan?</string>
+    <string name="set_delete_done">Data simpanan dihapus</string>
 </resources>

@@ -1,0 +1,3 @@
+Taruh file efek suara (.mp3/.ogg/.wav) di sini.
+Pakai di naskah: @suara nama_file
+File bernama "notifikasi" otomatis diputar saat pesan HP masuk.

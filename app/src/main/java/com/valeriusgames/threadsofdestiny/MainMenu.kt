@@ -1,24 +1,19 @@
 package com.valeriusgames.threadsofdestiny
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.TextView
-import android.widget.Toast
 import com.valeriusgames.threadsofdestiny.game.GameActivity
+import com.valeriusgames.threadsofdestiny.save.SaveLoadActivity
+import com.valeriusgames.threadsofdestiny.save.SaveStore
+import com.valeriusgames.threadsofdestiny.settings.SettingsActivity
 
 /**
  * Halaman utama: judul, tombol START GAME / CONTINUE / LOAD DATA / SETTINGS.
  */
 class MainMenu(private val activity: Activity, private val root: View) {
-
-    companion object {
-        private const val PREFS = "save_data"
-        /** Diisi true oleh sistem save nanti, saat pemain sudah punya data simpanan. */
-        const val KEY_HAS_SAVE = "has_save"
-    }
 
     private val titleBlock: View = root.findViewById(R.id.title_block)
     private val panel: View = root.findViewById(R.id.panel)
@@ -34,9 +29,13 @@ class MainMenu(private val activity: Activity, private val root: View) {
             activity.getString(R.string.version_format, BuildConfig.VERSION_NAME)
 
         btnStart.setOnClickListener { startGame() }
-        btnContinue.setOnClickListener { comingSoon(R.string.btn_continue) }
-        btnLoad.setOnClickListener { comingSoon(R.string.btn_load) }
-        btnSettings.setOnClickListener { comingSoon(R.string.btn_settings) }
+        btnContinue.setOnClickListener { continueGame() }
+        btnLoad.setOnClickListener {
+            open(Intent(activity, SaveLoadActivity::class.java)
+                .putExtra(SaveLoadActivity.EXTRA_MODE, SaveLoadActivity.MODE_LOAD)
+                .putExtra(SaveLoadActivity.EXTRA_FROM_MENU, true))
+        }
+        btnSettings.setOnClickListener { open(Intent(activity, SettingsActivity::class.java)) }
 
         refreshSaveState()
     }
@@ -85,24 +84,23 @@ class MainMenu(private val activity: Activity, private val root: View) {
 
     /** CONTINUE hanya aktif kalau ada data simpanan. */
     private fun refreshSaveState() {
-        val hasSave = activity.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getBoolean(KEY_HAS_SAVE, false)
+        val hasSave = SaveStore.hasAny(activity)
         btnContinue.isEnabled = hasSave
         btnContinue.subLabel =
             if (hasSave) null else activity.getString(R.string.btn_continue_empty)
     }
 
-    private fun startGame() {
-        activity.startActivity(Intent(activity, GameActivity::class.java))
-        @Suppress("DEPRECATION")
-        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    private fun startGame() = open(Intent(activity, GameActivity::class.java))
+
+    /** CONTINUE: lanjutkan dari data simpanan yang paling baru. */
+    private fun continueGame() {
+        val slot = SaveStore.latestSlot(activity) ?: return
+        open(Intent(activity, GameActivity::class.java).putExtra(GameActivity.EXTRA_LOAD_SLOT, slot))
     }
 
-    private fun comingSoon(labelRes: Int) {
-        Toast.makeText(
-            activity,
-            activity.getString(R.string.coming_soon, activity.getString(labelRes)),
-            Toast.LENGTH_SHORT
-        ).show()
+    private fun open(intent: Intent) {
+        activity.startActivity(intent)
+        @Suppress("DEPRECATION")
+        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 }

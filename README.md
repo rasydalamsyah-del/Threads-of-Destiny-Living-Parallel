@@ -17,6 +17,13 @@ Game Android (portrait) oleh **Valerius Games**. Aplikasi Android native (Kotlin
 4. **Duduk di ranjang** – kamera seolah bangkit, pemandangan kamar.
 5. **HP** – pesan masuk, ikon HP bergetar; ketuk untuk membuka layar HP.
 
+**Menu dalam game (☰ pojok kanan atas, muncul di masa kini):** Lanjutkan, Simpan, Muat,
+Riwayat dialog, Pengaturan, Menu Utama. Progres juga **disimpan otomatis** saat keluar,
+jadi tombol **CONTINUE** di menu utama melanjutkan dari simpanan terbaru.
+
+**Pengaturan:** tema kotak dialog, ukuran & gaya huruf, kepekatan kotak dialog, kecepatan teks,
+volume musik & efek suara, getar, lewati video intro, hapus data simpanan.
+
 Cerita ditulis di **`app/src/main/assets/naskah/prolog.txt`**, background di
 **`app/src/main/assets/latar/`**. Cara menulisnya: **[docs/NASKAH.md](docs/NASKAH.md)**.
 

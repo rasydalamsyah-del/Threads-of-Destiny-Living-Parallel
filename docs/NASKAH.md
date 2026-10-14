@@ -65,6 +65,16 @@ Jam ini juga dipakai di layar kunci HP.
 - `@hp pesan` → pesan masuk, ikon HP bergetar dan bertitik merah
 - `@tunggu_hp` → cerita berhenti sampai pemain membuka HP lalu menutupnya
 
+### Musik & efek suara
+```
+@musik nama_file      putar musik latar berulang (dari folder assets/musik)
+@musik stop           hentikan musik
+@suara nama_file      putar efek suara sekali (dari folder assets/suara)
+```
+- Format: `.mp3`, `.ogg`, `.m4a`, atau `.wav`. Tulis nama file **tanpa** ekstensi.
+- File `assets/suara/notifikasi.mp3` (kalau ada) otomatis diputar saat pesan HP masuk.
+- Volume mengikuti halaman **Pengaturan**. Kalau file tidak ada, game tetap jalan tanpa suara.
+
 ### Akhir
 ```
 @tamat Bersambung…
@@ -82,6 +92,12 @@ Jam ini juga dipakai di layar kunci HP.
 Hana: Latte di sini enak banget! Untung kita jadi ke sini.
 {nama}: Iya, pemandangannya juga bagus.
 ```
+
+## Simpan & muat
+
+Data simpanan mengingat **nomor baris** perintah di naskah. Kalau Anda menambah atau menghapus
+baris di bagian **sebelum** posisi simpanan, data simpanan lama bisa melompat ke kalimat lain.
+Saat masih tahap pengembangan, ini wajar: cukup mulai ulang dengan START GAME.
 
 ## Kalau ada yang salah
 

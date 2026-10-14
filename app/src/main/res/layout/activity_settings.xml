@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:src="@drawable/menu_bg" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E0050816" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/screen_header" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/title_divider" />
+
+        <!-- Contoh tampilan dialog (berubah langsung sesuai pengaturan) -->
+        <FrameLayout
+            android:id="@+id/preview_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="10dp">
+
+            <ImageView
+                android:id="@+id/preview_bg"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:background="@drawable/phone_notif"
+                android:clipToOutline="true"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="34dp"
+                android:layout_marginEnd="10dp">
+
+                <LinearLayout
+                    android:id="@+id/preview_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/dialog_light"
+                    android:orientation="vertical"
+                    android:paddingStart="18dp"
+                    android:paddingTop="22dp"
+                    android:paddingEnd="18dp"
+                    android:paddingBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/preview_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.18"
+                        android:minLines="2"
+                        android:textColor="#FF2A2A2E" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/preview_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/name_tag_light"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="14dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="5dp"
+                    android:text="Hana"
+                    android:textColor="#FF1E1E22"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="16dp">
+
+            <LinearLayout
+                android:id="@+id/settings_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <com.valeriusgames.threadsofdestiny.FantasyButton
+            android:id="@+id/settings_reset"
+            android:layout_width="250dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            app:label="@string/settings_reset" />
+    </LinearLayout>
+</FrameLayout>

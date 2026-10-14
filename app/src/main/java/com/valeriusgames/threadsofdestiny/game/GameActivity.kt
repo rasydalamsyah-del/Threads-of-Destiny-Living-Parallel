@@ -4,36 +4,53 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import com.valeriusgames.threadsofdestiny.FantasyButton
 import com.valeriusgames.threadsofdestiny.R
 import com.valeriusgames.threadsofdestiny.SparkleView
+import com.valeriusgames.threadsofdestiny.audio.AudioPlayer
 import com.valeriusgames.threadsofdestiny.enterImmersiveMode
+import com.valeriusgames.threadsofdestiny.save.SaveData
+import com.valeriusgames.threadsofdestiny.save.SaveLoadActivity
+import com.valeriusgames.threadsofdestiny.save.SaveStore
+import com.valeriusgames.threadsofdestiny.settings.GameSettings
+import com.valeriusgames.threadsofdestiny.settings.SettingsActivity
 import com.valeriusgames.threadsofdestiny.story.StoryScript
 import com.valeriusgames.threadsofdestiny.story.StoryScript.Cmd
+import com.valeriusgames.threadsofdestiny.story.StoryScript.Motion
 
 /**
  * Layar permainan visual novel.
  * Urutan: isi nama → jalankan naskah assets/naskah/prolog.txt
+ * Bisa juga dibuka langsung dari data simpanan (EXTRA_LOAD_SLOT).
  */
 class GameActivity : Activity() {
 
@@ -41,11 +58,15 @@ class GameActivity : Activity() {
         /** File naskah pertama yang dijalankan. */
         const val FIRST_SCRIPT = "naskah/prolog.txt"
 
-        /** Kecepatan teks muncul (milidetik per huruf). */
-        const val TYPE_DELAY_MS = 28L
+        /** Buka game langsung dari slot simpanan ini. */
+        const val EXTRA_LOAD_SLOT = "load_slot"
 
         const val PREFS = "player"
         const val KEY_NAME = "name"
+
+        private const val REQ_SAVE = 1
+        private const val REQ_LOAD = 2
+        private const val LOG_LIMIT = 80
     }
 
     private enum class Wait { BUSY, TAP, PHONE }
@@ -55,6 +76,7 @@ class GameActivity : Activity() {
     private lateinit var bg: BackgroundLayer
     private lateinit var vignette: View
     private lateinit var clock: TextView
+    private lateinit var burger: View
     private lateinit var dialog: View
     private lateinit var dialogBox: View
     private lateinit var dialogText: TextView
@@ -66,25 +88,38 @@ class GameActivity : Activity() {
     private lateinit var eyelid: EyelidView
     private lateinit var timecard: TextView
     private lateinit var phone: PhoneScreen
+    private lateinit var gameMenu: View
+    private lateinit var logOverlay: View
     private lateinit var nameEntry: View
     private lateinit var nameInput: EditText
     private lateinit var nameError: View
     private lateinit var nameSparkles: SparkleView
 
+    private lateinit var audio: AudioPlayer
+    private var settings = GameSettings.Values()
+
+    // ---- keadaan cerita (ikut disimpan) ----
+    private var scriptPath = FIRST_SCRIPT
     private var script: List<Cmd> = emptyList()
     private var pc = 0
-    private var wait = Wait.BUSY
+    private var currentIndex = 0
     private var playerName = ""
     private var memoryMode = false
+    private var bgName: String? = null
+    private var bgMotion = Motion.NONE
     private var clockText: String? = null
+    private val messages = mutableListOf<Pair<String, String>>()
+    private val log = ArrayDeque<Pair<String?, String>>()
+
+    private var storyStarted = false
+    private var wait = Wait.BUSY
+    private var currentSpeaker: String? = null
+    private var narrationLine = true
 
     private var fullText: CharSequence = ""
     private var typed = 0
     private var typing = false
     private var indicatorAnim: ValueAnimator? = null
-
-    private val serifItalic: Typeface by lazy { Typeface.create(Typeface.SERIF, Typeface.ITALIC) }
-    private val sansItalic: Typeface by lazy { Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC) }
 
     // ================================================================== lifecycle
 
@@ -96,6 +131,7 @@ class GameActivity : Activity() {
         bg = BackgroundLayer(findViewById<FrameLayout>(R.id.bg_container))
         vignette = findViewById(R.id.vignette)
         clock = findViewById(R.id.clock)
+        burger = findViewById(R.id.btn_burger)
         dialog = findViewById(R.id.dialog)
         dialogBox = findViewById(R.id.dialog_box)
         dialogText = findViewById(R.id.dialog_text)
@@ -106,33 +142,54 @@ class GameActivity : Activity() {
         black = findViewById(R.id.black)
         eyelid = findViewById(R.id.eyelid)
         timecard = findViewById(R.id.timecard)
+        gameMenu = findViewById(R.id.game_menu)
+        logOverlay = findViewById(R.id.log_overlay)
         nameEntry = findViewById(R.id.name_entry)
         nameInput = findViewById(R.id.name_input)
         nameError = findViewById(R.id.name_error)
         nameSparkles = findViewById(R.id.name_sparkles)
         phone = PhoneScreen(findViewById(R.id.phone_overlay)) { onPhoneClosed() }
 
+        audio = AudioPlayer(this)
+        applySettings()
+
         findViewById<View>(R.id.game_root).setOnClickListener { onScreenTap() }
         phoneIcon.setOnClickListener { openPhone() }
+        setupGameMenu()
 
-        try {
-            script = assets.open(FIRST_SCRIPT).bufferedReader().use { StoryScript.parse(it.readLines()) }
-        } catch (e: Exception) {
-            Toast.makeText(this, getString(R.string.script_error, e.message), Toast.LENGTH_LONG).show()
+        // Data simpanan yang mau dibuka (dari Load / Continue, atau Android sempat menutup game)
+        val slot = when {
+            intent.hasExtra(EXTRA_LOAD_SLOT) -> intent.getIntExtra(EXTRA_LOAD_SLOT, -1)
+            savedInstanceState != null -> SaveStore.AUTO_SLOT
+            else -> -1
         }
+        val save = if (slot >= 0) SaveStore.read(this, slot) else null
 
-        setupNameEntry()
+        if (save != null) {
+            nameEntry.visibility = View.GONE
+            restore(save)
+        } else {
+            if (slot >= 0 && intent.hasExtra(EXTRA_LOAD_SLOT)) {
+                Toast.makeText(this, R.string.load_failed, Toast.LENGTH_SHORT).show()
+            }
+            loadScript(FIRST_SCRIPT)
+            setupNameEntry()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         enterImmersiveMode()
+        applySettings()
+        audio.resume()
         if (nameEntry.visibility == View.VISIBLE) nameSparkles.start()
     }
 
     override fun onPause() {
         super.onPause()
         nameSparkles.stop()
+        audio.pause()
+        autoSave()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -144,28 +201,87 @@ class GameActivity : Activity() {
         handler.removeCallbacksAndMessages(null)
         indicatorAnim?.cancel()
         bg.release()
+        audio.release()
         super.onDestroy()
     }
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         when {
+            logOverlay.visibility == View.VISIBLE -> closeLog()
+            gameMenu.visibility == View.VISIBLE -> closeGameMenu()
             phone.isOpen -> phone.close()
             nameEntry.visibility == View.VISIBLE -> leaveToMenu()
-            else -> AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
-                .setTitle(R.string.quit_title)
-                .setMessage(R.string.quit_message)
-                .setPositiveButton(R.string.quit_yes) { _, _ -> leaveToMenu() }
-                .setNegativeButton(R.string.quit_no, null)
-                .setOnDismissListener { enterImmersiveMode() }
-                .show()
+            else -> confirmLeave()
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_LOAD && resultCode == RESULT_OK && data != null) {
+            val slot = data.getIntExtra(SaveLoadActivity.EXTRA_SLOT, -1)
+            if (slot >= 0) {
+                // Muat ulang layar permainan dari slot yang dipilih
+                startActivity(Intent(this, GameActivity::class.java).putExtra(EXTRA_LOAD_SLOT, slot))
+                finish()
+                @Suppress("DEPRECATION")
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+        }
+    }
+
+    private fun confirmLeave() {
+        AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle(R.string.quit_title)
+            .setMessage(R.string.quit_message)
+            .setPositiveButton(R.string.quit_yes) { _, _ -> leaveToMenu() }
+            .setNegativeButton(R.string.quit_no, null)
+            .setOnDismissListener { enterImmersiveMode() }
+            .show()
+    }
+
     private fun leaveToMenu() {
+        autoSave()
         finish()
         @Suppress("DEPRECATION")
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
+
+    // ================================================================== pengaturan
+
+    private fun applySettings() {
+        settings = GameSettings.load(this)
+        audio.setVolumes(settings.musicVolume, settings.sfxVolume)
+        dialogText.setTextSize(TypedValue.COMPLEX_UNIT_SP, settings.fontSizeSp)
+        applyDialogStyle()
+    }
+
+    private fun useDarkBox(): Boolean = when (settings.theme) {
+        GameSettings.Theme.AUTO -> memoryMode
+        GameSettings.Theme.LIGHT -> false
+        GameSettings.Theme.DARK -> true
+    }
+
+    private fun applyDialogStyle() {
+        val dark = useDarkBox()
+        val narration = narrationLine
+        dialogBox.setBackgroundResource(if (dark) R.drawable.dialog_dark else R.drawable.dialog_light)
+        dialogBox.background.mutate().alpha = (settings.boxOpacity * 255 / 100).coerceIn(40, 255)
+        nameTag.setBackgroundResource(if (dark) R.drawable.name_tag_dark else R.drawable.name_tag_light)
+        nameTag.setTextColor(if (dark) 0xFFF3E3BF.toInt() else 0xFF1E1E22.toInt())
+        dialogText.setTextColor(
+            when {
+                dark -> 0xFFF3E9D6.toInt()
+                narration -> 0xFF4A4A54.toInt()
+                else -> 0xFF2A2A2E.toInt()
+            }
+        )
+        // Kenangan memakai huruf klasik agar terasa seperti cerita lama
+        val style = if (memoryMode && settings.fontStyle == GameSettings.FontStyle.MODERN)
+            GameSettings.FontStyle.CLASSIC else settings.fontStyle
+        dialogText.typeface = GameSettings.typeface(this, style, italic = narration)
     }
 
     // ================================================================== isi nama
@@ -194,7 +310,6 @@ class GameActivity : Activity() {
         val name = nameInput.text.toString().trim().replace(Regex("\\s+"), " ")
         if (name.isEmpty()) {
             nameError.visibility = View.VISIBLE
-            nameInput.animate().cancel()
             nameInput.translationX = 0f
             val d = resources.displayMetrics.density
             ValueAnimator.ofFloat(0f, 1f).apply {
@@ -226,7 +341,18 @@ class GameActivity : Activity() {
 
     // ================================================================== naskah
 
+    private fun loadScript(path: String) {
+        scriptPath = path
+        script = try {
+            assets.open(path).bufferedReader().use { StoryScript.parse(it.readLines()) }
+        } catch (e: Exception) {
+            Toast.makeText(this, getString(R.string.script_error, e.message), Toast.LENGTH_LONG).show()
+            emptyList()
+        }
+    }
+
     private fun startScript() {
+        storyStarted = true
         pc = 0
         wait = Wait.BUSY
         next()
@@ -235,6 +361,7 @@ class GameActivity : Activity() {
     /** Jalankan perintah naskah berikutnya sampai ada yang perlu ditunggu. */
     private fun next() {
         while (pc < script.size) {
+            currentIndex = pc
             when (val c = script[pc++]) {
                 is Cmd.Background -> { changeBackground(c) { next() }; return }
                 is Cmd.FadeToBlack -> { hideDialog(); fadeBlack(1f, c.ms) { next() }; return }
@@ -245,12 +372,10 @@ class GameActivity : Activity() {
                 is Cmd.Pause -> { handler.postDelayed({ next() }, c.ms); return }
                 is Cmd.Line -> { showLine(c.speaker, c.text); return }
                 is Cmd.PhoneIcon -> setPhoneIconVisible(c.visible)
-                is Cmd.PhoneMessage -> {
-                    setPhoneIconVisible(true)
-                    phone.addMessage(fill(c.sender), fill(c.text))
-                    phoneIcon.ring(true)
-                }
+                is Cmd.PhoneMessage -> receiveMessage(fill(c.sender), fill(c.text))
                 is Cmd.WaitForPhone -> { waitForPhone(); return }
+                is Cmd.Music -> if (c.name == null) audio.stopMusic() else audio.playMusic(c.name)
+                is Cmd.Sound -> audio.playSound(c.name)
                 is Cmd.End -> { endStory(c.text); return }
             }
         }
@@ -269,11 +394,82 @@ class GameActivity : Activity() {
         }
     }
 
+    // ================================================================== simpan & muat
+
+    private fun snapshot(): SaveData? {
+        if (!storyStarted || wait == Wait.BUSY) return null
+        val preview = when {
+            wait == Wait.PHONE -> "📱 ${messages.firstOrNull()?.first.orEmpty()}"
+            currentSpeaker != null -> "$currentSpeaker: $fullText"
+            else -> fullText.toString()
+        }
+        return SaveData(
+            script = scriptPath,
+            index = currentIndex,
+            playerName = playerName,
+            bg = bgName,
+            memory = memoryMode,
+            motion = bgMotion.name,
+            clock = clockText,
+            music = audio.musicName,
+            phoneIcon = phoneIcon.visibility == View.VISIBLE,
+            ringing = phoneIcon.ringing,
+            messages = messages.toList(),
+            log = log.toList(),
+            preview = preview,
+            savedAt = System.currentTimeMillis(),
+        )
+    }
+
+    private fun autoSave() {
+        snapshot()?.let { SaveStore.write(this, SaveStore.AUTO_SLOT, it) }
+    }
+
+    /** Pulihkan layar persis seperti saat disimpan, lalu lanjutkan dari kalimat itu. */
+    private fun restore(d: SaveData) {
+        playerName = d.playerName
+        loadScript(d.script)
+        storyStarted = true
+        wait = Wait.BUSY
+        black.alpha = 1f
+
+        memoryMode = d.memory
+        bgName = d.bg
+        bgMotion = runCatching { Motion.valueOf(d.motion) }.getOrDefault(Motion.NONE)
+        if (d.bg != null) {
+            val motion = if (bgMotion == Motion.PAN) Motion.PAN else Motion.NONE
+            bg.show(loadBackground(d.bg), d.memory, motion, instant = true) {}
+        }
+        vignette.alpha = if (d.memory) 1f else 0f
+        setClock(d.clock)
+        d.music?.let { audio.playMusic(it) }
+
+        if (d.phoneIcon) setPhoneIconVisible(true)
+        d.messages.forEach { (from, text) ->
+            messages.add(from to text)
+            phone.addMessage(from, text)
+        }
+        if (d.ringing) phoneIcon.ring(true)
+
+        log.clear()
+        log.addAll(d.log)
+        updateBurger()
+        applyDialogStyle()
+
+        pc = d.index.coerceIn(0, script.size)
+        // Kalimat yang disimpan akan tampil lagi, jangan sampai dobel di riwayat
+        if (log.isNotEmpty() && script.getOrNull(pc) is Cmd.Line) log.removeLast()
+        handler.postDelayed({ fadeBlack(0f, 900) { next() } }, 300)
+    }
+
     // ================================================================== background & efek
 
     private fun changeBackground(c: Cmd.Background, done: () -> Unit) {
         val instant = black.alpha >= 0.99f
         memoryMode = c.memory
+        bgName = c.name
+        bgMotion = c.motion
+        updateBurger()
         hideDialog {
             vignette.animate().alpha(if (c.memory) 1f else 0f)
                 .setDuration(if (instant) 0 else BackgroundLayer.CROSSFADE_MS).start()
@@ -369,14 +565,16 @@ class GameActivity : Activity() {
 
     private fun showLine(speaker: String?, raw: String) {
         val text = fill(raw)
-        val narration = speaker == null
-        applyDialogStyle(narration)
+        val who = speaker?.let { fill(it) }
+        narrationLine = who == null
+        currentSpeaker = who
+        applyDialogStyle()
 
-        if (narration) {
+        if (who == null) {
             nameTag.visibility = View.INVISIBLE
         } else {
             nameTag.visibility = View.VISIBLE
-            nameTag.text = fill(speaker!!)
+            nameTag.text = who
         }
 
         if (dialog.alpha < 1f) {
@@ -385,14 +583,21 @@ class GameActivity : Activity() {
             dialog.animate().alpha(1f).translationY(0f).setDuration(260).start()
         }
 
+        log.addLast(who to text)
+        while (log.size > LOG_LIMIT) log.removeFirst()
+
         fullText = text
         typed = 0
+        wait = Wait.TAP
+        handler.removeCallbacks(typeTick)
+        if (settings.typeDelayMs <= 0L) {
+            finishTyping()
+            return
+        }
         typing = true
         setIndicator(false)
         dialogText.text = typedText()
-        handler.removeCallbacks(typeTick)
-        handler.postDelayed(typeTick, TYPE_DELAY_MS)
-        wait = Wait.TAP
+        handler.postDelayed(typeTick, settings.typeDelayMs)
     }
 
     private val typeTick = object : Runnable {
@@ -403,7 +608,7 @@ class GameActivity : Activity() {
                 finishTyping()
             } else {
                 dialogText.text = typedText()
-                handler.postDelayed(this, TYPE_DELAY_MS)
+                handler.postDelayed(this, settings.typeDelayMs.coerceAtLeast(1L))
             }
         }
     }
@@ -423,22 +628,6 @@ class GameActivity : Activity() {
         typed = fullText.length
         dialogText.text = fullText
         setIndicator(true)
-    }
-
-    private fun applyDialogStyle(narration: Boolean) {
-        if (memoryMode) {
-            dialogBox.setBackgroundResource(R.drawable.dialog_dark)
-            nameTag.setBackgroundResource(R.drawable.name_tag_dark)
-            nameTag.setTextColor(0xFFF3E3BF.toInt())
-            dialogText.setTextColor(0xFFF3E9D6.toInt())
-            dialogText.typeface = if (narration) serifItalic else Typeface.SERIF
-        } else {
-            dialogBox.setBackgroundResource(R.drawable.dialog_light)
-            nameTag.setBackgroundResource(R.drawable.name_tag_light)
-            nameTag.setTextColor(0xFF1E1E22.toInt())
-            dialogText.setTextColor(if (narration) 0xFF4A4A54.toInt() else 0xFF2A2A2E.toInt())
-            dialogText.typeface = if (narration) sansItalic else Typeface.DEFAULT
-        }
     }
 
     private fun setIndicator(show: Boolean) {
@@ -465,6 +654,134 @@ class GameActivity : Activity() {
         dialog.animate().alpha(0f).setDuration(220).withEndAction { done?.invoke() }.start()
     }
 
+    // ================================================================== menu (burger)
+
+    /** Tombol burger hanya muncul di masa kini (bukan saat adegan kenangan). */
+    private fun updateBurger() {
+        val show = storyStarted && !memoryMode
+        if (show && burger.visibility != View.VISIBLE) {
+            burger.visibility = View.VISIBLE
+            burger.alpha = 0f
+            burger.animate().alpha(1f).setDuration(500).start()
+        } else if (!show && burger.visibility == View.VISIBLE) {
+            burger.animate().alpha(0f).setDuration(300).withEndAction {
+                if (memoryMode) burger.visibility = View.GONE
+            }.start()
+        }
+    }
+
+    private fun setupGameMenu() {
+        burger.setOnClickListener { openGameMenu() }
+        gameMenu.setOnClickListener { closeGameMenu() }
+        findViewById<View>(R.id.menu_resume).setOnClickListener { closeGameMenu() }
+        findViewById<View>(R.id.menu_save).setOnClickListener {
+            val snap = snapshot()
+            if (snap == null) {
+                Toast.makeText(this, R.string.save_wait, Toast.LENGTH_SHORT).show()
+            } else {
+                closeGameMenu()
+                openSaveLoad(SaveLoadActivity.MODE_SAVE, snap)
+            }
+        }
+        findViewById<View>(R.id.menu_load).setOnClickListener {
+            closeGameMenu()
+            openSaveLoad(SaveLoadActivity.MODE_LOAD, null)
+        }
+        findViewById<View>(R.id.menu_log).setOnClickListener {
+            closeGameMenu()
+            openLog()
+        }
+        findViewById<View>(R.id.menu_settings).setOnClickListener {
+            closeGameMenu()
+            startActivity(Intent(this, SettingsActivity::class.java))
+            @Suppress("DEPRECATION")
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+        findViewById<View>(R.id.menu_main).setOnClickListener {
+            closeGameMenu()
+            confirmLeave()
+        }
+        findViewById<View>(R.id.log_close).setOnClickListener { closeLog() }
+    }
+
+    private fun openGameMenu() {
+        if (gameMenu.visibility == View.VISIBLE) return
+        gameMenu.visibility = View.VISIBLE
+        gameMenu.alpha = 0f
+        gameMenu.animate().alpha(1f).setDuration(200).start()
+        val card = findViewById<View>(R.id.game_menu_card)
+        card.scaleX = 0.92f
+        card.scaleY = 0.92f
+        card.animate().scaleX(1f).scaleY(1f).setDuration(260)
+            .setInterpolator(DecelerateInterpolator(2f)).start()
+    }
+
+    private fun closeGameMenu() {
+        if (gameMenu.visibility != View.VISIBLE) return
+        gameMenu.animate().alpha(0f).setDuration(180).withEndAction {
+            gameMenu.visibility = View.GONE
+        }.start()
+    }
+
+    private fun openSaveLoad(mode: String, snap: SaveData?) {
+        val i = Intent(this, SaveLoadActivity::class.java)
+            .putExtra(SaveLoadActivity.EXTRA_MODE, mode)
+        snap?.let { i.putExtra(SaveLoadActivity.EXTRA_STATE, it.toJson()) }
+        @Suppress("DEPRECATION")
+        startActivityForResult(i, if (mode == SaveLoadActivity.MODE_SAVE) REQ_SAVE else REQ_LOAD)
+        @Suppress("DEPRECATION")
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
+
+    private fun openLog() {
+        val list = findViewById<LinearLayout>(R.id.log_list)
+        list.removeAllViews()
+        val d = resources.displayMetrics.density
+        if (log.isEmpty()) {
+            list.addView(TextView(this).apply {
+                setText(R.string.log_empty)
+                setTextColor(0xB3FFFFFF.toInt())
+                textSize = 15f
+            })
+        }
+        log.forEach { (who, text) ->
+            val item = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setBackgroundResource(R.drawable.log_item)
+                setPadding((14 * d).toInt(), (10 * d).toInt(), (14 * d).toInt(), (12 * d).toInt())
+            }
+            if (who != null) {
+                item.addView(TextView(this).apply {
+                    this.text = who
+                    setTextColor(0xFFF2D58C.toInt())
+                    textSize = 14f
+                    typeface = Typeface.DEFAULT_BOLD
+                })
+            }
+            item.addView(TextView(this).apply {
+                this.text = text
+                setTextColor(if (who == null) 0xFFD9D2C3.toInt() else 0xFFF6F1E6.toInt())
+                textSize = 16f
+                typeface = GameSettings.typeface(this@GameActivity, settings.fontStyle, italic = who == null)
+                setLineSpacing(0f, 1.15f)
+            })
+            list.addView(item, LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { bottomMargin = (8 * d).toInt() })
+        }
+        logOverlay.visibility = View.VISIBLE
+        logOverlay.alpha = 0f
+        logOverlay.animate().alpha(1f).setDuration(220).start()
+        val scroll = findViewById<ScrollView>(R.id.log_scroll)
+        scroll.post { scroll.fullScroll(View.FOCUS_DOWN) }
+    }
+
+    private fun closeLog() {
+        logOverlay.animate().alpha(0f).setDuration(180).withEndAction {
+            logOverlay.visibility = View.GONE
+        }.start()
+    }
+
     // ================================================================== HP
 
     private fun setPhoneIconVisible(visible: Boolean) {
@@ -474,6 +791,29 @@ class GameActivity : Activity() {
             phoneIcon.animate().alpha(1f).setDuration(500).start()
         } else if (!visible) {
             phoneIcon.visibility = View.GONE
+        }
+    }
+
+    private fun receiveMessage(sender: String, text: String) {
+        setPhoneIconVisible(true)
+        messages.add(sender to text)
+        phone.addMessage(sender, text)
+        phoneIcon.ring(true)
+        audio.playSound("notifikasi")
+        vibrate()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun vibrate() {
+        if (!settings.vibration) return
+        try {
+            val v: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                (getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+            } else {
+                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            }
+            v.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 140, 110, 140), -1))
+        } catch (_: Exception) {
         }
     }
 

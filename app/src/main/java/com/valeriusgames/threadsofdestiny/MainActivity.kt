@@ -17,6 +17,7 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.ImageView
+import com.valeriusgames.threadsofdestiny.settings.GameSettings
 import kotlin.math.max
 
 /**
@@ -157,7 +158,7 @@ class MainActivity : Activity() {
 
     private fun startVideoStage() {
         if (stage != Stage.SPLASH) return
-        if (videoFailed) {
+        if (videoFailed || GameSettings.load(this).skipIntro) {
             finishVideo()
             return
         }
@@ -230,6 +231,8 @@ class MainActivity : Activity() {
             mp.setSurface(surface)
             mp.setOnPreparedListener {
                 playerPrepared = true
+                val vol = GameSettings.load(this).musicVolume
+                it.setVolume(vol, vol)
                 applyCenterCrop(it.videoWidth, it.videoHeight)
                 if (videoPosition > 0) it.seekTo(videoPosition)
                 if (stage == Stage.VIDEO && isActive) it.start()

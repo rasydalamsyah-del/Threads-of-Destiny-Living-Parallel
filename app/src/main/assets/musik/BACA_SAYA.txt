@@ -1,0 +1,2 @@
+Taruh file musik latar (.mp3/.ogg) di sini.
+Pakai di naskah: @musik nama_file
