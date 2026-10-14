@@ -72,8 +72,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete latest-build --cleanup-tag --yes || true
+          # Beri jeda agar penghapusan tag lama selesai diproses GitHub
+          sleep 5
           gh release create latest-build "${{ steps.apk.outputs.name }}" \
             --target "${GITHUB_SHA}" \
             --prerelease \
             --title "Build terbaru (v${{ steps.apk.outputs.version }} · build ${GITHUB_RUN_NUMBER})" \
             --notes "APK otomatis dari commit ${GITHUB_SHA::7}. Unduh file .apk di bawah, lalu install di HP Android."
+          # Pastikan rilis tidak tertinggal sebagai draft (draft tidak terlihat di halaman rilis)
+          for i in 1 2 3; do
+            if [ "$(gh release view latest-build --json isDraft -q .isDraft)" = "false" ]; then break; fi
+            gh release edit latest-build --draft=false --prerelease || true
+            sleep 3
+          done
+          gh release view latest-build --json isDraft,tagName,assets -q '"draft=\(.isDraft) tag=\(.tagName) aset=\(.assets|length)"'
