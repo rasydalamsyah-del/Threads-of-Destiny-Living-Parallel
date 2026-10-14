@@ -82,7 +82,7 @@ Nadia: ...Begitu.
 @gelap 1500
 @waktu Sabtu sore — Stasiun Besar Sakala
 @kalender Sabtu sore
-@latar kota_besar
+@latar stasiun_besar
 @terang 1500
 * Stasiun Besar Sakala, jam pulang kerja. Ribuan orang berdesakan.
 @jika petunjuk_sahabat >= 4 -> stasiun_dekat
