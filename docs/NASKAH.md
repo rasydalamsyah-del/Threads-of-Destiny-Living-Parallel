@@ -192,6 +192,11 @@ Jam ini juga dipakai di layar kunci HP.
 - Pemain bisa **mengajak ketemu** lewat Chat. Datang = `menepati_janji`, tidak datang = `ingkar_janji` (+ pesan kecewa).
 - Variabel otomatis: `misterius_dibalas` (pemain membalas Nomor Tidak Dikenal), `bohong_wawancara_<id_pekerjaan>`.
 
+### Profil karakter
+```
+@info bayu hobi                   pemain mengetahui info profil (hobi, kegemaran, pelajaran, keahlian, cita_cita, kisah_1..3, semua)
+```
+
 ### Tutorial & mulai ulang
 ```
 @mulai_ulang                      hapus semua hasil latihan (hidup, hubungan, HP, variabel); nama & kelamin tetap
@@ -202,7 +207,7 @@ Jam ini juga dipakai di layar kunci HP.
 @tunjuk hp kalender | Penjelasan...<br>baris baru      tampilkan bagian layar + kotak penjelasan (ketuk untuk lanjut)
 @tunjuk status bawah | ...                             kotak penjelasan di bawah (default di atas)
 ```
-Bagian yang bisa ditunjuk: `menu`, `panel`, `status`, `tas`, `belanja`, `jam`, `bebas`, `ikon_hp`, `hp` (+ nama aplikasi:
+Bagian yang bisa ditunjuk: `menu`, `panel`, `karakter`, `karakter_detail <id>`, `status`, `tas`, `belanja`, `jam`, `bebas`, `ikon_hp`, `hp` (+ nama aplikasi:
 `chat`, `kontak`, `kalender`, `lowongan`, `dompet`, `catatan`, `sosmed`), `kerja`, `kos`.
 
 ### Kejadian & sekolah

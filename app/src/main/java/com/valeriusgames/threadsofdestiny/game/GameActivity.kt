@@ -375,6 +375,13 @@ class GameActivity : Activity() {
             } else false
         }
         findViewById<FantasyButton>(R.id.name_ok).setOnClickListener { confirmName() }
+        findViewById<View>(R.id.name_back).setOnClickListener {
+            (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                .hideSoftInputFromWindow(nameInput.windowToken, 0)
+            finish()
+            @Suppress("DEPRECATION")
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
 
         playerGender = prefs.getString(KEY_GENDER, "") ?: ""
         findViewById<View>(R.id.gender_male).setOnClickListener { selectGender(GENDER_MALE) }
@@ -459,11 +466,11 @@ class GameActivity : Activity() {
         nameInput.clearFocus()
 
         nameEntry.isClickable = false
-        nameEntry.animate().alpha(0f).setDuration(900).withEndAction {
+        nameEntry.animate().alpha(0f).setDuration(450).withEndAction {
             nameEntry.visibility = View.GONE
             nameSparkles.stop()
             enterImmersiveMode()
-            handler.postDelayed({ startScript() }, 500)
+            handler.postDelayed({ startScript() }, 120)
         }.start()
     }
 
@@ -502,7 +509,17 @@ class GameActivity : Activity() {
                 is Cmd.Blink -> { blink { next() }; return }
                 is Cmd.Clock -> setClock(c.text)
                 is Cmd.Pause -> { handler.postDelayed({ next() }, c.ms); return }
-                is Cmd.Line -> { showLine(c.speaker, c.text); return }
+                is Cmd.Line -> {
+                    showLine(c.speaker, c.text)
+                    // Kalimat tepat sebelum @pilihan: tombol pilihan langsung muncul bersama pertanyaannya
+                    val nextCmd = script.getOrNull(pc)
+                    if (nextCmd is Cmd.Choice) {
+                        currentIndex = pc
+                        pc++
+                        showChoices(nextCmd)
+                    }
+                    return
+                }
                 is Cmd.PhoneIcon -> setPhoneIconVisible(c.visible)
                 is Cmd.PhoneMessage -> receiveMessage(fill(c.sender), fill(c.text))
                 is Cmd.WaitForPhone -> { waitForPhone(); return }
@@ -621,6 +638,11 @@ class GameActivity : Activity() {
                 }
                 is Cmd.End -> { endStory(c.text); return }
                 is Cmd.ResetState -> resetForStory()
+                is Cmd.Info -> gameData.characters[c.id]?.let { ch ->
+                    val keys = if (c.key == "semua") facts.map { it.key } else listOf(c.key)
+                    keys.filter { ch.text[it] != null }.forEach { learnFact(ch, it) }
+                    notice("📖 Info baru tentang ${ch.name}")
+                }
                 is Cmd.Show -> { showTour(c); return }
             }
         }
@@ -1008,6 +1030,10 @@ class GameActivity : Activity() {
             closeGameMenu()
             openLog()
         }
+        findViewById<View>(R.id.menu_chars).setOnClickListener {
+            closeGameMenu()
+            openCharacterList(currentSheetReturn())
+        }
         findViewById<View>(R.id.menu_settings).setOnClickListener {
             closeGameMenu()
             startActivity(Intent(this, SettingsActivity::class.java))
@@ -1184,8 +1210,7 @@ class GameActivity : Activity() {
         val show = life.active && storyStarted && !memoryMode
         if (show && lifeDrawer.visibility != View.VISIBLE) {
             lifeDrawer.visibility = View.VISIBLE
-            lifeDrawer.alpha = 0f
-            lifeDrawer.animate().alpha(1f).setDuration(400).start()
+            lifeDrawer.alpha = 1f
             lifeDrawer.post { setHudOpen(hudOpen, animate = false) }
         } else if (!show) {
             lifeDrawer.visibility = View.GONE
@@ -1212,6 +1237,7 @@ class GameActivity : Activity() {
         val w = lifeHud.width.takeIf { it > 0 } ?: lifeHud.measuredWidth
         val x = if (open) 0f else -w.toFloat()
         lifeDrawer.animate().cancel()
+        lifeDrawer.alpha = 1f   // jangan sampai animasi muncul (alpha) ikut terbatalkan
         if (animate) lifeDrawer.animate().translationX(x).setDuration(260)
             .setInterpolator(DecelerateInterpolator()).start()
         else lifeDrawer.translationX = x
@@ -2134,6 +2160,8 @@ class GameActivity : Activity() {
             "belanja" -> openShop()
             "kerja" -> openJobSearch()
             "kos" -> openKosSearch()
+            "karakter" -> openCharacterList(null)
+            "karakter_detail" -> gameData.characters[c.sub ?: ""]?.let { openCharacterDetail(it, null) }
             "bebas" -> {
                 pendingEvents.clear()
                 freeLeft = 2
@@ -2176,7 +2204,7 @@ class GameActivity : Activity() {
             "hp" -> phone.close()
             "status" -> setHudOpen(false)
             "bebas" -> { freeLeft = 0; closeSheet() }
-            "tas", "belanja", "kerja", "kos" -> closeSheet()
+            "tas", "belanja", "kerja", "kos", "karakter", "karakter_detail" -> closeSheet()
         }
         tourTarget = null
         wait = Wait.BUSY
@@ -2192,6 +2220,156 @@ class GameActivity : Activity() {
                 }.start()
             }.start()
         }.start()
+    }
+
+    // ================================================================== profil karakter
+
+    /** Info profil & syarat terbukanya: Cinta minimal, jumlah obrolan, Kepercayaan, bisa diceritakan orang lain. */
+    private data class Fact(val key: String, val label: String, val love: Int, val talks: Int, val trust: Int, val gossip: Boolean)
+
+    private val facts = listOf(
+        Fact("hobi", "🎯 Hobi", 20, 1, 0, true),
+        Fact("kegemaran", "⭐ Kegemaran", 30, 2, 0, true),
+        Fact("pelajaran", "📘 Pelajaran favorit", 30, 2, 0, true),
+        Fact("keahlian", "🛠️ Keahlian", 30, 2, 0, true),
+        Fact("cita_cita", "🌠 Cita-cita", 45, 3, 0, true),
+        Fact("kisah_1", "📖 Kisah hidupnya (1)", 40, 3, 0, true),
+        Fact("kisah_2", "📖 Kisah hidupnya (2)", 60, 6, 55, false),
+        Fact("kisah_3", "📖 Kisah hidupnya (3)", 80, 10, 75, false),
+    )
+
+    private fun initialFacts(c: GameData.CharacterDef): Set<String> =
+        c.text["tahu_awal"]?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }?.toSet() ?: emptySet()
+
+    private fun knowsFact(c: GameData.CharacterDef, key: String): Boolean {
+        val r = social.rel(c)
+        return "f:$key" in r.known || ((r.met || c.text["tampil_awal"] == "ya") && key in initialFacts(c))
+    }
+
+    /** Karakter tampil di daftar bila sudah dikenal, pernah diceritakan orang lain, atau tampil_awal. */
+    private fun profileVisible(c: GameData.CharacterDef): Boolean {
+        val r = social.rel(c)
+        return r.met || c.text["tampil_awal"] == "ya" || r.known.any { it.startsWith("f:") }
+    }
+
+    private fun learnFact(c: GameData.CharacterDef, key: String) {
+        social.rel(c).known += "f:$key"
+    }
+
+    /** Setelah mengobrol: buka satu info baru tentang karakter itu bila syaratnya terpenuhi. */
+    private fun revealOwnFact(c: GameData.CharacterDef, talks: Int): String? {
+        val r = social.rel(c)
+        val love = if (social.isPartner(c)) maxOf(r.love, r.romance) else r.love
+        val f = facts.firstOrNull { f ->
+            c.text[f.key] != null && !knowsFact(c, f.key) &&
+                love >= f.love && talks >= f.talks && r.trust >= f.trust
+        } ?: return null
+        learnFact(c, f.key)
+        notice("📖 Info baru tentang ${c.name}: ${f.label.substringAfter(' ')}")
+        return "📖 ${c.name} bercerita — ${f.label.substringAfter(' ')}:\n" + fill(c.text[f.key] ?: "")
+    }
+
+    /** Kadang ia bercerita tentang orang dekatnya (keluarga/teman) yang belum kamu ketahui. */
+    private fun gossipFact(c: GameData.CharacterDef): String? {
+        if (social.rel(c).love < 35 || kotlin.random.Random.nextInt(100) >= 30) return null
+        val options = gameData.relationsOf(c.id).mapNotNull { (otherId, _) ->
+            val o = gameData.characters[otherId] ?: return@mapNotNull null
+            if (o.text["daftar"] == "tidak") return@mapNotNull null
+            val f = facts.firstOrNull { it.gossip && o.text[it.key] != null && !knowsFact(o, it.key) } ?: return@mapNotNull null
+            o to f
+        }
+        val (o, f) = options.randomOrNull() ?: return null
+        learnFact(o, f.key)
+        notice("🗣️ Kamu jadi tahu tentang ${o.name}")
+        return "🗣️ ${c.name} bercerita tentang ${o.name} — ${f.label.substringAfter(' ')}:\n" + fill(o.text[f.key] ?: "")
+    }
+
+    private fun openCharacterList(returnTo: (() -> Unit)?) {
+        val back: () -> Unit = { if (returnTo != null) returnTo() else closeSheet() }
+        val all = gameData.characters.values.filter { it.text["daftar"] != "tidak" }
+        val shown = all.count { profileVisible(it) }
+        openSheet("👥 Karakter", "$shown dari ${all.size} karakter kamu ketahui", back)
+        all.forEach { c ->
+            if (profileVisible(c)) {
+                val r = social.rel(c)
+                val love = if (social.isPartner(c)) "❤️ ${r.romance}" else "💛 ${r.love}"
+                val known = facts.count { c.text[it.key] != null && knowsFact(c, it.key) }
+                val total = facts.count { c.text[it.key] != null }
+                sheetList.addView(card(
+                    title = c.name,
+                    sub = c.role + "\n" + (if (r.met) "${social.stageOf(c).label}   ·   $love   🤝 ${r.trust}" else "Belum bertemu langsung"),
+                    note = "📖 Info terbuka $known/$total",
+                ) { openCharacterDetail(c, returnTo) })
+            } else {
+                sheetList.addView(card(
+                    title = "🔒  ???",
+                    sub = "Belum kamu kenal. Siapa tahu kalian akan bertemu, atau kamu mendengar tentangnya dari orang lain.",
+                    enabled = false,
+                ))
+            }
+        }
+        sheetButtonRow(getString(R.string.btn_back) to back)
+    }
+
+    private fun openCharacterDetail(c: GameData.CharacterDef, returnTo: (() -> Unit)?) {
+        val r = social.rel(c)
+        val d = resources.displayMetrics.density
+        openSheet(c.name, c.role) { openCharacterList(returnTo) }
+        charBitmap(c.id, "biasa")?.let { bmp ->
+            sheetList.addView(android.widget.ImageView(this).apply {
+                setImageBitmap(bmp)
+                scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+                adjustViewBounds = true
+                if (!r.met) colorFilter = android.graphics.PorterDuffColorFilter(0xAA101425.toInt(), android.graphics.PorterDuff.Mode.SRC_ATOP)
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (260 * d).toInt()))
+        }
+        sheetList.addView(infoText(buildString {
+            append("🎂 Usia ").append(social.ageOf(c, playerAge())).append(" tahun")
+            if (r.met) append("   ·   ").append(social.stageOf(c).label)
+            else append("   ·   belum bertemu langsung")
+        }))
+        if (r.met) {
+            fun bar(label: String, v: Int, color: Int) {
+                sheetList.addView(TextView(this).apply {
+                    text = "$label   $v / 100"
+                    setTextColor(0xFFF6E7C8.toInt())
+                    textSize = 13.5f
+                    setPadding(0, (8 * d).toInt(), 0, (2 * d).toInt())
+                })
+                sheetList.addView(android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
+                    max = 100
+                    progress = v
+                    progressTintList = android.content.res.ColorStateList.valueOf(color)
+                    progressBackgroundTintList = android.content.res.ColorStateList.valueOf(0x40FFFFFF)
+                }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (10 * d).toInt()))
+            }
+            bar("💛 Cinta", r.love, 0xFFE0A93B.toInt())
+            if (social.isPartner(c)) bar("❤️ Cinta pasangan", r.romance, 0xFFE0556B.toInt())
+            bar("🤝 Kepercayaan", r.trust, 0xFF4C9FD6.toInt())
+            c.text["sifat"]?.let {
+                sheetList.addView(sectionLabel("✨ Sifat"))
+                sheetList.addView(infoText(it.replaceFirstChar { ch -> ch.uppercase() }))
+            }
+            fun knownNames(prefix: String) = r.known.filter { it.startsWith(prefix) }.mapNotNull { k ->
+                val id = k.substring(3)
+                gameData.topics[id]?.name ?: gameData.items[id]?.name
+            }
+            val likes = knownNames("+t:") + knownNames("+i:")
+            val hates = knownNames("-t:") + knownNames("-i:")
+            sheetList.addView(sectionLabel("👍 Suka"))
+            sheetList.addView(infoText(likes.joinToString(", ").ifEmpty { "🔒 Belum diketahui · coba ajak ngobrol berbagai topik atau beri hadiah" }))
+            sheetList.addView(sectionLabel("👎 Tidak suka"))
+            sheetList.addView(infoText(hates.joinToString(", ").ifEmpty { "🔒 Belum diketahui" }))
+        }
+        facts.filter { c.text[it.key] != null }.forEach { f ->
+            sheetList.addView(sectionLabel(f.label))
+            sheetList.addView(infoText(
+                if (knowsFact(c, f.key)) fill(c.text[f.key] ?: "")
+                else if (f.key.startsWith("kisah")) "🔒 Akan terbuka saat kalian makin dekat dan saling percaya."
+                else "🔒 Belum diketahui · makin akrab, makin banyak yang ia ceritakan. Teman dekatnya juga mungkin tahu."
+            ))
+        }
+        sheetButtonRow(getString(R.string.btn_back) to { openCharacterList(returnTo) })
     }
 
     /** Bersihkan semua hasil tutorial sebelum cerita sungguhan dimulai. */
@@ -3435,7 +3613,14 @@ class GameActivity : Activity() {
             afterTap = {
                 announce(social.changeLove(gameData, c.id, delta))
                 showCharacter(c.id, if (delta > 2) "senyum" else if (delta < 0) "kesal" else "biasa", "tengah")
-                afterTap = { meetingMenu(c) }
+                // Makin akrab, makin banyak yang ia ceritakan (atau ia bercerita tentang orang lain)
+                val talks = (vars["obrolan_${c.id}"]?.toIntOrNull() ?: 0) + 1
+                vars["obrolan_${c.id}"] = talks.toString()
+                val story = if (delta >= 0) revealOwnFact(c, talks) ?: gossipFact(c) else null
+                afterTap = if (story != null) ({
+                    afterTap = { meetingMenu(c) }
+                    showLine(null, story)
+                }) else ({ meetingMenu(c) })
                 showLine(c.name, c.text[key] ?: "...")
             }
             showLine("{nama}", t.line)

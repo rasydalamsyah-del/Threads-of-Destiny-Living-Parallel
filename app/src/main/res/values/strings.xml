@@ -43,6 +43,7 @@
     <string name="menu_save">SIMPAN</string>
     <string name="menu_load">MUAT</string>
     <string name="menu_log">RIWAYAT</string>
+    <string name="menu_chars">KARAKTER</string>
     <string name="menu_settings">PENGATURAN</string>
     <string name="menu_main">MENU UTAMA</string>
     <string name="log_title">RIWAYAT</string>

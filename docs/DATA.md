@@ -96,6 +96,32 @@ warna       = #2E8B57
 - `nama` juga dipakai sebagai **nama pembicara** di naskah (`Bayu: ...`). Saat karakter bicara, panel foto + nama + meter muncul di pojok kiri atas (setelah dikenal lewat `@kenal`).
 - `usia` bertambah bersama usia pemain. **Romansa hanya terbuka bila pemain dan karakter sama-sama 18 tahun ke atas**, lawan jenis, dan `bisa_dipacari = ya`.
 
+### Profil karakter (☰ Menu → Karakter)
+```
+hobi        = Memancing di ujung dermaga
+kegemaran   = Gorengan & kopi sachet
+pelajaran   = Olahraga            (anak sekolah)   ·   keahlian = ...   (orang dewasa)
+cita_cita   = Punya kapal ikan sendiri
+kisah_1 / kisah_2 / kisah_3 = cerita hidupnya, makin dalam makin sulit dibuka
+tahu_awal   = hobi, kegemaran     (sudah diketahui sejak kenal, mis. keluarga sendiri)
+tampil_awal = ya                  (tampil di daftar walau belum bertemu, mis. sahabat masa kecil)
+daftar      = tidak               (tidak tampil di daftar)
+```
+Cara info terbuka:
+| Info | Lewat obrolan langsung (syarat) | Bisa diceritakan orang lain? |
+|---|---|---|
+| Hobi | Cinta ≥ 20, sudah 1× ngobrol | ✅ |
+| Kegemaran / Pelajaran / Keahlian | Cinta ≥ 30, 2× ngobrol | ✅ |
+| Cita-cita | Cinta ≥ 45, 3× ngobrol | ✅ |
+| Kisah 1 | Cinta ≥ 40, 3× ngobrol | ✅ |
+| Kisah 2 | Cinta ≥ 60, 6× ngobrol, Kepercayaan ≥ 55 | ❌ |
+| Kisah 3 | Cinta ≥ 80, 10× ngobrol, Kepercayaan ≥ 75 | ❌ |
+
+- Satu info baru per obrolan (yang tidak membuatnya kesal). Muncul sebagai kalimat "📖 Bayu bercerita — Hobi: ...".
+- Kadang (30%, bila Cinta ≥ 35) ia bercerita tentang orang dekatnya (dari `hubungan.txt`). Karakter yang belum pernah ditemui pun jadi muncul di daftar.
+- Kesukaan/ketidaksukaan topik & barang terbuka saat dicoba (ngobrol/hadiah).
+- Dari naskah: `@info bayu hobi` (atau `@info bayu semua`).
+
 ### Ngobrol & hadiah (waktu bebas → Temui seseorang)
 | Aksi | Akibat ke Cinta |
 |---|---|

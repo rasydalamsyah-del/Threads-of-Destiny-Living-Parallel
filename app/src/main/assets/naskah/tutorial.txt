@@ -45,6 +45,9 @@ Pemandu: Contoh akibat lain: kamu ingkar janji pada Sekar. Bayu, sahabat Sekar, 
 Pemandu: Contoh lagi: kalau hubunganmu sangat buruk dengan Bayu, dia bisa melarang Sekar bertemu denganmu.
 Pemandu: Kebohongan juga tercatat. Contoh: kamu bilang ke Ibu tidak bekerja, padahal bekerja. Kalau suatu hari ketahuan, Cinta dan Kepercayaan Ibu jatuh drastis.
 Pemandu: Tingkat hubungan: kenalan → teman → teman dekat → sahabat. Saat dewasa (18+): pacaran → tunangan → menikah.
+@tunjuk karakter_detail bayu bawah | Ini halaman KARAKTER (☰ Menu → Karakter). Isinya: gambar, usia, tingkat hubungan, bar 💛 Cinta & 🤝 Kepercayaan, sifat, kesukaan, hobi, cita-cita, dan kisah hidupnya.<br><br>Yang bergembok 🔒 belum kamu ketahui.
+@tunjuk karakter_detail bayu bawah | Cara membukanya: makin sering ngobrol dan makin akrab, makin banyak yang ia ceritakan. Kisah terdalam butuh kepercayaan tinggi.<br><br>Contoh: Sekar, sahabat Bayu, bisa saja bercerita tentang cita-cita Bayu sebelum Bayu sendiri menceritakannya.
+@tunjuk karakter bawah | Daftar semua karakter. Yang belum kamu kenal tampil 🔒 ???. Mereka terbuka saat kalian bertemu, atau saat ada orang lain yang bercerita tentang mereka.
 
 # ---------- 3. ENDING ----------
 @waktu 3 · Jalan hidupmu menentukan ending

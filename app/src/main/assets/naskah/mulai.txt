@@ -1,9 +1,9 @@
 # ==========================================================
 #  LAYAR AWAL SETELAH ISI NAMA: pilih tutorial atau langsung mulai
+#  (kalimat sebelum @pilihan tampil bersama tombolnya)
 # ==========================================================
 
-* Selamat datang, {nama}.
-* Sebelum cerita dimulai, mau mencoba tutorial cara bermain dulu? (Sekitar 5 menit. Semua yang terjadi di tutorial tidak memengaruhi cerita.)
+* Selamat datang, {nama}. Mau mencoba tutorial cara bermain dulu? (Semua yang terjadi di tutorial tidak memengaruhi cerita.)
 @pilihan
 > 📖 Tutorial cara bermain -> tutorial
 > ⏭️ Lewati tutorial, langsung mulai -> mulai
