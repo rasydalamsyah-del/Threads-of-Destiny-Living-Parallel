@@ -4,7 +4,8 @@ Game Android (portrait) oleh **Valerius Games**. Aplikasi Android native (Kotlin
 
 > 📘 **Rancangan game:** [docs/RANCANGAN_GAME.md](docs/RANCANGAN_GAME.md) ·
 > 📋 **Catatan progres & rencana:** [docs/PROGRES.md](docs/PROGRES.md) ·
-> ✍️ **Cara menulis naskah:** [docs/NASKAH.md](docs/NASKAH.md)
+> ✍️ **Cara menulis naskah:** [docs/NASKAH.md](docs/NASKAH.md) ·
+> 🎨 **Prompt gambar AI:** [docs/PROMPT_GAMBAR.md](docs/PROMPT_GAMBAR.md)
 
 ## Alur pembuka
 

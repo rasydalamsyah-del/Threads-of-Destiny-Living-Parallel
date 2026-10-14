@@ -101,6 +101,7 @@
 | 14 Okt 2026 | Bar Kesehatan, Lapar, Haus, Kewarasan; makanan bisa kedaluwarsa; game over saat meninggal |
 | 14 Okt 2026 | Disetujui: Desa Tanjung Lentera → Kota Sakala; cerita "hidup paralel" lewat mimpi & sahabat masa kecil; usia 15–25 dalam 4 bab + bermain bebas; keluarga: Ayah (nelayan), Ibu (warung), adik Laras |
 | 14 Okt 2026 | Ending = gabungan sahabat masa kecil × hubungan cinta × kondisi hidup, ditutup mimpi terakhir (menyesal/berdamai). Sahabat tidak dijamin ditemukan |
+| 14 Okt 2026 | Gambar karakter & background **dipisah** (karakter PNG transparan, background tanpa orang); adegan spesial (CG) boleh gabungan |
 | 14 Okt 2026 | Bahasa Indonesia dulu. Gambar dibuat pemilik lewat AI, Claude bantu prompt. Dimainkan sendiri dulu |
 
 ---
@@ -115,7 +116,7 @@
 2. **Loncatan waktu antar bab** (ringkasan bulan-bulan rutin) agar cerita bisa sampai usia 18+.
 3. Hutang & cicilan (potong upah), naik jabatan & risiko orang dalam, kebohongan wawancara yang terbongkar, transportasi.
 4. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa), sistem ending & mimpi terakhir.
-5. **Prompt gambar AI** untuk semua karakter & latar (pemilik membuat gambar asli).
+5. ~~Prompt gambar AI~~ ✅ dibuat: [PROMPT_GAMBAR.md](PROMPT_GAMBAR.md). Pemilik sedang membuat gambar asli.
 
 ## 🐞 Catatan teknis
 - Bar "Lapar" & "Haus" ditampilkan sebagai **Kenyang** & **Hidrasi** (bar penuh = baik), agar semua bar searah.
