@@ -134,6 +134,7 @@
      - Karakter bertumpuk: penataan otomatis — 1 orang di tengah, 2 orang kiri–kanan, 3+ dibagi rata (urutan mengikuti
        kiri/tengah/kanan di naskah), makin banyak makin kecil. Yang **sedang bicara** di depan & terang, yang lain sedikit redup.
        Karakter yang disembunyikan lalu langsung dimunculkan lagi tidak lagi hilang/tersangkut.
+   - Gambar asli: **ruang_makan** (latar sarapan keluarga di prolog), menggantikan gambar sementara.
    - Gambar asli gelombang 3: **pemain_l, pemain_p** (foto tokoh utama) + background **toko_buku, taman_kota** (untuk Bab 4). Semua gambar karakter & background dasar kini sudah asli.
    - Gambar asli terpasang (gelombang 2): **darto, bayu, sekar, dimas, nadia, sahabat_l (Arka), sahabat_p (Alya), sosok** + 12 background: kamar_pagi, plafon, rumah_warung, gudang_ikan, kota_kecil, sekolah, stasiun_hujan, stasiun_desa, kos_kamar, kelas_sma, stasiun_besar (dipakai di Bab 3), dermaga_malam (untuk Bab 4).
    - Gambar asli terpasang: **ayah** (versi ke-2), **ibu**, **laras** (latar putih dihapus otomatis + foto profil `_foto.jpg` 512×512).
