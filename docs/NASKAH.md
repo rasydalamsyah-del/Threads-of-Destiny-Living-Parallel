@@ -124,6 +124,23 @@ Jam ini juga dipakai di layar kunci HP.
 - Pembanding: `==` `!=` `>=` `<=` `>` `<`. Angka dibandingkan sebagai angka, teks tidak membedakan huruf besar/kecil.
 - Variabel ikut tersimpan di data simpanan.
 
+### Sistem kehidupan
+```
+@hidup mulai              nyalakan panel status, uang, jam otomatis
+@lokasi desa              tempat pemain (menentukan aktivitas & toko): desa / kota
+@kalender Senin siang     atur hari & waktu (pagi / siang / sore / malam)
+@uang +50000              tambah / kurangi uang
+@stat energi -10          ubah bar: kesehatan, kenyang, hidrasi, kewarasan, energi
+@barang air_mineral 2     masukkan barang ke tas (id dari data/barang.txt)
+@maju 1                   majukan waktu (Malam → tidur → Pagi hari berikutnya)
+@bebas 2                  waktu bebas: pemain memilih 2 aktivitas, lalu naskah lanjut
+```
+- Saat `@bebas`, pemain memilih aktivitas dari `data/aktivitas.txt`, bisa membuka **Status & Tas** dan **Belanja**.
+  Saat Malam ada tombol **Tidur sampai pagi**.
+- Variabel otomatis: `{uang}`, `{hari}`, `{waktu}`, `{hari_ke}`.
+- Kalau Kesehatan habis, tokoh **meninggal** (game over).
+- Cara menambah barang & aktivitas: **[DATA.md](DATA.md)**.
+
 ### Akhir
 ```
 @tamat Bersambung…

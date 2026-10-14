@@ -14,6 +14,7 @@
 | 14 Okt 2026 | 4 | START GAME: isi nama → prolog masa lalu (efek kenangan, gerak kamera) → layar gelap + teks waktu → efek bangun tidur (kedip, buram) → duduk di ranjang → pesan HP masuk + layar HP. Mesin naskah teks (`assets/naskah/prolog.txt`), background sementara |
 | 14 Okt 2026 | 5 | Tombol burger di masa kini (Lanjutkan, Simpan, Muat, Riwayat, Pengaturan, Menu Utama). Simpan/Muat 1 slot otomatis + 6 manual. CONTINUE & LOAD DATA berfungsi. Halaman Pengaturan (tema, ukuran & gaya huruf, kepekatan kotak, kecepatan teks, volume musik/efek, getar, lewati intro, hapus data). Perintah naskah `@musik`, `@suara` |
 | 14 Okt 2026 | — | Dokumen rancangan game & catatan progres ini dibuat |
+| 14 Okt 2026 | 8 | **Sistem kehidupan:** kalender Pagi/Siang/Sore/Malam, bar Kesehatan/Kenyang/Hidrasi/Kewarasan/Energi, uang, tas dengan kedaluwarsa, waktu bebas (aktivitas), Status & Tas, Belanja, game over saat meninggal. Data `aktivitas.txt` & `barang.txt`. Bab 1: siang setelah lulus memakai sistem baru |
 | 14 Okt 2026 | 7 | Prolog ditulis ulang (Bab 1: masa kecil di Tanjung Lentera, sahabat pergi, lulus SMP, sarapan bersama keluarga, pesan misterius). Pilih jenis kelamin di layar isi nama. Pilihan jawaban (`@pilihan`), label & lompat, variabel (`@atur`, `@tambah`), syarat (`@jika`), teks sesuai jenis kelamin. Pilihan besar pertama: SMA / kerja / keduanya |
 | 14 Okt 2026 | — | Jawaban gambaran besar pemilik dimasukkan ke rancangan; usulan dunia (Desa Tanjung Lentera → Kota Sakala), cerita utama ("hidup paralel" lewat mimpi), dan fase hidup usia 15–25 |
 
@@ -23,7 +24,7 @@
 
 ### Tahap 0 — Menyesuaikan awal cerita
 - [x] Tulis ulang prolog: masa kecil di Tanjung Lentera, sahabat pergi naik kereta, kini lulus SMP
-- [~] Usia tokoh utama tersimpan (variabel `usia`); bertambah otomatis menyusul bersama sistem kalender
+- [~] Usia tokoh utama tersimpan (variabel `usia`); bertambah otomatis menyusul (perlu tanggal/bulan di kalender)
 - [x] Pilihan besar pertama: SMA di kota / kerja / SMA sambil kerja (isi tiap jalur menyusul)
 
 ### Tahap A — Fondasi hubungan
@@ -38,16 +39,16 @@
 - [ ] Data simpanan ikut menyimpan semua hal di atas
 
 ### Tahap B — Waktu & waktu bebas
-- [ ] Kalender + slot Pagi/Siang/Sore/Malam
-- [ ] Layar pilih aktivitas waktu bebas (ajak ketemu, tempat, kerja, istirahat, keluarga)
+- [x] Kalender + slot Pagi/Siang/Sore/Malam (tanggal, gajian, tahun ajaran menyusul)
+- [x] Layar pilih aktivitas waktu bebas (ajak ketemu karakter menyusul bersama sistem hubungan)
 - [ ] Jadwal karakter (kapan bisa ditemui)
 - [ ] Efek jaringan: kabar menyebar & karakter ikut campur (melarang, menjelekkan)
 
 ### Tahap C — Bertahan hidup, ekonomi & barang
-- [ ] Bar Kesehatan, Lapar, Haus, Kewarasan, Energi + game over saat meninggal
-- [ ] Makanan & minuman dengan kedaluwarsa
+- [x] Bar Kesehatan, Kenyang (lapar), Hidrasi (haus), Kewarasan, Energi + game over saat meninggal
+- [x] Makanan & minuman dengan kedaluwarsa
 - [ ] Status: Uang, Kemampuan, Reputasi
-- [ ] Tas/inventori, toko, beri & terima hadiah
+- [x] Tas/inventori & toko (beri & terima hadiah menyusul bersama sistem hubungan)
 - [ ] Kebutuhan hidup (kos, makan, transport) + tagihan
 
 ### Tahap D — Sekolah & pekerjaan
@@ -105,6 +106,8 @@
 ---
 
 ## 🐞 Catatan teknis
+- Bar "Lapar" & "Haus" ditampilkan sebagai **Kenyang** & **Hidrasi** (bar penuh = baik), agar semua bar searah.
+- Angka penurunan bar per slot masih perkiraan awal; perlu diuji dan disesuaikan (lihat DATA.md).
 - Tampilan belum pernah dicek langsung di HP oleh Claude (tidak bisa menjalankan Android di lingkungan kerjanya). Pemilik mengecek & mengirim screenshot bila ada yang tidak pas.
 - Data simpanan mengingat nomor baris naskah; menambah baris sebelum posisi simpanan bisa menggeser posisi muat.
 - Volume musik/efek baru berpengaruh ke video intro sampai ada file audio.

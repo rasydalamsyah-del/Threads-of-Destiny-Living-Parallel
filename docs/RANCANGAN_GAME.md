@@ -112,7 +112,7 @@ Setiap hari dalam game dimainkan ± 3–8 menit.
 | Pilihan besar pertama | **Lanjut SMA** (di kota, perlu biaya & kos) · **Kerja** · **SMA sambil kerja** |
 | Usia | Bertambah seiring waktu dalam game; memengaruhi apa yang bisa dilakukan |
 
-### Kebutuhan dasar (bertahan hidup) 📝
+### Kebutuhan dasar (bertahan hidup) ✅ (build 8; Lapar/Haus tampil sebagai Kenyang/Hidrasi)
 | Bar | Turun karena | Dipulihkan dengan | Bila habis |
 |---|---|---|---|
 | **Kesehatan** | Lapar/haus parah, kurang tidur, sakit, makanan basi | Makan layak, istirahat, obat, berobat | **Meninggal → game over** |
@@ -174,7 +174,7 @@ Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, h
 
 ---
 
-## 9. Waktu 📝
+## 9. Waktu 🔨 (slot harian ✅ build 8; tanggal/bulan, gajian, tahun ajaran 📝)
 - Hari: **Pagi · Siang · Sore · Malam** + tidur. Kalender (hari, akhir pekan, libur, gajian, bayar kos, tahun ajaran sekolah).
 - Waktu **maju saat pemain memilih aktivitas**.
 - Karakter punya jadwal sendiri.
@@ -189,7 +189,7 @@ Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, h
 
 ---
 
-## 11. Barang, makanan, uang 📝
+## 11. Barang, makanan, uang 🔨 (tas, toko, kedaluwarsa ✅ build 8; hadiah 📝)
 - Tas/inventori. Barang dari toko, pemberian karakter, hadiah acara, hasil kerja.
 - Hadiah: disukai/biasa/tidak disukai, 1 per karakter per hari.
 - **Makanan & minuman** dengan kedaluwarsa (lihat §6).
@@ -258,7 +258,7 @@ Setelah ending → bermain bebas.
 ---
 
 ## 17. Data (file teks, bisa diedit dari HP) 📝
-`assets/data/karakter.txt` · `hubungan.txt` · `barang.txt` · `makanan.txt` · `pekerjaan.txt` · `tempat.txt` · `sekolah.txt`
+`assets/data/barang.txt` ✅ · `aktivitas.txt` ✅ · `karakter.txt` · `hubungan.txt` · `pekerjaan.txt` · `tempat.txt` · `sekolah.txt` 📝 — panduan: [DATA.md](DATA.md)
 `assets/karakter/` (gambar karakter) · `assets/latar/` (background) · `assets/naskah/` (cerita)
 
 Perintah naskah baru (rencana): `@pilihan`, `@jika`, `@cinta hana +5`, `@percaya hana -10`, `@bohong`, `@terbongkar`,
