@@ -1,0 +1,123 @@
+# ==========================================================
+#  TUTORIAL INTERAKTIF
+#  Memakai sistem game yang asli. Di akhir, @mulai_ulang menghapus
+#  semua hasil latihan, lalu cerita sungguhan dimulai dari prolog.
+# ==========================================================
+
+@latar kamar_pagi
+@terang 1200
+Pemandu: Halo, {nama}! Aku pemandumu. Di sini kamu boleh mencoba apa saja. Tidak ada yang tersimpan ke cerita.
+
+# ---------- 1. DIALOG & MENU ----------
+@waktu 1 · Membaca cerita
+Pemandu: Ketuk layar di mana saja untuk lanjut ke kalimat berikutnya. Kalau teks sedang berjalan, ketukan pertama langsung menampilkan semuanya.
+Pemandu: Tombol ☰ di pojok kanan atas membuka menu: Simpan, Muat, Riwayat dialog, Pengaturan, dan kembali ke Menu Utama.
+Pemandu: Progresmu juga tersimpan otomatis. Tombol CONTINUE di menu utama melanjutkan dari simpanan terakhir.
+
+# ---------- 2. PILIHAN & AKIBAT ----------
+@waktu 2 · Pilihan memengaruhi orang lain
+@latar rumah_warung
+@kenal bayu
+@tampil bayu biasa
+Pemandu: Ini Bayu, teman masa kecilmu. Lihat panel di pojok kiri atas: foto, tingkat hubungan, 💛 Cinta, dan 🤝 Kepercayaan.
+Bayu: Woy! Bantuin aku angkat jaring, dong. Berat banget nih!
+Pemandu: Setiap pilihan jawaban punya akibat. Coba pilih salah satu.
+@pilihan
+> "Sini, aku bantu!" -> bantu
+> "Malas ah, angkat sendiri." -> kasar
+
+:: bantu
+@perilaku bayu membantu
+@tampil bayu senyum
+Bayu: Nah, gitu dong! Kamu memang teman sejati.
+Pemandu: Lihat angka di panel kiri atas naik. Bayu makin suka dan makin percaya padamu.
+@lompat sebar
+
+:: kasar
+@perilaku bayu kasar
+Bayu: ...Ya udah. Nggak usah ketus gitu juga.
+Pemandu: Cinta dan Kepercayaan Bayu turun. Bersikap kasar, menghindar, mengabaikan chat, atau ingkar janji akan merusak hubungan.
+
+:: sebar
+@sembunyi semua
+Pemandu: Ingat, kabar itu menyebar. Kalau kamu menyakiti seseorang, orang-orang terdekatnya ikut kecewa.
+Pemandu: Kalau hubunganmu buruk dengan sahabat seseorang, dia bisa melarang orang itu bertemu denganmu.
+Pemandu: Berbohong juga tercatat. Kalau suatu hari kebohonganmu terbongkar, Cinta dan Kepercayaan bisa jatuh drastis.
+Pemandu: Hubungan bisa berkembang: kenalan → teman → teman dekat → sahabat. Saat sudah dewasa (18 tahun ke atas), bisa juga pacaran → tunangan → menikah.
+
+# ---------- 3. ENDING ----------
+@waktu 3 · Jalan hidupmu menentukan ending
+Pemandu: Tidak ada pilihan yang "benar". Semua pilihan kecil menumpuk dan menentukan akhir hidupmu.
+Pemandu: Menemukan sahabat masa kecil dan menikah dengannya. Menikah dengan orang lain. Punya banyak pasangan. Atau menjalani hidup sendiri, entah kaya, biasa saja, atau miskin.
+Pemandu: Petunjuk tentang sahabatmu tersebar di cerita, di obrolan, dan di HP. Kumpulkan sebanyak mungkin.
+
+# ---------- 4. STATUS & BERTAHAN HIDUP ----------
+@waktu 4 · Menjaga tubuh & pikiran
+@hidup mulai
+@lokasi desa
+@kalender Senin siang
+@uang +50000
+@stat kenyang -45
+@barang roti_sobek 1
+@barang air_mineral 1
+Pemandu: Mulai sekarang hidupmu berjalan. Lihat tombol 📊 di sisi kiri layar. Ketuk untuk menarik panel status keluar, ketuk ‹ untuk menyimpannya lagi.
+Pemandu: ❤️ Kesehatan: kalau habis, tokohmu MENINGGAL dan permainan berakhir.
+Pemandu: 🍚 Kenyang dan 💧 Hidrasi turun seiring waktu. Kalau kosong, kesehatanmu ikut turun.
+Pemandu: 🧠 Kewarasan turun karena stres dan kerja berat. ⚡ Energi habis karena aktivitas, dan pulih dengan istirahat atau tidur.
+Pemandu: Kalau ada yang kritis, tombol 📊 berubah jadi ⚠️.
+Pemandu: Sekarang kamu sedang lapar. Di tasmu ada roti dan air. Nanti saat waktu bebas, buka "Status & Tas" lalu makan rotinya.
+Pemandu: Hati-hati, makanan punya tanggal kedaluwarsa. Makanan basi bisa membuatmu sakit.
+
+# ---------- 5. WAKTU ----------
+@waktu 5 · Waktu terus berjalan
+Pemandu: Jam di kanan atas menunjukkan hari dan waktu: Pagi → Siang → Sore → Malam.
+Pemandu: Setiap aktivitas memakan satu waktu. Saat Malam, kamu bisa tidur sampai pagi untuk memulihkan energi.
+Pemandu: Sewa kos, kiriman keluarga, dan gaji juga berjalan sesuai tanggal. Cek aplikasi Kalender di HP.
+
+# ---------- 6. WAKTU BEBAS ----------
+@waktu 6 · Waktu bebas
+Pemandu: Di saat-saat tertentu, cerita berhenti dan muncul layar WAKTU BEBAS. Di situlah kamu menjalani hidupmu sendiri.
+Pemandu: Kamu bisa memilih aktivitas (makan, bekerja, istirahat, belajar...), Belanja, membuka Status & Tas, atau Temui seseorang.
+Pemandu: Di menu "Temui seseorang", kamu bisa ngobrol dengan topik tertentu atau memberi hadiah. Topik dan hadiah yang tepat menambah Cinta. Yang salah membuatnya kesal.
+Pemandu: Coba sekarang: makan roti di Status & Tas, lalu pilih 2 kegiatan. Misalnya temui Bayu.
+@bebas 2
+
+Pemandu: Bagus! Begitulah waktu bebas bekerja. Jumlah kegiatannya ditentukan cerita. Setelah habis, cerita berlanjut.
+
+# ---------- 7. HP ----------
+@waktu 7 · HP-mu
+@hp tampil
+@hp pesan Bayu | Eh, tadi seru juga ya. Besok main lagi? 😄
+Pemandu: Ada pesan masuk! Ikon HP di kanan bawah bergetar. Ketuk untuk membukanya, lalu tutup lagi untuk lanjut.
+@tunggu_hp
+Pemandu: Di HP ada beberapa aplikasi. 💬 Chat: balas pesan. Pesan yang dibiarkan 2 hari dianggap mengabaikan. Kamu juga bisa mengajak bertemu, tapi janji harus ditepati!
+Pemandu: 👥 Kontak: hubunganmu dan kesukaan setiap orang yang sudah kamu ketahui. 📅 Kalender: janji, sewa, kiriman, dan gajian.
+Pemandu: 💼 Lowongan: cari kerja dan urus berkas. 👛 Dompet: riwayat uang masuk dan keluar. 📝 Catatan: petunjuk penting cerita.
+Pemandu: 📷 Sosmed: lihat kabar teman-teman, dan cari jejak sahabatmu sekali sehari.
+
+# ---------- 8. PEKERJAAN & SEKOLAH ----------
+@waktu 8 · Sekolah & pekerjaan
+Pemandu: Ada dua cara dapat kerja. Lewat tombol "🔎 Cari kerja" saat waktu bebas, atau lewat aplikasi Lowongan.
+Pemandu: Kerja yang mudah langsung bisa dilamar. Kerja yang lebih baik butuh berkas (ijazah, KTP, SKCK...), lalu tes tertulis dan wawancara.
+Pemandu: Saat wawancara, kamu boleh berbohong supaya terlihat hebat. Tapi bisa ketahuan, dan akibatnya buruk.
+Pemandu: Punya kenalan di tempat kerja ("orang dalam") dengan Cinta & Kepercayaan tinggi membuat peluang diterima jauh lebih besar.
+Pemandu: Sekolah dan kerja tetap WAJIB dihadiri sesuai jadwal. Bolos 3 kali dapat peringatan, 6 kali dikeluarkan atau dipecat.
+Pemandu: Kariermu terbentuk dari pilihanmu. Rajin di satu bidang membuka pekerjaan yang lebih baik.
+
+# ---------- 9. RINTANGAN ----------
+@waktu 9 · Rintangan tak terduga
+Pemandu: Hidup tidak selalu mulus. Sakit, dompet hilang, banjir, keluarga butuh bantuan... Kejadian seperti ini bisa datang kapan saja.
+Pemandu: Contohnya begini:
+@kejadian flu
+Pemandu: Setiap kejadian punya pilihan dan akibatnya sendiri. Jaga tabungan untuk hal-hal tak terduga.
+
+# ---------- SELESAI ----------
+@waktu Tutorial selesai
+@sembunyi semua
+@hp sembunyi
+Pemandu: Itu semua dasar-dasarnya, {nama}. Sisanya, temukan sendiri sambil menjalani hidupmu.
+Pemandu: Semua hasil latihan tadi akan dihapus. Ceritamu yang sesungguhnya dimulai sekarang.
+Pemandu: Selamat menjalani hidup... dan semoga benangmu menemukan ujungnya.
+@gelap 1500
+@mulai_ulang
+@naskah prolog.txt

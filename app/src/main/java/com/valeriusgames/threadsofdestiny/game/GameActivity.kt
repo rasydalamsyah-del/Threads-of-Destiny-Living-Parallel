@@ -62,7 +62,7 @@ class GameActivity : Activity() {
 
     companion object {
         /** File naskah pertama yang dijalankan. */
-        const val FIRST_SCRIPT = "naskah/prolog.txt"
+        const val FIRST_SCRIPT = "naskah/mulai.txt"
 
         /** Buka game langsung dari slot simpanan ini. */
         const val EXTRA_LOAD_SLOT = "load_slot"
@@ -620,6 +620,7 @@ class GameActivity : Activity() {
                     }
                 }
                 is Cmd.End -> { endStory(c.text); return }
+                is Cmd.ResetState -> resetForStory()
             }
         }
         endStory("Bersambung…")
@@ -2060,6 +2061,29 @@ class GameActivity : Activity() {
             "kelas" -> gameData.jobs[id]?.let { runSchoolYear(it, done) } ?: done()
             else -> done()
         }
+    }
+
+    /** Bersihkan semua hasil tutorial sebelum cerita sungguhan dimulai. */
+    private fun resetForStory() {
+        life = LifeState()
+        social = SocialState()
+        phoneData = PhoneState()
+        pendingEvents.clear()
+        noticeQueue.clear()
+        messages.clear()
+        log.clear()
+        vars.clear()
+        vars["nama"] = playerName
+        vars["kelamin"] = playerGender
+        hideCharacter(null)
+        speakingCharId = null
+        updateCharPanel(null)
+        setPhoneIconVisible(false)
+        setClock(null)
+        hudOpen = false
+        syncSocialVars()
+        refreshLife()
+        refreshPhoneHome()
     }
 
     /** Kebohongan terbongkar: semua yang dibohongi kecewa. */

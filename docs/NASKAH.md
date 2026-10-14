@@ -192,6 +192,12 @@ Jam ini juga dipakai di layar kunci HP.
 - Pemain bisa **mengajak ketemu** lewat Chat. Datang = `menepati_janji`, tidak datang = `ingkar_janji` (+ pesan kecewa).
 - Variabel otomatis: `misterius_dibalas` (pemain membalas Nomor Tidak Dikenal), `bohong_wawancara_<id_pekerjaan>`.
 
+### Tutorial & mulai ulang
+```
+@mulai_ulang                      hapus semua hasil latihan (hidup, hubungan, HP, variabel); nama & kelamin tetap
+```
+- Urutan file: `mulai.txt` (pilih Tutorial / Lewati) → `tutorial.txt` (diakhiri `@mulai_ulang` + `@naskah prolog.txt`) → `prolog.txt`.
+
 ### Kejadian & sekolah
 ```
 @kejadian flu                     jalankan kejadian dari data/kejadian.txt sekarang

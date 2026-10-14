@@ -100,6 +100,8 @@ object StoryScript {
         data class Event(val id: String) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
+        /** Hapus semua hasil latihan (tutorial): hidup, hubungan, HP, variabel. Nama & kelamin tetap. */
+        object ResetState : Cmd()
     }
 
     data class Option(val text: String, val label: String)
@@ -344,6 +346,7 @@ object StoryScript {
             "dokumen", "doc" -> Cmd.Doc(args.firstOrNull() ?: throw ParseError(n, "format: @dokumen id_dokumen"))
             "kejadian", "event" -> Cmd.Event(args.firstOrNull() ?: throw ParseError(n, "format: @kejadian id_kejadian"))
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
+            "mulai_ulang", "reset" -> Cmd.ResetState
             else -> throw ParseError(n, "perintah @$name tidak dikenal")
         }
     }
