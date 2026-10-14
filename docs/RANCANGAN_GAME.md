@@ -174,7 +174,7 @@ Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, h
 
 ---
 
-## 9. Waktu 🔨 (slot harian ✅ build 8; tanggal/bulan, gajian, tahun ajaran 📝)
+## 9. Waktu 🔨 (slot harian ✅ build 8; tanggal, usia, sewa & gaji 30 hari ✅ build 10; tahun ajaran 📝)
 - Hari: **Pagi · Siang · Sore · Malam** + tidur. Kalender (hari, akhir pekan, libur, gajian, bayar kos, tahun ajaran sekolah).
 - Waktu **maju saat pemain memilih aktivitas**.
 - Karakter punya jadwal sendiri.
@@ -197,14 +197,14 @@ Turun lewat: jawaban yang tidak disukai, bohong, menghindar, mengabaikan chat, h
 
 ---
 
-## 12. Sekolah 📝
+## 12. Sekolah 🔨 (jadwal wajib, bolos, nilai ✅ build 10; ujian & kenaikan kelas 📝)
 - SMA di Kota Sakala (perlu kos & biaya) atau sekolah sambil kerja.
 - Jadwal sekolah, PR/ujian (dipengaruhi Akademik), teman sekelas, guru.
 - Nilai & kelulusan memengaruhi pilihan setelahnya (kuliah/beasiswa/pekerjaan).
 
 ---
 
-## 13. Pekerjaan 📝
+## 13. Pekerjaan 🔨 (harian/paruh waktu/tetap, absen, gaji, lamar, orang dalam ✅ build 10; berkas & tes formal, naik jabatan 📝)
 - **Karier terbentuk dari pilihan pemain** (mis. sering ke kafe & memilih belajar kopi → jalur dunia kopi: barista → kepala barista → buka kedai sendiri). Tidak ada daftar karier tetap; jalurnya muncul dari minat & pilihan.
 - **Tetap** (gaji bulanan, kinerja, naik jabatan/PHK) & **panggilan/paruh waktu** (per shift).
 - **Jalur resmi:** lowongan → berkas (CV, surat lamaran, KTP, ijazah, SKCK, surat sehat, pas foto) → tes → wawancara → pengumuman.

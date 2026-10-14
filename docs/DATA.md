@@ -125,6 +125,48 @@ kalimat = Kemarin aku lihat kapal besar lewat dekat mercusuar.
 ```
 Saat ngobrol, pemain memilih 1 dari 3 topik acak.
 
+## pekerjaan.txt (sekolah & pekerjaan)
+```
+[kurir_paket]
+nama        = Kurir antar paket (sepeda)
+ikon        = 📦
+jenis       = paruh_waktu        (sekolah / tetap / paruh_waktu / harian)
+tempat      = kota
+hari        = setiap hari        (senin-sabtu / senin, rabu, jumat / setiap hari)
+waktu       = sore, malam
+gaji        = 30000              (paruh_waktu & harian: per kerja · tetap: per 30 hari)
+efek        = energi -25, hidrasi -15, komunikasi +1
+usia_min    = 15
+cara        = langsung           (langsung / lamar / cerita)
+sulit       = 25                 (0-100)
+orang_dalam = dimas              (opsional: id karakter yang bisa merekomendasikan)
+keterangan  = Penjelasan singkat
+teks        = Narasi setiap kali kerja
+```
+| Jenis | Aturan |
+|---|---|
+| `sekolah`, `tetap` | **Wajib hadir** sesuai hari & waktu. Tidak hadir saat waktu bebas = bolos/absen (kinerja −8). 3× → surat peringatan, 6× → **dikeluarkan/dipecat** |
+| `paruh_waktu`, `harian` | Datang kapan saja sesuai jadwal. Dibayar setiap kali kerja |
+| `tetap` | Digaji setiap 30 hari sejak mulai, besarnya tergantung kinerja |
+
+- Kinerja: +3 tiap kerja (−4 bila energi < 20). Kinerja < 15 → diberhentikan (bukan sekolah).
+- `cara = langsung` / `lamar` muncul di **🔎 Cari kerja** saat waktu bebas; `cara = cerita` hanya lewat naskah.
+- **Peluang diterima** = (100 − sulit) + 2 × (akademik + komunikasi, maks. +30) + `skor_wawancara`
+  − 15 bila Kewarasan < 30, **+45 lewat orang dalam** (bila Cinta & Kepercayaan orang itu ≥ 60). Usia di bawah `usia_min` selalu ditolak.
+
+## kos.txt
+```
+[kos_cendana]
+nama            = Kos Melati (Kawasan Cendana)
+harga           = 650000          (per 30 hari)
+tempat          = kota
+tidur_energi    = 0               (bising = minus)
+tidur_kewarasan = 1
+keterangan      = Penjelasan
+```
+- Pindah = bayar 30 hari pertama. Selanjutnya otomatis ditagih setiap 30 hari.
+- Uang kurang = **tunggakan**. Tunggakan 2× → **diusir**: tidur di emperan (energi −40, kewarasan −10 setiap tidur) sampai pindah ke kos baru lewat **🏠 Cari kos**.
+
 ## Gambar karakter
 Folder `app/src/main/assets/karakter/`:
 | File | Isi |

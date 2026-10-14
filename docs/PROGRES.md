@@ -14,6 +14,7 @@
 | 14 Okt 2026 | 4 | START GAME: isi nama → prolog masa lalu (efek kenangan, gerak kamera) → layar gelap + teks waktu → efek bangun tidur (kedip, buram) → duduk di ranjang → pesan HP masuk + layar HP. Mesin naskah teks (`assets/naskah/prolog.txt`), background sementara |
 | 14 Okt 2026 | 5 | Tombol burger di masa kini (Lanjutkan, Simpan, Muat, Riwayat, Pengaturan, Menu Utama). Simpan/Muat 1 slot otomatis + 6 manual. CONTINUE & LOAD DATA berfungsi. Halaman Pengaturan (tema, ukuran & gaya huruf, kepekatan kotak, kecepatan teks, volume musik/efek, getar, lewati intro, hapus data). Perintah naskah `@musik`, `@suara` |
 | 14 Okt 2026 | — | Dokumen rancangan game & catatan progres ini dibuat |
+| 14 Okt 2026 | 10 | **Sekolah & pekerjaan:** kalender bertanggal, usia bertambah, kos (sewa 30 hari, tunggakan, diusir), kiriman keluarga, sekolah & pekerjaan dari data (jadwal wajib, bolos/absen, surat peringatan, dikeluarkan/dipecat, kinerja, gaji), Cari kerja & lamar (orang dalam), Cari kos. **Bab 2**: jalur kota (stasiun, pilih kos, minggu pertama di Sakala, hari pertama SMA, Dimas & Nadia, petunjuk pertama tentang sahabat) dan jalur desa (kerja di Juragan Darto lewat Ayah) |
 | 14 Okt 2026 | 9 | **Sistem hubungan:** data karakter (keluarga + Bayu & Sekar), hubungan antar karakter, topik obrolan. Meter Cinta (teman/pasangan) & Kepercayaan, tingkat hubungan, kabar menyebar, karakter bisa dilarang bertemu oleh sahabatnya, perilaku buruk & kebohongan tercatat, pengakuan (hanya 18+). Gambar karakter (sementara) + panel nama & meter. Waktu bebas: Temui seseorang → ngobrol/hadiah |
 | 14 Okt 2026 | 8 | **Sistem kehidupan:** kalender Pagi/Siang/Sore/Malam, bar Kesehatan/Kenyang/Hidrasi/Kewarasan/Energi, uang, tas dengan kedaluwarsa, waktu bebas (aktivitas), Status & Tas, Belanja, game over saat meninggal. Data `aktivitas.txt` & `barang.txt`. Bab 1: siang setelah lulus memakai sistem baru |
 | 14 Okt 2026 | 7 | Prolog ditulis ulang (Bab 1: masa kecil di Tanjung Lentera, sahabat pergi, lulus SMP, sarapan bersama keluarga, pesan misterius). Pilih jenis kelamin di layar isi nama. Pilihan jawaban (`@pilihan`), label & lompat, variabel (`@atur`, `@tambah`), syarat (`@jika`), teks sesuai jenis kelamin. Pilihan besar pertama: SMA / kerja / keduanya |
@@ -25,7 +26,7 @@
 
 ### Tahap 0 — Menyesuaikan awal cerita
 - [x] Tulis ulang prolog: masa kecil di Tanjung Lentera, sahabat pergi naik kereta, kini lulus SMP
-- [~] Usia tokoh utama tersimpan (variabel `usia`); bertambah otomatis menyusul (perlu tanggal/bulan di kalender)
+- [x] Usia tokoh utama tersimpan dan bertambah setiap 365 hari
 - [x] Pilihan besar pertama: SMA di kota / kerja / SMA sambil kerja (isi tiap jalur menyusul)
 
 ### Tahap A — Fondasi hubungan
@@ -50,15 +51,15 @@
 - [x] Makanan & minuman dengan kedaluwarsa
 - [ ] Status: Uang, Kemampuan, Reputasi
 - [x] Tas/inventori & toko, beri hadiah (terima hadiah dari karakter lewat `@barang` di naskah)
-- [ ] Kebutuhan hidup (kos, makan, transport) + tagihan
+- [x] Kebutuhan hidup: kos + tagihan + diusir, makan dari belanja (transport menyusul)
 
 ### Tahap D — Sekolah & pekerjaan
-- [ ] Sekolah (SMA): jadwal, ujian, teman sekelas
+- [~] Sekolah (SMA): jadwal wajib, bolos, nilai, teman sekelas (ujian & kenaikan kelas menyusul)
 - [ ] Jalur karier yang terbentuk dari pilihan (contoh: dunia kopi)
-- [ ] Pekerjaan paruh waktu (shift)
-- [ ] Lowongan → berkas → tes → wawancara → pengumuman
-- [ ] Jalur orang dalam (rekomendasi + risikonya)
-- [ ] Pekerjaan tetap: gaji bulanan, kinerja, teguran, naik jabatan
+- [x] Pekerjaan paruh waktu & harian (per kerja)
+- [~] Lamaran dengan peluang diterima (kesulitan, kemampuan, skor wawancara); berkas & tes formal menyusul bersama aplikasi Lowongan di HP
+- [x] Jalur orang dalam (rekomendasi menaikkan peluang); risiko merusak hubungan bila kinerja buruk menyusul
+- [~] Pekerjaan tetap: gaji per 30 hari, kinerja, absen, surat peringatan, dipecat (naik jabatan menyusul)
 
 ### Tahap E — HP lengkap
 - [ ] Chat, Kontak, Kalender, Peta, Belanja, Lowongan, Dompet
@@ -107,9 +108,9 @@
 ---
 
 ## 🔜 Langkah berikutnya (urutan)
-1. **Tahap D — Sekolah & pekerjaan**: lanjut cerita jalur SMA / kerja / keduanya (pindah ke Kota Sakala, cari kos, hari pertama), pekerjaan paruh waktu.
-2. **Tahap E — HP lengkap**: Chat & Kontak (karakter mengirim pesan, membalas/mengabaikan memengaruhi hubungan).
-3. Kalender bertanggal (usia bertambah, tahun ajaran, gajian, bayar kos).
+1. **Tahap E — HP lengkap**: Chat & Kontak (karakter mengirim pesan, membalas/mengabaikan memengaruhi hubungan), Kalender (jadwal & tagihan), Lowongan (berkas, tes, wawancara), Dompet.
+2. **Tahap F — Rintangan & cerita**: kejadian acak (sakit, kehilangan uang, banjir), alur pencarian sahabat (petunjuk), ujian & kenaikan kelas, Bab 3.
+3. Naik jabatan & risiko orang dalam; transportasi.
 
 ## 🐞 Catatan teknis
 - Bar "Lapar" & "Haus" ditampilkan sebagai **Kenyang** & **Hidrasi** (bar penuh = baik), agar semua bar searah.

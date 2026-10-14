@@ -167,6 +167,21 @@ Jam ini juga dipakai di layar kunci HP.
 - `@ungkapkan` **selalu ditolak** bila pemain atau karakter belum 18 tahun, sesama jenis, atau karakter tidak bisa dipacari.
   Selain itu: Cinta < 50 hampir pasti ditolak; makin tinggi Cinta & Kepercayaan, makin besar peluang diterima.
 
+### Bab, tanggal, tempat tinggal, sekolah & pekerjaan
+```
+@naskah bab2.txt                   pindah ke file naskah berikutnya (folder assets/naskah)
+@tanggal 11 Juli 2026              atur tanggal hari ini (hari dalam seminggu ikut tanggal)
+@kalender Senin pagi               loncat ke hari Senin berikutnya (bila tanggal sudah diatur) & atur waktu
+@kos kos_cendana                   pindah ke kos (bayar 30 hari pertama)   ·   @kos kosong = tanpa kos
+@kiriman 600000                    kiriman keluarga setiap 30 hari   ·   @kiriman 0 = berhenti
+@kerja_mulai sma_sakala            mulai sekolah / bekerja (id dari data/pekerjaan.txt)
+@kerja_berhenti kurir_paket        berhenti
+@lamar buruh_ikan -> diterima, ditolak   melamar, lompat sesuai hasil
+```
+- Variabel otomatis: `usia` (bertambah tiap 365 hari), `kerja_<id>` (1/0), `dipecat_<id>`, `dikeluarkan_<id>`,
+  `kos`, `diusir`, `lewat_orang_dalam`, plus kemampuan dari efek kerja/aktivitas (mis. `akademik`, `komunikasi`).
+- Untuk simulasi **wawancara**, tulis adegan dengan `@pilihan` lalu `@tambah skor_wawancara +10` (atau −) sebelum `@lamar`.
+
 ### Akhir
 ```
 @tamat Bersambung…
