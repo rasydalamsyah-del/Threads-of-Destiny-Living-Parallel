@@ -561,7 +561,8 @@ class GameActivity : Activity() {
                 }
                 is Cmd.Free -> { startFree(c.count); return }
                 is Cmd.Advance -> {
-                    repeat(c.count) { if (!life.dead) advanceTime() }
+                    if (c.minutes > 0) passTime(c.minutes, fromStory = true)
+                    else repeat(c.count) { if (!life.dead) advancePeriod() }
                     if (life.dead) return
                 }
                 is Cmd.Money -> {
@@ -913,8 +914,10 @@ class GameActivity : Activity() {
         updateCharPanel(speakerDef)
         highlightSpeaker(speakerDef?.id)
 
+        // Selalu batalkan animasi sebelumnya: perintah "sembunyikan dialog" yang baru dijadwalkan
+        // (alpha masih 1) bisa menghapus kalimat ini kalau tidak dibatalkan.
+        dialog.animate().cancel()
         if (dialog.alpha < 1f) {
-            dialog.animate().cancel()
             dialog.translationY = 12 * resources.displayMetrics.density
             dialog.animate().alpha(1f).translationY(0f).setDuration(260).start()
         }
@@ -1222,6 +1225,8 @@ class GameActivity : Activity() {
             vars["kerja_aktif"] = life.jobs.count { gameData.jobs[it.id]?.kind != "sekolah" }.toString()
             vars["hari"] = life.weekday
             vars["waktu"] = life.slot.label
+            vars["jam"] = life.timeText
+            vars["jam_menit"] = life.minute.toString()
             vars["hari_ke"] = (life.day + 1).toString()
             life.date()?.let { d ->
                 vars["bulan"] = d.monthValue.toString()
@@ -1278,17 +1283,41 @@ class GameActivity : Activity() {
         }.start()
     }
 
-    /** Majukan waktu satu slot dan tampilkan peringatan. */
-    /** fromFree = waktu maju karena pilihan pemain di waktu bebas (bolos/absen dicek). */
-    private fun advanceTime(fromFree: Boolean = false) {
-        if (!life.active) return
-        if (fromFree) checkAbsences()
-        val dayBefore = life.day
-        val warnings = life.advance()
-        if (life.day != dayBefore) onNewDay()
+    /**
+     * Majukan jam sebanyak [minutes] menit. Setiap lewat tengah malam: cek bolos/absen hari itu
+     * lalu jalankan hal-hal harian (sewa, kiriman, kejadian...).
+     */
+    private fun passTime(minutes: Int, sleeping: Boolean = false, fromStory: Boolean = false) {
+        if (!life.active || minutes <= 0) return
+        var left = minutes
+        val warnings = mutableListOf<String>()
+        while (left > 0 && !life.dead) {
+            val chunk = minOf(left, life.minutesToMidnight)
+            val dayBefore = life.day
+            warnings += life.pass(chunk, sleeping)
+            left -= chunk
+            if (life.day != dayBefore) {
+                checkMissedJobs(dayBefore, wholeDay = true, excused = fromStory)
+                onNewDay()
+            }
+        }
+        checkMissedJobs(life.day, wholeDay = false, excused = fromStory)
+        checkMissedAppointments(excused = fromStory)
         refreshLife()
-        warnings.forEach { notice(it) }
+        warnings.distinct().forEach { notice(it) }
         checkDeath()
+    }
+
+    /** "@maju 1": loncat ke bagian hari berikutnya. Dari Malam = tidur sampai 06:00. */
+    private fun advancePeriod() {
+        val s = life.slot
+        if (s == LifeState.Slot.MALAM) {
+            val target = 6 * 60
+            val mins = if (life.minute < 4 * 60) target - life.minute else life.minutesToMidnight + target
+            passTime(mins, sleeping = true, fromStory = true)
+        } else {
+            passTime(s.end - life.minute, fromStory = true)
+        }
     }
 
     private fun checkDeath(): Boolean {
@@ -1365,15 +1394,17 @@ class GameActivity : Activity() {
         }
         // Jadwal sekolah / kerja di waktu ini
         val duties = life.jobs.mapNotNull { j -> gameData.jobs[j.id] }
-            .filter { gameData.scheduled(it, life.weekdayIndex, life.slot) }
+            .filter { gameData.canAttendNow(it, life.weekdayIndex, life.minute) && !life.hasAttended(it.id) }
         if (duties.isNotEmpty()) {
             sheetList.addView(sectionLabel("📌 Jadwalmu sekarang"))
             duties.forEach { def ->
                 val needEnergy = -(def.effects["energi"] ?: 0L)
                 val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy / 2
+                val lateBy = life.minute - def.startMin
                 sheetList.addView(card(
                     title = "${def.icon}  ${def.name}",
-                    sub = effectSummary(def.effects + payEffect(def)),
+                    sub = "🕐 ${def.hoursText}" + (if (lateBy > 15) "  ·  ⏰ sudah telat ${LifeState.duration(lateBy)}" else "") +
+                        "\n" + effectSummary(def.effects + payEffect(def)),
                     note = if (tooTired) getString(R.string.too_tired)
                         else if (def.mandatory) "Wajib hadir · tidak hadir = " + (if (def.kind == "sekolah") "bolos" else "absen")
                         else def.kindLabel,
@@ -1390,7 +1421,7 @@ class GameActivity : Activity() {
                 val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
                 sheetList.addView(card(
                     title = "${a.icon}  ${a.name}",
-                    sub = effectSummary(a.effects),
+                    sub = "⏱ ${LifeState.duration(a.minutes)}   " + effectSummary(a.effects),
                     note = if (tooTired) getString(R.string.too_tired) else null,
                     enabled = !tooTired,
                 ) { doActivity(a) })
@@ -1446,10 +1477,10 @@ class GameActivity : Activity() {
         }
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
-        advanceTime(fromFree = true)
+        passTime(a.minutes)
         if (life.dead) return
         afterTap = { continueFree() }
-        showLine(null, a.text.ifEmpty { a.name })
+        showLine(null, a.text.ifEmpty { a.name } + "\n(⏱ ${LifeState.duration(a.minutes)} · sekarang ${life.timeText})")
     }
 
     private fun continueFree() {
@@ -1469,16 +1500,40 @@ class GameActivity : Activity() {
         next()
     }
 
+    /** Tidur: pilih jam bangun. */
     private fun sleepUntilMorning() {
+        openSheet("😴 Tidur", "Sekarang ${life.timeText}. Mau bangun jam berapa?") { showFreeSheet() }
+        listOf(4 * 60 + 30, 5 * 60, 6 * 60, 7 * 60, 8 * 60, 9 * 60).forEach { wake ->
+            val mins = minutesUntil(wake)
+            if (mins < 60) return@forEach
+            sheetList.addView(card(
+                title = "⏰  Bangun ${LifeState.clock(wake)}",
+                sub = "Tidur ± ${LifeState.duration(mins)}" + when {
+                    mins < 6 * 60 -> "  ·  kurang tidur, besok mengantuk"
+                    mins > 10 * 60 -> "  ·  kebanyakan tidur"
+                    else -> "  ·  cukup"
+                },
+            ) { sleepFor(mins) })
+        }
+        sheetButtonRow(getString(R.string.btn_back) to { showFreeSheet() })
+    }
+
+    /** Menit dari sekarang sampai jam [target] berikutnya. */
+    private fun minutesUntil(target: Int): Int =
+        if (target > life.minute) target - life.minute else life.minutesToMidnight + target
+
+    private fun sleepFor(mins: Int) {
         closeSheet()
-        val startDay = life.day
         if (!life.active) life.active = true
-        while (life.day == startDay && !life.dead) advanceTime(fromFree = true)
+        passTime(mins, sleeping = true)
         if (life.dead) return
+        if (mins < 6 * 60) addExtraVars(life.applyEffects(mapOf("kewarasan" to -4L, "energi" to -8L)))
+        refreshLife()
         freeLeft = 0
         vars["_bebas_sisa"] = "0"
         afterTap = { endFree() }
-        showLine(null, "{nama} merebahkan diri dan tertidur pulas sampai pagi.")
+        showLine(null, "{nama} tertidur selama ${LifeState.duration(mins)} dan bangun pukul ${life.timeText}." +
+            (if (mins < 6 * 60) " Kepalanya masih berat... kurang tidur." else ""))
     }
 
     /** Syarat aktivitas, contoh "jalur != kerja" atau "usia >= 18". */
@@ -1561,7 +1616,7 @@ class GameActivity : Activity() {
                 val def = gameData.jobs[j.id] ?: return@forEach
                 sheetList.addView(card(
                     title = "${def.icon}  ${def.name}",
-                    sub = "${def.kindLabel} · ${daysText(def.days)} · ${def.slots.joinToString(", ")}" +
+                    sub = "${def.kindLabel} · ${daysText(def.days)} · ${def.hoursText}" +
                         (if (def.pay > 0) "\n💰 " + rupiah(def.pay) + (if (def.kind == "tetap") " / 30 hari" else " / kerja") else ""),
                     note = (if (def.kind == "sekolah") "📊 Nilai " else "📊 Kinerja ") + "${j.performance}   ·   " +
                         (if (def.kind == "sekolah") "Bolos " else "Absen ") + "${j.absences}×",
@@ -1866,6 +1921,13 @@ class GameActivity : Activity() {
     private fun doJob(def: GameData.JobDef) {
         closeSheet()
         val job = life.jobs.firstOrNull { it.id == def.id } ?: return
+        val late = life.minute - def.startMin
+        val waitMin = (def.startMin - life.minute).coerceAtLeast(0)
+        val workMin = def.endMin - maxOf(life.minute, def.startMin)
+        if (late > 15) {
+            job.performance = (job.performance - (if (late > 60) 6 else 3)).coerceAtLeast(0)
+            notice("⏰ Kamu terlambat ${LifeState.duration(late)}!")
+        }
         addExtraVars(life.applyEffects(def.effects + payEffect(def)))
         payEffect(def)["uang"]?.let {
             notice("💰 +" + rupiah(it))
@@ -1881,22 +1943,25 @@ class GameActivity : Activity() {
         }
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
-        advanceTime(fromFree = true)
+        passTime(waitMin + workMin)
         if (life.dead) return
         afterTap = { continueFree() }
-        showLine(null, def.text.ifEmpty { def.name })
+        showLine(null, def.text.ifEmpty { def.name } + "\n(${def.hoursText} · sekarang ${life.timeText})")
     }
 
-    /** Sekolah / kerja tetap yang dijadwalkan di slot ini tapi tidak dihadiri. */
-    private fun checkAbsences() {
-        // Janji temu yang dilewatkan = ingkar janji
-        phoneData.appts.filter { it.day < life.day || (it.day == life.day && it.slot == life.slot.name) }.forEach { a ->
+    /** Janji temu yang waktunya sudah lewat = ingkar janji. */
+    private fun checkMissedAppointments(excused: Boolean = false) {
+        phoneData.appts.filter { a ->
+            val end = runCatching { LifeState.Slot.valueOf(a.slot).end }.getOrDefault(24 * 60)
+            a.day < life.day || (a.day == life.day && life.minute >= end)
+        }.forEach { a ->
             phoneData.appts.remove(a)
             gameData.characters[a.charId]?.let { c ->
                 val place = (vars["lokasi"] ?: "desa").lowercase()
-                if ("semua" !in c.places && place !in c.places) {
+                if (excused || ("semua" !in c.places && place !in c.places)) {
                     // pemain sudah pindah tempat (mis. berangkat ke kota): janji batal baik-baik
-                    receiveMessage(c.name, "Oh iya, kamu udah pindah ya. Janjinya nanti aja kalau kamu pulang 🙂")
+                    receiveMessage(c.name, if (excused) "Eh, tadi kamu lagi sibuk ya? Nggak apa-apa, lain kali aja 🙂"
+                        else "Oh iya, kamu udah pindah ya. Janjinya nanti aja kalau kamu pulang 🙂")
                     return@let
                 }
                 announce(social.behave(gameData, c.id, "ingkar_janji"))
@@ -1904,9 +1969,21 @@ class GameActivity : Activity() {
                 receiveMessage(c.name, "Aku nungguin kamu tadi... Kok nggak datang?")
             }
         }
+    }
+
+    /** Sekolah / kerja tetap hari ke-[d] yang tidak dihadiri (batas: 1 jam sebelum selesai). */
+    private fun checkMissedJobs(d: Int, wholeDay: Boolean, excused: Boolean = false) {
         life.jobs.toList().forEach { job ->
             val def = gameData.jobs[job.id] ?: return@forEach
-            if (!def.mandatory || !gameData.scheduled(def, life.weekdayIndex, life.slot) || life.hasAttended(def.id)) return@forEach
+            if (!def.mandatory || !gameData.scheduledOn(def, life.weekdayOf(d))) return@forEach
+            if (d < job.startDay || life.hasAttended(def.id, d) || life.isMarkedAbsent(def.id, d)) return@forEach
+            if (!wholeDay && life.minute <= def.endMin - 60) return@forEach
+            if (excused) {
+                // waktu dimajukan oleh cerita: dianggap hadir
+                life.markAttended(def.id, d)
+                return@forEach
+            }
+            life.markAbsent(def.id, d)
             job.absences++
             job.performance = (job.performance - 8).coerceAtLeast(0)
             val school = def.kind == "sekolah"
@@ -2022,7 +2099,7 @@ class GameActivity : Activity() {
             if (ref != null && social.rel(ref).met) notes += "Orang dalam: ${ref.name}"
             sheetList.addView(card(
                 title = "${j.icon}  ${j.name}",
-                sub = "${j.kindLabel} · ${daysText(j.days)} · ${j.slots.joinToString(", ")}\n" +
+                sub = "${j.kindLabel} · ${daysText(j.days)} · ${j.hoursText}\n" +
                     "💰 " + rupiah(j.pay) + (if (j.kind == "tetap") " / 30 hari" else " / kerja") +
                     (if (j.desc.isNotEmpty()) "\n" + j.desc else ""),
                 note = notes.joinToString(" · "),
@@ -2038,7 +2115,7 @@ class GameActivity : Activity() {
         addExtraVars(life.applyEffects(mapOf("energi" to -5L, "kewarasan" to (if (ok) 5L else -5L))))
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
-        advanceTime(fromFree = true)
+        passTime(60)
         if (life.dead) return
         afterTap = { continueFree() }
         showLine(null, if (ok) "Kamu diterima! ${j.name} — mulai sekarang kamu bisa bekerja sesuai jadwal."
@@ -2872,7 +2949,7 @@ class GameActivity : Activity() {
         phone.clearApp()
         phone.setTitle("📅  Kalender")
         phone.backHandler = null
-        phone.content.addView(pCard("Hari ini", "${life.dateText} · ${life.slot.label} ${life.slot.icon}"))
+        phone.content.addView(pCard("Hari ini", "${life.dateText} · ${life.timeText} ${life.slot.icon}"))
 
         val events = mutableListOf<Pair<Int, String>>()
         phoneData.appts.forEach { a ->
@@ -2905,7 +2982,7 @@ class GameActivity : Activity() {
             phone.content.addView(pSection("JADWAL RUTIN"))
             life.jobs.forEach { j ->
                 val def = gameData.jobs[j.id] ?: return@forEach
-                phone.content.addView(pCard("${def.icon} ${def.name}", "${daysText(def.days)} · ${def.slots.joinToString(", ")}"))
+                phone.content.addView(pCard("${def.icon} ${def.name}", "${daysText(def.days)} · ${def.hoursText}"))
             }
         }
         phone.scrollToTop()
@@ -3067,7 +3144,7 @@ class GameActivity : Activity() {
         phone.setTitle(j.name)
         phone.backHandler = { renderJobs() }
         phone.content.addView(pCard("${j.icon} ${j.kindLabel}",
-            "${daysText(j.days)} · ${j.slots.joinToString(", ")}\n💰 ${rupiah(j.pay)}" + (if (j.kind == "tetap") " per 30 hari" else " per kerja")))
+            "${daysText(j.days)} · ${j.hoursText}\n💰 ${rupiah(j.pay)}" + (if (j.kind == "tetap") " per 30 hari" else " per kerja")))
         if (j.desc.isNotEmpty()) phone.content.addView(pText(j.desc, 13f).apply { setPadding(4, 4, 4, 8) })
         phone.content.addView(pSection("SYARAT"))
         val ageOk = playerAge() >= j.minAge
@@ -3683,7 +3760,7 @@ class GameActivity : Activity() {
         life.applyEffects(mapOf("energi" to -5L, "kewarasan" to (if (social.rel(c).love >= 50) 5L else 2L)))
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
-        advanceTime(fromFree = true)
+        passTime(60)
         if (life.dead) return
         continueFree()
     }

@@ -277,6 +277,12 @@ Folder `app/src/main/assets/karakter/`:
 Ekspresi yang dipakai otomatis saat ngobrol/memberi hadiah: `senyum`, `kesal`, `biasa`.
 
 ## Aturan waktu & kebutuhan (sementara, bisa disesuaikan)
+
+**Jam sungguhan** (sejak build 26): jam berjalan per menit. Bagian hari: Pagi 04:00–10:59, Siang 11:00–14:59,
+Sore 15:00–17:59, Malam 18:00–03:59. Aktivitas punya `durasi`, pekerjaan punya `jam` (masuk–pulang).
+Per jam terjaga: 🍚 −2, 💧 −2,8, ⚡ −1 (begadang 00:00–04:00: ⚡ ×3 & 🧠 −1/jam). Saat tidur: ⚡ +11/jam,
+🍚/💧 turun setengahnya. Tidur < 6 jam: 🧠 −4, ⚡ −8. Kenyang/hidrasi/energi 0 → ❤️ turun tiap jam.
+
 | Kejadian | Akibat |
 |---|---|
 | Ganti slot (terjaga) | Kenyang −10, Hidrasi −14, Energi −5 |

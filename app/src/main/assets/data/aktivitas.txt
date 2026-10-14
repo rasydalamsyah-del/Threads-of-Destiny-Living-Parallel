@@ -7,6 +7,8 @@
 #  ikon   = emoji
 #  tempat = desa, kota, atau semua
 #  waktu  = pagi, siang, sore, malam (pisahkan koma), atau semua
+#           (Pagi 04:00–10:59 · Siang 11:00–14:59 · Sore 15:00–17:59 · Malam 18:00–03:59)
+#  durasi = lama kegiatan: 45 menit / 2 jam / 1,5 jam (bawaan 1 jam)
 #  efek   = energi, kenyang, hidrasi, kewarasan, kesehatan, uang (+/-),
 #           atau variabel lain (mis. akademik +2)
 #  syarat = (opsional) contoh: jalur != kerja   atau   usia >= 18
@@ -20,6 +22,7 @@ nama   = Makan bersama keluarga
 ikon   = 🍲
 tempat = desa
 waktu  = pagi, siang, malam
+durasi = 45 menit
 efek   = kenyang +50, hidrasi +30, kewarasan +5
 teks   = Ibu memasak sayur asem dan ikan bakar. Laras tak berhenti bercerita, Ayah hanya tersenyum mendengarkan.
 
@@ -28,6 +31,7 @@ nama   = Bantu Ibu di warung
 ikon   = 🍳
 tempat = desa
 waktu  = pagi, siang, sore
+durasi = 3 jam
 efek   = energi -20, uang +15000, kenyang -5, hidrasi -5, kewarasan -2
 teks   = Kamu menggoreng pisang dan melayani pembeli seharian. Ibu menyelipkan selembar uang ke tanganmu.
 
@@ -36,6 +40,7 @@ nama   = Melaut bersama Ayah
 ikon   = 🚣
 tempat = desa
 waktu  = pagi
+durasi = 5 jam
 efek   = energi -40, uang +40000, hidrasi -20, kenyang -10, kewarasan -3
 teks   = Ombak sedang tinggi. Tanganmu lecet menarik jaring, tapi hasil tangkapan hari ini lumayan.
 
@@ -44,6 +49,7 @@ nama   = Duduk di dermaga mercusuar
 ikon   = 🌅
 tempat = desa
 waktu  = sore, malam
+durasi = 1,5 jam
 efek   = kewarasan +12, energi -5
 teks   = Angin laut menyentuh wajahmu. Mercusuar tua itu masih berdiri, sama seperti dulu... hanya saja kali ini kamu duduk sendirian.
 
@@ -52,6 +58,7 @@ nama   = Menemani Laras bermain
 ikon   = 🪁
 tempat = desa
 waktu  = siang, sore
+durasi = 1 jam
 efek   = kewarasan +8, energi -8
 teks   = Laras memaksamu menerbangkan layang-layang. Kalian tertawa sampai lupa waktu.
 
@@ -60,6 +67,7 @@ nama   = Belajar untuk persiapan SMA
 ikon   = 📚
 tempat = semua
 waktu  = siang, malam
+durasi = 2 jam
 syarat = jalur != kerja
 efek   = energi -12, kewarasan -2, akademik +2
 teks   = Kamu membuka buku-buku lama. Soal-soal matematika itu tetap saja membuat kepala pusing.
@@ -69,6 +77,7 @@ nama   = Istirahat sebentar
 ikon   = 🛏️
 tempat = semua
 waktu  = semua
+durasi = 1 jam
 efek   = energi +25, kewarasan +3
 teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristirahat.
 
@@ -79,6 +88,7 @@ nama   = Jalan-jalan di Taman Kota
 ikon   = 🌳
 tempat = kota
 waktu  = pagi, sore, malam
+durasi = 1 jam
 efek   = kewarasan +10, energi -8, hidrasi -6
 teks   = Lampu-lampu taman mulai menyala. Orang-orang berlalu-lalang, tak satu pun yang kamu kenal.
 
@@ -87,6 +97,7 @@ nama   = Menjelajah sudut kota
 ikon   = 🧭
 tempat = kota
 waktu  = siang, sore
+durasi = 2 jam
 efek   = energi -15, hidrasi -10, kewarasan +4, wawasan_kota +1
 teks   = Kamu menyusuri jalan-jalan Sakala, menghafal arah dan nama-nama gang.
 
@@ -95,6 +106,7 @@ nama   = Mencari jejak sahabat lama
 ikon   = 🔍
 tempat = kota
 waktu  = siang, sore
+durasi = 2 jam
 efek   = energi -15, kewarasan -2, petunjuk_sahabat +1
 teks   = Kamu bertanya ke beberapa orang di sekitar stasiun. Tak ada yang tahu... tapi seorang tukang parkir sepertinya mengingat sesuatu.
 
@@ -105,6 +117,7 @@ nama   = Belajar di perpustakaan kota
 ikon   = 🏛️
 tempat = kota
 waktu  = siang, sore
+durasi = 2 jam
 syarat = jalur == sma
 efek   = energi -12, hidrasi -6, kewarasan -1, akademik +3, hidup_baik +1
 teks   = Perpustakaan kota sunyi dan sejuk. Kamu mengerjakan soal-soal sampai lampu baca mulai berkedip.
@@ -114,6 +127,7 @@ nama   = Lari pagi keliling taman
 ikon   = 🏃
 tempat = kota
 waktu  = pagi
+durasi = 45 menit
 efek   = energi -10, hidrasi -12, kesehatan +3, kewarasan +6, hidup_baik +1
 teks   = Udara pagi kota belum terlalu kotor. Napasmu terengah, tapi kepalamu terasa jernih.
 
@@ -124,6 +138,7 @@ nama   = Nongkrong & belanja di mal
 ikon   = 🛍️
 tempat = kota
 waktu  = siang, sore, malam
+durasi = 3 jam
 efek   = uang -120000, kewarasan +15, energi -10, kenyang +15, foya +1
 teks   = Lampu-lampu mal menyilaukan. Kamu membeli baju yang sebenarnya tidak perlu, lalu makan di restoran cepat saji. Rasanya menyenangkan... untuk sementara.
 
@@ -132,6 +147,7 @@ nama   = Ngopi di kafe kekinian
 ikon   = 🧋
 tempat = kota
 waktu  = siang, sore, malam
+durasi = 1,5 jam
 efek   = uang -45000, kewarasan +8, hidrasi +20, foya +1
 teks   = Segelas kopi susu seharga makan dua hari di desa. Kamu memotretnya dulu sebelum diminum.
 
@@ -140,5 +156,6 @@ nama   = Begadang main game di warnet
 ikon   = 🎮
 tempat = kota
 waktu  = malam
+durasi = 4 jam
 efek   = uang -20000, kewarasan +10, energi -25, kesehatan -3, akademik -1, foya +1
 teks   = "Satu ronde lagi," katamu, untuk kesepuluh kalinya. Saat keluar warnet, langit sudah mulai terang.

@@ -71,13 +71,15 @@ Pemandu: Ending yang mungkin: bersama sahabat masa kecil, menikah dengan orang l
 
 # ---------- 5. WAKTU ----------
 @waktu 5 · Waktu terus berjalan
-@tunjuk jam bawah | Ini JAM: hari, tanggal, dan waktu.<br>Pagi → Siang → Sore → Malam.<br><br>Contoh: kamu memilih "Bantu Ibu di warung" saat Siang. Setelah selesai, waktunya jadi Sore. Saat Malam, kamu bisa tidur sampai pagi.
+@tunjuk jam bawah | Ini JAM: hari, tanggal, dan jam sungguhan (contoh: Senin, 11:00 ☀️).<br><br>Setiap kegiatan punya lama sendiri. Contoh: makan bersama keluarga 45 menit, bantu Ibu di warung 3 jam, melaut 5 jam. Kalau sekarang 11:00 lalu kamu bantu warung, selesainya jam 14:00.
+@tunjuk jam bawah | Sekolah & kerja punya jam masuk. Contoh: SMA 07:00–14:00. Datang lebih dari 15 menit setelah jam masuk = TERLAMBAT (nilai/kinerja turun). Tidak datang sama sekali = bolos.<br><br>Hari dibagi Pagi (04–11), Siang (11–15), Sore (15–18), Malam (18–04). Ada kegiatan & orang yang hanya bisa ditemui di bagian hari tertentu.
+@tunjuk jam bawah | TIDUR: saat Malam muncul tombol Tidur. Kamu memilih jam bangun.<br>Contoh: tidur jam 22:00, bangun 06:00 = 8 jam, segar. Tidur kurang dari 6 jam = besok mengantuk.<br><br>BEGADANG lewat tengah malam membuat ⚡ Energi dan 🧠 Kewarasan turun lebih cepat.
 Pemandu: Sewa kos, kiriman keluarga, dan gaji juga berjalan sesuai tanggal. Kamu bisa melihatnya di aplikasi Kalender.
 
 # ---------- 6. WAKTU BEBAS ----------
 @waktu 6 · Waktu bebas
-@tunjuk bebas atas | Ini layar WAKTU BEBAS. Muncul di saat-saat tertentu, ketika cerita berhenti dan kamu menjalani hidupmu sendiri.<br><br>Atas: sisa kegiatan & waktu sekarang.<br>Daftar AKTIVITAS: makan, bekerja, istirahat, belajar... (masing-masing tertulis efeknya).
-@tunjuk bebas atas | Di bawahnya ada tombol Status & Tas, Belanja, HP, Menu, dan 🔎 Cari kerja.<br><br>"👥 Temui seseorang": ngobrol tentang topik tertentu atau memberi hadiah. Contoh: Bayu suka ngobrol soal laut dan sepak bola, dan senang diberi gorengan. Tapi jangan bahas pelajaran, dia bosan!<br><br>Saat Malam muncul tombol "Tidur sampai pagi".
+@tunjuk bebas atas | Ini layar WAKTU BEBAS. Muncul di saat-saat tertentu, ketika cerita berhenti dan kamu menjalani hidupmu sendiri.<br><br>Atas: sisa kegiatan & waktu sekarang.<br>Daftar AKTIVITAS: makan, bekerja, istirahat, belajar... (masing-masing tertulis ⏱ lamanya & efeknya).
+@tunjuk bebas atas | Di bawahnya ada tombol Status & Tas, Belanja, HP, Menu, dan 🔎 Cari kerja.<br><br>"👥 Temui seseorang": ngobrol tentang topik tertentu atau memberi hadiah. Contoh: Bayu suka ngobrol soal laut dan sepak bola, dan senang diberi gorengan. Tapi jangan bahas pelajaran, dia bosan!<br><br>Saat Malam muncul tombol "Tidur" untuk memilih jam bangun.
 Pemandu: Sekarang giliranmu. Coba makan roti di Status & Tas, lalu pilih 2 kegiatan. Misalnya temui Bayu.
 @bebas 2
 
@@ -105,7 +107,8 @@ Pemandu: Bagus! Jumlah kegiatan di waktu bebas ditentukan cerita. Setelah habis,
 Pemandu: Kerja yang mudah bisa langsung dilamar. Kerja yang lebih baik butuh berkas, lalu tes tertulis dan wawancara.
 Pemandu: Contoh: saat wawancara ditanya "Pernah kerja di kafe?" Kamu boleh berbohong "Pernah!" supaya terlihat hebat. Tapi bisa ketahuan, dan langsung ditolak.
 Pemandu: Contoh orang dalam: Ayah kenal Juragan Darto. Kalau Cinta & Kepercayaan Ayah tinggi, peluangmu diterima di gudang ikan jauh lebih besar.
-Pemandu: Sekolah dan kerja tetap WAJIB dihadiri sesuai jadwal. Bolos 3 kali dapat peringatan, 6 kali dikeluarkan atau dipecat.
+Pemandu: Sekolah dan kerja tetap WAJIB dihadiri sesuai jam. Di waktu bebas, kewajibanmu muncul di "📌 Jadwalmu sekarang" mulai 1 jam sebelum jam masuk.
+Pemandu: Bolos 3 kali dapat peringatan, 6 kali dikeluarkan atau dipecat. Sering terlambat juga menurunkan nilai dan kinerja.
 Pemandu: Kariermu terbentuk dari pilihanmu. Rajin di satu bidang membuka pekerjaan yang lebih baik.
 
 # ---------- 9. RINTANGAN ----------

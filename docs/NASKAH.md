@@ -128,16 +128,17 @@ Jam ini juga dipakai di layar kunci HP.
 ```
 @hidup mulai              nyalakan panel status, uang, jam otomatis
 @lokasi desa              tempat pemain (menentukan aktivitas & toko): desa / kota
-@kalender Senin siang     atur hari & waktu (pagi / siang / sore / malam)
+@kalender Senin siang     atur hari & jam (pagi=06:00, siang=11:00, sore=15:00, malam=18:30) atau jam tepat: @kalender Senin 07:30
 @uang +50000              tambah / kurangi uang
 @stat energi -10          ubah bar: kesehatan, kenyang, hidrasi, kewarasan, energi
 @barang air_mineral 2     masukkan barang ke tas (id dari data/barang.txt)
-@maju 1                   majukan waktu (Malam → tidur → Pagi hari berikutnya)
+@maju 1                   loncat ke bagian hari berikutnya (Malam → tidur sampai 06:00)
+@maju 2 jam               majukan jam (juga: @maju 30 menit). Waktu yang dimajukan cerita tidak dihitung bolos
 @bebas 2                  waktu bebas: pemain memilih 2 aktivitas, lalu naskah lanjut
 ```
 - Saat `@bebas`, pemain memilih aktivitas dari `data/aktivitas.txt`, bisa membuka **Status & Tas** dan **Belanja**.
   Saat Malam ada tombol **Tidur sampai pagi**.
-- Variabel otomatis: `{uang}`, `{hari}`, `{waktu}`, `{hari_ke}`.
+- Variabel otomatis: `{uang}`, `{hari}`, `{waktu}` (Pagi/Siang/Sore/Malam), `{jam}` (mis. 07:30), `jam_menit` (menit sejak tengah malam, untuk `@jika`), `{hari_ke}`.
 - Kalau Kesehatan habis, tokoh **meninggal** (game over).
 - Cara menambah barang & aktivitas: **[DATA.md](DATA.md)**.
 

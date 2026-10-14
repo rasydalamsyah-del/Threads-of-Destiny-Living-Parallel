@@ -11,8 +11,24 @@ import kotlin.random.Random
  */
 class LifeState {
 
-    enum class Slot(val label: String, val icon: String) {
-        PAGI("Pagi", "☀️"), SIANG("Siang", "🌤️"), SORE("Sore", "🌇"), MALAM("Malam", "🌙")
+    /**
+     * Bagian hari (untuk ketersediaan aktivitas, karakter, janji temu).
+     * start = menit saat bagian ini dimulai, set = jam yang dipakai bila naskah memakai "@kalender Senin pagi".
+     */
+    enum class Slot(val label: String, val icon: String, val start: Int, val set: Int, val end: Int) {
+        PAGI("Pagi", "☀️", 4 * 60, 6 * 60, 11 * 60),
+        SIANG("Siang", "🌤️", 11 * 60, 11 * 60, 15 * 60),
+        SORE("Sore", "🌇", 15 * 60, 15 * 60, 18 * 60),
+        MALAM("Malam", "🌙", 18 * 60, 18 * 60 + 30, 24 * 60);
+
+        companion object {
+            fun of(minute: Int): Slot = when (minute) {
+                in 4 * 60 until 11 * 60 -> PAGI
+                in 11 * 60 until 15 * 60 -> SIANG
+                in 15 * 60 until 18 * 60 -> SORE
+                else -> MALAM
+            }
+        }
     }
 
     enum class Stat(val key: String, val label: String, val icon: String) {
@@ -56,10 +72,32 @@ class LifeState {
             return runCatching { LocalDate.of(y, m, d).toEpochDay() }.getOrNull()
         }
 
-        /** Penurunan tiap pergantian waktu (saat terjaga). */
-        private const val DECAY_KENYANG = 10
-        private const val DECAY_HIDRASI = 14
-        private const val DECAY_ENERGI = 5
+        /** Perubahan per jam saat terjaga / tidur. */
+        private const val KENYANG_PER_JAM = -2.0f
+        private const val HIDRASI_PER_JAM = -2.8f
+        private const val ENERGI_PER_JAM = -1.0f
+        private const val TIDUR_ENERGI_PER_JAM = 11f
+
+        /** "07:30" → 450 menit. "24:00" → 1440. */
+        fun parseClock(t: String): Int? {
+            val m = Regex("^(\\d{1,2})[:.](\\d{2})$").find(t.trim()) ?: return null
+            val h = m.groupValues[1].toInt(); val mi = m.groupValues[2].toInt()
+            if (h > 24 || mi > 59) return null
+            return h * 60 + mi
+        }
+
+        /** 450 → "07:30". */
+        fun clock(min: Int): String {
+            val m = ((min % 1440) + 1440) % 1440
+            return "%02d:%02d".format(m / 60, m % 60)
+        }
+
+        /** 90 → "1 jam 30 menit". */
+        fun duration(min: Int): String = when {
+            min < 60 -> "$min menit"
+            min % 60 == 0 -> "${min / 60} jam"
+            else -> "${min / 60} jam ${min % 60} menit"
+        }
 
         fun fromJson(s: String?): LifeState {
             val st = LifeState()
@@ -69,7 +107,8 @@ class LifeState {
                 st.active = o.optBoolean("active")
                 st.day = o.optInt("day", 0)
                 st.startWeekday = o.optInt("startWeekday", 0)
-                st.slot = runCatching { Slot.valueOf(o.optString("slot")) }.getOrDefault(Slot.PAGI)
+                st.minute = if (o.has("minute")) o.optInt("minute")
+                    else runCatching { Slot.valueOf(o.optString("slot")).set }.getOrDefault(Slot.PAGI.set)
                 st.money = o.optLong("money", 0)
                 st.dead = o.optBoolean("dead")
                 st.deathReason = o.optString("deathReason")
@@ -105,7 +144,13 @@ class LifeState {
     var active = false
     var day = 0
     var startWeekday = 0
-    var slot = Slot.PAGI
+    /** Jam sekarang dalam menit sejak tengah malam (0–1439). */
+    var minute = 7 * 60
+    /** Bagian hari dari jam sekarang. Mengisi nilai = loncat ke awal bagian itu. */
+    var slot: Slot
+        get() = Slot.of(minute)
+        set(v) { minute = v.set }
+    private val frac = mutableMapOf<Stat, Float>()
     var money = 0L
     var dead = false
     var deathReason = ""
@@ -139,10 +184,20 @@ class LifeState {
     val dateText: String
         get() = date()?.let { "${it.dayOfMonth} ${MONTHS[it.monthValue - 1]} ${it.year}" } ?: "Hari ke-${day + 1}"
 
-    fun attendKey(jobId: String) = "$day:${slot.name}:$jobId"
-    fun hasAttended(jobId: String) = attended.split(';').contains(attendKey(jobId))
-    fun markAttended(jobId: String) {
-        attended = (attended.split(';').filter { it.startsWith("$day:") } + attendKey(jobId)).joinToString(";")
+    /** Hari dalam seminggu untuk hari ke-d (0 = Senin). */
+    fun weekdayOf(d: Int): Int = startEpochDay.takeIf { it != 0L }
+        ?.let { LocalDate.ofEpochDay(it + d).dayOfWeek.value - 1 } ?: ((startWeekday + d) % 7)
+
+    /** Penanda per hari: "hari:id" = hadir, "hari:x:id" = sudah dicatat absen. */
+    fun hasAttended(jobId: String, d: Int = day) = attended.split(';').contains("$d:$jobId")
+    fun markAttended(jobId: String, d: Int = day) = mark("$d:$jobId")
+    fun isMarkedAbsent(jobId: String, d: Int) = attended.split(';').contains("$d:x:$jobId")
+    fun markAbsent(jobId: String, d: Int) = mark("$d:x:$jobId")
+    private fun mark(key: String) {
+        // simpan penanda 2 hari terakhir saja
+        attended = (attended.split(';').filter { k ->
+            k.substringBefore(':').toIntOrNull()?.let { it >= day - 1 } == true
+        } + key).joinToString(";")
     }
 
     val stats: MutableMap<Stat, Int> = mutableMapOf(
@@ -161,63 +216,84 @@ class LifeState {
     }
 
     val weekday: String get() = WEEKDAYS[weekdayIndex]
+    val timeText: String get() = clock(minute)
     val clockText: String
-        get() = date()?.let { "$weekday, ${it.dayOfMonth} ${MONTHS[it.monthValue - 1].take(3)} · ${slot.label} ${slot.icon}" }
-            ?: "$weekday · ${slot.label} ${slot.icon}"
+        get() = date()?.let { "$weekday, ${it.dayOfMonth} ${MONTHS[it.monthValue - 1].take(3)} · $timeText ${slot.icon}" }
+            ?: "$weekday · $timeText ${slot.icon}"
 
+    /** "@kalender Senin pagi" atau "@kalender Senin 07:30". */
     fun setCalendar(weekdayName: String, slotName: String) {
         val wd = WEEKDAYS.indexOfFirst { it.equals(weekdayName, true) }
-        if (wd >= 0) startWeekday = ((wd - day) % 7 + 7) % 7
-        Slot.values().firstOrNull { it.label.equals(slotName, true) }?.let { slot = it }
+        if (wd >= 0 && startEpochDay == 0L) startWeekday = ((wd - day) % 7 + 7) % 7
+        val t = parseClock(slotName)
+        if (t != null) minute = t.coerceIn(0, 1439)
+        else Slot.values().firstOrNull { it.label.equals(slotName, true) }?.let { minute = it.set }
     }
 
+    /** Menit sampai tengah malam berikutnya. */
+    val minutesToMidnight: Int get() = 1440 - minute
+
     /**
-     * Majukan waktu satu slot. Malam → Pagi berarti tidur.
-     * Mengembalikan daftar peringatan baru (mis. "Kamu mulai lapar").
+     * Majukan waktu [min] menit (tidak melewati tengah malam — pemanggil memecahnya).
+     * Mengembalikan peringatan baru (mis. "Kamu mulai lapar").
      */
-    fun advance(): List<String> {
+    fun pass(min: Int, sleeping: Boolean = false): List<String> {
+        if (min <= 0) return emptyList()
         val before = stats.toMap()
-        if (slot == Slot.MALAM) {
-            sleep()
-        } else {
-            slot = Slot.values()[slot.ordinal + 1]
-            change(Stat.KENYANG, -DECAY_KENYANG)
-            change(Stat.HIDRASI, -DECAY_HIDRASI)
-            change(Stat.ENERGI, -DECAY_ENERGI)
-            needsEffect()
+        var left = min
+        while (left > 0 && !dead) {
+            val step = minOf(left, 15)
+            val h = step / 60f
+            val lateNight = !sleeping && (minute < 4 * 60)
+            if (sleeping) {
+                addFrac(Stat.KENYANG, KENYANG_PER_JAM * 0.5f * h)
+                addFrac(Stat.HIDRASI, HIDRASI_PER_JAM * 0.45f * h)
+                val wellFed = this[Stat.KENYANG] >= 20 && this[Stat.HIDRASI] >= 20
+                addFrac(Stat.ENERGI, (if (wellFed) TIDUR_ENERGI_PER_JAM else 6f) * h + sleepEnergy / 8f * h)
+                addFrac(Stat.KEWARASAN, (if (wellFed) 0.7f else -0.4f) * h + sleepSanity / 8f * h)
+            } else {
+                addFrac(Stat.KENYANG, KENYANG_PER_JAM * h)
+                addFrac(Stat.HIDRASI, HIDRASI_PER_JAM * h)
+                addFrac(Stat.ENERGI, ENERGI_PER_JAM * h * (if (lateNight) 3f else 1f))
+                if (lateNight) addFrac(Stat.KEWARASAN, -1f * h)
+            }
+            needsEffect(h)
+            minute += step
+            left -= step
+            if (minute >= 1440) {
+                minute -= 1440
+                day++
+            }
         }
         return warnings(before)
     }
 
-    private fun sleep() {
-        day++
-        slot = Slot.PAGI
-        change(Stat.KENYANG, -15)
-        change(Stat.HIDRASI, -15)
-        val wellFed = this[Stat.KENYANG] >= 20 && this[Stat.HIDRASI] >= 20
-        change(Stat.ENERGI, (if (wellFed) 80 else 45) + sleepEnergy)
-        change(Stat.KEWARASAN, (if (wellFed) 5 else -3) + sleepSanity)
-        needsEffect()
+    private fun addFrac(s: Stat, delta: Float) {
+        val v = (frac[s] ?: 0f) + delta
+        val whole = v.toInt()
+        if (whole != 0) change(s, whole)
+        frac[s] = v - whole
     }
 
-    /** Akibat kebutuhan dasar terhadap kesehatan & kewarasan. */
-    private fun needsEffect() {
+    /** Akibat kebutuhan dasar terhadap kesehatan & kewarasan, untuk [h] jam. */
+    private fun needsEffect(h: Float) {
         val k = this[Stat.KENYANG]
-        val h = this[Stat.HIDRASI]
+        val hy = this[Stat.HIDRASI]
         val e = this[Stat.ENERGI]
-        var dmg = 0
-        if (k == 0) dmg += 10
-        if (h == 0) dmg += 15
-        if (e == 0) dmg += 5
-        if (dmg > 0) change(Stat.KESEHATAN, -dmg)
-        else if (k >= 50 && h >= 50 && e >= 30) change(Stat.KESEHATAN, 2)
+        var dmg = 0f
+        if (k == 0) dmg += 2f
+        if (hy == 0) dmg += 3f
+        if (e == 0) dmg += 1f
+        if (dmg > 0f) addFrac(Stat.KESEHATAN, -dmg * h)
+        else if (k >= 50 && hy >= 50 && e >= 30) addFrac(Stat.KESEHATAN, 0.4f * h)
 
-        if (k < 25 || h < 25 || e < 20) change(Stat.KEWARASAN, -3)
+        if (k < 25 || hy < 25 || e < 20) addFrac(Stat.KEWARASAN, -0.6f * h)
+        val h2 = hy
 
         if (this[Stat.KESEHATAN] <= 0) {
             dead = true
             deathReason = when {
-                h == 0 -> "dehidrasi"
+                h2 == 0 -> "dehidrasi"
                 k == 0 -> "kelaparan"
                 else -> "kelelahan"
             }
@@ -283,6 +359,7 @@ class LifeState {
         put("day", day)
         put("startWeekday", startWeekday)
         put("slot", slot.name)
+        put("minute", minute)
         put("money", money)
         put("dead", dead)
         put("deathReason", deathReason)

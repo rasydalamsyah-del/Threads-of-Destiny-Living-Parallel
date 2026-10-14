@@ -52,7 +52,7 @@ object StoryScript {
         /** Waktu bebas sebanyak n kesempatan. */
         data class Free(val count: Int) : Cmd()
         /** Majukan waktu n kali (Pagi → Siang → Sore → Malam → tidur → Pagi). */
-        data class Advance(val count: Int) : Cmd()
+        data class Advance(val count: Int, val minutes: Int = 0) : Cmd()
         /** Ubah uang. */
         data class Money(val delta: Long) : Cmd()
         /** Ubah bar: kesehatan, kenyang, hidrasi, kewarasan, energi. */
@@ -278,7 +278,15 @@ object StoryScript {
                 Cmd.Calendar(args[0], args[1])
             }
             "bebas", "free" -> Cmd.Free(args.firstOrNull()?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
-            "maju", "advance" -> Cmd.Advance(args.firstOrNull()?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
+            "maju", "advance" -> {
+                val nArg = args.firstOrNull()?.replace(',', '.')
+                val unit = args.getOrNull(1)
+                when (unit) {
+                    "jam" -> Cmd.Advance(1, ((nArg?.toFloatOrNull() ?: 1f) * 60).toInt())
+                    "menit" -> Cmd.Advance(1, nArg?.toIntOrNull() ?: 30)
+                    else -> Cmd.Advance(nArg?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
+                }
+            }
             "uang", "money" -> {
                 val v = rest.replace(".", "").replace(" ", "").removePrefix("+").toLongOrNull()
                     ?: throw ParseError(n, "format: @uang +50000  (atau -5000)")

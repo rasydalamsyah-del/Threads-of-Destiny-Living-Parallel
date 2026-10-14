@@ -113,7 +113,12 @@ class GameData private constructor(
         val hasTest: Boolean,
         /** Sekolah: ujian setiap N hari (0 = tidak ada). */
         val examEvery: Int,
+        /** Jam mulai & selesai (menit sejak tengah malam). */
+        val startMin: Int,
+        val endMin: Int,
     ) {
+        val hoursText: String get() = LifeState.clock(startMin) + "–" + (if (endMin >= 1440) "24:00" else LifeState.clock(endMin))
+        val lengthMin: Int get() = endMin - startMin
         /** Sekolah & pekerjaan tetap wajib dihadiri; bolos/absen tercatat. */
         val mandatory: Boolean get() = kind == "sekolah" || kind == "tetap"
         val kindLabel: String
@@ -170,6 +175,8 @@ class GameData private constructor(
         val condition: String?,
         val text: String,
         val icon: String,
+        /** Lama kegiatan dalam menit. */
+        val minutes: Int,
     )
 
     data class ItemDef(
@@ -198,6 +205,7 @@ class GameData private constructor(
                     condition = m["syarat"]?.takeIf { it.isNotBlank() },
                     text = m["teks"] ?: "",
                     icon = m["ikon"] ?: "•",
+                    minutes = minutes(m["durasi"]) ?: 60,
                 )
             }
             val items = readSections(ctx, "data/barang.txt").associate { (id, m) ->
@@ -265,6 +273,8 @@ class GameData private constructor(
                     documents = list(m["berkas"]).toList(),
                     hasTest = (m["tes"] ?: "tidak").trim().lowercase() == "ya",
                     examEvery = m["ujian_tiap"]?.trim()?.toIntOrNull() ?: 0,
+                    startMin = hours(m["jam"], list(m["waktu"]))?.first ?: 7 * 60,
+                    endMin = hours(m["jam"], list(m["waktu"]))?.second ?: 11 * 60,
                 )
             }
             val kos = readSections(ctx, "data/kos.txt").associate { (id, m) ->
@@ -364,6 +374,32 @@ class GameData private constructor(
             return out
         }
 
+        /** "45 menit", "2 jam", "1,5 jam", "1 jam 30 menit", "90" → menit. */
+        private fun minutes(v: String?): Int? {
+            val t = v?.trim()?.lowercase()?.replace(',', '.') ?: return null
+            if (t.isEmpty()) return null
+            t.toIntOrNull()?.let { return it }
+            var total = 0f
+            Regex("([\\d.]+)\\s*(jam|menit)").findAll(t).forEach { m ->
+                val n = m.groupValues[1].toFloatOrNull() ?: 0f
+                total += if (m.groupValues[2] == "jam") n * 60 else n
+            }
+            return if (total > 0) total.toInt() else null
+        }
+
+        /** "07:00-14:00" → (420, 840). Tanpa jam: dari bagian hari (pagi, siang, sore, malam). */
+        private fun hours(v: String?, slots: Set<String>): Pair<Int, Int>? {
+            v?.split('-', '–')?.map { it.trim() }?.takeIf { it.size == 2 }?.let { (a, b) ->
+                val s = LifeState.parseClock(a); val e = LifeState.parseClock(b)
+                if (s != null && e != null && e > s) return s to e
+            }
+            val ranges = mapOf("pagi" to (7 * 60 to 11 * 60), "siang" to (11 * 60 to 15 * 60),
+                "sore" to (15 * 60 to 18 * 60), "malam" to (18 * 60 to 22 * 60))
+            val picked = slots.mapNotNull { ranges[it] }
+            if (picked.isEmpty()) return null
+            return picked.minOf { it.first } to picked.maxOf { it.second }
+        }
+
         private val DAY_NAMES = listOf("senin", "selasa", "rabu", "kamis", "jumat", "sabtu", "minggu")
 
         /** "senin-sabtu", "senin, rabu, jumat", "setiap hari" → indeks hari (0 = Senin). */
@@ -429,6 +465,10 @@ class GameData private constructor(
         }
 
     /** Kegiatan yang dijadwalkan pada hari & waktu tertentu. */
-    fun scheduled(job: JobDef, weekdayIndex: Int, slot: LifeState.Slot): Boolean =
-        weekdayIndex in job.days && ("semua" in job.slots || slot.label.lowercase() in job.slots)
+    /** Pekerjaan dijadwalkan pada hari itu. */
+    fun scheduledOn(job: JobDef, weekdayIndex: Int): Boolean = weekdayIndex in job.days
+
+    /** Bisa berangkat sekarang: mulai 1 jam sebelum jam masuk, paling lambat 1 jam sebelum selesai. */
+    fun canAttendNow(job: JobDef, weekdayIndex: Int, minute: Int): Boolean =
+        scheduledOn(job, weekdayIndex) && minute >= job.startMin - 60 && minute <= job.endMin - 60
 }
