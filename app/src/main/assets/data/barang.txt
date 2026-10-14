@@ -1,0 +1,100 @@
+# ==========================================================
+#  DAFTAR BARANG (makanan, minuman, dll.)
+#  Bisa ditambah/diubah dari HP. Panduan: docs/DATA.md
+#
+#  [id_barang]          → id unik, huruf kecil, tanpa spasi
+#  nama   = nama yang tampil
+#  ikon   = emoji
+#  harga  = harga dalam rupiah
+#  tahan  = berapa hari sampai basi/kedaluwarsa (0 = harus habis hari itu juga)
+#  tempat = di mana bisa dibeli: desa, kota (pisahkan dengan koma)
+#  efek   = kenyang, hidrasi, energi, kewarasan, kesehatan (+/-)
+# ==========================================================
+
+[air_mineral]
+nama   = Air mineral 600 ml
+ikon   = 💧
+harga  = 4000
+tahan  = 60
+tempat = desa, kota
+efek   = hidrasi +35
+
+[teh_manis]
+nama   = Es teh manis
+ikon   = 🧋
+harga  = 5000
+tahan  = 0
+tempat = desa, kota
+efek   = hidrasi +30, kewarasan +3, kenyang +3
+
+[kopi_sachet]
+nama   = Kopi sachet
+ikon   = ☕
+harga  = 2500
+tahan  = 180
+tempat = desa, kota
+efek   = energi +15, hidrasi +5, kewarasan +2
+
+[nasi_bungkus]
+nama   = Nasi bungkus lauk ikan
+ikon   = 🍱
+harga  = 12000
+tahan  = 0
+tempat = desa, kota
+efek   = kenyang +50, hidrasi +5, kewarasan +3
+
+[gorengan]
+nama   = Gorengan (3 biji)
+ikon   = 🍤
+harga  = 5000
+tahan  = 1
+tempat = desa
+efek   = kenyang +18
+
+[roti_tawar]
+nama   = Roti tawar
+ikon   = 🍞
+harga  = 16000
+tahan  = 4
+tempat = desa, kota
+efek   = kenyang +30
+
+[mi_instan]
+nama   = Mi instan
+ikon   = 🍜
+harga  = 3500
+tahan  = 120
+tempat = desa, kota
+efek   = kenyang +28, hidrasi -5, kewarasan +2
+
+[pisang]
+nama   = Pisang (2 buah)
+ikon   = 🍌
+harga  = 4000
+tahan  = 3
+tempat = desa
+efek   = kenyang +15, energi +5
+
+[ikan_asin]
+nama   = Ikan asin goreng
+ikon   = 🐟
+harga  = 8000
+tahan  = 5
+tempat = desa
+efek   = kenyang +22, hidrasi -8
+
+[roti_sobek]
+nama   = Roti isi cokelat
+ikon   = 🥐
+harga  = 9000
+tahan  = 3
+tempat = kota
+efek   = kenyang +22, kewarasan +3
+
+[obat_flu]
+nama   = Obat flu & sakit perut
+ikon   = 💊
+harga  = 9000
+tahan  = 365
+tempat = desa, kota
+efek   = kesehatan +20

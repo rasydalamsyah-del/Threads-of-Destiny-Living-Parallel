@@ -38,6 +38,10 @@ import com.valeriusgames.threadsofdestiny.R
 import com.valeriusgames.threadsofdestiny.SparkleView
 import com.valeriusgames.threadsofdestiny.audio.AudioPlayer
 import com.valeriusgames.threadsofdestiny.enterImmersiveMode
+import com.valeriusgames.threadsofdestiny.life.GameData
+import com.valeriusgames.threadsofdestiny.life.LifeHudView
+import com.valeriusgames.threadsofdestiny.life.LifeState
+import com.valeriusgames.threadsofdestiny.life.rupiah
 import com.valeriusgames.threadsofdestiny.save.SaveData
 import com.valeriusgames.threadsofdestiny.save.SaveLoadActivity
 import com.valeriusgames.threadsofdestiny.save.SaveStore
@@ -72,7 +76,7 @@ class GameActivity : Activity() {
         private const val LOG_LIMIT = 80
     }
 
-    private enum class Wait { BUSY, TAP, PHONE, CHOICE }
+    private enum class Wait { BUSY, TAP, PHONE, CHOICE, FREE }
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -98,6 +102,25 @@ class GameActivity : Activity() {
     private lateinit var nameError: View
     private lateinit var nameSparkles: SparkleView
     private lateinit var choiceList: LinearLayout
+    private lateinit var lifeHud: LifeHudView
+    private lateinit var lifeNotice: TextView
+    private lateinit var sheet: View
+    private lateinit var sheetTitle: TextView
+    private lateinit var sheetSub: TextView
+    private lateinit var sheetList: LinearLayout
+    private lateinit var sheetButtons: LinearLayout
+    private lateinit var deathOverlay: View
+
+    // ---- sistem kehidupan ----
+    private var life = LifeState()
+    private val gameData by lazy { GameData.get(this) }
+    /** Aksi setelah pemain mengetuk kalimat (dipakai waktu bebas), bukan lanjut naskah. */
+    private var afterTap: (() -> Unit)? = null
+    private var freeLeft = 0
+    /** Tombol kembali saat lembar terbuka (null = tidak bisa ditutup dengan kembali). */
+    private var sheetBack: (() -> Unit)? = null
+    private val noticeQueue = ArrayDeque<String>()
+    private var noticeShowing = false
 
     private lateinit var audio: AudioPlayer
     private var settings = GameSettings.Values()
@@ -157,6 +180,18 @@ class GameActivity : Activity() {
         nameError = findViewById(R.id.name_error)
         nameSparkles = findViewById(R.id.name_sparkles)
         choiceList = findViewById(R.id.choice_list)
+        lifeHud = findViewById(R.id.life_hud)
+        lifeNotice = findViewById(R.id.life_notice)
+        sheet = findViewById(R.id.sheet_overlay)
+        sheetTitle = findViewById(R.id.sheet_title)
+        sheetSub = findViewById(R.id.sheet_sub)
+        sheetList = findViewById(R.id.sheet_list)
+        sheetButtons = findViewById(R.id.sheet_buttons)
+        deathOverlay = findViewById(R.id.death_overlay)
+        lifeHud.setOnClickListener { if (wait != Wait.BUSY) openStatus(returnTo = currentSheetReturn()) }
+        sheet.setOnClickListener { sheetBack?.invoke() }
+        findViewById<View>(R.id.death_load).setOnClickListener { openSaveLoad(SaveLoadActivity.MODE_LOAD, null) }
+        findViewById<View>(R.id.death_menu).setOnClickListener { leaveToMenu() }
         phone = PhoneScreen(findViewById(R.id.phone_overlay)) { onPhoneClosed() }
 
         audio = AudioPlayer(this)
@@ -217,7 +252,10 @@ class GameActivity : Activity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         when {
+            deathOverlay.visibility == View.VISIBLE -> leaveToMenu()
             logOverlay.visibility == View.VISIBLE -> closeLog()
+            gameMenu.visibility != View.VISIBLE && sheet.visibility == View.VISIBLE ->
+                sheetBack?.invoke() ?: openGameMenu()
             gameMenu.visibility == View.VISIBLE -> closeGameMenu()
             phone.isOpen -> phone.close()
             nameEntry.visibility == View.VISIBLE -> leaveToMenu()
@@ -432,6 +470,31 @@ class GameActivity : Activity() {
                     val now = vars[c.variable]?.toLongOrNull() ?: 0L
                     vars[c.variable] = (now + c.amount).toString()
                 }
+                is Cmd.Life -> { life.active = c.active; refreshLife() }
+                is Cmd.Calendar -> { life.setCalendar(c.weekday, c.slot); refreshLife() }
+                is Cmd.Free -> { startFree(c.count); return }
+                is Cmd.Advance -> {
+                    repeat(c.count) { if (!life.dead) advanceTime() }
+                    if (life.dead) return
+                }
+                is Cmd.Money -> {
+                    life.money = (life.money + c.delta).coerceAtLeast(0)
+                    notice((if (c.delta >= 0) "💰 +" else "💸 -") + rupiah(kotlin.math.abs(c.delta)))
+                    refreshLife()
+                }
+                is Cmd.Stat -> {
+                    LifeState.Stat.of(c.stat)?.let { life.change(it, c.delta) }
+                    refreshLife()
+                    if (checkDeath()) return
+                }
+                is Cmd.GiveItem -> {
+                    val def = gameData.items[c.id]
+                    if (def != null) {
+                        repeat(c.count) { life.addItem(def.id, def.shelfDays) }
+                        notice("${def.icon} ${def.name}" + (if (c.count > 1) " ×${c.count}" else "") + " masuk ke tas")
+                    }
+                }
+                is Cmd.Location -> vars["lokasi"] = c.place
                 is Cmd.End -> { endStory(c.text); return }
             }
         }
@@ -484,17 +547,20 @@ class GameActivity : Activity() {
             finishTyping()
         } else {
             wait = Wait.BUSY
-            next()
+            val a = afterTap
+            afterTap = null
+            if (a != null) a() else next()
         }
     }
 
     // ================================================================== simpan & muat
 
     private fun snapshot(): SaveData? {
-        if (!storyStarted || wait == Wait.BUSY) return null
+        if (!storyStarted || wait == Wait.BUSY || life.dead) return null
         val preview = when {
             wait == Wait.PHONE -> "📱 ${messages.lastOrNull()?.first.orEmpty()}"
             wait == Wait.CHOICE -> "Memilih: " + fill(fullText.toString())
+            wait == Wait.FREE || vars.containsKey("_bebas_sisa") -> "Waktu bebas · ${life.clockText}"
             currentSpeaker != null -> "$currentSpeaker: $fullText"
             else -> fullText.toString()
         }
@@ -514,6 +580,7 @@ class GameActivity : Activity() {
             preview = preview,
             savedAt = System.currentTimeMillis(),
             vars = vars.toMap() + mapOf("nama" to playerName, "kelamin" to playerGender),
+            life = life.toJson(),
         )
     }
 
@@ -554,6 +621,8 @@ class GameActivity : Activity() {
 
         log.clear()
         log.addAll(d.log)
+        life = LifeState.fromJson(d.life)
+        refreshLife()
         updateBurger()
         applyDialogStyle()
 
@@ -769,6 +838,7 @@ class GameActivity : Activity() {
 
     /** Tombol burger hanya muncul di masa kini (bukan saat adegan kenangan). */
     private fun updateBurger() {
+        refreshLife()
         val show = storyStarted && !memoryMode
         if (show && burger.visibility != View.VISIBLE) {
             burger.visibility = View.VISIBLE
@@ -817,6 +887,7 @@ class GameActivity : Activity() {
 
     private fun openGameMenu() {
         if (gameMenu.visibility == View.VISIBLE) return
+        gameMenu.bringToFront()
         gameMenu.visibility = View.VISIBLE
         gameMenu.alpha = 0f
         gameMenu.animate().alpha(1f).setDuration(200).start()
@@ -845,6 +916,7 @@ class GameActivity : Activity() {
     }
 
     private fun openLog() {
+        logOverlay.bringToFront()
         val list = findViewById<LinearLayout>(R.id.log_list)
         list.removeAllViews()
         val d = resources.displayMetrics.density
@@ -950,6 +1022,448 @@ class GameActivity : Activity() {
                 next()
             }, 260)
         }.start()
+    }
+
+    // ================================================================== kehidupan
+
+    /** Perbarui panel status, jam, dan variabel kehidupan. */
+    private fun refreshLife() {
+        val show = life.active && storyStarted && !memoryMode
+        if (show && lifeHud.visibility != View.VISIBLE) {
+            lifeHud.visibility = View.VISIBLE
+            lifeHud.alpha = 0f
+            lifeHud.animate().alpha(1f).setDuration(400).start()
+        } else if (!show) {
+            lifeHud.visibility = View.GONE
+        }
+        lifeHud.bind(life)
+        if (life.active) {
+            vars["uang"] = life.money.toString()
+            vars["hari"] = life.weekday
+            vars["waktu"] = life.slot.label
+            vars["hari_ke"] = (life.day + 1).toString()
+            if (clockText != life.clockText) setClock(life.clockText)
+        }
+    }
+
+    /** Pemberitahuan singkat di layar, antre satu per satu. */
+    private fun notice(text: String) {
+        noticeQueue.addLast(text)
+        if (!noticeShowing) showNextNotice()
+    }
+
+    private fun showNextNotice() {
+        val t = noticeQueue.removeFirstOrNull()
+        if (t == null) {
+            noticeShowing = false
+            return
+        }
+        noticeShowing = true
+        lifeNotice.bringToFront()
+        lifeNotice.text = t
+        lifeNotice.translationY = -10 * resources.displayMetrics.density
+        lifeNotice.animate().alpha(1f).translationY(0f).setDuration(220).withEndAction {
+            lifeNotice.animate().alpha(0f).setStartDelay(1900).setDuration(300).withEndAction {
+                lifeNotice.animate().setStartDelay(0)
+                showNextNotice()
+            }.start()
+        }.start()
+    }
+
+    /** Majukan waktu satu slot dan tampilkan peringatan. */
+    private fun advanceTime() {
+        if (!life.active) return
+        val warnings = life.advance()
+        refreshLife()
+        warnings.forEach { notice(it) }
+        checkDeath()
+    }
+
+    private fun checkDeath(): Boolean {
+        if (!life.dead) return false
+        showDeath()
+        return true
+    }
+
+    private fun showDeath() {
+        wait = Wait.BUSY
+        afterTap = null
+        handler.removeCallbacksAndMessages(null)
+        closeSheet()
+        hideDialog()
+        choiceList.visibility = View.GONE
+        val reason = when (life.deathReason) {
+            "dehidrasi" -> "dehidrasi"
+            "kelaparan" -> "kelaparan"
+            "sakit" -> "sakit yang tak tertangani"
+            else -> "kelelahan yang tak tertahankan"
+        }
+        findViewById<TextView>(R.id.death_text).text =
+            "$playerName meninggal karena $reason,\npada hari ke-${life.day + 1}.\n\nHidup ini keras. Tapi selalu ada pilihan lain."
+        deathOverlay.bringToFront()
+        deathOverlay.visibility = View.VISIBLE
+        deathOverlay.alpha = 0f
+        deathOverlay.animate().alpha(1f).setDuration(1600).start()
+        audio.stopMusic()
+    }
+
+    // ---------------- waktu bebas ----------------
+
+    private fun startFree(count: Int) {
+        if (!life.active) {
+            life.active = true
+            refreshLife()
+        }
+        freeLeft = vars["_bebas_sisa"]?.toIntOrNull() ?: count
+        vars["_bebas_sisa"] = freeLeft.toString()
+        wait = Wait.FREE
+        hideDialog()
+        showFreeSheet()
+    }
+
+    private fun showFreeSheet() {
+        if (freeLeft <= 0) {
+            endFree()
+            return
+        }
+        wait = Wait.FREE
+        val place = vars["lokasi"] ?: "desa"
+        openSheet(
+            getString(R.string.free_title),
+            getString(R.string.free_sub, life.clockText, freeLeft),
+            back = null,
+        )
+        gameData.activitiesFor(place, life.slot)
+            .filter { a -> a.condition == null || checkCondition(a.condition) }
+            .forEach { a ->
+                val needEnergy = -(a.effects["energi"] ?: 0L)
+                val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
+                sheetList.addView(card(
+                    title = "${a.icon}  ${a.name}",
+                    sub = effectSummary(a.effects),
+                    note = if (tooTired) getString(R.string.too_tired) else null,
+                    enabled = !tooTired,
+                ) { doActivity(a) })
+            }
+        sheetButtonRow(
+            getString(R.string.btn_status) to { openStatus(returnTo = { showFreeSheet() }) },
+            getString(R.string.btn_shop) to { openShop() },
+        )
+        if (life.slot == LifeState.Slot.MALAM) {
+            sheetButtonRow(
+                getString(R.string.btn_sleep) to { sleepUntilMorning() },
+                "☰ Menu" to { openGameMenu() },
+            )
+        } else {
+            sheetButtonRow("☰ Menu" to { openGameMenu() })
+        }
+    }
+
+    private fun doActivity(a: GameData.ActivityDef) {
+        closeSheet()
+        val extra = life.applyEffects(a.effects)
+        extra.forEach { (k, v) ->
+            vars[k] = ((vars[k]?.toLongOrNull() ?: 0L) + v).toString()
+        }
+        a.effects["uang"]?.let { if (it != 0L) notice((if (it > 0) "💰 +" else "💸 -") + rupiah(kotlin.math.abs(it))) }
+        freeLeft--
+        vars["_bebas_sisa"] = freeLeft.toString()
+        advanceTime()
+        if (life.dead) return
+        afterTap = { continueFree() }
+        showLine(null, a.text.ifEmpty { a.name })
+    }
+
+    private fun continueFree() {
+        if (freeLeft > 0) {
+            hideDialog()
+            showFreeSheet()
+        } else {
+            endFree()
+        }
+    }
+
+    private fun endFree() {
+        vars.remove("_bebas_sisa")
+        freeLeft = 0
+        closeSheet()
+        wait = Wait.BUSY
+        next()
+    }
+
+    private fun sleepUntilMorning() {
+        closeSheet()
+        val startDay = life.day
+        if (!life.active) life.active = true
+        while (life.day == startDay && !life.dead) advanceTime()
+        if (life.dead) return
+        freeLeft = 0
+        vars["_bebas_sisa"] = "0"
+        afterTap = { endFree() }
+        showLine(null, "{nama} merebahkan diri dan tertidur pulas sampai pagi.")
+    }
+
+    /** Syarat aktivitas, contoh "jalur != kerja" atau "usia >= 18". */
+    private fun checkCondition(cond: String): Boolean {
+        val m = Regex("^\\s*(\\w+)\\s*(==|!=|>=|<=|>|<)\\s*(.+?)\\s*$").find(cond) ?: return true
+        val (v, op, value) = m.destructured
+        return check(Cmd.JumpIf(v, op, value, ""))
+    }
+
+    private fun effectSummary(effects: Map<String, Long>): String {
+        val icons = mapOf(
+            "kesehatan" to "❤️", "kenyang" to "🍚", "hidrasi" to "💧",
+            "kewarasan" to "🧠", "energi" to "⚡", "uang" to "💰",
+        )
+        return effects.entries.joinToString("   ") { (k, v) ->
+            val sign = if (v >= 0) "+" else "-"
+            val amount = if (k == "uang") rupiah(kotlin.math.abs(v)) else kotlin.math.abs(v).toString()
+            "${icons[k] ?: k} $sign$amount"
+        }
+    }
+
+    // ---------------- status & tas ----------------
+
+    private fun currentSheetReturn(): (() -> Unit)? =
+        if (wait == Wait.FREE) ({ showFreeSheet() }) else null
+
+    private fun openStatus(returnTo: (() -> Unit)?) {
+        val back: () -> Unit = { if (returnTo != null) returnTo() else closeSheet() }
+        openSheet(getString(R.string.status_title), "${life.clockText}   ·   💰 ${rupiah(life.money)}", back)
+        val d = resources.displayMetrics.density
+
+        LifeState.Stat.values().forEach { stat ->
+            val v = life[stat]
+            val row = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(0, (4 * d).toInt(), 0, (8 * d).toInt())
+            }
+            row.addView(TextView(this).apply {
+                text = "${stat.icon}  ${stat.label}   $v / 100"
+                setTextColor(0xFFF6E7C8.toInt())
+                textSize = 14f
+            })
+            row.addView(android.widget.ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
+                max = 100
+                progress = v
+                progressTintList = android.content.res.ColorStateList.valueOf(
+                    when {
+                        v >= 60 -> 0xFF4CAF7A.toInt()
+                        v >= 30 -> 0xFFE0A93B.toInt()
+                        else -> 0xFFE0554B.toInt()
+                    }
+                )
+                progressBackgroundTintList = android.content.res.ColorStateList.valueOf(0x40FFFFFF)
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (10 * d).toInt()).apply {
+                topMargin = (4 * d).toInt()
+            })
+            sheetList.addView(row)
+        }
+
+        sheetList.addView(sectionLabel("🎒 Tas"))
+        if (life.items.isEmpty()) {
+            sheetList.addView(TextView(this).apply {
+                setText(R.string.bag_empty)
+                setTextColor(0x99E8E0CF.toInt())
+                textSize = 14f
+            })
+        }
+        life.items.sortedBy { it.expiresDay }.forEach { item ->
+            val def = gameData.items[item.id] ?: return@forEach
+            val left = item.expiresDay - life.day
+            val status = when {
+                life.isExpired(item) -> "⚠️ " + getString(R.string.expired)
+                left == 0 -> getString(R.string.expires_today)
+                else -> getString(R.string.expires_in, left)
+            }
+            val drinkOnly = (def.effects["kenyang"] ?: 0L) <= 0L && def.effects.containsKey("hidrasi")
+            val medicine = !def.effects.containsKey("kenyang") && !def.effects.containsKey("hidrasi")
+            val useLabel = getString(
+                when {
+                    medicine -> R.string.btn_use
+                    drinkOnly -> R.string.btn_drink
+                    else -> R.string.btn_eat
+                }
+            )
+            sheetList.addView(card(
+                title = "${def.icon}  ${def.name}",
+                sub = effectSummary(def.effects),
+                note = status,
+                noteWarn = life.isExpired(item),
+                actions = listOf(
+                    useLabel to {
+                        notice(life.consume(item, def))
+                        refreshLife()
+                        if (!checkDeath()) openStatus(returnTo)
+                    },
+                    getString(R.string.btn_discard) to {
+                        life.items.remove(item)
+                        openStatus(returnTo)
+                    },
+                ),
+            ))
+        }
+        sheetButtonRow(
+            (if (returnTo != null) getString(R.string.btn_back) else getString(R.string.btn_close)) to back,
+        )
+    }
+
+    // ---------------- belanja ----------------
+
+    private fun openShop() {
+        val place = vars["lokasi"] ?: "desa"
+        val placeName = if (place == "desa") "Warung desa" else if (place == "kota") "Minimarket" else place
+        openSheet(getString(R.string.shop_title), "$placeName   ·   💰 ${rupiah(life.money)}") { showFreeSheet() }
+        gameData.shopFor(place).sortedBy { it.price }.forEach { def ->
+            val affordable = life.money >= def.price
+            sheetList.addView(card(
+                title = "${def.icon}  ${def.name}",
+                sub = effectSummary(def.effects),
+                note = rupiah(def.price) + if (affordable) "" else "  ·  " + getString(R.string.no_money),
+                noteWarn = !affordable,
+                actions = listOf(getString(R.string.btn_buy) to {
+                    if (life.money >= def.price) {
+                        life.money -= def.price
+                        life.addItem(def.id, def.shelfDays)
+                        refreshLife()
+                        notice(getString(R.string.bought, def.name))
+                        openShop()
+                    }
+                }),
+                actionsEnabled = affordable,
+            ))
+        }
+        sheetButtonRow(
+            getString(R.string.btn_status) to { openStatus(returnTo = { openShop() }) },
+            getString(R.string.btn_back) to { showFreeSheet() },
+        )
+    }
+
+    // ---------------- lembar serbaguna ----------------
+
+    private fun openSheet(title: String, sub: String, back: (() -> Unit)?) {
+        sheetBack = back
+        sheetTitle.text = title
+        sheetSub.text = sub
+        sheetList.removeAllViews()
+        sheetButtons.removeAllViews()
+        sheetButtons.orientation = LinearLayout.VERTICAL
+        if (sheet.visibility != View.VISIBLE) {
+            sheet.bringToFront()
+            sheet.visibility = View.VISIBLE
+            sheet.alpha = 0f
+            sheet.animate().alpha(1f).setDuration(200).start()
+        }
+    }
+
+    private fun closeSheet() {
+        sheetBack = null
+        if (sheet.visibility != View.VISIBLE) return
+        sheet.animate().alpha(0f).setDuration(160).withEndAction { sheet.visibility = View.GONE }.start()
+    }
+
+    private fun sectionLabel(text: String) = TextView(this).apply {
+        this.text = text
+        typeface = resources.getFont(R.font.cinzel)
+        setTextColor(0xFFF2D58C.toInt())
+        textSize = 15f
+        setPadding(0, (14 * resources.displayMetrics.density).toInt(), 0, (8 * resources.displayMetrics.density).toInt())
+    }
+
+    private fun sheetButtonRow(vararg buttons: Pair<String, () -> Unit>) {
+        val d = resources.displayMetrics.density
+        val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        buttons.forEachIndexed { i, (label, action) ->
+            row.addView(TextView(this).apply {
+                text = label
+                gravity = android.view.Gravity.CENTER
+                setTextColor(0xFFF6E7C8.toInt())
+                textSize = 14f
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = 12 * d
+                    setColor(0x40101A3A)
+                    setStroke((1 * d).toInt(), 0xAAD2AE62.toInt())
+                }
+                setOnClickListener { action() }
+            }, LinearLayout.LayoutParams(0, (44 * d).toInt(), 1f).apply {
+                if (i > 0) marginStart = (8 * d).toInt()
+            })
+        }
+        sheetButtons.addView(row, LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply { topMargin = (6 * d).toInt() })
+    }
+
+    /** Kartu pilihan di lembar: judul, keterangan efek, catatan, dan tombol aksi. */
+    private fun card(
+        title: String,
+        sub: String,
+        note: String? = null,
+        noteWarn: Boolean = false,
+        enabled: Boolean = true,
+        actions: List<Pair<String, () -> Unit>> = emptyList(),
+        actionsEnabled: Boolean = true,
+        onClick: (() -> Unit)? = null,
+    ): View {
+        val d = resources.displayMetrics.density
+        val box = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER_VERTICAL
+            setPadding((14 * d).toInt(), (11 * d).toInt(), (12 * d).toInt(), (11 * d).toInt())
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 14 * d
+                setColor(0x33FFFFFF)
+                setStroke((1 * d).toInt(), 0x55D2AE62)
+            }
+            alpha = if (enabled) 1f else 0.5f
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { bottomMargin = (8 * d).toInt() }
+        }
+        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        col.addView(TextView(this).apply {
+            text = title
+            setTextColor(0xFFFFF7E6.toInt())
+            textSize = 15.5f
+            typeface = Typeface.DEFAULT_BOLD
+        })
+        if (sub.isNotEmpty()) col.addView(TextView(this).apply {
+            text = sub
+            setTextColor(0xCCE8E0CF.toInt())
+            textSize = 12.5f
+            setPadding(0, (3 * d).toInt(), 0, 0)
+        })
+        if (note != null) col.addView(TextView(this).apply {
+            text = note
+            setTextColor(if (noteWarn) 0xFFFF9A8A.toInt() else 0xFFF2D58C.toInt())
+            textSize = 12.5f
+            setPadding(0, (3 * d).toInt(), 0, 0)
+        })
+        box.addView(col, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        actions.forEach { (label, action) ->
+            box.addView(TextView(this).apply {
+                text = label
+                gravity = android.view.Gravity.CENTER
+                textSize = 13f
+                setTextColor(if (actionsEnabled) 0xFF1A1206.toInt() else 0xFF8A8A8A.toInt())
+                setPadding((12 * d).toInt(), 0, (12 * d).toInt(), 0)
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = 10 * d
+                    if (actionsEnabled) {
+                        orientation = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM
+                        colors = intArrayOf(0xFFF8E3A8.toInt(), 0xFFD2AE62.toInt())
+                    } else {
+                        setColor(0x55FFFFFF)
+                    }
+                }
+                isEnabled = actionsEnabled
+                setOnClickListener { action() }
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (36 * d).toInt()).apply {
+                marginStart = (6 * d).toInt()
+            })
+        }
+        if (onClick != null && enabled) box.setOnClickListener { onClick() }
+        return box
     }
 
     // ================================================================== HP

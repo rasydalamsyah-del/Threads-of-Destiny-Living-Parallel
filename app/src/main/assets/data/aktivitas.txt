@@ -1,0 +1,73 @@
+# ==========================================================
+#  DAFTAR AKTIVITAS WAKTU BEBAS
+#  Bisa ditambah/diubah dari HP. Panduan: docs/DATA.md
+#
+#  [id_aktivitas]
+#  nama   = nama yang tampil
+#  ikon   = emoji
+#  tempat = desa, kota, atau semua
+#  waktu  = pagi, siang, sore, malam (pisahkan koma), atau semua
+#  efek   = energi, kenyang, hidrasi, kewarasan, kesehatan, uang (+/-),
+#           atau variabel lain (mis. akademik +2)
+#  syarat = (opsional) contoh: jalur != kerja   atau   usia >= 18
+#  teks   = narasi yang tampil setelah aktivitas dipilih
+# ==========================================================
+
+# ---------------- DESA TANJUNG LENTERA ----------------
+
+[makan_keluarga]
+nama   = Makan bersama keluarga
+ikon   = 🍲
+tempat = desa
+waktu  = pagi, siang, malam
+efek   = kenyang +50, hidrasi +30, kewarasan +5
+teks   = Ibu memasak sayur asem dan ikan bakar. Laras tak berhenti bercerita, Ayah hanya tersenyum mendengarkan.
+
+[bantu_warung]
+nama   = Bantu Ibu di warung
+ikon   = 🍳
+tempat = desa
+waktu  = pagi, siang, sore
+efek   = energi -20, uang +15000, kenyang -5, hidrasi -5, kewarasan -2
+teks   = Kamu menggoreng pisang dan melayani pembeli seharian. Ibu menyelipkan selembar uang ke tanganmu.
+
+[melaut]
+nama   = Melaut bersama Ayah
+ikon   = 🚣
+tempat = desa
+waktu  = pagi
+efek   = energi -40, uang +40000, hidrasi -20, kenyang -10, kewarasan -3
+teks   = Ombak sedang tinggi. Tanganmu lecet menarik jaring, tapi hasil tangkapan hari ini lumayan.
+
+[dermaga]
+nama   = Duduk di dermaga mercusuar
+ikon   = 🌅
+tempat = desa
+waktu  = sore, malam
+efek   = kewarasan +12, energi -5
+teks   = Angin laut menyentuh wajahmu. Mercusuar tua itu masih berdiri, sama seperti dulu... hanya saja kali ini kamu duduk sendirian.
+
+[main_laras]
+nama   = Menemani Laras bermain
+ikon   = 🪁
+tempat = desa
+waktu  = siang, sore
+efek   = kewarasan +8, energi -8
+teks   = Laras memaksamu menerbangkan layang-layang. Kalian tertawa sampai lupa waktu.
+
+[belajar]
+nama   = Belajar untuk persiapan SMA
+ikon   = 📚
+tempat = semua
+waktu  = siang, malam
+syarat = jalur != kerja
+efek   = energi -12, kewarasan -2, akademik +2
+teks   = Kamu membuka buku-buku lama. Soal-soal matematika itu tetap saja membuat kepala pusing.
+
+[istirahat]
+nama   = Istirahat sebentar
+ikon   = 🛏️
+tempat = semua
+waktu  = semua
+efek   = energi +25, kewarasan +3
+teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristirahat.

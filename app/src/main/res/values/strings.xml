@@ -90,4 +90,28 @@
     <string name="set_delete_data">Hapus semua data simpanan</string>
     <string name="set_delete_confirm">Semua slot simpanan dan nama pemain akan dihapus. Lanjutkan?</string>
     <string name="set_delete_done">Data simpanan dihapus</string>
+
+    <!-- Sistem kehidupan -->
+    <string name="death_title">KAMU MENINGGAL</string>
+    <string name="free_title">WAKTU BEBAS</string>
+    <string name="free_sub">%1$s · sisa %2$d kesempatan</string>
+    <string name="status_title">STATUS &amp; TAS</string>
+    <string name="shop_title">BELANJA</string>
+    <string name="btn_close">Tutup</string>
+    <string name="btn_status">❤️ Status &amp; Tas</string>
+    <string name="btn_shop">🛒 Belanja</string>
+    <string name="btn_sleep">🛏️ Tidur sampai pagi</string>
+    <string name="btn_back">‹ Kembali</string>
+    <string name="too_tired">Terlalu lelah</string>
+    <string name="no_money">Uang tidak cukup</string>
+    <string name="bag_empty">Tas kosong.</string>
+    <string name="bought">%1$s dibeli</string>
+    <string name="expired">Basi</string>
+    <string name="expires_today">Habiskan hari ini</string>
+    <string name="expires_in">Tahan %1$d hari lagi</string>
+    <string name="btn_eat">Makan</string>
+    <string name="btn_drink">Minum</string>
+    <string name="btn_use">Pakai</string>
+    <string name="btn_discard">Buang</string>
+    <string name="btn_buy">Beli</string>
 </resources>

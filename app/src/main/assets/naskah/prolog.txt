@@ -92,14 +92,14 @@ Ibu: {nama}? Kok melamun? Jadi bagaimana, Nak?
 {nama}: Aku mau lanjut SMA di Kota Sakala, Yah, Bu.
 Ayah: ...Baik. Kalau itu pilihanmu, Ayah akan usahakan biayanya.
 Ibu: Tapi janji, kamu belajar yang benar di sana, ya.
-@lompat malam
+@lompat siang
 
 :: kerja
 @atur jalur = kerja
 {nama}: Aku mau kerja dulu saja, Yah. Bantu Ayah dan Ibu.
 Ibu: Kamu yakin, Nak? Ibu tidak mau kamu menyesal nanti.
 Ayah: Hidup di laut itu keras. Tapi Ayah bangga kamu mau bantu.
-@lompat malam
+@lompat siang
 
 :: keduanya
 @atur jalur = keduanya
@@ -110,14 +110,30 @@ Ibu: ...Anak ini memang keras kepala, persis ayahnya.
 
 
 # ----------------------------------------------------------
+#  SIANG — MULAI MENJALANI HARI (sistem kehidupan mulai)
+# ----------------------------------------------------------
+
+:: siang
+* Selesai sarapan, Ayah menyelipkan beberapa lembar uang ke tangan {nama}.
+Ayah: Ini hadiah kelulusan dari Ayah. Simpan baik-baik, ya.
+@hidup mulai
+@lokasi desa
+@kalender Senin siang
+@uang +50000
+@barang air_mineral 1
+* Mulai sekarang, hidupmu ada di tanganmu sendiri. Jaga perutmu, minummu, tenagamu, dan pikiranmu.
+* Ketuk panel di pojok kiri atas kapan saja untuk melihat status dan isi tas.
+@bebas 2
+
+
+# ----------------------------------------------------------
 #  MALAM ITU
 # ----------------------------------------------------------
 
 :: malam
 @gelap 1800
-@waktu Senin, 21:40
+@waktu Senin, malam
 @latar kamar_pagi
-@jam Senin, 21:40 🌙
 @terang 1500
 * Malam itu, {nama} menatap pesan di HP-nya lama sekali.
 @jika jalur == kerja -> malam_kerja

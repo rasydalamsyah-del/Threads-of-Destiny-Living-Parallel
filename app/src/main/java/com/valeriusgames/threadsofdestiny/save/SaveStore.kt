@@ -22,6 +22,8 @@ data class SaveData(
     val savedAt: Long,
     /** Variabel cerita (kelamin, usia, jalur, dll). */
     val vars: Map<String, String> = emptyMap(),
+    /** Keadaan hidup (bar, uang, waktu, tas) dalam JSON. */
+    val life: String = "",
 ) {
     fun toJson(): String = JSONObject().apply {
         put("script", script)
@@ -43,6 +45,7 @@ data class SaveData(
         put("preview", preview)
         put("savedAt", savedAt)
         put("vars", JSONObject().apply { vars.forEach { (k, v) -> put(k, v) } })
+        put("life", life)
     }.toString()
 
     companion object {
@@ -74,6 +77,7 @@ data class SaveData(
                 vars = o.optJSONObject("vars")?.let { vo ->
                     vo.keys().asSequence().associateWith { k -> vo.optString(k) }
                 } ?: emptyMap(),
+                life = o.optString("life"),
             )
         } catch (e: Exception) {
             null

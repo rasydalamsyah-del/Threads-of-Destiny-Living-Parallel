@@ -45,6 +45,22 @@ object StoryScript {
         data class SetVar(val variable: String, val value: String) : Cmd()
         /** Tambah/kurangi variabel angka, contoh: @tambah uang -5000 */
         data class AddVar(val variable: String, val amount: Long) : Cmd()
+        /** Nyalakan/matikan sistem kehidupan (bar, uang, jam otomatis). */
+        data class Life(val active: Boolean) : Cmd()
+        /** Atur hari & waktu, contoh: @kalender Senin pagi */
+        data class Calendar(val weekday: String, val slot: String) : Cmd()
+        /** Waktu bebas sebanyak n kesempatan. */
+        data class Free(val count: Int) : Cmd()
+        /** Majukan waktu n kali (Pagi → Siang → Sore → Malam → tidur → Pagi). */
+        data class Advance(val count: Int) : Cmd()
+        /** Ubah uang. */
+        data class Money(val delta: Long) : Cmd()
+        /** Ubah bar: kesehatan, kenyang, hidrasi, kewarasan, energi. */
+        data class Stat(val stat: String, val delta: Int) : Cmd()
+        /** Tambah barang ke tas. */
+        data class GiveItem(val id: String, val count: Int) : Cmd()
+        /** Tempat pemain sekarang (menentukan aktivitas & toko): desa, kota, ... */
+        data class Location(val place: String) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
     }
@@ -205,6 +221,28 @@ object StoryScript {
                     ?: throw ParseError(n, "format: @tambah variabel +5  (atau -5)")
                 Cmd.AddVar(m.groupValues[1], m.groupValues[2].removePrefix("+").toLong())
             }
+            "hidup", "life" -> Cmd.Life(args.firstOrNull() !in setOf("berhenti", "stop", "mati"))
+            "kalender", "calendar" -> {
+                if (args.size < 2) throw ParseError(n, "format: @kalender Senin pagi")
+                Cmd.Calendar(args[0], args[1])
+            }
+            "bebas", "free" -> Cmd.Free(args.firstOrNull()?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
+            "maju", "advance" -> Cmd.Advance(args.firstOrNull()?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
+            "uang", "money" -> {
+                val v = rest.replace(".", "").replace(" ", "").removePrefix("+").toLongOrNull()
+                    ?: throw ParseError(n, "format: @uang +50000  (atau -5000)")
+                Cmd.Money(v)
+            }
+            "stat" -> {
+                val m = Regex("^(\\w+)\\s+([+-]?\\d+)$").find(rest)
+                    ?: throw ParseError(n, "format: @stat energi -10")
+                Cmd.Stat(m.groupValues[1].lowercase(), m.groupValues[2].removePrefix("+").toInt())
+            }
+            "barang", "item" -> {
+                val id = args.firstOrNull() ?: throw ParseError(n, "format: @barang id_barang 2")
+                Cmd.GiveItem(id, args.getOrNull(1)?.toIntOrNull()?.coerceAtLeast(1) ?: 1)
+            }
+            "lokasi", "location" -> Cmd.Location(args.firstOrNull() ?: throw ParseError(n, "format: @lokasi desa"))
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             else -> throw ParseError(n, "perintah @$name tidak dikenal")
         }
