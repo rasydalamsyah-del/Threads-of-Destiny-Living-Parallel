@@ -196,7 +196,7 @@ Jam ini juga dipakai di layar kunci HP.
 ```
 @mulai_ulang                      hapus semua hasil latihan (hidup, hubungan, HP, variabel); nama & kelamin tetap
 ```
-- Urutan file: `mulai.txt` (pilih Tutorial / Lewati) → `tutorial.txt` (diakhiri `@mulai_ulang` + `@naskah prolog.txt`) → `prolog.txt`.
+- Urutan file: `mulai.txt` (pilih Tutorial / Lewati) → `tutorial.txt` (penjelasan saja) → `prolog.txt`. `@mulai_ulang` tersedia bila suatu saat dibutuhkan.
 
 ### Kejadian & sekolah
 ```
