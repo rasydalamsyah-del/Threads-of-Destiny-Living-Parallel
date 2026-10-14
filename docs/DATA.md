@@ -89,6 +89,8 @@ hadiah_suka / hadiah_biasa / hadiah_benci = jawaban saat diberi hadiah
 larangan    = kalimat saat ia dilarang bertemu oleh orang dekatnya
 warna       = #2E8B57
 ```
+- Tambahan untuk HP: `chat` (pesan yang kadang ia kirim, pisahkan `|`), `chat_balas` (balasannya), `ajak_ya` / `ajak_tidak` (jawaban saat diajak ketemu).
+  Karakter yang sudah dikenal dan Cintanya ≥ 25 kadang mengirim pesan (maks. 2 pesan per hari dari semua karakter).
 - `nama` juga dipakai sebagai **nama pembicara** di naskah (`Bayu: ...`). Saat karakter bicara, panel foto + nama + meter muncul di pojok kiri atas (setelah dikenal lewat `@kenal`).
 - `usia` bertambah bersama usia pemain. **Romansa hanya terbuka bila pemain dan karakter sama-sama 18 tahun ke atas**, lawan jenis, dan `bisa_dipacari = ya`.
 
@@ -153,6 +155,37 @@ teks        = Narasi setiap kali kerja
 - `cara = langsung` / `lamar` muncul di **🔎 Cari kerja** saat waktu bebas; `cara = cerita` hanya lewat naskah.
 - **Peluang diterima** = (100 − sulit) + 2 × (akademik + komunikasi, maks. +30) + `skor_wawancara`
   − 15 bila Kewarasan < 30, **+45 lewat orang dalam** (bila Cinta & Kepercayaan orang itu ≥ 60). Usia di bawah `usia_min` selalu ditolak.
+
+Tambahan untuk `cara = lamar` (dilamar lewat **HP → Lowongan**):
+```
+berkas = cv, pas_foto, ijazah_smp     (id dari dokumen.txt — wajib dimiliki)
+tes    = ya                           (ada tes tertulis sebelum wawancara)
+```
+Alur lamaran di HP: **Kirim lamaran → seleksi berkas (2 hari) → tes (bila ada, 3 hari) → wawancara (3 hari) → diterima/ditolak**.
+Lewat orang dalam: langsung ke wawancara. Lewat batas waktu = gugur. Kabar dikirim lewat Chat dari "HRD · nama pekerjaan".
+
+## dokumen.txt
+```
+[skck]
+nama       = SKCK
+biaya      = 30000
+lama       = 3          (hari sampai jadi; 0 = langsung)
+usia_min   = 17
+awal       = ya         (opsional: sudah dimiliki sejak awal)
+keterangan = Surat dari kantor polisi.
+```
+Diurus di **HP → Lowongan → Dokumen saya**. `usia_min = 99` berarti hanya didapat lewat cerita (`@dokumen`).
+
+## wawancara.txt
+```
+[motivasi]
+tanya = Kenapa kamu ingin bekerja di sini?
+a = Saya ingin belajar dan membantu keluarga. | 15
+b = Ya... butuh uang saja. | -5
+c = Saya sudah sangat berpengalaman! | 20 | bohong
+```
+3 pertanyaan diacak setiap wawancara. Jawaban `bohong`: 40% ketahuan (skor −30).
+**Peluang diterima** = 40 − sulit/3 + skor wawancara + ½ skor tes + 2×(akademik+komunikasi) (+30 orang dalam, −15 bila Kewarasan < 30).
 
 ## kos.txt
 ```

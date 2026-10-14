@@ -14,6 +14,7 @@
 | 14 Okt 2026 | 4 | START GAME: isi nama → prolog masa lalu (efek kenangan, gerak kamera) → layar gelap + teks waktu → efek bangun tidur (kedip, buram) → duduk di ranjang → pesan HP masuk + layar HP. Mesin naskah teks (`assets/naskah/prolog.txt`), background sementara |
 | 14 Okt 2026 | 5 | Tombol burger di masa kini (Lanjutkan, Simpan, Muat, Riwayat, Pengaturan, Menu Utama). Simpan/Muat 1 slot otomatis + 6 manual. CONTINUE & LOAD DATA berfungsi. Halaman Pengaturan (tema, ukuran & gaya huruf, kepekatan kotak, kecepatan teks, volume musik/efek, getar, lewati intro, hapus data). Perintah naskah `@musik`, `@suara` |
 | 14 Okt 2026 | — | Dokumen rancangan game & catatan progres ini dibuat |
+| 14 Okt 2026 | 11 | **HP lengkap:** layar utama dengan ikon aplikasi. **Chat** (karakter mengirim pesan, balas/abaikan, ajak ketemu → janji temu, ingkar/menepati janji), **Kontak** (hubungan & kesukaan yang diketahui), **Kalender** (janji, sewa, kiriman, gajian, batas lamaran), **Lowongan** (dokumen diurus dengan biaya & waktu, kirim lamaran, seleksi berkas, tes tertulis, wawancara dengan opsi bohong, orang dalam), **Dompet** (riwayat uang), **Catatan** (petunjuk cerita) |
 | 14 Okt 2026 | 10 | **Sekolah & pekerjaan:** kalender bertanggal, usia bertambah, kos (sewa 30 hari, tunggakan, diusir), kiriman keluarga, sekolah & pekerjaan dari data (jadwal wajib, bolos/absen, surat peringatan, dikeluarkan/dipecat, kinerja, gaji), Cari kerja & lamar (orang dalam), Cari kos. **Bab 2**: jalur kota (stasiun, pilih kos, minggu pertama di Sakala, hari pertama SMA, Dimas & Nadia, petunjuk pertama tentang sahabat) dan jalur desa (kerja di Juragan Darto lewat Ayah) |
 | 14 Okt 2026 | 9 | **Sistem hubungan:** data karakter (keluarga + Bayu & Sekar), hubungan antar karakter, topik obrolan. Meter Cinta (teman/pasangan) & Kepercayaan, tingkat hubungan, kabar menyebar, karakter bisa dilarang bertemu oleh sahabatnya, perilaku buruk & kebohongan tercatat, pengakuan (hanya 18+). Gambar karakter (sementara) + panel nama & meter. Waktu bebas: Temui seseorang → ngobrol/hadiah |
 | 14 Okt 2026 | 8 | **Sistem kehidupan:** kalender Pagi/Siang/Sore/Malam, bar Kesehatan/Kenyang/Hidrasi/Kewarasan/Energi, uang, tas dengan kedaluwarsa, waktu bebas (aktivitas), Status & Tas, Belanja, game over saat meninggal. Data `aktivitas.txt` & `barang.txt`. Bab 1: siang setelah lulus memakai sistem baru |
@@ -57,12 +58,12 @@
 - [~] Sekolah (SMA): jadwal wajib, bolos, nilai, teman sekelas (ujian & kenaikan kelas menyusul)
 - [ ] Jalur karier yang terbentuk dari pilihan (contoh: dunia kopi)
 - [x] Pekerjaan paruh waktu & harian (per kerja)
-- [~] Lamaran dengan peluang diterima (kesulitan, kemampuan, skor wawancara); berkas & tes formal menyusul bersama aplikasi Lowongan di HP
+- [x] Lowongan → berkas → tes → wawancara → pengumuman (HP → Lowongan)
 - [x] Jalur orang dalam (rekomendasi menaikkan peluang); risiko merusak hubungan bila kinerja buruk menyusul
 - [~] Pekerjaan tetap: gaji per 30 hari, kinerja, absen, surat peringatan, dipecat (naik jabatan menyusul)
 
 ### Tahap E — HP lengkap
-- [ ] Chat, Kontak, Kalender, Peta, Belanja, Lowongan, Dompet
+- [x] Chat, Kontak, Kalender, Lowongan, Dompet, Catatan (Peta & Belanja online menyusul; belanja lewat waktu bebas)
 
 ### Tahap F — Rintangan, cerita, ending
 - [ ] Kejadian rintangan (acak & terjadwal)
@@ -108,9 +109,9 @@
 ---
 
 ## 🔜 Langkah berikutnya (urutan)
-1. **Tahap E — HP lengkap**: Chat & Kontak (karakter mengirim pesan, membalas/mengabaikan memengaruhi hubungan), Kalender (jadwal & tagihan), Lowongan (berkas, tes, wawancara), Dompet.
-2. **Tahap F — Rintangan & cerita**: kejadian acak (sakit, kehilangan uang, banjir), alur pencarian sahabat (petunjuk), ujian & kenaikan kelas, Bab 3.
-3. Naik jabatan & risiko orang dalam; transportasi.
+1. **Tahap F — Rintangan & cerita**: kejadian acak (sakit, kehilangan uang, banjir, kena tipu), alur pencarian sahabat (petunjuk berlanjut), ujian & kenaikan kelas, Bab 3.
+2. Naik jabatan & risiko orang dalam; kebohongan wawancara yang terbongkar; transportasi.
+3. Deteksi "ketahuan punya pasangan lain" (untuk masa dewasa).
 
 ## 🐞 Catatan teknis
 - Bar "Lapar" & "Haus" ditampilkan sebagai **Kenyang** & **Hidrasi** (bar penuh = baik), agar semua bar searah.

@@ -224,7 +224,8 @@ keluarga (masalah orang tua, saudara butuh bantuan), sekolah (nilai jatuh, perun
 | Aplikasi | Status |
 |---|---|
 | Layar kunci + notifikasi | ✅ |
-| Chat · Kontak · Kalender · Peta · Belanja · Lowongan · Dompet · Catatan kesehatan | 📝 |
+| Chat · Kontak · Kalender · Lowongan (dokumen, tes, wawancara) · Dompet · Catatan | ✅ build 11 |
+| Peta · Belanja online · Catatan kesehatan | 📝 |
 
 ---
 

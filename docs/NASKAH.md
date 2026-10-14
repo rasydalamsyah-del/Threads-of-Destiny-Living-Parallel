@@ -182,6 +182,16 @@ Jam ini juga dipakai di layar kunci HP.
   `kos`, `diusir`, `lewat_orang_dalam`, plus kemampuan dari efek kerja/aktivitas (mis. `akademik`, `komunikasi`).
 - Untuk simulasi **wawancara**, tulis adegan dengan `@pilihan` lalu `@tambah skor_wawancara +10` (atau −) sebelum `@lamar`.
 
+### HP: catatan & dokumen
+```
+@catatan Petunjuk #1 — ...        tambah catatan di aplikasi Catatan (untuk petunjuk cerita, tugas)
+@dokumen ijazah_sma               pemain mendapat dokumen (id dari data/dokumen.txt)
+@hp pesan Bayu | ...              pesan dari karakter masuk ke aplikasi Chat (bisa dibalas)
+```
+- Pesan dari karakter yang tidak dibalas **2 hari** otomatis dihitung `abaikan_chat`.
+- Pemain bisa **mengajak ketemu** lewat Chat. Datang = `menepati_janji`, tidak datang = `ingkar_janji` (+ pesan kecewa).
+- Variabel otomatis: `misterius_dibalas` (pemain membalas Nomor Tidak Dikenal), `bohong_wawancara_<id_pekerjaan>`.
+
 ### Akhir
 ```
 @tamat Bersambung…
