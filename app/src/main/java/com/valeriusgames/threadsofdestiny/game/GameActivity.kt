@@ -77,6 +77,8 @@ class GameActivity : Activity() {
         private const val REQ_SAVE = 1
         private const val REQ_LOAD = 2
         private const val LOG_LIMIT = 80
+        /** Paling banyak berapa kali ngobrol dalam satu pertemuan. */
+        private const val MAX_TALKS = 2
     }
 
     private enum class Wait { BUSY, TAP, PHONE, CHOICE, FREE }
@@ -124,7 +126,8 @@ class GameActivity : Activity() {
     /** Karakter yang sedang tampil: id → (ekspresi, posisi). */
     private val shownChars = linkedMapOf<String, Pair<String, String>>()
     private var panelCharId: String? = null
-    private var meetingTalked = false
+    private var meetingTalks = 0
+    private var meetingGaveGift = false
     private var meetingGifted = false
 
     /** Kejadian yang menunggu ditampilkan: "ev:<id>", "ujian:<id_sekolah>", "kelas:<id_sekolah>". */
@@ -232,6 +235,12 @@ class GameActivity : Activity() {
         phone = PhoneScreen(findViewById(R.id.phone_overlay)) { onPhoneClosed() }
         phone.onAppOpen = { renderApp(it) }
         phone.onHomeShown = { refreshPhoneHome() }
+        phone.onNotifTap = { key ->
+            if (phoneData.threads[key] != null && phoneApps.any { it.id == "chat" }) {
+                phone.openAppById("chat")
+                renderThread(key)
+            }
+        }
 
         audio = AudioPlayer(this)
         applySettings()
@@ -769,7 +778,7 @@ class GameActivity : Activity() {
         if (d.phoneIcon) setPhoneIconVisible(true)
         d.messages.forEach { (from, text) ->
             messages.add(from to text)
-            phone.addMessage(from, text)
+            phone.addMessage(from, text, messageKey(from))
         }
         if (d.ringing) phoneIcon.ring(true)
 
@@ -1472,10 +1481,12 @@ class GameActivity : Activity() {
             getString(R.string.btn_status) to { openStatus(returnTo = { showFreeSheet() }) },
             getString(R.string.btn_shop) to { openShop() },
         )
+        // Hanya orang yang sudah dikenal, ada di tempat ini, dan memang bisa ditemui sekarang
+        // (sesuai jadwalnya; teman yang perlu janjian muncul di "📅 Janji temu").
         val people = gameData.characters.values.filter { c ->
-            c.meetable && social.rel(c).met &&
+            social.rel(c).met &&
                 ("semua" in c.places || place.lowercase() in c.places) &&
-                ("semua" in c.slots || life.slot.label.lowercase() in c.slots)
+                gameData.meetableNow(c, life.weekdayIndex, life.minute)
         }
         if (people.isNotEmpty()) {
             sheetList.addView(sectionLabel("👥 Temui seseorang"))
@@ -2847,6 +2858,9 @@ class GameActivity : Activity() {
     private fun renderThread(key: String) {
         val t = phoneData.threads[key] ?: return
         t.unread = 0
+        // pesan sudah dibaca → notifikasinya hilang dari layar utama HP
+        messages.removeAll { messageKey(it.first) == key }
+        phone.removeMessages(key)
         phone.clearApp()
         phone.setTitle(t.title)
         phone.backHandler = { renderChatList() }
@@ -3611,7 +3625,9 @@ class GameActivity : Activity() {
             val iv = charLayer.findViewWithTag<android.widget.ImageView>("char_$id") ?: return@forEachIndexed
             val x = if (n == 1) 0f else -spread / 2 + spread * i / (n - 1)
             val dim = n > 1 && speaker != null && speaker != id
-            val scale = heightFrac / CHAR_BASE_HEIGHT * (if (dim) 0.95f else 1f)
+            // skala tubuh dari data (anak-anak lebih kecil): skala = 0.8
+            val bodyScale = gameData.characters[id]?.text?.get("skala")?.trim()?.toFloatOrNull()?.coerceIn(0.5f, 1.2f) ?: 1f
+            val scale = heightFrac / CHAR_BASE_HEIGHT * bodyScale * (if (dim) 0.95f else 1f)
             // perkecil dari tengah-bawah (kaki tetap di bawah layar)
             val viewH = h * CHAR_BASE_HEIGHT
             val dr = iv.drawable
@@ -3716,58 +3732,161 @@ class GameActivity : Activity() {
             announce(social.behave(gameData, c.id, "menepati_janji"))
             notice("🤝 Kamu menepati janji dengan ${c.name}")
         }
-        meetingTalked = false
+        meetingTalks = 0
+        meetingGaveGift = false
         meetingGifted = social.rel(c).lastGiftDay == life.day
         showCharacter(c.id, "biasa", "tengah")
         afterTap = { meetingMenu(c) }
         showLine(c.name, c.text["sapa"] ?: "Halo.")
     }
 
+    /**
+     * Menu saat bertemu. Isinya menyesuaikan keadaan: hadiah hanya bila tas berisi dan belum
+     * memberi hari ini, pertanyaan khusus hanya bila syarat ceritanya terpenuhi.
+     */
     private fun meetingMenu(c: GameData.CharacterDef) {
         val opts = mutableListOf<Pair<String, () -> Unit>>()
-        if (!meetingTalked) opts += "💬 Ngobrol" to { chooseTopic(c) }
-        if (!meetingGifted) opts += "🎁 Beri hadiah" to { chooseGift(c) }
+        if (meetingTalks < MAX_TALKS) {
+            opts += "💬 Ngobrol" to { talkMenu(c) }
+        }
+        if (!meetingGifted && life.items.isNotEmpty()) opts += "🎁 Beri hadiah" to { chooseGift(c) }
         opts += "👋 Pamit" to { endMeeting(c) }
         showButtons(opts.map { it.first }) { i -> opts[i].second() }
     }
 
-    private fun chooseTopic(c: GameData.CharacterDef) {
-        val topics = gameData.topics.values.shuffled().take(3)
-        if (topics.isEmpty()) {
+    private fun chatAllowed(ch: GameData.ChatDef): Boolean {
+        val owner = gameData.characters[ch.charId] ?: return false
+        val cond = ch.condition
+        if (cond != null && !checkCondition(cond)) return false
+        if (ch.once && vars["tanya_${ch.id}"] == "1") return false
+        val key = ch.reveal
+        return key == null || !knowsFact(owner, key)
+    }
+
+    /** Pertanyaan "kenal" yang belum terjawab, urut dari yang paling mudah. */
+    private fun openDeepChats(c: GameData.CharacterDef) =
+        gameData.chatsOf(c.id, "kenal").filter { chatAllowed(it) }.sortedBy { it.needLove + it.needTrust }
+
+    /** Pilih tujuan ngobrol: santai, mengenal lebih dalam, atau pertanyaan khusus sesuai cerita. */
+    private fun talkMenu(c: GameData.CharacterDef) {
+        val opts = mutableListOf<Pair<String, () -> Unit>>()
+        val casual = gameData.chatsOf(c.id, "santai").filter { chatAllowed(it) }
+        if (casual.isNotEmpty()) opts += "😊 Ngobrol santai" to { casualMenu(c, casual) }
+        if (openDeepChats(c).isNotEmpty()) opts += "🔍 Kenali ${c.name} lebih dalam" to { deepMenu(c) }
+        gameData.chatsOf(c.id, "khusus").filter { chatAllowed(it) }.forEach { ch ->
+            opts += "❓ ${fill(ch.title)}" to { runChat(c, ch) }
+        }
+        if (opts.isEmpty()) {
+            notice("💬 Belum ada yang ingin kamu bicarakan dengan ${c.name}.")
             meetingMenu(c)
             return
         }
-        showButtons(topics.map { "${it.icon} ${it.name}" }) { i ->
-            val t = topics[i]
-            meetingTalked = true
-            val r = social.rel(c)
-            val repeatToday = r.lastTalkDay == life.day
-            r.lastTalkDay = life.day
-            val (delta, key) = when (t.id) {
-                in c.likeTopics -> (if (repeatToday) 3 else 6) to "respon_suka"
-                in c.hateTopics -> -5 to "respon_benci"
-                else -> (if (repeatToday) 1 else 2) to "respon_biasa"
-            }
-            when (t.id) {
-                in c.likeTopics -> r.known += "+t:${t.id}"
-                in c.hateTopics -> r.known += "-t:${t.id}"
-            }
-            afterTap = {
-                announce(social.changeLove(gameData, c.id, delta))
-                showCharacter(c.id, if (delta > 2) "senyum" else if (delta < 0) "kesal" else "biasa", "tengah")
-                // Makin akrab, makin banyak yang ia ceritakan (atau ia bercerita tentang orang lain)
-                val talks = (vars["obrolan_${c.id}"]?.toIntOrNull() ?: 0) + 1
-                vars["obrolan_${c.id}"] = talks.toString()
-                val story = if (delta >= 0) revealOwnFact(c, talks) ?: gossipFact(c) else null
-                afterTap = if (story != null) ({
-                    afterTap = { meetingMenu(c) }
-                    showLine(null, story)
-                }) else ({ meetingMenu(c) })
-                showLine(c.name, c.text[key] ?: "...")
-            }
-            showLine("{nama}", t.line)
+        opts += "↩️ Kembali" to { meetingMenu(c) }
+        showButtons(opts.map { it.first }) { i -> opts[i].second() }
+    }
+
+    private fun casualMenu(c: GameData.CharacterDef, list: List<GameData.ChatDef>) {
+        val shown = list.take(4)
+        showButtons(shown.map { fill(it.title) } + "↩️ Kembali") { i ->
+            if (i == shown.size) talkMenu(c) else runChat(c, shown[i])
         }
     }
+
+    private fun deepMenu(c: GameData.CharacterDef) {
+        val shown = openDeepChats(c).take(3)
+        val r = social.rel(c)
+        val love = if (social.isPartner(c)) maxOf(r.love, r.romance) else r.love
+        val labels = shown.map { ch ->
+            val ready = love >= ch.needLove && r.trust >= ch.needTrust
+            (if (ready) "" else "🔒 ") + fill(ch.title)
+        }
+        showButtons(labels + "↩️ Kembali") { i ->
+            if (i == shown.size) talkMenu(c) else runChat(c, shown[i])
+        }
+    }
+
+    /** Jalankan satu obrolan dari data/obrolan.txt. */
+    private fun runChat(c: GameData.CharacterDef, ch: GameData.ChatDef) {
+        meetingTalks++
+        val r = social.rel(c)
+        val love = if (social.isPartner(c)) maxOf(r.love, r.romance) else r.love
+        if (love < ch.needLove || r.trust < ch.needTrust) {
+            // Belum cukup dekat: ia mengelak. Tidak ada efek, pertanyaan tetap bisa diulang nanti.
+            afterTap = {
+                showCharacter(c.id, "biasa", "tengah")
+                notice(if (love < ch.needLove) "🔒 ${c.name} belum cukup akrab denganmu (butuh ${ch.needLove})"
+                    else "🔒 ${c.name} belum cukup percaya padamu (butuh ${ch.needTrust})")
+                afterTap = { meetingMenu(c) }
+                showLine(c.name, ch.refuse ?: "Hm... lain kali saja, ya.")
+            }
+            showLine("{nama}", ch.say)
+            return
+        }
+        if (ch.once) vars["tanya_${ch.id}"] = "1"
+        val repeatToday = ch.kind == "santai" && r.lastTalkDay == life.day
+        if (ch.kind == "santai") r.lastTalkDay = life.day
+        val loveDelta = (ch.effects["cinta"] ?: 0L).toInt().let { if (repeatToday && it > 0) 1 else it }
+        val trustDelta = (ch.effects["percaya"] ?: 0L).toInt().let { if (repeatToday && it > 0) 0 else it }
+        ch.topic?.let { t ->
+            when (t) {
+                in c.likeTopics -> r.known += "+t:$t"
+                in c.hateTopics -> r.known += "-t:$t"
+            }
+        }
+        val mood = if (loveDelta >= 4) "senyum" else if (loveDelta < 0) "kesal" else "biasa"
+        val finish: () -> Unit = {
+            if (loveDelta != 0) announce(social.changeLove(gameData, c.id, loveDelta))
+            if (trustDelta != 0) {
+                social.changeTrust(gameData, c.id, trustDelta)
+                notice((if (trustDelta >= 0) "🤝 " else "⚠️ ") + "${c.name}: kepercayaan " + (if (trustDelta >= 0) "+" else "") + trustDelta)
+            }
+            ch.effects.filterKeys { it != "cinta" && it != "percaya" }.forEach { (k, v) ->
+                vars[k] = ((vars[k]?.toLongOrNull() ?: 0L) + v).toString()
+                if (k == "petunjuk_sahabat" && v > 0) notice("🧵 Petunjuk baru tentang ${vars["nama_sahabat"] ?: "sahabatmu"}")
+            }
+            ch.reveal?.let { key ->
+                if (!knowsFact(c, key)) {
+                    learnFact(c, key)
+                    notice("📖 Info baru tentang ${c.name}: ${factLabel(key)}")
+                }
+            }
+            ch.revealOther?.let { (otherId, key) ->
+                gameData.characters[otherId]?.let { o ->
+                    if (!knowsFact(o, key)) {
+                        learnFact(o, key)
+                        notice("📖 Info baru tentang ${o.name}: ${factLabel(key)}")
+                    }
+                }
+            }
+            syncSocialVars()
+            // Obrolan santai yang hangat kadang membuatnya bercerita tentang dirinya / orang dekatnya
+            val story = if (ch.kind == "santai" && loveDelta > 0 && !repeatToday) {
+                val talks = (vars["obrolan_${c.id}"]?.toIntOrNull() ?: 0) + 1
+                vars["obrolan_${c.id}"] = talks.toString()
+                revealOwnFact(c, talks) ?: gossipFact(c)
+            } else null
+            if (story != null) {
+                afterTap = { meetingMenu(c) }
+                showLine(null, story)
+            } else meetingMenu(c)
+        }
+        // kalimat pemain → jawaban (beberapa kalimat, "*" = narasi) → efek
+        fun answer(i: Int) {
+            if (i >= ch.lines.size) { finish(); return }
+            val line = ch.lines[i]
+            afterTap = { answer(i + 1) }
+            if (line.startsWith("*")) showLine(null, line.removePrefix("*").trim())
+            else showLine(c.name, line)
+        }
+        afterTap = {
+            showCharacter(c.id, mood, "tengah")
+            answer(0)
+        }
+        showLine("{nama}", ch.say)
+    }
+
+    private fun factLabel(key: String): String =
+        facts.firstOrNull { it.key == key }?.label?.substringAfter(' ') ?: key
 
     private fun chooseGift(c: GameData.CharacterDef) {
         if (life.items.isEmpty()) {
@@ -3796,6 +3915,7 @@ class GameActivity : Activity() {
         closeSheet()
         life.items.remove(item)
         meetingGifted = true
+        meetingGaveGift = true
         social.rel(c).lastGiftDay = life.day
         refreshLife()
         val expired = life.isExpired(item)
@@ -3825,7 +3945,8 @@ class GameActivity : Activity() {
         life.applyEffects(mapOf("energi" to -5L, "kewarasan" to (if (social.rel(c).love >= 50) 5L else 2L)))
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
-        passTime(60)
+        // lama pertemuan: sapaan 15 menit + tiap obrolan 20 menit + hadiah 10 menit
+        passTime(15 + meetingTalks * 20 + (if (meetingGaveGift) 10 else 0))
         if (life.dead) return
         continueFree()
     }
@@ -3842,20 +3963,26 @@ class GameActivity : Activity() {
         }
     }
 
-    private fun receiveMessage(sender: String, text: String) {
-        setPhoneIconVisible(true)
+    /** Kunci percakapan Chat untuk pengirim pesan (id karakter, atau nama pengirim). */
+    private fun messageKey(sender: String): String {
         val ch = gameData.findCharacter(sender)
-        val key = when {
+        return when {
             ch != null -> ch.id
             sender.startsWith("HRD") -> "hrd_" + sender
             else -> sender
         }
+    }
+
+    private fun receiveMessage(sender: String, text: String) {
+        setPhoneIconVisible(true)
+        val ch = gameData.findCharacter(sender)
+        val key = messageKey(sender)
         val th = phoneData.thread(key, ch?.name ?: sender)
         th.msgs += PhoneState.Msg(false, text, life.day)
         th.unread++
         if (ch != null) th.pendingSince = life.day
         messages.add(sender to text)
-        phone.addMessage(sender, text)
+        phone.addMessage(sender, text, key)
         phoneIcon.ring(true)
         audio.playSound("notifikasi")
         vibrate()

@@ -22,6 +22,7 @@ class GameData private constructor(
     val interview: List<InterviewQ>,
     val events: List<EventDef>,
     val posts: List<PostDef>,
+    val chats: List<ChatDef> = emptyList(),
 ) {
 
     /**
@@ -42,6 +43,30 @@ class GameData private constructor(
             c.copy(name = name, gender = g)
         }
     }
+
+    /**
+     * Obrolan saat menemui seseorang (data/obrolan.txt).
+     * kind: santai / kenal / khusus. lines: jawaban (diawali "*" = narasi).
+     */
+    data class ChatDef(
+        val id: String,
+        val charId: String,
+        val kind: String,
+        val title: String,
+        val say: String,
+        val lines: List<String>,
+        val effects: Map<String, Long>,
+        val topic: String?,
+        val needLove: Int,
+        val needTrust: Int,
+        val refuse: String?,
+        val reveal: String?,
+        val revealOther: Pair<String, String>?,
+        val condition: String?,
+        val once: Boolean,
+    )
+
+    fun chatsOf(charId: String, kind: String): List<ChatDef> = chats.filter { it.charId == charId && it.kind == kind }
 
     /** Pilihan dalam kejadian: teks tombol, efek, teks hasil. */
     data class EventOption(val label: String, val effects: Map<String, Long>, val result: String)
@@ -352,7 +377,8 @@ class GameData private constructor(
                     clue = m["petunjuk"]?.trim()?.toIntOrNull() ?: 0,
                 )
             }
-            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts)
+            val chats = readSections(ctx, "data/obrolan.txt").map { (id, m) -> chat(id, m) }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {
@@ -394,6 +420,28 @@ class GameData private constructor(
                 total += if (m.groupValues[2] == "jam") n * 60 else n
             }
             return if (total > 0) total.toInt() else null
+        }
+
+        /** "senin-sabtu 13:00-20:00, minggu 07:00-20:00" → daftar (hari, mulai, selesai). */
+        /** Inti [meetableNow] (internal agar bisa diuji tanpa CharacterDef). */
+        internal fun meetable(ditemui: String?, jadwal: String?, slots: Set<String>, weekdayIndex: Int, minute: Int): Boolean {
+            val mode = (ditemui ?: "ya").trim().lowercase()
+            if (mode == "tidak" || mode == "janji") return false
+            val sched = schedule(jadwal)
+            if (sched.isEmpty()) return "semua" in slots || LifeState.Slot.of(minute).label.lowercase() in slots
+            return sched.any { (days, from, to) ->
+                if (to < from) (weekdayIndex in days && minute >= from) || (((weekdayIndex + 6) % 7) in days && minute < to)
+                else weekdayIndex in days && minute in from until to
+            }
+        }
+
+        internal fun schedule(v: String?): List<Triple<Set<Int>, Int, Int>> {
+            if (v.isNullOrBlank()) return emptyList()
+            return v.split(',').mapNotNull { part ->
+                val m = Regex("^(.*?)\\s*(\\d{1,2}[:.]\\d{2}\\s*[-–]\\s*\\d{1,2}[:.]\\d{2})\\s*$").find(part.trim()) ?: return@mapNotNull null
+                val w = window(m.groupValues[2].replace(" ", "")) ?: return@mapNotNull null
+                Triple(days(m.groupValues[1].trim().ifEmpty { null }), w.first, w.second)
+            }
         }
 
         /** "04:00-06:00" → (240, 360). Boleh melewati tengah malam: "19:00-02:00" → (1140, 120). */
@@ -446,6 +494,33 @@ class GameData private constructor(
         private fun list(v: String?): Set<String> =
             v?.split(',')?.map { it.trim().lowercase() }?.filter { it.isNotEmpty() }?.toSet() ?: emptySet()
 
+        /** Satu entri obrolan.txt → [ChatDef]. internal agar bisa diuji. */
+        internal fun chat(id: String, m: Map<String, String>): ChatDef {
+            val kind = (m["jenis"] ?: "santai").trim().lowercase()
+            val other = m["ungkap_lain"]?.trim()?.split(Regex("\\s+"))?.takeIf { it.size == 2 }
+            return ChatDef(
+                id = id,
+                charId = (m["karakter"] ?: "").trim().lowercase(),
+                kind = kind,
+                title = m["judul"] ?: id,
+                say = m["kamu"] ?: "",
+                lines = (m["jawab"] ?: "...").split("//").map { it.trim() }.filter { it.isNotEmpty() },
+                effects = effects(m["efek"]),
+                topic = m["topik"]?.trim()?.lowercase()?.takeIf { it.isNotEmpty() },
+                needLove = m["akrab"]?.trim()?.toIntOrNull() ?: 0,
+                needTrust = m["percaya"]?.trim()?.toIntOrNull() ?: 0,
+                refuse = m["tolak"]?.takeIf { it.isNotBlank() },
+                reveal = m["ungkap"]?.trim()?.takeIf { it.isNotEmpty() },
+                revealOther = other?.let { it[0].lowercase() to it[1] },
+                condition = m["syarat"]?.takeIf { it.isNotBlank() },
+                once = when ((m["sekali"] ?: "").trim().lowercase()) {
+                    "ya" -> true
+                    "tidak" -> false
+                    else -> kind != "santai"
+                },
+            )
+        }
+
         /** "energi -20, uang +15000" → {energi=-20, uang=15000} */
         private fun effects(v: String?): Map<String, Long> {
             if (v.isNullOrBlank()) return emptyMap()
@@ -462,6 +537,17 @@ class GameData private constructor(
             ("semua" in a.places || place.lowercase() in a.places) &&
                 ("semua" in a.slots || slot.label.lowercase() in a.slots)
         }
+
+    /**
+     * Bisa ditemui langsung sekarang? (daftar "Temui seseorang")
+     * ditemui = tidak → tidak pernah · ditemui = janji → hanya lewat janji di Chat ·
+     * jadwal = "senin-sabtu 13:00-20:00, minggu 07:00-20:00" → sesuai jadwal · tanpa jadwal → bagian hari ("waktu").
+     */
+    fun meetableNow(c: CharacterDef, weekdayIndex: Int, minute: Int): Boolean =
+        meetable(c.text["ditemui"], c.text["jadwal"], c.slots, weekdayIndex, minute)
+
+    /** Hanya bisa ditemui lewat janji (Chat → Ajak ketemu). */
+    fun meetByAppointmentOnly(c: CharacterDef): Boolean = (c.text["ditemui"] ?: "").trim().lowercase() == "janji"
 
     /** Semua aktivitas di tempat ini (dipakai untuk menampilkan yang belum bisa, redup). */
     fun activitiesAt(place: String): List<ActivityDef> =

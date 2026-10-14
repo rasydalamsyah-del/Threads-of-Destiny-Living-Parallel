@@ -122,5 +122,49 @@ for n, raw in enumerate(open(pk, encoding="utf-8"), 1):
         if who and who not in chars:
             err(pk, n, f"Orang dalam '{who}' tidak ada di data/karakter.txt")
 
+# data/obrolan.txt: karakter, jenis, kolom wajib, topik, info profil
+ob = os.path.join(data, "obrolan.txt")
+topics = sections(os.path.join(data, "topik.txt"))
+FACTS = {"hobi", "kegemaran", "pelajaran", "keahlian", "cita_cita", "kisah_1", "kisah_2", "kisah_3"}
+if os.path.exists(ob):
+    def check_entry(eid, line_no, m):
+        if not eid:
+            return
+        who = m.get("karakter", "")
+        if who not in chars:
+            err(ob, line_no, f"[{eid}] karakter '{who}' tidak ada di data/karakter.txt")
+        if m.get("jenis", "santai") not in ("santai", "kenal", "khusus"):
+            err(ob, line_no, f"[{eid}] jenis harus santai / kenal / khusus")
+        for k in ("judul", "kamu", "jawab"):
+            if not m.get(k):
+                err(ob, line_no, f"[{eid}] kolom '{k}' kosong")
+        if m.get("topik") and m["topik"] not in topics:
+            err(ob, line_no, f"[{eid}] topik '{m['topik']}' tidak ada di data/topik.txt")
+        if m.get("ungkap") and m["ungkap"] not in FACTS:
+            err(ob, line_no, f"[{eid}] ungkap '{m['ungkap']}' bukan info profil")
+        if m.get("jenis") == "kenal" and not m.get("ungkap"):
+            err(ob, line_no, f"[{eid}] jenis kenal wajib punya 'ungkap'")
+        if m.get("ungkap_lain"):
+            p2 = m["ungkap_lain"].split()
+            if len(p2) != 2 or p2[0] not in chars or p2[1] not in FACTS:
+                err(ob, line_no, f"[{eid}] ungkap_lain harus 'id_karakter info'")
+        if (m.get("akrab") or m.get("percaya")) and not m.get("tolak"):
+            err(ob, line_no, f"[{eid}] punya syarat akrab/percaya tapi tidak ada 'tolak'")
+    cur, start, fields, seen = None, 0, {}, set()
+    for n, raw in enumerate(open(ob, encoding="utf-8"), 1):
+        l = raw.strip()
+        if not l or l.startswith("#"):
+            continue
+        if l.startswith("[") and l.endswith("]"):
+            check_entry(cur, start, fields)
+            cur, start, fields = l[1:-1].strip(), n, {}
+            if cur in seen:
+                err(ob, n, f"id obrolan '{cur}' dobel")
+            seen.add(cur)
+        elif "=" in l:
+            k, v = l.split("=", 1)
+            fields[k.strip().lower()] = v.strip()
+    check_entry(cur, start, fields)
+
 print(f"Pemeriksaan naskah selesai: {errors} kesalahan.")
 sys.exit(1 if errors else 0)

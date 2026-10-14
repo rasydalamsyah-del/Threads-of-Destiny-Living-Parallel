@@ -1,0 +1,762 @@
+# ==========================================================
+#  OBROLAN SAAT MENEMUI SESEORANG
+#  Panduan lengkap: docs/DATA.md
+#
+#  Setiap karakter punya obrolannya sendiri, sesuai sifat, profil, dan alur cerita.
+#  Menu "💬 Ngobrol" berisi:
+#    😊 Ngobrol santai          (jenis = santai)  → boleh diulang; efek penuh sekali per hari
+#    🔍 Kenali lebih dalam       (jenis = kenal)   → bertanya tentang dirinya; membuka info profil.
+#                                                   Tidak muncul bila info itu sudah kamu ketahui.
+#    ❓ pertanyaan khusus        (jenis = khusus)  → tampil langsung di menu bila "syarat"-nya terpenuhi
+#  Satu pertemuan: paling banyak 2 kali ngobrol.
+#
+#  [id]
+#  karakter = id karakter
+#  jenis    = santai / kenal / khusus
+#  judul    = teks tombol
+#  kamu     = kalimat yang diucapkan pemain
+#  jawab    = jawaban karakter. Beberapa kalimat dipisah " // ". Diawali "*" = narasi.
+#  efek     = efek bila berhasil (cinta, percaya, atau variabel lain, mis. petunjuk_sahabat +1)
+#  topik    = (santai) id topik dari topik.txt → tercatat di "Suka"/"Tidak suka" halaman Karakter
+#  akrab    = Cinta/Keakraban minimal agar ia mau menjawab (bawaan 0)
+#  percaya  = Kepercayaan minimal (bawaan 0)
+#  tolak    = jawaban bila belum cukup akrab/percaya
+#  ungkap   = info profil yang terbuka: hobi, kegemaran, pelajaran, keahlian, cita_cita, kisah_1/2/3
+#  ungkap_lain = info profil karakter lain, contoh: sahabat kisah_2
+#  syarat   = (opsional) contoh: jalur == kerja && kerja_aktif == 0
+#  sekali   = ya → hanya bisa ditanyakan sekali (kenal & khusus otomatis sekali)
+# ==========================================================
+
+
+# ======================= AYAH =======================
+# Nelayan, pendiam, melaut malam & tidur pagi. Ditemui siang–sore.
+
+[ayah_kabar]
+karakter = ayah
+jenis    = santai
+judul    = Tanya kabar Ayah
+kamu     = Ayah capek, ya? Semalam melautnya sampai jauh?
+jawab    = Lumayan, Nak. Ombaknya besar semalam. // Tapi Ayah sudah biasa. Badan Ayah ini sudah jadi badan laut.
+efek     = cinta +2
+
+[ayah_laut]
+karakter = ayah
+jenis    = santai
+judul    = Cerita soal kapal di laut
+topik    = laut
+kamu     = Yah, kemarin aku lihat kapal besar lewat dekat mercusuar. Besar banget!
+jawab    = * Mata Ayah berbinar walau bibirnya hanya tersenyum tipis. // Itu kapal tanker. Dulu Ayah pernah mimpi bisa kerja di kapal sebesar itu.
+efek     = cinta +5
+
+[ayah_gosip]
+karakter = ayah
+jenis    = santai
+judul    = Cerita gosip desa
+topik    = gosip
+kamu     = Yah, katanya anak Pak Kades pacaran sama orang kota, lho.
+jawab    = * Ayah mengernyit. // Sudahlah. Tidak usah mengurusi hidup orang lain, Nak.
+efek     = cinta -3
+
+
+[ayah_cita]
+karakter = ayah
+jenis    = kenal
+judul    = Tanya cita-cita Ayah dulu
+akrab    = 45
+ungkap   = cita_cita
+kamu     = Yah, dulu waktu seumuranku, Ayah mau jadi apa?
+jawab    = * Ayah diam cukup lama. // ...Nakhoda kapal besar. Ayah mau keliling dunia. // Sekarang mimpi Ayah cuma satu: kalian hidup lebih baik dari Ayah.
+tolak    = Itu cerita lama. Lain kali saja.
+efek     = cinta +3
+
+[ayah_kisah1]
+karakter = ayah
+jenis    = kenal
+judul    = Tanya kenapa Ayah berhenti sekolah
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Yah, kenapa Ayah dulu nggak lanjut sekolah?
+jawab    = Kelas dua SMP, Ayah berhenti. Kakekmu sakit, harus ada yang melaut. // Makanya Ayah mau kamu sekolah setinggi-tingginya, Nak. Jangan seperti Ayah.
+tolak    = Sudah, itu tidak penting.
+efek     = cinta +3, percaya +2
+
+[ayah_kisah2]
+karakter = ayah
+jenis    = kenal
+judul    = Tanya apa yang Ayah sembunyikan
+akrab    = 60
+percaya  = 55
+ungkap   = kisah_2
+kamu     = Yah... ada yang Ayah sembunyikan, ya? Waktu sarapan Ayah sama Ibu saling lirik.
+jawab    = * Ayah menghela napas panjang. // Perahu itu... Ayah beli dengan uang pinjaman Juragan Darto. Cicilannya belum lunas. // Jangan bilang Ibumu, ya. Ayah tidak mau Ibu tambah pikiran.
+tolak    = Tidak ada apa-apa. Jangan dipikirkan.
+efek     = percaya +5
+
+[ayah_kisah3]
+karakter = ayah
+jenis    = kenal
+judul    = Tanya kenapa Ayah selalu pulang sebelum badai
+akrab    = 80
+percaya  = 75
+ungkap   = kisah_3
+kamu     = Yah, kenapa Ayah selalu buru-buru pulang kalau langit mulai gelap?
+jawab    = Tahun kamu lahir, perahu Ayah terbalik dihantam badai. Ayah terapung semalaman. // Waktu itu Ayah janji pada diri sendiri: Ayah harus pulang. Selalu pulang. Untuk kalian.
+tolak    = Kebiasaan saja. Laut itu tidak bisa ditebak.
+efek     = cinta +5, percaya +5
+
+[ayah_kerja]
+karakter = ayah
+jenis    = khusus
+judul    = Minta saran soal kerja di desa
+syarat   = jalur == kerja && kerja_aktif == 0
+kamu     = Yah, aku mau cari kerja di desa. Menurut Ayah, di mana yang bagus?
+jawab    = Gudang ikan Juragan Darto selalu butuh orang. Kerjanya berat, tapi upahnya dibayar tiap hari. // Atau ikut Ayah melaut. Tapi bangunnya jam empat subuh, ya.
+efek     = percaya +2
+sekali   = tidak
+
+[ayah_sahabat]
+karakter = ayah
+jenis    = khusus
+judul    = Tanya kenapa keluarga {nama_sahabat} pindah
+akrab    = 50
+ungkap_lain = sahabat kisah_2
+kamu     = Yah, Ayah ingat keluarga {nama_sahabat}? Kenapa mereka pindah tiba-tiba?
+jawab    = * Ayah meletakkan jaringnya. // Yang Ayah dengar, bapaknya punya utang. Ada orang kota yang datang menagih malam-malam. // Seminggu kemudian, rumahnya sudah kosong.
+tolak    = Itu urusan keluarga orang, Nak. Ayah tidak tahu banyak.
+efek     = petunjuk_sahabat +1
+
+
+# ======================= IBU =======================
+# Pemilik warung gorengan, cerewet, hangat, gampang khawatir. Ditemui pagi–malam.
+
+[ibu_kabar]
+karakter = ibu
+jenis    = santai
+judul    = Tanya kabar Ibu
+kamu     = Ibu capek, ya? Dari subuh sudah di dapur.
+jawab    = Capek itu biasa, Nak. Asal kalian kenyang, Ibu senang.
+efek     = cinta +2
+
+[ibu_masak]
+karakter = ibu
+jenis    = santai
+judul    = Tanya resep sambal Ibu
+topik    = masak
+kamu     = Bu, sambal tadi pagi enak banget. Gimana bikinnya?
+jawab    = * Ibu tertawa, lalu bercerita panjang lebar. // Rahasianya terasi bakar sama perasan jeruk limau. Nanti Ibu ajari, ya!
+efek     = cinta +5
+
+[ibu_kota]
+karakter = ibu
+jenis    = santai
+judul    = Cerita soal Kota Sakala
+topik    = kota
+kamu     = Bu, katanya gedung di Kota Sakala tinggi-tinggi sampai nyentuh awan.
+jawab    = * Senyum Ibu memudar. // Kota itu keras, Nak. Ibu tidak suka membayangkan kamu jauh-jauh dari rumah.
+efek     = cinta -2
+
+
+[ibu_cita]
+karakter = ibu
+jenis    = kenal
+judul    = Tanya mimpi Ibu
+akrab    = 45
+ungkap   = cita_cita
+kamu     = Bu, Ibu punya mimpi nggak?
+jawab    = Mimpi Ibu... punya warung makan yang ada meja sama kursinya. Bukan cuma bangku plastik. // Biar orang bisa makan sambil ngobrol lama-lama.
+tolak    = Mimpi apa? Ibu sudah tua, Nak.
+efek     = cinta +3
+
+[ibu_kisah1]
+karakter = ibu
+jenis    = kenal
+judul    = Tanya bagaimana Ibu bertemu Ayah
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Bu, dulu Ibu ketemu Ayah di mana?
+jawab    = Ibu dulu tinggal di kota kecil seberang teluk. Ayahmu sering jual ikan ke pasar di sana. // Keluarga Ibu tidak setuju. Tapi Ibu tetap ikut Ayahmu ke sini. Ibu tidak pernah menyesal.
+tolak    = Ih, kepo. Nanti saja ceritanya.
+efek     = cinta +3
+
+[ibu_kisah2]
+karakter = ibu
+jenis    = kenal
+judul    = Tanya soal celengan bambu
+akrab    = 60
+percaya  = 55
+ungkap   = kisah_2
+kamu     = Bu, celengan bambu di bawah lemari itu buat apa?
+jawab    = * Ibu kaget, lalu tersenyum. // Itu tabungan sekolah kalian. Sepi seperti apa pun warung, Ibu tidak pernah ambil dari situ.
+tolak    = Celengan apa? Sudah, jangan diutak-atik.
+efek     = cinta +3, percaya +4
+
+[ibu_kisah3]
+karakter = ibu
+jenis    = kenal
+judul    = Tanya soal ibu {nama_sahabat}
+akrab    = 80
+percaya  = 75
+ungkap   = kisah_3
+kamu     = Bu, dulu Ibu dekat sama ibunya {nama_sahabat}, kan?
+jawab    = * Ibu terdiam lama. // ...Kami berteman baik. Malam sebelum mereka pergi, ibunya datang ke sini sambil menangis, pamit. // Katanya mereka harus pergi sebelum "orang itu" datang lagi. Ibu tidak tahu lebih dari itu, Nak. Sungguh.
+tolak    = Itu sudah lama sekali, Nak.
+efek     = petunjuk_sahabat +1, percaya +3
+
+[ibu_warung]
+karakter = ibu
+jenis    = khusus
+judul    = Tanya keadaan warung
+kamu     = Bu, warung sepi terus, ya? Ada yang bisa aku bantu?
+jawab    = Bantu Ibu jualan saja sudah cukup. // Kalau nanti kamu punya penghasilan, sisihkan sedikit buat adikmu. Itu sudah sangat membantu.
+efek     = percaya +2
+
+
+# ======================= LARAS =======================
+# Adik, 11 tahun, kelas 5 SD. Jahil, ceria. Pagi sekolah, ditemui setelah pukul 13:00.
+
+[laras_sekolah]
+karakter = laras
+jenis    = santai
+judul    = Tanya sekolahnya hari ini
+topik    = sekolah
+kamu     = Gimana sekolahmu hari ini, Ras?
+jawab    = Seru! Tadi aku menang lomba gambar sekelas! // Tapi matematika... ugh, jangan dibahas.
+efek     = cinta +4
+
+[laras_layangan]
+karakter = laras
+jenis    = santai
+judul    = Ajak main layangan
+topik    = layangan
+kamu     = Ras, sore ini anginnya kencang. Main layangan, yuk!
+jawab    = * Laras melompat-lompat kegirangan. // Ayo! Kali ini aku yang pegang benangnya!
+efek     = cinta +5
+
+[laras_pr]
+karakter = laras
+jenis    = santai
+judul    = Tanya PR matematikanya
+topik    = pelajaran
+kamu     = Ras, PR matematikamu sudah dikerjakan?
+jawab    = Ih, jangan ngomongin pelajaran! Bosen!
+efek     = cinta -3
+
+
+
+[laras_kisah1]
+karakter = laras
+jenis    = kenal
+judul    = Tanya kenapa ia murung pulang sekolah
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Ras, kok kemarin pulang sekolah diam saja?
+jawab    = * Laras menunduk. // ...Teman-teman bilang bajuku bau ikan. // Jangan bilang Ibu, ya, Kak. Nanti Ibu sedih.
+tolak    = Nggak apa-apa! Udah, Kakak jangan kepo.
+efek     = cinta +4, percaya +4
+
+[laras_kisah2]
+karakter = laras
+jenis    = kenal
+judul    = Tanya kenapa ia tidur di kamarmu
+akrab    = 60
+percaya  = 55
+ungkap   = kisah_2
+kamu     = Ras, kemarin kok kamu tidur di kamar Kakak?
+jawab    = Habis... kamar Kakak sepi kalau Kakak nggak ada. // Biar kamarnya nggak kesepian. Biar aku juga nggak.
+tolak    = Salah kamar! Ngantuk!
+efek     = cinta +4
+
+[laras_kisah3]
+karakter = laras
+jenis    = kenal
+judul    = Tanya isi kotak sepatunya
+akrab    = 80
+percaya  = 75
+ungkap   = kisah_3
+kamu     = Ras, kotak sepatu di bawah ranjangmu itu isinya apa?
+jawab    = * Laras tersipu, lalu membukanya pelan-pelan. Isinya puluhan gambar. // Ini buat Kakak. Semuanya. Tuh, tutupnya kutulisi: "Buat Kakak kalau sudah pulang."
+tolak    = Bukan apa-apa! Jangan dibuka!
+efek     = cinta +6
+
+
+# ======================= BAYU =======================
+# Teman sekelas, anak nelayan, ceria, setia kawan. Hanya bisa ditemui lewat janji.
+
+[bayu_kabar]
+karakter = bayu
+jenis    = santai
+judul    = Tanya kabar Bayu
+kamu     = Gimana kabarmu, Bay?
+jawab    = Gini-gini aja. Bantu Bapak benerin jaring, terus ke dermaga. // Kamu tuh yang jarang kelihatan!
+efek     = cinta +2
+
+[bayu_bola]
+karakter = bayu
+jenis    = santai
+judul    = Ngobrol soal bola antar-desa
+topik    = sepak_bola
+kamu     = Bay, nanti nonton pertandingan bola antar-desa?
+jawab    = Jelas! Aku main jadi bek. Kamu harus datang nonton, ya!
+efek     = cinta +5
+
+[bayu_ujian]
+karakter = bayu
+jenis    = santai
+judul    = Tanya nilai ujiannya
+topik    = pelajaran
+kamu     = Bay, nilai ujianmu kemarin gimana?
+jawab    = Aduh, jangan bahas itu dong. Udah lulus, masih aja.
+efek     = cinta -3
+
+[bayu_hobi]
+karakter = bayu
+jenis    = kenal
+judul    = Tanya kesibukannya
+akrab    = 20
+ungkap   = hobi
+kamu     = Bay, kalau lagi nggak bantu bapakmu, kamu ngapain?
+jawab    = Mancing di ujung dermaga! Atau main bola di pantai sampai magrib.
+tolak    = Ya gitu-gitu aja. Kenapa emangnya?
+efek     = cinta +2
+
+[bayu_cita]
+karakter = bayu
+jenis    = kenal
+judul    = Tanya cita-citanya
+akrab    = 45
+ungkap   = cita_cita
+kamu     = Bay, kamu nanti mau jadi apa?
+jawab    = Punya kapal ikan sendiri. Biar Bapak nggak usah ikut juragan lagi. // Ketawa aja, aku serius!
+tolak    = Hahaha, nanti aja ngomongin masa depan. Pusing!
+efek     = cinta +3
+
+[bayu_kisah1]
+karakter = bayu
+jenis    = kenal
+judul    = Tanya kenapa uang jajannya selalu habis
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Bay, kok uang jajanmu selalu habis duluan?
+jawab    = Hehe... Adikku empat, {nama}. Kalau mereka minta, ya aku kasih. // Aku kan anak sulung.
+tolak    = Boros aja, hehe.
+efek     = cinta +3, percaya +3
+
+[bayu_kisah2]
+karakter = bayu
+jenis    = kenal
+judul    = Tanya kenapa ia gugup soal Sekar
+akrab    = 60
+percaya  = 55
+syarat   = kenal_sekar == 1
+ungkap   = kisah_2
+kamu     = Bay, kok kamu gugup terus tiap ada Sekar?
+jawab    = A-apa sih! Nggak! // ...Oke, oke. Dari SD. Tapi jangan bilang siapa-siapa, ya!
+tolak    = Gugup apaan? Kamu salah lihat!
+efek     = percaya +5
+
+[bayu_kisah3]
+karakter = bayu
+jenis    = kenal
+judul    = Tanya apa yang sedang ia pikirkan
+akrab    = 80
+percaya  = 75
+ungkap   = kisah_3
+kamu     = Bay, kamu kelihatan banyak pikiran akhir-akhir ini.
+jawab    = * Bayu lama menatap laut. // Bapak utangnya banyak ke Juragan Darto. // Aku takut harus berhenti sekolah dan kerja di gudang ikan selamanya.
+tolak    = Nggak, kok. Cuma kurang tidur.
+efek     = cinta +5, percaya +5
+
+[bayu_sahabat]
+karakter = bayu
+jenis    = khusus
+judul    = Tanya soal {nama_sahabat}
+akrab    = 35
+kamu     = Bay, kamu masih ingat {nama_sahabat}? Pernah dengar kabarnya?
+jawab    = Ingat, lah! Kalian berdua dulu nempel terus kayak perangko. // Kabar sih nggak ada... tapi kakakku yang kerja di Sakala pernah bilang lihat orang mirip dia di Stasiun Besar.
+tolak    = Hmm... nggak tahu, ya. Udah lama banget.
+efek     = petunjuk_sahabat +1
+
+
+# ======================= SEKAR =======================
+# Juara kelas, serius, perasa. Hanya bisa ditemui lewat janji (dikenal lewat cerita).
+
+[sekar_kabar]
+karakter = sekar
+jenis    = santai
+judul    = Tanya kabar Sekar
+kamu     = Gimana kabarmu, Sekar?
+jawab    = Baik. Lagi bantu Ibu menjahit pesanan seragam.
+efek     = cinta +2
+
+[sekar_buku]
+karakter = sekar
+jenis    = santai
+judul    = Tanya buku yang sedang dibaca
+topik    = pelajaran
+kamu     = Lagi baca buku apa sekarang?
+jawab    = * Sekar tersenyum kecil dan menunjukkan sampulnya. // Novel tentang anak desa yang jadi dokter. Aku sudah baca tiga kali.
+efek     = cinta +5
+
+[sekar_bola]
+karakter = sekar
+jenis    = santai
+judul    = Ngobrol soal bola
+topik    = sepak_bola
+kamu     = Sekar, nanti nonton bola antar-desa, nggak?
+jawab    = * Sekar menghela napas. // Kamu nggak ada obrolan lain, ya?
+efek     = cinta -3
+
+[sekar_hobi]
+karakter = sekar
+jenis    = kenal
+judul    = Tanya kesukaannya
+akrab    = 20
+ungkap   = hobi
+kamu     = Sekar, selain belajar, kamu suka ngapain?
+jawab    = Baca novel... sama menulis puisi di buku harian. // Jangan minta lihat, ya.
+tolak    = Belajar. Itu saja.
+efek     = cinta +2
+
+[sekar_cita]
+karakter = sekar
+jenis    = kenal
+judul    = Tanya cita-citanya
+akrab    = 45
+ungkap   = cita_cita
+kamu     = Sekar, kamu mau jadi apa nanti?
+jawab    = Dokter. Dokter pertama dari Tanjung Lentera. // Supaya orang sini tidak perlu jauh-jauh ke kota kalau sakit.
+tolak    = Masih kupikirkan.
+efek     = cinta +3
+
+[sekar_kisah1]
+karakter = sekar
+jenis    = kenal
+judul    = Tanya soal keluarganya
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Sekar, ibumu kerja sampai malam terus, ya?
+jawab    = Ayahku sudah meninggal. Ibu menjahit sampai larut supaya aku bisa terus sekolah. // Makanya aku tidak boleh gagal.
+tolak    = Ya... begitulah.
+efek     = cinta +3, percaya +3
+
+[sekar_kisah2]
+karakter = sekar
+jenis    = kenal
+judul    = Tanya soal beasiswa ke Sakala
+akrab    = 60
+percaya  = 55
+ungkap   = kisah_2
+kamu     = Katanya kamu pernah ditawari beasiswa ke Sakala?
+jawab    = * Sekar memalingkan wajah. // Aku tolak. Aku tidak tega meninggalkan Ibu sendirian.
+tolak    = Itu sudah lewat. Tidak usah dibahas.
+efek     = percaya +4
+
+[sekar_kisah3]
+karakter = sekar
+jenis    = khusus
+judul    = Tanya soal hari {nama_sahabat} pergi
+akrab    = 70
+percaya  = 70
+ungkap   = kisah_3
+kamu     = Sekar... kamu tahu sesuatu soal hari {nama_sahabat} pergi, kan?
+jawab    = * Sekar lama terdiam. // Sehari sebelum pergi, aku melihat {nama_sahabat} menangis sendirian di stasiun. // Dia bilang, "Jangan kasih tahu siapa-siapa." Maaf... baru sekarang aku cerita.
+tolak    = Aku... tidak tahu apa-apa.
+efek     = petunjuk_sahabat +1, percaya +5
+
+
+# ======================= JURAGAN DARTO =======================
+# Juragan pengolahan ikan asin, tegas, perhitungan. Ditemui di gudang Senin–Sabtu 07:00–16:00.
+
+[darto_kabar]
+karakter = darto
+jenis    = santai
+judul    = Tanya usahanya
+kamu     = Usahanya lancar, Juragan?
+jawab    = Lancar, kalau anak buah tidak malas.
+efek     = cinta +1
+
+[darto_harga]
+karakter = darto
+jenis    = santai
+judul    = Ngobrol soal harga ikan
+topik    = laut
+kamu     = Juragan, harga ikan lagi turun, ya?
+jawab    = Hm. Kamu tahu juga soal itu. Musim begini memang ikan melimpah, harga jatuh.
+efek     = cinta +4
+
+[darto_layangan]
+karakter = darto
+jenis    = santai
+judul    = Cerita soal layangan
+topik    = layangan
+kamu     = Juragan, sore ini anak-anak ramai main layangan di pantai.
+jawab    = Buang-buang waktu saja.
+efek     = cinta -3
+
+[darto_hobi]
+karakter = darto
+jenis    = kenal
+judul    = Tanya burung di sangkarnya
+akrab    = 20
+ungkap   = hobi
+kamu     = Juragan, burung di sangkar depan gudang itu punya Juragan?
+jawab    = Perkutut. Suaranya bagus kalau pagi. // Lebih jujur daripada kebanyakan orang.
+tolak    = Bukan urusanmu. Kerja sana.
+efek     = cinta +2
+
+[darto_cita]
+karakter = darto
+jenis    = kenal
+judul    = Tanya rencana usahanya
+akrab    = 45
+ungkap   = cita_cita
+kamu     = Juragan mau usahanya sebesar apa nanti?
+jawab    = Ikan asin Tanjung Lentera harus sampai ke luar pulau. Pakai merek sendiri.
+tolak    = Itu rahasia dagang.
+efek     = cinta +3
+
+[darto_kisah1]
+karakter = darto
+jenis    = kenal
+judul    = Tanya awal usahanya
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Juragan dulu mulai usaha dari mana?
+jawab    = Dari angkut ikan. Sama seperti kalian. Punggung saya dulu juga lecet semua.
+tolak    = Dari kerja keras. Sudah.
+efek     = percaya +3
+
+[darto_kisah2]
+karakter = darto
+jenis    = kenal
+judul    = Tanya soal pinjaman ke nelayan
+akrab    = 60
+percaya  = 55
+ungkap   = kisah_2
+kamu     = Juragan, kenapa Juragan mau meminjamkan uang ke hampir semua nelayan?
+jawab    = Karena kalau mereka tidak melaut, saya tidak punya ikan. // Banyak yang benci saya. Tapi tanpa saya, perahu-perahu itu cuma jadi kayu bakar.
+tolak    = Itu urusan dagang.
+efek     = percaya +4
+
+[darto_kisah3]
+karakter = darto
+jenis    = kenal
+judul    = Tanya soal keluarganya
+akrab    = 80
+percaya  = 75
+ungkap   = kisah_3
+kamu     = Juragan punya anak?
+jawab    = * Darto lama tidak menjawab. // Satu. Pergi ke kota, tidak pernah pulang. // Makanya saya tidak suka anak muda yang buru-buru pergi.
+tolak    = Kerja sana. Jangan banyak tanya.
+efek     = percaya +5
+
+[darto_lowongan]
+karakter = darto
+jenis    = khusus
+judul    = Tanya lowongan di gudang
+syarat   = jalur == kerja && kerja_aktif == 0
+kamu     = Juragan, gudang masih butuh orang?
+jawab    = Selalu. Kerjanya Senin–Sabtu, jam tujuh pagi sampai jam dua siang. // Lamar lewat "Cari kerja" di HP-mu. Jangan telat, saya tidak suka orang telat.
+sekali   = tidak
+
+[darto_hutang]
+karakter = darto
+jenis    = khusus
+judul    = Bicarakan soal hutang
+syarat   = hutang_darto > 0
+kamu     = Juragan, soal hutang obat Ibu kemarin...
+jawab    = Bayar sedikit-sedikit dari upahmu. Saya tidak kejar, asal kamu jujur dan tidak kabur.
+efek     = percaya +3
+
+
+# ======================= DIMAS =======================
+# Teman sebangku di Sakala, humoris, kurir paket. Hanya bisa ditemui lewat janji.
+
+[dimas_kabar]
+karakter = dimas
+jenis    = santai
+judul    = Tanya kabar Dimas
+kamu     = Capek ngantar paket hari ini, Dim?
+jawab    = Lumayan, betisku udah kayak pemain bola. Hahaha!
+efek     = cinta +2
+
+[dimas_bola]
+karakter = dimas
+jenis    = santai
+judul    = Ngobrol soal bola
+topik    = sepak_bola
+kamu     = Dim, semalam nonton bola, nggak?
+jawab    = Nonton di warung kopi! Golnya menit terakhir, Bro. Gila!
+efek     = cinta +5
+
+[dimas_gosip]
+karakter = dimas
+jenis    = santai
+judul    = Cerita gosip kelas
+topik    = gosip
+kamu     = Dim, katanya si anak kelas sebelah ketahuan nyontek, ya?
+jawab    = Aku nggak suka ngomongin orang, Bro.
+efek     = cinta -3
+
+[dimas_hobi]
+karakter = dimas
+jenis    = kenal
+judul    = Tanya kesukaannya
+akrab    = 20
+ungkap   = hobi
+kamu     = Dim, kalau lagi libur kamu ngapain?
+jawab    = Main gitar di atap kos. Lagunya sedih semua, jangan ketawa.
+tolak    = Tidur, Bro. Tidur.
+efek     = cinta +2
+
+[dimas_cita]
+karakter = dimas
+jenis    = kenal
+judul    = Tanya cita-citanya
+akrab    = 45
+ungkap   = cita_cita
+kamu     = Dim, kamu jago matematika. Nanti mau jadi apa?
+jawab    = Insinyur sipil. Mau bangun rumah yang layak buat warga Rel Utara.
+tolak    = Jadi orang kaya! Hahaha.
+efek     = cinta +3
+
+[dimas_kisah1]
+karakter = dimas
+jenis    = kenal
+judul    = Tanya soal keluarganya
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Dim, kamu tinggal sama siapa?
+jawab    = Sama Ibu. Ibu jualan nasi uduk dekat rel. Nanti mampir, ya. Enak, sumpah.
+tolak    = Sama nyamuk. Hahaha.
+efek     = cinta +3
+
+[dimas_kisah2]
+karakter = dimas
+jenis    = kenal
+judul    = Tanya kenapa ia kerja sambil sekolah
+akrab    = 60
+percaya  = 55
+ungkap   = kisah_2
+kamu     = Dim, kenapa kamu kerja sambil sekolah?
+jawab    = * Dimas berhenti tersenyum. // Bapak pergi waktu aku kecil. Aku jadi kurir supaya Ibu nggak usah jualan sampai malam.
+tolak    = Biar bisa jajan, lah!
+efek     = percaya +4
+
+[dimas_kisah3]
+karakter = dimas
+jenis    = kenal
+judul    = Tanya apa yang mengganggunya
+akrab    = 80
+percaya  = 75
+ungkap   = kisah_3
+kamu     = Dim, akhir-akhir ini kamu diam terus. Ada apa?
+jawab    = Rumahku mau digusur buat jalur kereta baru. // Jangan bilang siapa-siapa di sekolah, ya.
+tolak    = Nggak ada apa-apa. Lagi capek aja.
+efek     = percaya +5
+
+[dimas_kurir]
+karakter = dimas
+jenis    = khusus
+judul    = Tanya soal kerja kurir
+syarat   = kerja_aktif == 0
+kamu     = Dim, kerja kurir paket itu gimana? Masih butuh orang?
+jawab    = Butuh terus! Sore sampai malam, sepedanya dipinjami. // Lamar lewat "Cari kerja". Sebut namaku, biar bos percaya.
+sekali   = tidak
+
+
+# ======================= NADIA =======================
+# Ketua kelas, anak pemilik toko buku di depan Stasiun Besar. Ditemui di toko 14:00–20:00.
+
+[nadia_kabar]
+karakter = nadia
+jenis    = santai
+judul    = Tanya keadaan toko
+kamu     = Toko ramai hari ini, Nad?
+jawab    = Lumayan. Kebanyakan cuma numpang baca, sih.
+efek     = cinta +2
+
+[nadia_buku]
+karakter = nadia
+jenis    = santai
+judul    = Minta rekomendasi buku
+topik    = pelajaran
+kamu     = Nad, ada buku bagus yang bisa kamu rekomendasikan?
+jawab    = * Nadia menutup bukunya dan langsung bersemangat. // Ada! Novel sejarah tentang pelabuhan Sakala zaman dulu. Aku pinjami, asal jangan dilipat halamannya.
+efek     = cinta +5
+
+[nadia_bola]
+karakter = nadia
+jenis    = santai
+judul    = Ngobrol soal bola
+topik    = sepak_bola
+kamu     = Nad, kamu suka nonton bola?
+jawab    = * Nadia kembali membaca bukunya tanpa menjawab.
+efek     = cinta -3
+
+[nadia_hobi]
+karakter = nadia
+jenis    = kenal
+judul    = Tanya kesukaannya
+akrab    = 20
+ungkap   = hobi
+kamu     = Nad, kamu selalu bawa buku catatan kecil. Buat apa?
+jawab    = Untuk menulis resensi buku. Aku punya blog sendiri. // Pembacanya baru dua belas orang. Jangan tertawa.
+tolak    = Catatan pelajaran. Biasa saja.
+efek     = cinta +2
+
+[nadia_cita]
+karakter = nadia
+jenis    = kenal
+judul    = Tanya cita-citanya
+akrab    = 45
+ungkap   = cita_cita
+kamu     = Nad, kamu mau jadi apa nanti?
+jawab    = Jurnalis. Yang berani menulis hal-hal yang orang lain takut tulis.
+tolak    = Belum tahu.
+efek     = cinta +3
+
+[nadia_kisah1]
+karakter = nadia
+jenis    = kenal
+judul    = Tanya soal toko keluarganya
+akrab    = 40
+ungkap   = kisah_1
+kamu     = Toko ini sudah lama, ya?
+jawab    = Sejak zaman kakekku. Tapi sekarang orang lebih suka beli di internet. // Aku takut toko ini tutup sebelum aku lulus.
+tolak    = Lumayan lama.
+efek     = cinta +3
+
+[nadia_kisah2]
+karakter = nadia
+jenis    = kenal
+judul    = Tanya soal ibunya
+akrab    = 60
+percaya  = 55
+ungkap   = kisah_2
+kamu     = Nad, aku belum pernah lihat ibumu di toko.
+jawab    = * Nadia memaksakan senyum. // Ibu kerja di luar negeri. Kami cuma bisa video call sebulan sekali.
+tolak    = Ibu sibuk.
+efek     = percaya +4
+
+[nadia_kisah3]
+karakter = nadia
+jenis    = kenal
+judul    = Tanya soal murid pindahan itu
+akrab    = 80
+percaya  = 75
+ungkap   = kisah_3
+kamu     = Nad, kamu sebenarnya kenal dekat murid pindahan dari Tanjung Lentera itu, kan?
+jawab    = * Nadia lama terdiam, lalu mengeluarkan amplop lusuh dari laci kasir. // Kami pernah sebangku. Aku menulis surat ini untuknya, tapi dia keburu pindah. // Kalau kamu bertemu dengannya... tolong berikan.
+tolak    = Kan sudah kubilang, aku lupa.
+efek     = petunjuk_sahabat +1, percaya +5
+
+[nadia_kabar_cari]
+karakter = nadia
+jenis    = khusus
+judul    = Tanya kabar pencarian
+syarat   = nadia_membantu == 1
+kamu     = Nad, ada kabar soal anak bergelang merah itu?
+jawab    = Belum ada lagi. Tapi aku selalu memperhatikan peron jurusan Pelabuhan tiap sore. // Kalau ada apa-apa, kamu yang pertama kukabari.
+efek     = percaya +2
+sekali   = tidak

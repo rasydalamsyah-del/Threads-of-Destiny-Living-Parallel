@@ -14,7 +14,7 @@
 # ==========================================================
 
 @waktu Minggu kedua di Kota Sakala
-@kalender Senin pagi
+@kalender Senin 07:00
 @latar kelas_sma
 @terang 1500
 * Seminggu berlalu. Rutinitas mulai terbentuk: bangun pagi, sekolah, mengatur uang... dan diam-diam mencari.
@@ -85,7 +85,7 @@ Nadia: ...Begitu.
 @kalender Sabtu sore
 @latar stasiun_besar
 @terang 1500
-* Stasiun Besar Sakala, jam pulang kerja. Ribuan orang berdesakan.
+* Stasiun Besar Sakala, Sabtu sore. Ribuan orang berdesakan, pulang dari kerja dan belanja akhir pekan.
 @jika petunjuk_sahabat >= 4 -> stasiun_dekat
 * Di tengah kerumunan, sekilas kamu melihat seutas gelang merah... lalu hilang ditelan arus manusia.
 {nama}: Tunggu...!
@@ -126,8 +126,9 @@ Nadia: ...Begitu.
 @tampil laras sedih tengah
 Laras: Kak! Kak! Ibu... Ibu pingsan di warung!
 @sembunyi semua
-@latar kamar_pagi
+@latar ruang_makan
 @tampil ibu sedih
+* Ibu dibaringkan di tikar ruang tengah. Wajahnya pucat.
 Ibu: Ibu nggak apa-apa... cuma capek.
 * Kata mantri desa, Ibu kelelahan dan tekanan darahnya tinggi. Ibu butuh obat dan harus istirahat. Biayanya Rp150.000.
 
@@ -175,8 +176,10 @@ Ayah: Biar Ayah yang urus. Ayah jual semua hasil tangkapan minggu ini.
 
 @latar rumah_warung
 @tampil laras biasa
-Laras: Kak, aku nemu ini di laci Kakak. Gelang benang merah. Punya siapa?
-{nama}: Itu... janji lama.
+Laras: Kak, gelang benang merah di tangan Kakak itu dari siapa, sih? Udah butut, kok nggak pernah dilepas?
+{nama}: Ini... janji lama, Laras.
+Laras: Janji sama siapa? Pacar, ya?
+{nama}: Bukan. Sama sahabat Kakak waktu kecil. Dia pergi ke kota, dan Kakak masih menunggunya.
 @tambah petunjuk_sahabat +1
 @sembunyi semua
 @hp pesan Nomor Tidak Dikenal | Kamu masih di Tanjung Lentera, ya? Kalau kamu tidak datang ke Sakala... mungkin suatu hari aku yang akan pulang.

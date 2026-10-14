@@ -38,41 +38,92 @@
 
 
 # ----------------------------------------------------------
-#  PAGI SETELAH KELULUSAN
+#  PAGI SETELAH KELULUSAN — BANGUN
 # ----------------------------------------------------------
 
 @atur usia = 15
-@waktu Senin, 06:30
+@hidup mulai
+@lokasi desa
+@kalender Senin 06:00
+@waktu Senin, 06:00
 @latar plafon
-@jam Senin, 06:30 ☀️
 @kedip
 
 {nama}: ...Mimpi itu lagi.
 {nama}: Kenapa selalu stasiun itu...
 
 @latar kamar_pagi naik
-* {nama} duduk di tepi ranjang. Dari dapur tercium aroma ikan goreng.
-Ibu: {nama}! Sudah bangun belum? Sarapan dulu, nanti keburu dingin!
-{nama}: Iya, Bu! Sebentar!
-
-@latar rumah_warung
-@jam Senin, 06:45 ☀️
-@kenal ayah
+* {nama} duduk di tepi ranjang. Dari dapur tercium aroma ikan goreng dan nasi yang baru matang.
 @kenal ibu
+Ibu: {nama}! Sudah bangun belum? Sarapan sudah siap. Ayahmu juga baru pulang!
+{nama}: Iya, Bu! Sebentar!
+@maju 10 menit
+
+
+# ----------------------------------------------------------
+#  SARAPAN DI RUANG MAKAN (obrolan keluarga, tanpa pilihan)
+# ----------------------------------------------------------
+
+@latar ruang_makan
+@kenal ayah
 @kenal laras
-@tampil ibu senyum kiri
-@tampil ayah biasa kanan
-* Di warung kecil depan rumah, Ibu sudah sibuk menata gorengan. Ayah baru pulang melaut, bajunya masih basah.
-Ayah: Nah, ini dia {jagoan|putri} Ayah yang baru lulus.
+@tampil ayah biasa kiri
 @tampil laras senyum tengah
+@tampil ibu senyum kanan
+* Di ruang makan yang sempit, meja kayu sudah penuh: nasi hangat, sayur asem, sambal, dan ikan goreng hasil tangkapan Ayah semalam.
+* Ayah baru pulang melaut. Rambutnya masih kaku oleh garam laut, matanya merah karena semalaman terjaga.
+Ayah: Nah, ini dia {jagoan|putri} Ayah yang sudah lulus SMP.
 Laras: Kak {nama} kemarin nangis waktu perpisahan sekolah, lho!
 {nama}: Laras! Jangan ngarang!
-Ibu: Sudah, sudah. Duduk sini, makan.
-* Mereka sarapan bersama. Lalu Ayah meletakkan gelas kopinya, dan suasana berubah serius.
-Ayah: {nama}, sekarang kamu sudah lulus. Ayah sama Ibu mau tanya...
-Ayah: Kamu mau lanjut ke mana?
+Ibu: Sudah, sudah. Ayo makan dulu, keburu dingin.
+* Mereka makan bersama. Sendok beradu dengan piring seng, diselingi celoteh Laras soal kucing tetangga yang tidur di warung.
+Ibu: Yah, tangkapan semalam bagaimana?
+Ayah: Lumayan... tapi harga ikan di pelelangan turun lagi. Juragan Darto cuma mau bayar delapan ribu sekilo.
+Ibu: Delapan ribu... Padahal solar naik terus.
+Ayah: Ya mau bagaimana. Yang penting dapur tetap ngebul.
+Ibu: Warung juga sepi akhir-akhir ini. Orang lebih suka beli gorengan di minimarket baru dekat jalan raya.
+Laras: Minimarket yang ada AC-nya itu ya, Bu? Aku pernah masuk, dingin banget!
+Ibu: Hush, kamu itu.
+* Tawa kecil pecah di meja makan. Tapi {nama} melihat Ayah dan Ibu saling bertukar pandang, seolah ada yang tidak mereka ucapkan.
+Ayah: Sudah. Urusan uang biar Ayah sama Ibu yang pikirkan. Kalian makan yang banyak.
+Laras: Bu, nanti aku minta uang jajan dua ribu, ya. Ada yang jual es lilin kacang hijau di sekolah.
+Ibu: Seribu. Yang seribu lagi masuk celengan.
+Laras: Yaaah...
+@maju 35 menit
+
+# ---------- Laras berangkat sekolah ----------
+* Selesai makan, Ibu bergegas ke dapur dan kembali membawa kotak bekal berwarna biru.
+Ibu: Laras, ini bekalmu. Dihabiskan, jangan dikasih ke kucing lagi.
+Laras: Iya, Bu~
+@sembunyi laras
+* Laras berlari ke teras dan memasang sepatu hitamnya yang mulai sobek di ujung.
+* Ia kembali sebentar untuk mencium tangan Ayah dan Ibu, mengucap salam, lalu mengayuh sepeda kecilnya menyusuri jalan tanah menuju sekolah.
+* Bunyi bel sepedanya terdengar sampai menghilang di tikungan dekat dermaga.
+Ayah: Ayah tidur dulu, ya. Nanti siang Ayah bangun.
+@sembunyi ayah
+* Ayah masuk ke kamar. Tak lama kemudian, terdengar dengkurnya yang khas.
+Ibu: {nama}, siap-siap, ya. Tolong buka warung duluan. Ibu cuci piring sebentar, nanti Ibu menyusul.
+{nama}: Iya, Bu.
+@sembunyi semua
+@maju 15 menit
+
+
+# ----------------------------------------------------------
+#  MEMBUKA WARUNG BERSAMA IBU
+# ----------------------------------------------------------
+
+@latar rumah_warung
+* {nama} membuka tirai bambu warung, menyusun toples kerupuk, dan menyalakan kompor.
+* Tak lama, Ibu datang membawa sebaskom adonan pisang goreng.
+@tampil ibu senyum
+Ibu: Wah, sudah rapi. Anak Ibu memang bisa diandalkan.
+* Mereka menggoreng sambil sesekali melayani tetangga yang mampir membeli gorengan untuk sarapan.
+@maju 30 menit
+@tampil ibu biasa
+Ibu: {nama}... Ibu mau tanya, dan Ibu mau kamu jawab jujur, ya.
+Ibu: Sekarang kamu sudah lulus. Kamu mau lanjut ke mana?
 Ibu: SMA terdekat cuma ada di Kota Sakala. Kalau sekolah di sana, kamu harus ngekos. Biayanya... tidak sedikit.
-Ayah: Tapi kalau kamu mau kerja dulu, bantu Ayah melaut atau bantu Ibu di warung, itu juga tidak apa-apa.
+Ibu: Tapi kalau kamu mau di sini, bantu Ibu di warung atau ikut Ayah melaut, itu juga tidak apa-apa. Semalam Ayahmu juga bilang begitu.
 * {nama} terdiam. Ini keputusan pertama yang benar-benar menentukan hidupnya.
 
 @hp tampil
@@ -96,14 +147,13 @@ Ibu: {nama}? Kok melamun? Jadi bagaimana, Nak?
 
 :: sma
 @atur jalur = sma
-{nama}: Aku mau lanjut SMA di Kota Sakala, Yah, Bu.
-* Ayah dan Ibu saling berpandangan. Lama sekali tidak ada yang bicara.
-Ayah: ...Baik. Kalau itu pilihanmu, Ayah akan usahakan biayanya.
-@tampil ibu sedih kiri
+{nama}: Aku mau lanjut SMA di Kota Sakala, Bu.
+* Ibu berhenti membalik gorengan. Lama sekali Ibu tidak bicara.
+@tampil ibu sedih
+Ibu: ...Kalau itu pilihanmu, Ibu sama Ayah akan usahakan biayanya.
 Ibu: Tapi, Nak... di kota itu semuanya bayar. Kos, makan, ongkos. Kamu sendirian di sana.
-Ibu: Ayah sama Ibu cuma bisa kirim seadanya. Ibu takut kamu kekurangan, terus tidak bilang.
-Ayah: Hasil laut sekarang tidak menentu, {nama}. Ayah tidak mau janji yang tidak bisa Ayah tepati.
-* {nama} melihat tangan Ayah yang kasar, dan kerutan baru di wajah Ibu. Bagaimana kamu menjawabnya?
+Ibu: Ayah sama Ibu cuma bisa kirim seadanya. Ibu takut kamu kekurangan, terus diam saja tidak bilang.
+* {nama} melihat tangan Ibu yang penuh bekas cipratan minyak, dan teringat wajah lelah Ayah tadi pagi. Bagaimana kamu menjawabnya?
 @pilihan
 > "Aku akan hemat. Cukup dengan kiriman Ayah dan Ibu." -> uang_ortu
 > "Iya, Bu. Aku pasti baik-baik saja." (diam-diam berencana kerja) -> kerja_rahasia
@@ -114,7 +164,7 @@ Ayah: Hasil laut sekarang tidak menentu, {nama}. Ayah tidak mau janji yang tidak
 {nama}: Aku akan hemat, Bu. Cukup dengan yang Ayah sama Ibu kirim. Aku mau fokus sekolah.
 Ibu: ...Ya sudah. Tapi kalau kurang, bilang. Jangan ditahan-tahan.
 @cinta ibu +3
-@lompat siang
+@lompat setelah_warung
 
 :: kerja_rahasia
 @atur rencana_kerja = rahasia
@@ -122,47 +172,48 @@ Ibu: ...Ya sudah. Tapi kalau kurang, bilang. Jangan ditahan-tahan.
 * Di dalam hati, {nama} sudah memutuskan: di kota nanti, ia akan mencari kerja sendiri. Tapi kalau Ibu tahu, Ibu pasti makin cemas.
 @bohong kerja_rahasia ibu ayah
 Ibu: Syukurlah... Anak Ibu sudah besar, ya.
-@lompat siang
+@lompat setelah_warung
 
 :: kerja_terbuka
 @atur rencana_kerja = terbuka
-{nama}: Aku juga mau cari kerja paruh waktu di sana, Yah. Biar tidak semuanya Ayah sama Ibu yang tanggung.
-Ayah: Sekolah sambil kerja itu berat, {nama}. Kamu sanggup?
-{nama}: Aku sanggup, Yah. Tapi sekolah tetap nomor satu. Janji.
+{nama}: Aku juga mau cari kerja paruh waktu di sana, Bu. Biar tidak semuanya Ayah sama Ibu yang tanggung.
+Ibu: Sekolah sambil kerja itu berat, {nama}. Kamu sanggup?
+{nama}: Aku sanggup, Bu. Tapi sekolah tetap nomor satu. Janji.
 Ibu: ...Anak ini memang keras kepala, persis ayahnya.
-Ayah: Kalau begitu Ayah kirim sedikit lebih kecil, sisanya Ayah tabung untuk Laras. Tapi kalau capek, berhenti. Paham?
-@percaya ayah +6
+Ibu: Nanti Ibu bicarakan sama Ayah. Kirimannya mungkin sedikit lebih kecil, sisanya ditabung untuk Laras. Tapi kalau capek, berhenti. Paham?
 @percaya ibu +6
-@lompat siang
+@percaya ayah +4
+@lompat setelah_warung
 
 :: kerja
 @atur jalur = kerja
 @atur rencana_kerja = desa
-{nama}: Aku mau tetap di desa, Yah. Kerja, bantu Ayah dan Ibu, dan pelan-pelan memperbaiki hidup kita.
+{nama}: Aku mau tetap di desa, Bu. Kerja, bantu Ayah sama Ibu, dan pelan-pelan memperbaiki hidup kita.
 Ibu: Kamu yakin, Nak? Ibu tidak mau kamu menyesal nanti.
-Ayah: Hidup di laut itu keras. Tapi Ayah bangga kamu mau bantu.
+{nama}: Aku yakin, Bu.
+Ibu: ...Nanti siang bilang sendiri ke Ayahmu, ya. Ayah pasti bangga.
 {nama}: (Dan aku tidak akan berhenti mencarinya. Kalau tidak bisa ke kota, aku cari lewat internet.)
 
 
 # ----------------------------------------------------------
-#  SIANG — MULAI MENJALANI HARI (sistem kehidupan mulai)
+#  SETELAH WARUNG — MULAI MENJALANI HARI
 # ----------------------------------------------------------
 
-:: siang
+:: setelah_warung
 @sembunyi semua
-* Selesai sarapan, Ayah menyelipkan beberapa lembar uang ke tangan {nama}.
-Ayah: Ini hadiah kelulusan dari Ayah. Simpan baik-baik, ya.
-@hidup mulai
-@lokasi desa
 @kalender Senin siang
+* Menjelang siang, warung mulai sepi. Ibu menyelipkan beberapa lembar uang ke tangan {nama}.
+@tampil ibu senyum
+Ibu: Ini titipan Ayah semalam. Hadiah kelulusan, katanya. Simpan baik-baik, ya.
+@sembunyi ibu
 @uang +50000
 @barang air_mineral 1
 * Mulai sekarang, hidupmu ada di tanganmu sendiri. Jaga perutmu, minummu, tenagamu, dan pikiranmu.
 * Ketuk tombol 📊 di sisi kiri layar kapan saja untuk menarik panel status. Ketuk panelnya untuk melihat isi tas.
 @kenal bayu
-@kenal sekar
-@hp pesan Bayu | Woy {nama}! Selamat lulus, {bro|cuy}! Aku sama Sekar nongkrong di dermaga, nyusul ya kalau sempat.
-* Di waktu bebas, kamu bisa menemui keluarga atau teman-temanmu. Ngobrol dan memberi hadiah akan mendekatkan hubungan, tapi topik atau hadiah yang salah bisa membuat mereka kesal.
+@hp pesan Bayu | Woy {nama}! Selamat lulus, {bro|cuy}! Nanti sore aku nongkrong di dermaga. Kalau mau ketemu, janjian dulu ya lewat Chat!
+* Di waktu bebas, kamu bisa menemui orang yang memang ada di dekatmu. Keluarga ada di rumah (Ayah baru bangun siang, Laras pulang sekolah pukul 13:00).
+* Teman seperti Bayu harus diajak janjian dulu lewat Chat di HP.
 @bebas 2
 
 

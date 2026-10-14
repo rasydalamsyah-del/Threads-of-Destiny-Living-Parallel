@@ -39,6 +39,8 @@ class PhoneScreen(private val overlay: View, private val onClosed: () -> Unit) {
     var onAppOpen: ((String) -> Unit)? = null
     /** Dipanggil setiap HP dibuka / kembali ke layar utama (untuk memperbarui lencana). */
     var onHomeShown: (() -> Unit)? = null
+    /** Notifikasi pesan disentuh → buka percakapannya. */
+    var onNotifTap: ((String) -> Unit)? = null
 
     /** Tombol kembali di dalam aplikasi (null = kembali ke layar utama). */
     var backHandler: (() -> Unit)? = null
@@ -173,10 +175,12 @@ class PhoneScreen(private val overlay: View, private val onClosed: () -> Unit) {
     }
 
     /** Notifikasi di layar utama (paling baru di atas). */
-    fun addMessage(sender: String, text: String) {
+    fun addMessage(sender: String, text: String, threadKey: String = sender) {
         val ctx = overlay.context
         val card = LinearLayout(ctx).apply {
+            tag = threadKey
             orientation = LinearLayout.VERTICAL
+            setOnClickListener { onNotifTap?.invoke(threadKey) }
             setBackgroundResource(R.drawable.phone_notif)
             setPadding((12 * dp).toInt(), (9 * dp).toInt(), (12 * dp).toInt(), (10 * dp).toInt())
         }
@@ -208,6 +212,14 @@ class PhoneScreen(private val overlay: View, private val onClosed: () -> Unit) {
         list.addView(card, 0, lp)
         while (list.childCount > 4) list.removeViewAt(list.childCount - 1)
         empty.visibility = View.GONE
+    }
+
+    /** Hapus notifikasi dari satu percakapan (dipanggil saat pesannya sudah dibaca). */
+    fun removeMessages(threadKey: String) {
+        for (i in list.childCount - 1 downTo 0) {
+            if (list.getChildAt(i).tag == threadKey) list.removeViewAt(i)
+        }
+        empty.visibility = if (list.childCount == 0) View.VISIBLE else View.GONE
     }
 
     fun clearNotifications() {
