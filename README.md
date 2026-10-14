@@ -45,6 +45,11 @@ Setiap ada perubahan di branch `main`, GitHub Actions otomatis membuat APK.
 APK selalu ditandatangani dengan kunci yang sama (`keystore/debug.keystore`),
 jadi versi baru bisa langsung di-install menimpa versi lama.
 
+## Pengujian otomatis
+
+Setiap build menjalankan **unit test** (`app/src/test/`) sebelum membuat APK: sistem jam, jadwal sekolah/kerja,
+dan simulasi naskah asli. Kalau ada tes yang gagal, APK tidak dibuat dan pesannya tampil di tab Actions.
+
 ## Mengganti aset
 
 | Aset | Lokasi file |

@@ -134,7 +134,9 @@ Jam ini juga dipakai di layar kunci HP.
 @barang air_mineral 2     masukkan barang ke tas (id dari data/barang.txt)
 @maju 1                   loncat ke bagian hari berikutnya (Malam → tidur sampai 06:00)
 @maju 2 jam               majukan jam (juga: @maju 30 menit). Waktu yang dimajukan cerita tidak dihitung bolos
-@bebas 2                  waktu bebas: pemain memilih 2 aktivitas, lalu naskah lanjut
+@bebas 2                  waktu bebas: 2 kegiatan (tidur mengakhirinya), lalu naskah lanjut
+@bebas 5 hari             waktu bebas selama 5 hari (pemain makan, sekolah/kerja, tidur sendiri)
+@bebas sampai Sabtu 15:00 waktu bebas sampai hari & jam tertentu
 ```
 - Saat `@bebas`, pemain memilih aktivitas dari `data/aktivitas.txt`, bisa membuka **Status & Tas** dan **Belanja**.
   Saat Malam ada tombol **Tidur sampai pagi**.
