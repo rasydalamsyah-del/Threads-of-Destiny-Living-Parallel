@@ -20,6 +20,9 @@
 #  respon_suka / respon_biasa / respon_benci = jawaban saat diajak ngobrol
 #  hadiah_suka / hadiah_biasa / hadiah_benci = jawaban saat diberi hadiah
 #  larangan    = kalimat saat ia dilarang bertemu oleh orang dekatnya
+#  chat        = pesan yang kadang ia kirim ke HP-mu (pisahkan dengan |)
+#  chat_balas  = balasannya saat kamu membalas pesannya (pisahkan dengan |)
+#  ajak_ya / ajak_tidak = jawaban saat diajak ketemu lewat chat
 #  warna       = warna nama (#RRGGBB)
 # ==========================================================
 
@@ -51,6 +54,10 @@ hadiah_biasa = Terima kasih, Nak.
 hadiah_benci = Ayah tidak terlalu suka ini, tapi terima kasih sudah ingat Ayah.
 larangan    = Ayah sedang tidak ingin diganggu.
 warna       = #3F6E8C
+chat        = Sudah makan, Nak?|Ayah tadi dapat ikan banyak.|Jaga kesehatan.
+chat_balas  = Ya sudah. Hati-hati.|Hm.
+ajak_ya     = Boleh. Ayah tunggu.
+ajak_tidak  = Ayah lagi di laut, Nak. Lain kali.
 
 [ibu]
 nama        = Ibu
@@ -78,6 +85,10 @@ hadiah_biasa = Makasih, ya. Nanti Ibu simpan.
 hadiah_benci = Ini kan tidak sehat. Jangan sering-sering makan begini.
 larangan    = Ibu sedang sibuk sekali di warung.
 warna       = #B5546A
+chat        = Nak, sudah makan belum?|Jangan lupa minum air putih ya.|Ibu kangen. Kapan pulang?|Uangnya cukup? Jangan boros ya.
+chat_balas  = Iya, Ibu senang dengarnya.|Jaga diri baik-baik, Nak.
+ajak_ya     = Wah, iya! Ibu tunggu.
+ajak_tidak  = Ibu lagi repot di warung, Nak.
 
 [laras]
 nama        = Laras
@@ -105,6 +116,10 @@ hadiah_biasa = Makasih, Kak.
 hadiah_benci = Ihh, aku nggak suka ini!
 larangan    = Laras lagi ngambek. Katanya nggak mau main.
 warna       = #D9822B
+chat        = Kakaaak! Aku dapat nilai 90!|Kak, bawain oleh-oleh dong!|Kakak lagi apa?
+chat_balas  = Hehehe!|Kakak terbaik!
+ajak_ya     = Asiiik! Janji ya!
+ajak_tidak  = Nggak mau, aku lagi ngambek.
 
 # ---------------- TEMAN DESA ----------------
 
@@ -134,6 +149,10 @@ hadiah_biasa = Makasih, ya.
 hadiah_benci = Ngapain ngasih ginian? Aku nggak sakit.
 larangan    = Sori, {nama}... Sekar bilang aku jangan main sama kamu dulu.
 warna       = #2E8B57
+chat        = Woy, lagi apa?|Sore ini ke dermaga yuk!|Bosen banget nih.
+chat_balas  = Wkwkwk mantap!|Sip, sip.
+ajak_ya     = Gas! Ketemu ya!
+ajak_tidak  = Sori, lagi bantu bapak.
 
 [sekar]
 nama        = Sekar
@@ -161,6 +180,10 @@ hadiah_biasa = Makasih.
 hadiah_benci = Aku lagi jaga makan. Kamu aja deh.
 larangan    = Bayu bilang Sekar lagi nggak mau ketemu kamu.
 warna       = #7A5BC2
+chat        = Kamu udah baca buku yang kemarin?|Lagi sibuk?
+chat_balas  = Oh, oke.|Hmm, menarik.
+ajak_ya     = Boleh.
+ajak_tidak  = Maaf, aku lagi belajar.
 
 # ---------------- DESA: PEKERJAAN ----------------
 
@@ -190,6 +213,10 @@ hadiah_biasa = Taruh saja di situ.
 hadiah_benci = Saya tidak minum yang manis-manis.
 larangan    = Juragan Darto sedang sibuk menghitung hasil.
 warna       = #6B5A3A
+chat        = Besok jangan telat.|Kerjamu kemarin lumayan.
+chat_balas  = Hm.|Ya.
+ajak_ya     = Boleh, saya di gudang.
+ajak_tidak  = Saya sibuk.
 
 # ---------------- KOTA: SMA NEGERI 3 SAKALA ----------------
 
@@ -219,6 +246,10 @@ hadiah_biasa = Thanks, ya.
 hadiah_benci = Nggak usah repot-repot gitu.
 larangan    = Dimas bilang dia lagi nggak bisa ketemu.
 warna       = #C2512E
+chat        = {Bro|Sis}, PR matematika udah?|Mabar yuk nanti malam!|Lapar... ada makanan nggak?
+chat_balas  = Hahaha sip!|Mantap jiwa.
+ajak_ya     = Gas! Ketemu ya!
+ajak_tidak  = Sori, lagi ngantar paket.
 
 [nadia]
 nama        = Nadia
@@ -246,3 +277,7 @@ hadiah_biasa = Terima kasih.
 hadiah_benci = Maaf, aku nggak bisa makan ini.
 larangan    = Nadia sedang tidak mau diganggu.
 warna       = #2F6DB5
+chat        = Jangan lupa tugas kelompok besok.|Kamu udah makan?|Lagi baca apa?
+chat_balas  = Oke.|Hmm, terima kasih.
+ajak_ya     = Boleh. Jangan telat.
+ajak_tidak  = Aku lagi jaga toko.

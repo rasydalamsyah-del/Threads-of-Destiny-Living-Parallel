@@ -41,6 +41,7 @@ import com.valeriusgames.threadsofdestiny.enterImmersiveMode
 import com.valeriusgames.threadsofdestiny.life.GameData
 import com.valeriusgames.threadsofdestiny.life.LifeHudView
 import com.valeriusgames.threadsofdestiny.life.LifeState
+import com.valeriusgames.threadsofdestiny.life.PhoneState
 import com.valeriusgames.threadsofdestiny.life.SocialState
 import com.valeriusgames.threadsofdestiny.life.rupiah
 import com.valeriusgames.threadsofdestiny.save.SaveData
@@ -121,6 +122,9 @@ class GameActivity : Activity() {
     private var panelCharId: String? = null
     private var meetingTalked = false
     private var meetingGifted = false
+
+    // ---- isi HP ----
+    private var phoneData = PhoneState()
 
     // ---- sistem kehidupan ----
     private var life = LifeState()
@@ -207,6 +211,8 @@ class GameActivity : Activity() {
         findViewById<View>(R.id.death_load).setOnClickListener { openSaveLoad(SaveLoadActivity.MODE_LOAD, null) }
         findViewById<View>(R.id.death_menu).setOnClickListener { leaveToMenu() }
         phone = PhoneScreen(findViewById(R.id.phone_overlay)) { onPhoneClosed() }
+        phone.onAppOpen = { renderApp(it) }
+        phone.onHomeShown = { refreshPhoneHome() }
 
         audio = AudioPlayer(this)
         applySettings()
@@ -485,7 +491,19 @@ class GameActivity : Activity() {
                     val now = vars[c.variable]?.toLongOrNull() ?: 0L
                     vars[c.variable] = (now + c.amount).toString()
                 }
-                is Cmd.Life -> { life.active = c.active; refreshLife() }
+                is Cmd.Life -> {
+                    life.active = c.active
+                    if (phoneData.docs.isEmpty()) phoneData.docs += gameData.documents.values.filter { it.initial }.map { it.id }
+                    refreshLife()
+                }
+                is Cmd.Note -> {
+                    phoneData.notes += PhoneState.Note(life.day, fill(c.text))
+                    notice("📝 Catatan baru di HP")
+                }
+                is Cmd.Doc -> {
+                    phoneData.docs += c.id
+                    gameData.documents[c.id]?.let { notice("📁 Dokumen didapat: ${it.name}") }
+                }
                 is Cmd.Calendar -> {
                     val target = LifeState.WEEKDAYS.indexOfFirst { it.equals(c.weekday, true) }
                     if (life.startEpochDay != 0L && target >= 0) {
@@ -506,6 +524,7 @@ class GameActivity : Activity() {
                 }
                 is Cmd.Money -> {
                     life.money = (life.money + c.delta).coerceAtLeast(0)
+                    logMoney(if (c.delta >= 0) "Pemasukan" else "Pengeluaran", c.delta)
                     notice((if (c.delta >= 0) "💰 +" else "💸 -") + rupiah(kotlin.math.abs(c.delta)))
                     refreshLife()
                 }
@@ -659,6 +678,7 @@ class GameActivity : Activity() {
             vars = vars.toMap() + mapOf("nama" to playerName, "kelamin" to playerGender),
             life = life.toJson(),
             social = social.toJson(),
+            phone = phoneData.toJson(),
         )
     }
 
@@ -701,6 +721,7 @@ class GameActivity : Activity() {
         log.addAll(d.log)
         life = LifeState.fromJson(d.life)
         social = SocialState.fromJson(d.social)
+        phoneData = PhoneState.fromJson(d.phone)
         syncSocialVars()
         restoreShownCharacters()
         refreshLife()
@@ -1225,6 +1246,17 @@ class GameActivity : Activity() {
             getString(R.string.free_sub, life.clockText, freeLeft),
             back = null,
         )
+        // Janji temu di waktu ini
+        phoneData.appts.filter { it.day == life.day && it.slot == life.slot.name }.forEach { a ->
+            val c = gameData.characters[a.charId] ?: return@forEach
+            sheetList.addView(sectionLabel("📅 Janji temu"))
+            sheetList.addView(card(
+                title = "🤝  Ketemu ${c.name}",
+                sub = "Kalian sudah janjian di waktu ini.",
+                note = "Tidak datang = ingkar janji",
+                noteWarn = true,
+            ) { meetCharacter(c) })
+        }
         // Jadwal sekolah / kerja di waktu ini
         val duties = life.jobs.mapNotNull { j -> gameData.jobs[j.id] }
             .filter { gameData.scheduled(it, life.weekdayIndex, life.slot) }
@@ -1281,10 +1313,11 @@ class GameActivity : Activity() {
         if (life.slot == LifeState.Slot.MALAM) {
             sheetButtonRow(
                 getString(R.string.btn_sleep) to { sleepUntilMorning() },
+                "📱 HP" to { openPhoneFromSheet() },
                 "☰ Menu" to { openGameMenu() },
             )
         } else {
-            sheetButtonRow("☰ Menu" to { openGameMenu() })
+            sheetButtonRow("📱 HP" to { openPhoneFromSheet() }, "☰ Menu" to { openGameMenu() })
         }
         if (place == "kota") {
             sheetButtonRow("🔎 Cari kerja" to { openJobSearch() }, "🏠 Cari kos" to { openKosSearch() })
@@ -1299,7 +1332,12 @@ class GameActivity : Activity() {
         extra.forEach { (k, v) ->
             vars[k] = ((vars[k]?.toLongOrNull() ?: 0L) + v).toString()
         }
-        a.effects["uang"]?.let { if (it != 0L) notice((if (it > 0) "💰 +" else "💸 -") + rupiah(kotlin.math.abs(it))) }
+        a.effects["uang"]?.let {
+            if (it != 0L) {
+                notice((if (it > 0) "💰 +" else "💸 -") + rupiah(kotlin.math.abs(it)))
+                logMoney(a.name, it)
+            }
+        }
         freeLeft--
         vars["_bebas_sisa"] = freeLeft.toString()
         advanceTime(fromFree = true)
@@ -1490,6 +1528,7 @@ class GameActivity : Activity() {
                 actions = listOf(getString(R.string.btn_buy) to {
                     if (life.money >= def.price) {
                         life.money -= def.price
+                        logMoney("Belanja: ${def.name}", -def.price)
                         life.addItem(def.id, def.shelfDays)
                         refreshLife()
                         notice(getString(R.string.bought, def.name))
@@ -1719,7 +1758,10 @@ class GameActivity : Activity() {
         closeSheet()
         val job = life.jobs.firstOrNull { it.id == def.id } ?: return
         addExtraVars(life.applyEffects(def.effects + payEffect(def)))
-        payEffect(def)["uang"]?.let { notice("💰 +" + rupiah(it)) }
+        payEffect(def)["uang"]?.let {
+            notice("💰 +" + rupiah(it))
+            logMoney("Upah: ${def.name}", it)
+        }
         job.shifts++
         job.performance = (job.performance + (if (life[LifeState.Stat.ENERGI] >= 20) 3 else -4)).coerceIn(0, 100)
         life.markAttended(def.id)
@@ -1738,6 +1780,15 @@ class GameActivity : Activity() {
 
     /** Sekolah / kerja tetap yang dijadwalkan di slot ini tapi tidak dihadiri. */
     private fun checkAbsences() {
+        // Janji temu yang dilewatkan = ingkar janji
+        phoneData.appts.filter { it.day < life.day || (it.day == life.day && it.slot == life.slot.name) }.forEach { a ->
+            phoneData.appts.remove(a)
+            gameData.characters[a.charId]?.let { c ->
+                announce(social.behave(gameData, c.id, "ingkar_janji"))
+                notice("💔 Kamu tidak datang ke janji dengan ${c.name}")
+                receiveMessage(c.name, "Aku nungguin kamu tadi... Kok nggak datang?")
+            }
+        }
         life.jobs.toList().forEach { job ->
             val def = gameData.jobs[job.id] ?: return@forEach
             if (!def.mandatory || !gameData.scheduled(def, life.weekdayIndex, life.slot) || life.hasAttended(def.id)) return@forEach
@@ -1758,6 +1809,7 @@ class GameActivity : Activity() {
 
     /** Hal-hal yang terjadi setiap ganti hari: ulang tahun, sewa kos, kiriman, gaji bulanan. */
     private fun onNewDay() {
+        processPhoneDaily()
         if (life.day > 0 && life.day % 365 == 0) {
             vars["usia"] = (playerAge() + 1).toString()
             notice("🎂 Selamat ulang tahun! Usiamu sekarang ${playerAge()} tahun.")
@@ -1765,6 +1817,7 @@ class GameActivity : Activity() {
         if (life.kosId.isNotEmpty() && life.rentDueDay in 0..life.day) {
             if (life.money >= life.rent) {
                 life.money -= life.rent
+                logMoney("Sewa kos", -life.rent)
                 life.arrears = 0
                 notice("🏠 Bayar sewa kos " + rupiah(life.rent))
             } else {
@@ -1776,6 +1829,7 @@ class GameActivity : Activity() {
         }
         if (life.allowance > 0 && life.allowanceNextDay in 0..life.day) {
             life.money += life.allowance
+            logMoney("Kiriman Ayah & Ibu", life.allowance)
             life.allowanceNextDay += 30
             notice("💌 Kiriman dari Ayah & Ibu: +" + rupiah(life.allowance))
         }
@@ -1785,6 +1839,7 @@ class GameActivity : Activity() {
             if (def.kind == "tetap" && def.pay > 0 && worked > 0 && worked % 30 == 0) {
                 val pay = (def.pay * (0.6 + j.performance / 250.0)).toLong()
                 life.money += pay
+                logMoney("Gaji: ${def.name}", pay)
                 notice("💼 Gaji dari ${def.name}: +" + rupiah(pay))
             }
         }
@@ -1811,6 +1866,7 @@ class GameActivity : Activity() {
         vars["diusir"] = "0"
         if (life.money >= def.price) {
             life.money -= def.price
+            logMoney("Sewa kos: ${def.name}", -def.price)
             life.arrears = 0
             notice("🏠 Pindah ke ${def.name} · bayar " + rupiah(def.price))
         } else {
@@ -1888,6 +1944,703 @@ class GameActivity : Activity() {
             ))
         }
         sheetButtonRow(getString(R.string.btn_back) to { showFreeSheet() })
+    }
+
+    // ================================================================== aplikasi HP
+
+    private val phoneApps by lazy {
+        listOf(
+            PhoneScreen.App("chat", "💬", "Chat", 0xFF34C759.toInt()),
+            PhoneScreen.App("kontak", "👥", "Kontak", 0xFF5E8BFF.toInt()),
+            PhoneScreen.App("kalender", "📅", "Kalender", 0xFFFF9F0A.toInt()),
+            PhoneScreen.App("lowongan", "💼", "Lowongan", 0xFF8E5CF7.toInt()),
+            PhoneScreen.App("dompet", "👛", "Dompet", 0xFF2EB5A0.toInt()),
+            PhoneScreen.App("catatan", "📝", "Catatan", 0xFFE0A33B.toInt()),
+        )
+    }
+
+    private fun logMoney(desc: String, amount: Long) = phoneData.logTx(life.day, desc, amount)
+
+    private fun openPhoneFromSheet() {
+        phoneIcon.ring(false)
+        phone.open()
+    }
+
+    private fun refreshPhoneHome() {
+        val actionable = phoneData.apps.count { it.stage == "tes" || it.stage == "wawancara" }
+        val apptsToday = phoneData.appts.count { it.day == life.day }
+        phone.setApps(phoneApps, mapOf("chat" to phoneData.unreadTotal, "lowongan" to actionable, "kalender" to apptsToday))
+    }
+
+    private fun renderApp(id: String) {
+        when (id) {
+            "chat" -> renderChatList()
+            "kontak" -> renderContacts()
+            "kalender" -> renderCalendar()
+            "lowongan" -> renderJobs()
+            "dompet" -> renderWallet()
+            "catatan" -> renderNotes()
+        }
+    }
+
+    // ---------- komponen tampilan HP (tema terang) ----------
+
+    private fun pText(text: String, size: Float = 13.5f, color: Int = 0xFF2A2A30.toInt(), bold: Boolean = false) =
+        TextView(this).apply {
+            this.text = text
+            textSize = size
+            setTextColor(color)
+            if (bold) typeface = Typeface.DEFAULT_BOLD
+            setLineSpacing(0f, 1.12f)
+        }
+
+    private fun pSection(text: String) = pText(text, 12f, 0xFF8A8A93.toInt(), true).apply {
+        letterSpacing = 0.05f
+        val d = resources.displayMetrics.density
+        setPadding((4 * d).toInt(), (12 * d).toInt(), 0, (6 * d).toInt())
+    }
+
+    private fun pCard(title: String, sub: String? = null, right: String? = null, badge: Int = 0, onClick: (() -> Unit)? = null): View {
+        val d = resources.displayMetrics.density
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = android.view.Gravity.CENTER_VERTICAL
+            setPadding((12 * d).toInt(), (10 * d).toInt(), (12 * d).toInt(), (10 * d).toInt())
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 14 * d
+                setColor(0xFFFFFFFF.toInt())
+            }
+            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .apply { bottomMargin = (6 * d).toInt() }
+            onClick?.let { cb -> setOnClickListener { cb() } }
+        }
+        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        col.addView(pText(title, 14.5f, 0xFF16161A.toInt(), true))
+        if (!sub.isNullOrEmpty()) col.addView(pText(sub, 12.5f, 0xFF6B6B73.toInt()))
+        row.addView(col, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        if (right != null) row.addView(pText(right, 12f, 0xFF8A8A93.toInt()))
+        if (badge > 0) row.addView(TextView(this).apply {
+            text = badge.toString()
+            textSize = 11f
+            setTextColor(0xFFFFFFFF.toInt())
+            gravity = android.view.Gravity.CENTER
+            background = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.OVAL
+                setColor(0xFFFF3B4E.toInt())
+            }
+        }, LinearLayout.LayoutParams((20 * d).toInt(), (20 * d).toInt()).apply { marginStart = (6 * d).toInt() })
+        return row
+    }
+
+    /** Tombol di bagian bawah aplikasi. Satu baris bisa berisi beberapa tombol. */
+    private fun pButtons(vararg buttons: Triple<String, Boolean, () -> Unit>) {
+        val d = resources.displayMetrics.density
+        val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        buttons.forEachIndexed { i, (label, enabled, action) ->
+            row.addView(TextView(this).apply {
+                text = label
+                gravity = android.view.Gravity.CENTER
+                textSize = 12.5f
+                setPadding((6 * d).toInt(), (8 * d).toInt(), (6 * d).toInt(), (8 * d).toInt())
+                setTextColor(if (enabled) 0xFFFFFFFF.toInt() else 0xFF9A9AA2.toInt())
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = 18 * d
+                    setColor(if (enabled) 0xFF2F6DB5.toInt() else 0xFFE4E4E8.toInt())
+                }
+                if (enabled) setOnClickListener { action() }
+            }, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
+                if (i > 0) marginStart = (6 * d).toInt()
+            })
+        }
+        phone.footer.addView(row, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            .apply { topMargin = (6 * d).toInt() })
+    }
+
+    private fun bubble(text: String, mine: Boolean): View {
+        val d = resources.displayMetrics.density
+        val wrap = LinearLayout(this).apply {
+            gravity = if (mine) android.view.Gravity.END else android.view.Gravity.START
+            setPadding(0, (3 * d).toInt(), 0, (3 * d).toInt())
+        }
+        wrap.addView(pText(text, 13.5f, if (mine) 0xFFFFFFFF.toInt() else 0xFF16161A.toInt()).apply {
+            maxWidth = (200 * d).toInt()
+            setPadding((12 * d).toInt(), (8 * d).toInt(), (12 * d).toInt(), (8 * d).toInt())
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 16 * d
+                setColor(if (mine) 0xFF2F9E5B.toInt() else 0xFFFFFFFF.toInt())
+            }
+        })
+        return wrap
+    }
+
+    private fun dayLabel(dayIndex: Int): String {
+        val diff = dayIndex - life.day
+        val d = if (life.startEpochDay != 0L) java.time.LocalDate.ofEpochDay(life.startEpochDay + dayIndex) else null
+        val date = d?.let { "${LifeState.WEEKDAYS[it.dayOfWeek.value - 1]}, ${it.dayOfMonth} ${LifeState.MONTHS[it.monthValue - 1].take(3)}" }
+            ?: "Hari ke-${dayIndex + 1}"
+        return when (diff) {
+            0 -> "Hari ini"
+            1 -> "Besok"
+            -1 -> "Kemarin"
+            else -> date
+        }
+    }
+
+    // ---------- Chat ----------
+
+    private fun renderChatList() {
+        phone.clearApp()
+        phone.setTitle("💬  Chat")
+        phone.backHandler = null
+        val threads = phoneData.threads.values.filter { it.msgs.isNotEmpty() }.reversed()
+        if (threads.isEmpty()) phone.content.addView(pText("Belum ada pesan.", 13f, 0xFF8A8A93.toInt()))
+        threads.sortedByDescending { it.msgs.lastOrNull()?.day ?: 0 }.forEach { t ->
+            val last = t.msgs.last()
+            phone.content.addView(pCard(
+                t.title,
+                (if (last.fromMe) "Kamu: " else "") + last.text,
+                dayLabel(last.day),
+                t.unread,
+            ) { renderThread(t.key) })
+        }
+        phone.scrollToTop()
+    }
+
+    private fun renderThread(key: String) {
+        val t = phoneData.threads[key] ?: return
+        t.unread = 0
+        phone.clearApp()
+        phone.setTitle(t.title)
+        phone.backHandler = { renderChatList() }
+        var lastDay = -999
+        t.msgs.forEach { m ->
+            if (m.day != lastDay) {
+                lastDay = m.day
+                phone.content.addView(pText(dayLabel(m.day), 11f, 0xFF8A8A93.toInt()).apply {
+                    gravity = android.view.Gravity.CENTER
+                    layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                })
+            }
+            phone.content.addView(bubble(m.text, m.fromMe))
+        }
+        val c = gameData.characters[key]
+        when {
+            c != null -> {
+                val canReply = t.pendingSince >= 0
+                pButtons(
+                    Triple("😊 Balas hangat", canReply) { replyChat(c, t, warm = true) },
+                    Triple("Balas singkat", canReply) { replyChat(c, t, warm = false) },
+                )
+                val canMeet = c.meetable && social.rel(c).met && phoneData.appts.none { it.charId == c.id }
+                pButtons(Triple("📅 Ajak ketemu", canMeet) { chooseMeetTime(c, t) })
+            }
+            key == "Nomor Tidak Dikenal" -> {
+                val replied = vars["misterius_dibalas"] == "1"
+                pButtons(
+                    Triple("Siapa kamu sebenarnya?", !replied) { replyMystery(t, "Siapa kamu sebenarnya?") },
+                    Triple("Aku ingat janji kita.", !replied) { replyMystery(t, "Kamu... aku masih ingat janji kita di dermaga.") },
+                )
+            }
+        }
+        phone.scrollToBottom()
+    }
+
+    private fun replyChat(c: GameData.CharacterDef, t: PhoneState.Thread, warm: Boolean) {
+        val mine = if (warm) listOf("Hehe, iya! Kamu sendiri lagi apa?", "Makasih udah ngabarin 😊", "Aku juga kangen ngobrol sama kamu.").random()
+            else listOf("Ok.", "Iya.", "Sip.").random()
+        t.msgs += PhoneState.Msg(true, mine, life.day)
+        t.pendingSince = -1
+        if (t.repliedDay != life.day) {
+            t.repliedDay = life.day
+            announce(social.changeLove(gameData, c.id, if (warm) 3 else 1))
+        }
+        val replies = c.text["chat_balas"]?.split('|')?.map { it.trim() }?.filter { it.isNotEmpty() }
+        replies?.randomOrNull()?.let { t.msgs += PhoneState.Msg(false, fill(it), life.day) }
+        renderThread(t.key)
+    }
+
+    private fun replyMystery(t: PhoneState.Thread, text: String) {
+        t.msgs += PhoneState.Msg(true, text, life.day)
+        vars["misterius_dibalas"] = "1"
+        notice("📨 Pesan terkirim... tapi belum ada balasan.")
+        renderThread(t.key)
+    }
+
+    private fun chooseMeetTime(c: GameData.CharacterDef, t: PhoneState.Thread) {
+        phone.footer.removeAllViews()
+        val options = mutableListOf<Pair<Int, LifeState.Slot>>()
+        for (dayOffset in 0..1) {
+            LifeState.Slot.values().forEach { sl ->
+                if (dayOffset == 0 && sl.ordinal <= life.slot.ordinal) return@forEach
+                if ("semua" in c.slots || sl.label.lowercase() in c.slots) options += (life.day + dayOffset) to sl
+            }
+        }
+        if (options.isEmpty()) {
+            notice("${c.name} tidak punya waktu luang dalam dua hari ini.")
+            renderThread(t.key)
+            return
+        }
+        options.take(4).chunked(2).forEach { pair ->
+            val btns = pair.map { (dy, sl) ->
+                Triple("${dayLabel(dy)} ${sl.label.lowercase()}", true) { inviteMeet(c, t, dy, sl) }
+            }
+            pButtons(*btns.toTypedArray())
+        }
+        pButtons(Triple("Batal", true) { renderThread(t.key) })
+    }
+
+    private fun inviteMeet(c: GameData.CharacterDef, t: PhoneState.Thread, day: Int, slot: LifeState.Slot) {
+        val label = "${dayLabel(day)} ${slot.label.lowercase()}"
+        t.msgs += PhoneState.Msg(true, "Ketemu yuk, $label?", life.day)
+        val blocker = social.blockedBy(gameData, c)
+        val r = social.rel(c)
+        val reply = when {
+            blocker != null -> fill(c.text["larangan"] ?: "Maaf, nggak bisa.")
+            r.love < 30 -> fill(c.text["ajak_tidak"] ?: "Maaf, lagi sibuk.")
+            else -> {
+                phoneData.appts += PhoneState.Appt(c.id, day, slot.name)
+                notice("📅 Janji ketemu ${c.name}: $label")
+                fill(c.text["ajak_ya"] ?: "Oke!")
+            }
+        }
+        t.msgs += PhoneState.Msg(false, reply, life.day)
+        renderThread(t.key)
+    }
+
+    // ---------- Kontak ----------
+
+    private fun renderContacts() {
+        phone.clearApp()
+        phone.setTitle("👥  Kontak")
+        phone.backHandler = null
+        val known = gameData.characters.values.filter { social.rel(it).met }
+        if (known.isEmpty()) phone.content.addView(pText("Belum ada kontak.", 13f, 0xFF8A8A93.toInt()))
+        known.forEach { c ->
+            val r = social.rel(c)
+            val love = if (social.isPartner(c)) "❤️ ${r.romance}" else "💛 ${r.love}"
+            phone.content.addView(pCard(c.name, "${social.stageOf(c).label} · $love · 🤝 ${r.trust}", null) { renderContact(c) })
+        }
+        phone.scrollToTop()
+    }
+
+    private fun renderContact(c: GameData.CharacterDef) {
+        phone.clearApp()
+        phone.setTitle(c.name)
+        phone.backHandler = { renderContacts() }
+        val d = resources.displayMetrics.density
+        val r = social.rel(c)
+        val photo = loadAsset(listOf("karakter/${c.id}_foto.jpg", "karakter/${c.id}_foto.png", "karakter/${c.id}_foto.webp"))
+        if (photo != null) {
+            phone.content.addView(android.widget.ImageView(this).apply {
+                setImageBitmap(photo)
+                scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+                background = android.graphics.drawable.GradientDrawable().apply { shape = android.graphics.drawable.GradientDrawable.OVAL }
+                clipToOutline = true
+            }, LinearLayout.LayoutParams((96 * d).toInt(), (96 * d).toInt()).apply {
+                gravity = android.view.Gravity.CENTER_HORIZONTAL
+                bottomMargin = (8 * d).toInt()
+            })
+        }
+        phone.content.addView(pText(c.role, 13f, 0xFF6B6B73.toInt()).apply { gravity = android.view.Gravity.CENTER })
+        phone.content.addView(pSection("HUBUNGAN"))
+        val love = if (social.isPartner(c)) "❤️ Cinta ${r.romance}%" else "💛 Cinta ${r.love}%"
+        phone.content.addView(pCard(social.stageOf(c).label, "$love   ·   🤝 Kepercayaan ${r.trust}%"))
+        val playerAge = playerAge()
+        phone.content.addView(pText("Usia ${social.ageOf(c, playerAge)} tahun", 12.5f, 0xFF6B6B73.toInt()))
+
+        fun knownList(prefix: String): String {
+            val names = r.known.filter { it.startsWith(prefix) }.map { k ->
+                val id = k.substring(3)
+                if (k[1] == 't') gameData.topics[id]?.name ?: id else gameData.items[id]?.name ?: id
+            }
+            return if (names.isEmpty()) "Belum tahu" else names.joinToString(", ")
+        }
+        phone.content.addView(pSection("YANG KAMU KETAHUI"))
+        phone.content.addView(pCard("💚 Topik disukai", knownList("+t:")))
+        phone.content.addView(pCard("💔 Topik tidak disukai", knownList("-t:")))
+        phone.content.addView(pCard("🎁 Hadiah disukai", knownList("+i:")))
+        phone.content.addView(pCard("🚫 Hadiah tidak disukai", knownList("-i:")))
+        pButtons(Triple("💬 Kirim pesan", true) {
+            phoneData.thread(c.id, c.name)
+            renderThread(c.id)
+        })
+        phone.scrollToTop()
+    }
+
+    // ---------- Kalender ----------
+
+    private fun renderCalendar() {
+        phone.clearApp()
+        phone.setTitle("📅  Kalender")
+        phone.backHandler = null
+        phone.content.addView(pCard("Hari ini", "${life.dateText} · ${life.slot.label} ${life.slot.icon}"))
+
+        val events = mutableListOf<Pair<Int, String>>()
+        phoneData.appts.forEach { a ->
+            val name = gameData.characters[a.charId]?.name ?: a.charId
+            val sl = runCatching { LifeState.Slot.valueOf(a.slot).label.lowercase() }.getOrDefault(a.slot)
+            events += a.day to "🤝 Janji ketemu $name ($sl)"
+        }
+        if (life.rentDueDay >= 0) events += life.rentDueDay to "🏠 Bayar sewa kos ${rupiah(life.rent)}"
+        if (life.allowance > 0 && life.allowanceNextDay >= 0) events += life.allowanceNextDay to "💌 Kiriman keluarga ${rupiah(life.allowance)}"
+        life.jobs.forEach { j ->
+            val def = gameData.jobs[j.id] ?: return@forEach
+            if (def.kind == "tetap") {
+                val next = life.day + (30 - ((life.day - j.startDay) % 30)).let { if (it == 0) 30 else it }
+                events += next to "💼 Gajian ${def.name}"
+            }
+        }
+        phoneData.apps.filter { it.stage == "tes" || it.stage == "wawancara" || it.stage == "dikirim" }.forEach { a ->
+            val name = gameData.jobs[a.jobId]?.name ?: a.jobId
+            val what = when (a.stage) { "tes" -> "Batas tes"; "wawancara" -> "Batas wawancara"; else -> "Pengumuman berkas" }
+            events += a.dueDay to "📨 $what: $name"
+        }
+        phoneData.pendingDocs.forEach { (id, day) -> events += day to "📁 ${gameData.documents[id]?.name ?: id} jadi" }
+
+        phone.content.addView(pSection("AKAN DATANG"))
+        val upcoming = events.filter { it.first >= life.day }.sortedBy { it.first }
+        if (upcoming.isEmpty()) phone.content.addView(pText("Tidak ada acara.", 13f, 0xFF8A8A93.toInt()))
+        upcoming.forEach { (day, text) -> phone.content.addView(pCard(text, null, dayLabel(day))) }
+
+        if (life.jobs.isNotEmpty()) {
+            phone.content.addView(pSection("JADWAL RUTIN"))
+            life.jobs.forEach { j ->
+                val def = gameData.jobs[j.id] ?: return@forEach
+                phone.content.addView(pCard("${def.icon} ${def.name}", "${daysText(def.days)} · ${def.slots.joinToString(", ")}"))
+            }
+        }
+        phone.scrollToTop()
+    }
+
+    // ---------- Dompet ----------
+
+    private fun renderWallet() {
+        phone.clearApp()
+        phone.setTitle("👛  Dompet")
+        phone.backHandler = null
+        phone.content.addView(pText("Saldo", 12f, 0xFF8A8A93.toInt()))
+        phone.content.addView(pText(rupiah(life.money), 28f, 0xFF16161A.toInt(), true))
+        if (life.rentDueDay >= 0) phone.content.addView(pCard("🏠 Sewa kos berikutnya", rupiah(life.rent), dayLabel(life.rentDueDay)))
+        if (life.arrears > 0) phone.content.addView(pCard("⚠️ Tunggakan sewa", "${life.arrears}× — 2× berarti diusir!"))
+        phone.content.addView(pSection("RIWAYAT"))
+        if (phoneData.tx.isEmpty()) phone.content.addView(pText("Belum ada transaksi.", 13f, 0xFF8A8A93.toInt()))
+        phoneData.tx.reversed().forEach { t ->
+            phone.content.addView(pCard(t.desc, dayLabel(t.day), (if (t.amount >= 0) "+" else "−") + rupiah(kotlin.math.abs(t.amount))))
+        }
+        phone.scrollToTop()
+    }
+
+    // ---------- Catatan ----------
+
+    private fun renderNotes() {
+        phone.clearApp()
+        phone.setTitle("📝  Catatan")
+        phone.backHandler = null
+        if (phoneData.notes.isEmpty()) phone.content.addView(pText("Belum ada catatan.", 13f, 0xFF8A8A93.toInt()))
+        phoneData.notes.reversed().forEach { n -> phone.content.addView(pCard(n.text, dayLabel(n.day))) }
+        phone.scrollToTop()
+    }
+
+    // ---------- Lowongan: lamaran, dokumen, tes, wawancara ----------
+
+    private fun stageLabel(stage: String) = when (stage) {
+        "dikirim" -> "⏳ Berkas sedang diperiksa"
+        "tes" -> "📝 Kerjakan tes"
+        "wawancara" -> "🗣️ Ikuti wawancara"
+        "diterima" -> "✅ Diterima"
+        "ditolak" -> "❌ Ditolak"
+        else -> "⌛ Gugur (lewat batas waktu)"
+    }
+
+    private fun renderJobs() {
+        phone.clearApp()
+        phone.setTitle("💼  Lowongan")
+        phone.backHandler = null
+        val place = vars["lokasi"] ?: "desa"
+
+        if (phoneData.apps.isNotEmpty()) {
+            phone.content.addView(pSection("LAMARANKU"))
+            phoneData.apps.takeLast(6).reversed().forEach { a ->
+                val def = gameData.jobs[a.jobId] ?: return@forEach
+                val due = if (a.stage in setOf("dikirim", "tes", "wawancara")) "Batas: ${dayLabel(a.dueDay)}" else null
+                phone.content.addView(pCard("${def.icon} ${def.name}", stageLabel(a.stage) + (due?.let { "\n$it" } ?: ""), null,
+                    if (a.stage == "tes" || a.stage == "wawancara") 1 else 0) {
+                    when (a.stage) {
+                        "tes" -> startTest(a)
+                        "wawancara" -> startInterview(a)
+                        else -> renderJobDetail(def)
+                    }
+                })
+            }
+        }
+        phone.content.addView(pSection("LOWONGAN DI SEKITARMU"))
+        val list = gameData.jobs.values.filter { j ->
+            j.kind != "sekolah" && (j.way == "lamar" || j.way == "langsung") &&
+                ("semua" in j.places || place in j.places)
+        }
+        if (list.isEmpty()) phone.content.addView(pText("Belum ada lowongan.", 13f, 0xFF8A8A93.toInt()))
+        list.forEach { j ->
+            val held = life.jobs.any { it.id == j.id }
+            phone.content.addView(pCard("${j.icon} ${j.name}",
+                "${j.kindLabel} · ${rupiah(j.pay)}" + (if (j.kind == "tetap") "/30 hari" else "/kerja") +
+                    (if (held) "\n✅ Pekerjaanmu sekarang" else ""),
+                if (j.way == "lamar") "Lamar" else "Datang langsung") { renderJobDetail(j) })
+        }
+        pButtons(Triple("📁 Dokumen saya", true) { renderDocs() })
+        phone.scrollToTop()
+    }
+
+    private fun renderJobDetail(j: GameData.JobDef) {
+        phone.clearApp()
+        phone.setTitle(j.name)
+        phone.backHandler = { renderJobs() }
+        phone.content.addView(pCard("${j.icon} ${j.kindLabel}",
+            "${daysText(j.days)} · ${j.slots.joinToString(", ")}\n💰 ${rupiah(j.pay)}" + (if (j.kind == "tetap") " per 30 hari" else " per kerja")))
+        if (j.desc.isNotEmpty()) phone.content.addView(pText(j.desc, 13f).apply { setPadding(4, 4, 4, 8) })
+        phone.content.addView(pSection("SYARAT"))
+        val ageOk = playerAge() >= j.minAge
+        phone.content.addView(pCard((if (ageOk) "✅" else "❌") + " Usia minimal ${j.minAge} tahun", "Usiamu ${playerAge()} tahun"))
+        j.documents.forEach { docId ->
+            val has = docId in phoneData.docs
+            phone.content.addView(pCard((if (has) "✅ " else "❌ ") + (gameData.documents[docId]?.name ?: docId)))
+        }
+        if (j.hasTest) phone.content.addView(pCard("📝 Ada tes tertulis", "Dipengaruhi kemampuan akademik"))
+        j.referrer?.let { gameData.characters[it] }?.takeIf { social.rel(it).met }?.let { ref ->
+            val r = social.rel(ref)
+            val ok = r.love >= 60 && r.trust >= 60
+            phone.content.addView(pCard("🤝 Orang dalam: ${ref.name}",
+                if (ok) "Bisa merekomendasikanmu — langsung ke wawancara" else "Perlu Cinta & Kepercayaan ≥ 60 (sekarang ${r.love} / ${r.trust})"))
+        }
+        val applied = phoneData.apps.any { it.jobId == j.id && it.stage in setOf("dikirim", "tes", "wawancara") }
+        val held = life.jobs.any { it.id == j.id }
+        when {
+            held -> phone.content.addView(pText("Kamu sudah bekerja di sini.", 13f, 0xFF2F9E5B.toInt(), true))
+            applied -> phone.content.addView(pText("Lamaranmu sedang diproses.", 13f, 0xFF8E5CF7.toInt(), true))
+            j.way == "langsung" -> phone.content.addView(pText("Pekerjaan ini tidak perlu berkas. Datangi langsung lewat 🔎 Cari kerja saat waktu bebas.", 13f, 0xFF6B6B73.toInt()))
+            else -> {
+                val missing = j.documents.filter { it !in phoneData.docs }
+                pButtons(Triple(if (missing.isEmpty() && ageOk) "📨 Kirim lamaran" else "Syarat belum lengkap", missing.isEmpty() && ageOk) {
+                    sendApplication(j)
+                })
+            }
+        }
+        phone.scrollToTop()
+    }
+
+    private fun hrdMessage(j: GameData.JobDef, text: String) = receiveMessage("HRD · ${j.name}", text)
+
+    private fun sendApplication(j: GameData.JobDef) {
+        val ref = j.referrer?.let { gameData.characters[it] }
+        val insider = ref != null && social.rel(ref).let { it.met && it.love >= 60 && it.trust >= 60 }
+        val app = PhoneState.Application(
+            j.id,
+            stage = if (insider) "wawancara" else "dikirim",
+            dueDay = life.day + if (insider) 3 else 2,
+            viaInsider = insider,
+        )
+        phoneData.apps += app
+        if (insider && ref != null) {
+            hrdMessage(j, "Atas rekomendasi ${ref.name}, kamu langsung kami undang wawancara. Silakan ikuti sebelum ${dayLabel(app.dueDay)} lewat aplikasi Lowongan.")
+        } else {
+            notice("📨 Lamaran ke ${j.name} terkirim. Tunggu kabar 2 hari lagi.")
+        }
+        renderJobs()
+    }
+
+    /** Proses harian: pemeriksaan berkas, batas waktu, dokumen jadi, chat dari karakter, chat yang diabaikan. */
+    private fun processPhoneDaily() {
+        phoneData.apps.filter { it.stage in setOf("dikirim", "tes", "wawancara") }.forEach { a ->
+            val j = gameData.jobs[a.jobId] ?: return@forEach
+            when {
+                a.stage == "dikirim" && life.day >= a.dueDay -> {
+                    val skill = (vars["akademik"]?.toIntOrNull() ?: 0) + (vars["komunikasi"]?.toIntOrNull() ?: 0)
+                    val chance = (85 - j.difficulty / 2 + skill * 2).coerceIn(10, 95)
+                    if (kotlin.random.Random.nextInt(100) < chance) {
+                        a.stage = if (j.hasTest) "tes" else "wawancara"
+                        a.dueDay = life.day + 3
+                        hrdMessage(j, "Selamat, kamu lolos seleksi berkas! " +
+                            (if (j.hasTest) "Kerjakan tes" else "Ikuti wawancara") + " di aplikasi Lowongan sebelum ${dayLabel(a.dueDay)}.")
+                    } else {
+                        a.stage = "ditolak"
+                        hrdMessage(j, "Mohon maaf, berkas lamaranmu belum sesuai dengan kebutuhan kami.")
+                    }
+                }
+                (a.stage == "tes" || a.stage == "wawancara") && life.day > a.dueDay -> {
+                    a.stage = "gugur"
+                    hrdMessage(j, "Batas waktu sudah lewat. Lamaranmu kami anggap gugur.")
+                }
+            }
+        }
+        phoneData.pendingDocs.filter { it.value <= life.day }.keys.toList().forEach { id ->
+            phoneData.pendingDocs.remove(id)
+            phoneData.docs += id
+            notice("📁 ${gameData.documents[id]?.name ?: id} sudah jadi")
+        }
+        // Chat yang tidak dibalas 2 hari = mengabaikan
+        phoneData.threads.values.forEach { t ->
+            val c = gameData.characters[t.key] ?: return@forEach
+            if (t.pendingSince >= 0 && life.day - t.pendingSince >= 2) {
+                t.pendingSince = -1
+                social.behave(gameData, c.id, "abaikan_chat")
+                syncSocialVars()
+            }
+        }
+        // Karakter kadang mengirim pesan
+        var sent = 0
+        gameData.characters.values.shuffled().forEach { c ->
+            if (sent >= 2) return@forEach
+            val r = social.rel(c)
+            if (!r.met || r.love < 25) return@forEach
+            val lines = c.text["chat"]?.split('|')?.map { it.trim() }?.filter { it.isNotEmpty() } ?: return@forEach
+            val chance = 0.12f + r.love / 400f
+            if (kotlin.random.Random.nextFloat() < chance) {
+                receiveMessage(c.name, fill(lines.random()))
+                sent++
+            }
+        }
+    }
+
+    private fun renderDocs() {
+        phone.clearApp()
+        phone.setTitle("📁  Dokumen")
+        phone.backHandler = { renderJobs() }
+        gameData.documents.values.forEach { doc ->
+            val has = doc.id in phoneData.docs
+            val pending = phoneData.pendingDocs[doc.id]
+            val status = when {
+                has -> "✅ Sudah punya"
+                pending != null -> "⏳ Jadi ${dayLabel(pending)}"
+                doc.minAge > 90 -> "Didapat lewat cerita"
+                playerAge() < doc.minAge -> "Usia minimal ${doc.minAge}"
+                else -> "Urus: ${rupiah(doc.cost)}" + (if (doc.days > 0) " · ${doc.days} hari" else "")
+            }
+            val canProcess = !has && pending == null && doc.minAge <= 90 && playerAge() >= doc.minAge && life.money >= doc.cost
+            phone.content.addView(pCard(doc.name, doc.desc + "\n" + status, if (canProcess) "Urus ›" else null) {
+                if (canProcess) processDoc(doc)
+            })
+        }
+        phone.scrollToTop()
+    }
+
+    private fun processDoc(doc: GameData.DocDef) {
+        life.money -= doc.cost
+        logMoney("Urus ${doc.name}", -doc.cost)
+        if (doc.days <= 0) {
+            phoneData.docs += doc.id
+            notice("📁 ${doc.name} selesai")
+        } else {
+            phoneData.pendingDocs[doc.id] = life.day + doc.days
+            notice("📁 ${doc.name} sedang diurus, jadi ${dayLabel(life.day + doc.days)}")
+        }
+        refreshLife()
+        renderDocs()
+    }
+
+    /** Tes tertulis: 3 soal hitungan & logika. */
+    private fun startTest(a: PhoneState.Application) {
+        val j = gameData.jobs[a.jobId] ?: return
+        val rnd = kotlin.random.Random
+        val questions = List(3) { i ->
+            when (i) {
+                0 -> { val x = rnd.nextInt(12, 60); val y = rnd.nextInt(12, 60); "Berapa $x + $y?" to (x + y) }
+                1 -> { val x = rnd.nextInt(3, 13); val y = rnd.nextInt(3, 13); "Berapa $x × $y?" to (x * y) }
+                else -> { val st = rnd.nextInt(2, 9); val step = rnd.nextInt(2, 7)
+                    "Lanjutkan deret: ${st}, ${st + step}, ${st + 2 * step}, …" to (st + 3 * step) }
+            }
+        }
+        var correct = 0
+        fun ask(i: Int) {
+            phone.clearApp()
+            phone.setTitle("📝 Tes · ${j.name}")
+            phone.backHandler = null
+            if (i >= questions.size) {
+                val pass = correct >= 2 || (correct >= 1 && (vars["akademik"]?.toIntOrNull() ?: 0) >= 10)
+                a.score += correct * 10
+                if (pass) {
+                    a.stage = "wawancara"
+                    a.dueDay = life.day + 3
+                    hrdMessage(j, "Hasil tesmu bagus ($correct/3 benar). Ikuti wawancara sebelum ${dayLabel(a.dueDay)}.")
+                } else {
+                    a.stage = "ditolak"
+                    hrdMessage(j, "Mohon maaf, nilai tesmu ($correct/3) belum memenuhi syarat.")
+                }
+                life.applyEffects(mapOf("energi" to -8L, "kewarasan" to (if (pass) 3L else -5L)))
+                refreshLife()
+                phone.content.addView(pText("Tes selesai: $correct dari 3 benar.", 16f, 0xFF16161A.toInt(), true))
+                pButtons(Triple("Kembali ke Lowongan", true) { renderJobs() })
+                return
+            }
+            val (q, ans) = questions[i]
+            phone.content.addView(pText("Soal ${i + 1} dari 3", 12f, 0xFF8A8A93.toInt()))
+            phone.content.addView(pText(q, 18f, 0xFF16161A.toInt(), true).apply { setPadding(0, 12, 0, 12) })
+            val opts = (listOf(ans, ans + rnd.nextInt(1, 5), ans - rnd.nextInt(1, 5), ans + rnd.nextInt(6, 12))).shuffled()
+            opts.chunked(2).forEach { pair ->
+                pButtons(*pair.map { o -> Triple(o.toString(), true) { if (o == ans) correct++; ask(i + 1) } }.toTypedArray())
+            }
+        }
+        ask(0)
+    }
+
+    /** Wawancara: 3 pertanyaan acak dari data/wawancara.txt. */
+    private fun startInterview(a: PhoneState.Application) {
+        val j = gameData.jobs[a.jobId] ?: return
+        val qs = gameData.interview.shuffled().take(3)
+        if (qs.isEmpty()) return
+        var score = 0
+        var caught = false
+        val transcript = mutableListOf<Pair<Boolean, String>>()
+        fun step(i: Int) {
+            phone.clearApp()
+            phone.setTitle("🗣️ Wawancara · ${j.name}")
+            phone.backHandler = null
+            transcript.forEach { (mine, t) -> phone.content.addView(bubble(t, mine)) }
+            if (i >= qs.size) {
+                val skill = (vars["akademik"]?.toIntOrNull() ?: 0) + (vars["komunikasi"]?.toIntOrNull() ?: 0)
+                var chance = 40 - j.difficulty / 3 + score + a.score / 2 + skill * 2
+                if (a.viaInsider) chance += 30
+                if (life[LifeState.Stat.KEWARASAN] < 30) chance -= 15
+                val ok = kotlin.random.Random.nextInt(100) < chance.coerceIn(5, 95)
+                if (ok) {
+                    a.stage = "diterima"
+                    startJob(j.id)
+                    hrdMessage(j, "Selamat! Kamu diterima sebagai ${j.name}. Mulai bekerja sesuai jadwal.")
+                } else {
+                    a.stage = "ditolak"
+                    hrdMessage(j, "Terima kasih sudah datang wawancara. Mohon maaf, kami memilih kandidat lain.")
+                }
+                life.applyEffects(mapOf("energi" to -10L, "kewarasan" to (if (ok) 6L else -6L)))
+                refreshLife()
+                phone.content.addView(pText(if (ok) "✅ Kamu diterima!" else "❌ Belum berhasil kali ini.", 16f, 0xFF16161A.toInt(), true)
+                    .apply { setPadding(0, 16, 0, 0) })
+                if (caught) phone.content.addView(pText("Kebohonganmu sempat ketahuan pewawancara.", 12.5f, 0xFFB5402E.toInt()))
+                pButtons(Triple("Kembali ke Lowongan", true) { renderJobs() })
+                phone.scrollToBottom()
+                return
+            }
+            val q = qs[i]
+            transcript += false to q.question
+            phone.content.addView(bubble(q.question, false))
+            q.answers.forEach { ans ->
+                pButtons(Triple(ans.text, true) {
+                    transcript += true to ans.text
+                    if (ans.lie) {
+                        vars["bohong_wawancara_${j.id}"] = "1"
+                        if (kotlin.random.Random.nextInt(100) < 40) {
+                            caught = true
+                            score -= 30
+                            transcript += false to "Hmm... boleh saya cek kebenarannya? Sepertinya ada yang tidak cocok."
+                        } else {
+                            score += ans.score
+                        }
+                    } else {
+                        score += ans.score
+                    }
+                    step(i + 1)
+                })
+            }
+            phone.scrollToBottom()
+        }
+        step(0)
     }
 
     // ================================================================== hubungan
@@ -2039,6 +2792,11 @@ class GameActivity : Activity() {
             return
         }
         social.rel(c).met = true
+        phoneData.appts.firstOrNull { it.charId == c.id && it.day == life.day && it.slot == life.slot.name }?.let { a ->
+            phoneData.appts.remove(a)
+            announce(social.behave(gameData, c.id, "menepati_janji"))
+            notice("🤝 Kamu menepati janji dengan ${c.name}")
+        }
         meetingTalked = false
         meetingGifted = social.rel(c).lastGiftDay == life.day
         showCharacter(c.id, "biasa", "tengah")
@@ -2070,6 +2828,10 @@ class GameActivity : Activity() {
                 in c.likeTopics -> (if (repeatToday) 3 else 6) to "respon_suka"
                 in c.hateTopics -> -5 to "respon_benci"
                 else -> (if (repeatToday) 1 else 2) to "respon_biasa"
+            }
+            when (t.id) {
+                in c.likeTopics -> r.known += "+t:${t.id}"
+                in c.hateTopics -> r.known += "-t:${t.id}"
             }
             afterTap = {
                 announce(social.changeLove(gameData, c.id, delta))
@@ -2117,6 +2879,10 @@ class GameActivity : Activity() {
             def.id in c.hateItems -> -6 to "hadiah_benci"
             else -> 3 to "hadiah_biasa"
         }
+        when {
+            def.id in c.likeItems -> social.rel(c).known += "+i:${def.id}"
+            def.id in c.hateItems -> social.rel(c).known += "-i:${def.id}"
+        }
         announce(social.changeLove(gameData, c.id, delta))
         if (expired) {
             social.changeTrust(gameData, c.id, -6)
@@ -2152,6 +2918,16 @@ class GameActivity : Activity() {
 
     private fun receiveMessage(sender: String, text: String) {
         setPhoneIconVisible(true)
+        val ch = gameData.findCharacter(sender)
+        val key = when {
+            ch != null -> ch.id
+            sender.startsWith("HRD") -> "hrd_" + sender
+            else -> sender
+        }
+        val th = phoneData.thread(key, ch?.name ?: sender)
+        th.msgs += PhoneState.Msg(false, text, life.day)
+        th.unread++
+        if (ch != null) th.pendingSince = life.day
         messages.add(sender to text)
         phone.addMessage(sender, text)
         phoneIcon.ring(true)
@@ -2190,6 +2966,7 @@ class GameActivity : Activity() {
 
     private fun onPhoneClosed() {
         enterImmersiveMode()
+        if (wait == Wait.FREE && !life.dead) showFreeSheet()
         if (wait == Wait.PHONE) {
             wait = Wait.BUSY
             handler.postDelayed({ next() }, 350)

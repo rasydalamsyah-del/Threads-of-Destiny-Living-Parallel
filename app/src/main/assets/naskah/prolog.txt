@@ -81,6 +81,7 @@ Ayah: Tapi kalau kamu mau kerja dulu, bantu Ayah melaut atau bantu Ibu di warung
 
 {nama}: Nomor ini... siapa? Kenapa dia tahu aku baru lulus?
 {nama}: "Aku tunggu di Kota Sakala"...?
+@catatan Pesan dari nomor tidak dikenal: "Selamat atas kelulusanmu. Aku tunggu di Kota Sakala." Siapa dia? Apakah... dia?
 Ibu: {nama}? Kok melamun? Jadi bagaimana, Nak?
 
 

@@ -77,6 +77,7 @@ Laras: Kak... nanti pulang, kan? Janji?
 @latar kos_kamar
 * {nama} meletakkan tas di lantai. Untuk pertama kalinya, tidak ada suara Ibu dari dapur. Tidak ada Laras yang merecoki.
 * Di kota ini, tidak ada yang akan memasakkan makanan untukmu. Belanjalah di minimarket, dan jaga uangmu baik-baik.
+* HP-mu kini berisi aplikasi Chat, Kontak, Kalender, Lowongan, Dompet, dan Catatan. Buka lewat ikon HP, atau tombol 📱 HP saat waktu bebas.
 @bebas 1
 
 @latar kos_kamar
@@ -127,6 +128,7 @@ Nadia: Dulu, waktu SMP, ada murid pindahan dari desa itu juga di sekolahku. Pend
 {nama}: Siapa namanya?!
 Nadia: Aku lupa... Dia cuma setahun, lalu pindah lagi. Kenapa? Kamu kenal?
 @atur petunjuk_sahabat = 1
+@catatan Petunjuk #1 — Kata Nadia, dulu ada murid pindahan dari Tanjung Lentera di SMP-nya. Pendiam, suka duduk dekat jendela. Hanya setahun, lalu pindah lagi.
 * Jantung {nama} berdegup kencang. Mungkinkah...
 @sembunyi semua
 * Hari pertama sekolah berlalu dengan cepat.

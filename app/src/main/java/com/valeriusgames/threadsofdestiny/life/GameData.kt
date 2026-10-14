@@ -18,7 +18,23 @@ class GameData private constructor(
     val topics: Map<String, TopicDef>,
     val jobs: Map<String, JobDef>,
     val housing: Map<String, KosDef>,
+    val documents: Map<String, DocDef>,
+    val interview: List<InterviewQ>,
 ) {
+
+    data class DocDef(
+        val id: String,
+        val name: String,
+        val cost: Long,
+        val days: Int,
+        val minAge: Int,
+        val initial: Boolean,
+        val desc: String,
+    )
+
+    data class InterviewAnswer(val text: String, val score: Int, val lie: Boolean)
+    data class InterviewQ(val id: String, val question: String, val answers: List<InterviewAnswer>)
+
 
     /**
      * Kegiatan rutin: sekolah atau pekerjaan.
@@ -41,6 +57,8 @@ class GameData private constructor(
         val text: String,
         val icon: String,
         val desc: String,
+        val documents: List<String>,
+        val hasTest: Boolean,
     ) {
         /** Sekolah & pekerjaan tetap wajib dihadiri; bolos/absen tercatat. */
         val mandatory: Boolean get() = kind == "sekolah" || kind == "tetap"
@@ -190,6 +208,8 @@ class GameData private constructor(
                     text = m["teks"] ?: "",
                     icon = m["ikon"] ?: "💼",
                     desc = m["keterangan"] ?: "",
+                    documents = list(m["berkas"]).toList(),
+                    hasTest = (m["tes"] ?: "tidak").trim().lowercase() == "ya",
                 )
             }
             val kos = readSections(ctx, "data/kos.txt").associate { (id, m) ->
@@ -203,7 +223,30 @@ class GameData private constructor(
                     text = m["keterangan"] ?: "",
                 )
             }
-            return GameData(acts, items, chars, rels, topics, jobs, kos)
+            val docs = readSections(ctx, "data/dokumen.txt").associate { (id, m) ->
+                id to DocDef(
+                    id = id,
+                    name = m["nama"] ?: id,
+                    cost = m["biaya"]?.filter { it.isDigit() }?.toLongOrNull() ?: 0L,
+                    days = m["lama"]?.trim()?.toIntOrNull() ?: 0,
+                    minAge = m["usia_min"]?.trim()?.toIntOrNull() ?: 0,
+                    initial = (m["awal"] ?: "").trim().lowercase() == "ya",
+                    desc = m["keterangan"] ?: "",
+                )
+            }
+            val questions = readSections(ctx, "data/wawancara.txt").mapNotNull { (id, m) ->
+                val q = m["tanya"] ?: return@mapNotNull null
+                val answers = listOf("a", "b", "c", "d").mapNotNull { k ->
+                    val parts = m[k]?.split('|')?.map { it.trim() } ?: return@mapNotNull null
+                    InterviewAnswer(
+                        parts[0],
+                        parts.getOrNull(1)?.removePrefix("+")?.toIntOrNull() ?: 0,
+                        parts.getOrNull(2)?.lowercase() == "bohong",
+                    )
+                }
+                if (answers.isEmpty()) null else InterviewQ(id, q, answers)
+            }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {

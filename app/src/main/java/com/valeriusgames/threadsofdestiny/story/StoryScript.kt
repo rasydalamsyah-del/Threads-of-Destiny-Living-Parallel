@@ -92,6 +92,10 @@ object StoryScript {
         data class JobStop(val id: String) : Cmd()
         /** Melamar → lompat ke label diterima / ditolak. */
         data class Apply(val id: String, val okLabel: String, val noLabel: String) : Cmd()
+        /** Tambah catatan di aplikasi Catatan HP. */
+        data class Note(val text: String) : Cmd()
+        /** Pemain mendapat dokumen (mis. ijazah_sma). */
+        data class Doc(val id: String) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
     }
@@ -334,6 +338,8 @@ object StoryScript {
                     ?: throw ParseError(n, "format: @lamar id_pekerjaan -> label_diterima, label_ditolak")
                 Cmd.Apply(m.groupValues[1].lowercase(), m.groupValues[2], m.groupValues[3])
             }
+            "catatan", "note" -> Cmd.Note(rest.ifEmpty { throw ParseError(n, "format: @catatan isi catatan") })
+            "dokumen", "doc" -> Cmd.Doc(args.firstOrNull() ?: throw ParseError(n, "format: @dokumen id_dokumen"))
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             else -> throw ParseError(n, "perintah @$name tidak dikenal")
         }

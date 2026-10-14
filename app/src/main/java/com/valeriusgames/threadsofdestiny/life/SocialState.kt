@@ -31,6 +31,8 @@ class SocialState {
         var lastGiftDay: Int = -1,
         var lastTalkDay: Int = -1,
         val counters: MutableMap<String, Int> = mutableMapOf(),
+        /** Kesukaan yang sudah diketahui pemain: "+t:laut", "-i:gorengan", dst. */
+        val known: MutableSet<String> = mutableSetOf(),
     )
 
     /** Kebohongan yang belum/sudah terbongkar: kode → daftar karakter yang dibohongi. */
@@ -180,6 +182,7 @@ class SocialState {
                     put("met", r.met); put("love", r.love); put("romance", r.romance); put("trust", r.trust)
                     put("stage", r.romanticStage); put("gift", r.lastGiftDay); put("talk", r.lastTalkDay)
                     put("counters", JSONObject().apply { r.counters.forEach { (k, v) -> put(k, v) } })
+                    put("known", JSONArray(r.known.toList()))
                 })
             }
         })
@@ -201,6 +204,7 @@ class SocialState {
                             lastGiftDay = j.optInt("gift", -1), lastTalkDay = j.optInt("talk", -1),
                         )
                         j.optJSONObject("counters")?.let { c -> c.keys().forEach { k -> r.counters[k] = c.optInt(k) } }
+                        j.optJSONArray("known")?.let { a -> for (x in 0 until a.length()) r.known += a.getString(x) }
                         st.rels[id] = r
                     }
                 }

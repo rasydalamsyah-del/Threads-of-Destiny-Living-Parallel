@@ -1,0 +1,45 @@
+# ==========================================================
+#  PERTANYAAN WAWANCARA KERJA
+#  Saat wawancara, 3 pertanyaan dipilih acak.
+#  [id]
+#  tanya = pertanyaan pewawancara
+#  a / b / c / d = jawaban | skor | bohong (opsional)
+#     skor ditambahkan ke nilai wawancara
+#     "bohong" = jawaban berbohong: skor tinggi, tapi bisa ketahuan (skor −30)
+# ==========================================================
+
+[motivasi]
+tanya = Kenapa kamu ingin bekerja di sini?
+a = Saya ingin belajar dan membantu keluarga. | 15
+b = Ya... butuh uang saja, Pak/Bu. | -5
+c = Saya sudah sangat berpengalaman di bidang ini! | 20 | bohong
+
+[kelemahan]
+tanya = Apa kelemahan terbesarmu?
+a = Kadang terlalu lama mengerjakan sesuatu karena ingin rapi. | 12
+b = Saya tidak punya kelemahan. | -8
+c = Saya gampang capek. | -3
+
+[jadwal]
+tanya = Kamu bisa datang tepat waktu setiap jadwal?
+a = Bisa. Saya akan atur waktu dengan baik. | 12
+b = Mungkin, tergantung keadaan. | 0
+c = Pasti! Saya tidak pernah terlambat seumur hidup. | 15 | bohong
+
+[masalah]
+tanya = Kalau ada pelanggan marah, apa yang kamu lakukan?
+a = Dengarkan dulu, minta maaf, lalu cari solusinya. | 15
+b = Panggil atasan saja. | 3
+c = Saya balas marah supaya dia diam. | -15
+
+[gaji]
+tanya = Berapa gaji yang kamu harapkan?
+a = Sesuai aturan perusahaan saja. | 10
+b = Setinggi-tingginya! | -6
+c = Saya mau digaji dobel karena saya yang terbaik. | -10
+
+[pengalaman]
+tanya = Pernah bekerja sebelumnya?
+a = Pernah bantu usaha keluarga dan kerja harian. | 12
+b = Belum pernah, tapi saya cepat belajar. | 8
+c = Pernah jadi kepala toko di kota besar. | 18 | bohong

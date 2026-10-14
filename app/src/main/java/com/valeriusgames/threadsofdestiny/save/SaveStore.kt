@@ -26,6 +26,8 @@ data class SaveData(
     val life: String = "",
     /** Hubungan dengan semua karakter dalam JSON. */
     val social: String = "",
+    /** Isi HP (chat, janji, lamaran, dokumen, dompet, catatan) dalam JSON. */
+    val phone: String = "",
 ) {
     fun toJson(): String = JSONObject().apply {
         put("script", script)
@@ -49,6 +51,7 @@ data class SaveData(
         put("vars", JSONObject().apply { vars.forEach { (k, v) -> put(k, v) } })
         put("life", life)
         put("social", social)
+        put("phone", phone)
     }.toString()
 
     companion object {
@@ -82,6 +85,7 @@ data class SaveData(
                 } ?: emptyMap(),
                 life = o.optString("life"),
                 social = o.optString("social"),
+                phone = o.optString("phone"),
             )
         } catch (e: Exception) {
             null

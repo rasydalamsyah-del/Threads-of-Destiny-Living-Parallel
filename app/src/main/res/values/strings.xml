@@ -27,7 +27,7 @@
     <!-- HP -->
     <string name="phone_hint">Ketuk HP 📱</string>
     <string name="phone_empty">Tidak ada notifikasi</string>
-    <string name="phone_close_hint">Ketuk di luar HP untuk menutup</string>
+    <string name="phone_close_hint">Ketuk di luar HP untuk menutup · garis bawah = kembali</string>
     <string name="phone_app_messages">PESAN · sekarang</string>
 
     <!-- Kembali ke menu -->

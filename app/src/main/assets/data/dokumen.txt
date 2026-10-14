@@ -1,0 +1,64 @@
+# ==========================================================
+#  DOKUMEN / BERKAS LAMARAN
+#  Diurus lewat HP → Lowongan → Dokumen. Butuh biaya & waktu.
+#  [id]           → dipakai di pekerjaan.txt (berkas = cv, pas_foto, ...)
+#  nama      = nama yang tampil
+#  biaya     = rupiah
+#  lama      = berapa hari sampai jadi (0 = langsung)
+#  usia_min  = usia minimal untuk mengurus
+#  awal      = ya (sudah dimiliki sejak awal permainan)
+#  keterangan
+# ==========================================================
+
+[akta_kelahiran]
+nama       = Akta kelahiran
+biaya      = 0
+lama       = 0
+awal       = ya
+keterangan = Disimpan Ibu sejak kamu lahir.
+
+[ijazah_smp]
+nama       = Ijazah SMP
+biaya      = 0
+lama       = 0
+awal       = ya
+keterangan = Baru saja kamu terima saat kelulusan.
+
+[cv]
+nama       = CV (daftar riwayat hidup)
+biaya      = 5000
+lama       = 0
+keterangan = Diketik dan dicetak di warnet.
+
+[pas_foto]
+nama       = Pas foto 3×4
+biaya      = 20000
+lama       = 1
+keterangan = Foto di studio, jadi besok.
+
+[surat_sehat]
+nama       = Surat keterangan sehat
+biaya      = 25000
+lama       = 1
+keterangan = Periksa di puskesmas.
+
+[ktp]
+nama       = KTP
+biaya      = 0
+lama       = 7
+usia_min   = 17
+keterangan = Rekam data di kantor kecamatan. Hanya bisa saat usia 17 tahun.
+
+[skck]
+nama       = SKCK
+biaya      = 30000
+lama       = 3
+usia_min   = 17
+keterangan = Surat dari kantor polisi. Butuh KTP.
+
+[ijazah_sma]
+nama       = Ijazah SMA
+biaya      = 0
+lama       = 0
+usia_min   = 99
+keterangan = Didapat saat lulus SMA (lewat cerita).

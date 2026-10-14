@@ -19,6 +19,8 @@
 #  cara        = langsung (bisa dicari di "Cari kerja") / lamar / cerita (hanya lewat naskah)
 #  sulit       = 0-100, makin tinggi makin sulit diterima
 #  orang_dalam = id karakter yang bisa merekomendasikan (Cinta & Kepercayaan ≥ 60)
+#  berkas      = (untuk cara = lamar) dokumen yang wajib ada, dari dokumen.txt
+#  tes         = ya / tidak  (untuk cara = lamar: ada tes tertulis sebelum wawancara)
 #  keterangan  = penjelasan singkat
 #  teks        = narasi setiap kali hadir
 # ==========================================================
@@ -52,6 +54,8 @@ usia_min    = 15
 cara        = lamar
 sulit       = 55
 orang_dalam = ayah
+berkas      = ijazah_smp
+tes         = tidak
 keterangan  = Milik Juragan Darto. Menjemur dan mengasinkan ikan. Bau, panas, tapi upahnya lumayan.
 teks        = Matahari menyengat. Tanganmu perih kena garam, tapi tumpukan ikan di tampah makin rapi.
 
@@ -114,5 +118,24 @@ efek        = energi -30, kewarasan -5, akademik +1
 usia_min    = 16
 cara        = lamar
 sulit       = 45
+berkas      = cv, pas_foto, ijazah_smp
+tes         = ya
 keterangan  = Menjaga warnet sampai larut. Bisa belajar sambil kerja, tapi kurang tidur.
 teks        = Lampu neon berkedip. Kamu menahan kantuk sambil mencatat jam main pelanggan.
+
+[kasir_minimarket]
+nama        = Kasir minimarket
+ikon        = 🧾
+jenis       = tetap
+tempat      = kota
+hari        = senin-sabtu
+waktu       = siang, sore
+gaji        = 1800000
+efek        = energi -20, kewarasan -4, komunikasi +1
+usia_min    = 18
+cara        = lamar
+sulit       = 50
+berkas      = cv, pas_foto, ktp, ijazah_sma, surat_sehat
+tes         = ya
+keterangan  = Pekerjaan tetap dengan gaji bulanan. Syarat: lulus SMA dan punya KTP.
+teks        = Antrean pembeli mengular. Kamu memindai barang satu per satu sambil tersenyum ramah.
