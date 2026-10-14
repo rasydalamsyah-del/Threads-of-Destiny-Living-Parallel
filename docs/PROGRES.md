@@ -14,6 +14,7 @@
 | 14 Okt 2026 | 4 | START GAME: isi nama → prolog masa lalu (efek kenangan, gerak kamera) → layar gelap + teks waktu → efek bangun tidur (kedip, buram) → duduk di ranjang → pesan HP masuk + layar HP. Mesin naskah teks (`assets/naskah/prolog.txt`), background sementara |
 | 14 Okt 2026 | 5 | Tombol burger di masa kini (Lanjutkan, Simpan, Muat, Riwayat, Pengaturan, Menu Utama). Simpan/Muat 1 slot otomatis + 6 manual. CONTINUE & LOAD DATA berfungsi. Halaman Pengaturan (tema, ukuran & gaya huruf, kepekatan kotak, kecepatan teks, volume musik/efek, getar, lewati intro, hapus data). Perintah naskah `@musik`, `@suara` |
 | 14 Okt 2026 | — | Dokumen rancangan game & catatan progres ini dibuat |
+| 14 Okt 2026 | 7 | Prolog ditulis ulang (Bab 1: masa kecil di Tanjung Lentera, sahabat pergi, lulus SMP, sarapan bersama keluarga, pesan misterius). Pilih jenis kelamin di layar isi nama. Pilihan jawaban (`@pilihan`), label & lompat, variabel (`@atur`, `@tambah`), syarat (`@jika`), teks sesuai jenis kelamin. Pilihan besar pertama: SMA / kerja / keduanya |
 | 14 Okt 2026 | — | Jawaban gambaran besar pemilik dimasukkan ke rancangan; usulan dunia (Desa Tanjung Lentera → Kota Sakala), cerita utama ("hidup paralel" lewat mimpi), dan fase hidup usia 15–25 |
 
 ---
@@ -21,14 +22,14 @@
 ## 🔨 Rencana kerja (urutan)
 
 ### Tahap 0 — Menyesuaikan awal cerita
-- [ ] Tulis ulang prolog: masa kecil di Tanjung Lentera, sahabat pergi naik kereta, kini lulus SMP
-- [ ] Usia tokoh utama tersimpan & bertambah seiring waktu
-- [ ] Pilihan besar pertama: SMA di kota / kerja / SMA sambil kerja
+- [x] Tulis ulang prolog: masa kecil di Tanjung Lentera, sahabat pergi naik kereta, kini lulus SMP
+- [~] Usia tokoh utama tersimpan (variabel `usia`); bertambah otomatis menyusul bersama sistem kalender
+- [x] Pilihan besar pertama: SMA di kota / kerja / SMA sambil kerja (isi tiap jalur menyusul)
 
 ### Tahap A — Fondasi hubungan
-- [ ] Pilih jenis kelamin di layar isi nama (aturan pasangan lawan jenis)
+- [x] Pilih jenis kelamin di layar isi nama (aturan pasangan menyusul bersama sistem hubungan)
 - [ ] File data karakter (`assets/data/karakter.txt`) + hubungan antar karakter
-- [ ] Perintah `@pilihan` (pilihan jawaban) dan `@jika` (syarat)
+- [x] Perintah `@pilihan` (pilihan jawaban), label, `@lompat`, `@atur`, `@tambah`, `@jika`
 - [ ] Meter **Cinta (teman)**, **Cinta (pasangan)**, **Kepercayaan** + tahapan hubungan
 - [ ] Romansa terkunci sampai tokoh berusia 18; pengakuan bisa ditolak
 - [ ] Sifat karakter (setia/cemburuan vs terbuka) untuk akibat banyak pasangan
@@ -92,15 +93,13 @@
 | 14 Okt 2026 | Romansa hanya antar orang dewasa: terbuka saat tokoh berusia 18 (ditetapkan Claude) |
 | 14 Okt 2026 | Karier terbentuk dari pilihan pemain |
 | 14 Okt 2026 | Bar Kesehatan, Lapar, Haus, Kewarasan; makanan bisa kedaluwarsa; game over saat meninggal |
+| 14 Okt 2026 | Disetujui: Desa Tanjung Lentera → Kota Sakala; cerita "hidup paralel" lewat mimpi & sahabat masa kecil; usia 15–25 dalam 4 bab + bermain bebas; keluarga: Ayah (nelayan), Ibu (warung), adik Laras |
 | 14 Okt 2026 | Bahasa Indonesia dulu. Gambar dibuat pemilik lewat AI, Claude bantu prompt. Dimainkan sendiri dulu |
 
 ---
 
-## ❓ Menunggu persetujuan pemilik
-- Usulan dunia: Desa Tanjung Lentera & Kota Sakala (RANCANGAN §2)
-- Usulan cerita utama & arti "Living Parallel" (RANCANGAN §3)
-- Usulan durasi: usia 15 → 25, dibagi 4 bab + bermain bebas (RANCANGAN §4)
-- Susunan keluarga tokoh utama (usulan: ayah nelayan, ibu pemilik warung, satu adik)
+## ❓ Menunggu
+- (kosong) — usulan dunia, cerita utama, durasi, dan keluarga **disetujui pemilik 14 Okt 2026**
 
 ---
 

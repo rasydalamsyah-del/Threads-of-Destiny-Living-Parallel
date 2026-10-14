@@ -35,21 +35,81 @@ object StoryScript {
         data class Music(val name: String?) : Cmd()
         /** Efek suara sekali. */
         data class Sound(val name: String) : Cmd()
+        /** Pilihan jawaban: setiap opsi melompat ke sebuah label. */
+        data class Choice(val options: List<Option>) : Cmd()
+        /** Lompat ke label. */
+        data class Jump(val label: String) : Cmd()
+        /** Lompat ke label bila syarat terpenuhi, contoh: @jika usia >= 18 -> dewasa */
+        data class JumpIf(val variable: String, val op: String, val value: String, val label: String) : Cmd()
+        /** Isi variabel, contoh: @atur jalur = sma */
+        data class SetVar(val variable: String, val value: String) : Cmd()
+        /** Tambah/kurangi variabel angka, contoh: @tambah uang -5000 */
+        data class AddVar(val variable: String, val amount: Long) : Cmd()
         /** Akhir naskah. */
         data class End(val text: String) : Cmd()
     }
 
+    data class Option(val text: String, val label: String)
+
+    /** Hasil baca naskah: daftar perintah + posisi setiap label. */
+    data class Script(val cmds: List<Cmd>, val labels: Map<String, Int>)
+
     class ParseError(val lineNumber: Int, message: String) :
         Exception("Naskah baris $lineNumber: $message")
 
-    fun parse(lines: List<String>): List<Cmd> {
+    fun parse(lines: List<String>): Script {
         val out = mutableListOf<Cmd>()
+        val labels = mutableMapOf<String, Int>()
+        val jumps = mutableListOf<Pair<String, Int>>()   // (label, nomor baris) untuk dicek
+        var openChoice: MutableList<Option>? = null
+
+        fun closeChoice(n: Int) {
+            val opts = openChoice ?: return
+            if (opts.isEmpty()) throw ParseError(n, "@pilihan harus diikuti minimal satu baris > pilihan -> label")
+            out += Cmd.Choice(opts.toList())
+            openChoice = null
+        }
+
         lines.forEachIndexed { index, rawLine ->
             val n = index + 1
             val line = rawLine.trim()
+            if (line.isEmpty() || line.startsWith("#")) return@forEachIndexed
+
+            if (line.startsWith(">")) {
+                val opts = openChoice ?: throw ParseError(n, "baris > hanya boleh tepat di bawah @pilihan")
+                val body = line.substring(1)
+                val arrow = body.lastIndexOf("->")
+                if (arrow < 0) throw ParseError(n, "format pilihan: > Teks pilihan -> nama_label")
+                val text = body.substring(0, arrow).trim()
+                val label = body.substring(arrow + 2).trim()
+                if (text.isEmpty() || label.isEmpty()) throw ParseError(n, "format pilihan: > Teks pilihan -> nama_label")
+                opts += Option(text, label)
+                jumps += label to n
+                return@forEachIndexed
+            }
+            closeChoice(n)
+
             when {
-                line.isEmpty() || line.startsWith("#") -> Unit
-                line.startsWith("@") -> out += parseCommand(line.substring(1).trim(), n)
+                line.startsWith("::") -> {
+                    val label = line.substring(2).trim()
+                    if (label.isEmpty()) throw ParseError(n, "label butuh nama, contoh: :: sma")
+                    if (labels.containsKey(label)) throw ParseError(n, "label :: $label sudah ada")
+                    labels[label] = out.size
+                }
+                line.startsWith("@") -> {
+                    val body = line.substring(1).trim()
+                    if (body.substringBefore(' ').lowercase() in setOf("pilihan", "choice")) {
+                        openChoice = mutableListOf()
+                    } else {
+                        val cmd = parseCommand(body, n)
+                        when (cmd) {
+                            is Cmd.Jump -> jumps += cmd.label to n
+                            is Cmd.JumpIf -> jumps += cmd.label to n
+                            else -> Unit
+                        }
+                        out += cmd
+                    }
+                }
                 line.startsWith("*") -> out += Cmd.Line(null, line.substring(1).trim())
                 else -> {
                     val colon = line.indexOf(':')
@@ -61,7 +121,12 @@ object StoryScript {
                 }
             }
         }
-        return out
+        closeChoice(lines.size)
+
+        jumps.forEach { (label, n) ->
+            if (!labels.containsKey(label)) throw ParseError(n, "label :: $label tidak ditemukan")
+        }
+        return Script(out, labels)
     }
 
     private fun parseCommand(body: String, n: Int): Cmd {
@@ -73,7 +138,7 @@ object StoryScript {
 
         return when (name) {
             "latar", "bg" -> {
-                val file = rest.split(Regex("\\s+")).firstOrNull()
+                val file = rest.split(Regex("\\s+")).firstOrNull()?.takeIf { it.isNotEmpty() }
                     ?: throw ParseError(n, "@latar butuh nama gambar, contoh: @latar plafon")
                 val flags = args.drop(1)
                 val memory = flags.any { it == "kenangan" || it == "memory" }
@@ -118,6 +183,27 @@ object StoryScript {
                 val file = rest.split(Regex("\\s+")).firstOrNull()?.takeIf { it.isNotEmpty() }
                     ?: throw ParseError(n, "@suara butuh nama file")
                 Cmd.Sound(file)
+            }
+            "lompat", "jump", "goto" -> {
+                val label = rest.takeIf { it.isNotEmpty() }
+                    ?: throw ParseError(n, "@lompat butuh nama label")
+                Cmd.Jump(label)
+            }
+            "jika", "if" -> {
+                val m = Regex("^(\\w+)\\s*(==|!=|>=|<=|>|<)\\s*(.+?)\\s*->\\s*(\\w+)$").find(rest)
+                    ?: throw ParseError(n, "format: @jika variabel >= nilai -> nama_label")
+                val (v, op, value, label) = m.destructured
+                Cmd.JumpIf(v, op, value, label)
+            }
+            "atur", "set" -> {
+                val m = Regex("^(\\w+)\\s*=\\s*(.*)$").find(rest)
+                    ?: throw ParseError(n, "format: @atur variabel = nilai")
+                Cmd.SetVar(m.groupValues[1], m.groupValues[2].trim())
+            }
+            "tambah", "add" -> {
+                val m = Regex("^(\\w+)\\s+([+-]?\\d+)$").find(rest)
+                    ?: throw ParseError(n, "format: @tambah variabel +5  (atau -5)")
+                Cmd.AddVar(m.groupValues[1], m.groupValues[2].removePrefix("+").toLong())
             }
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             else -> throw ParseError(n, "perintah @$name tidak dikenal")

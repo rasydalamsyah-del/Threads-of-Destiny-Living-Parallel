@@ -1,58 +1,132 @@
 # ==========================================================
 #  THREADS OF DESTINY: LIVING PARALLEL
-#  Naskah: PROLOG  (teks sementara — silakan diganti)
+#  Naskah: BAB 1 — LULUS SMP (Desa Tanjung Lentera)
 #  Panduan menulis naskah: docs/NASKAH.md
-#  {nama} otomatis diganti dengan nama pemain.
+#
+#  {nama}           → nama pemain
+#  {teks L|teks P}  → teks untuk pemain laki-laki | perempuan
+#  {usia}, {jalur}  → isi variabel
 # ==========================================================
 
 
 # ----------------------------------------------------------
-#  BAGIAN 1 — KISAH MASA LALU
+#  PROLOG — KENANGAN MASA KECIL
 # ----------------------------------------------------------
 
 @latar kota_kecil kenangan gerak
 @terang 2000
-* Dulu, di sebuah kota kecil di tepi laut, ada seorang anak bernama {nama}.
-* Setiap sore, {nama} berlari ke dermaga, menunggu matahari tenggelam bersama seseorang yang paling berarti baginya.
+* Di ujung pesisir, ada sebuah desa kecil bernama Tanjung Lentera.
+* Mercusuar tuanya sudah lama tidak menyala. Tapi setiap sore, dua anak selalu duduk di dermaga di bawahnya.
+* Salah satunya adalah {nama}.
 
 @latar sekolah kenangan gerak
-* Mereka tumbuh bersama. Satu sekolah, satu jalan pulang, satu mimpi yang sama.
-* "Suatu hari nanti, kita pergi ke kota besar sama-sama, ya," katanya waktu itu, sambil tersenyum.
+* Mereka tak terpisahkan. Satu sekolah, satu jalan pulang, satu mimpi yang sama.
+* "Nanti kalau sudah besar, kita ke Kota Sakala sama-sama, ya. Janji?"
 
 @latar stasiun_hujan kenangan gerak
-* Tapi hidup tidak selalu menepati janji.
-* Di hari yang hujan itu, sebuah kereta membawanya pergi... tanpa sempat mengucapkan selamat tinggal.
+* Lalu suatu hari di musim hujan, saat mereka berumur dua belas tahun...
+* Sahabatnya naik kereta ke kota, dan pergi tanpa sepatah kata pun.
+* Tak ada surat. Tak ada kabar. Hanya janji yang tertinggal di dermaga.
 
-@latar kota_besar kenangan gerak
-* Bertahun-tahun berlalu. {nama} akhirnya tiba di kota besar, sendirian.
-* Ribuan langkah setiap hari. Ribuan wajah asing yang lewat begitu saja.
-* Dan benang takdir yang dulu terputus... diam-diam mulai terhubung kembali.
+@latar kota_kecil kenangan gerak
+* Tiga tahun berlalu.
+* Hari ini, {nama} resmi lulus SMP.
+* Dan di depannya, jalan hidup mulai bercabang...
 
 @gelap 2500
 
 
 # ----------------------------------------------------------
-#  BAGIAN 2 — MASA KINI: BANGUN TIDUR
+#  PAGI SETELAH KELULUSAN
 # ----------------------------------------------------------
 
-@waktu Sabtu, 07:12
+@atur usia = 15
+@waktu Senin, 06:30
 @latar plafon
-@jam Sabtu, 07:12 ☀️
+@jam Senin, 06:30 ☀️
 @kedip
 
 {nama}: ...Mimpi itu lagi.
-{nama}: Sudah berapa tahun, ya? Kenapa masih terasa begitu nyata...
+{nama}: Kenapa selalu stasiun itu...
 
 @latar kamar_pagi naik
-* {nama} bangkit dan duduk di tepi ranjang. Cahaya pagi menembus tirai jendela.
-{nama}: Hari Sabtu. Tidak ada kuliah, tidak ada kerja paruh waktu.
-{nama}: Hari ini mau ngapain, ya...
+* {nama} duduk di tepi ranjang. Dari dapur tercium aroma ikan goreng.
+Ibu: {nama}! Sudah bangun belum? Sarapan dulu, nanti keburu dingin!
+{nama}: Iya, Bu! Sebentar!
+
+@latar rumah_warung
+@jam Senin, 06:45 ☀️
+* Di warung kecil depan rumah, Ibu sudah sibuk menata gorengan. Ayah baru pulang melaut, bajunya masih basah.
+Ayah: Nah, ini dia {jagoan|putri} Ayah yang baru lulus.
+Laras: Kak {nama} kemarin nangis waktu perpisahan sekolah, lho!
+{nama}: Laras! Jangan ngarang!
+Ibu: Sudah, sudah. Duduk sini, makan.
+* Mereka sarapan bersama. Lalu Ayah meletakkan gelas kopinya, dan suasana berubah serius.
+Ayah: {nama}, sekarang kamu sudah lulus. Ayah sama Ibu mau tanya...
+Ayah: Kamu mau lanjut ke mana?
+Ibu: SMA terdekat cuma ada di Kota Sakala. Kalau sekolah di sana, kamu harus ngekos. Biayanya... tidak sedikit.
+Ayah: Tapi kalau kamu mau kerja dulu, bantu Ayah melaut atau bantu Ibu di warung, itu juga tidak apa-apa.
+* {nama} terdiam. Ini keputusan pertama yang benar-benar menentukan hidupnya.
 
 @hp tampil
-@hp pesan Nomor Tidak Dikenal | Lama tidak bertemu, {nama}. Kamu masih ingat aku?
-{nama}: Hm? HP-ku bergetar.
+@hp pesan Nomor Tidak Dikenal | Lama tidak bertemu, {nama}. Selamat atas kelulusanmu. Aku tunggu di Kota Sakala.
+{nama}: HP-ku... bergetar?
 @tunggu_hp
 
-{nama}: ...Siapa ini?
+{nama}: Nomor ini... siapa? Kenapa dia tahu aku baru lulus?
+{nama}: "Aku tunggu di Kota Sakala"...?
+Ibu: {nama}? Kok melamun? Jadi bagaimana, Nak?
 
-@tamat Bersambung…
+
+# ----------------------------------------------------------
+#  PILIHAN BESAR PERTAMA
+# ----------------------------------------------------------
+
+@pilihan
+> Lanjut SMA di Kota Sakala -> sma
+> Tetap di desa dan bekerja -> kerja
+> SMA di Kota Sakala sambil bekerja -> keduanya
+
+:: sma
+@atur jalur = sma
+{nama}: Aku mau lanjut SMA di Kota Sakala, Yah, Bu.
+Ayah: ...Baik. Kalau itu pilihanmu, Ayah akan usahakan biayanya.
+Ibu: Tapi janji, kamu belajar yang benar di sana, ya.
+@lompat malam
+
+:: kerja
+@atur jalur = kerja
+{nama}: Aku mau kerja dulu saja, Yah. Bantu Ayah dan Ibu.
+Ibu: Kamu yakin, Nak? Ibu tidak mau kamu menyesal nanti.
+Ayah: Hidup di laut itu keras. Tapi Ayah bangga kamu mau bantu.
+@lompat malam
+
+:: keduanya
+@atur jalur = keduanya
+{nama}: Aku mau sekolah di Sakala, tapi aku juga mau kerja di sana. Supaya tidak terlalu memberatkan Ayah dan Ibu.
+Ayah: Sekolah sambil kerja itu berat, {nama}. Kamu sanggup?
+{nama}: Aku sanggup, Yah.
+Ibu: ...Anak ini memang keras kepala, persis ayahnya.
+
+
+# ----------------------------------------------------------
+#  MALAM ITU
+# ----------------------------------------------------------
+
+:: malam
+@gelap 1800
+@waktu Senin, 21:40
+@latar kamar_pagi
+@jam Senin, 21:40 🌙
+@terang 1500
+* Malam itu, {nama} menatap pesan di HP-nya lama sekali.
+@jika jalur == kerja -> malam_kerja
+* Sebentar lagi, {nama} akan berangkat ke Kota Sakala. Kota yang sama dengan janji di dermaga dulu.
+@lompat penutup
+
+:: malam_kerja
+* Kota Sakala terasa jauh sekali dari desa ini. Tapi pesan itu terus mengusik pikirannya.
+
+:: penutup
+* Di suatu tempat, di jalan hidup yang lain, mungkin ada dirinya yang memilih berbeda...
+@tamat Bab 1 — Bersambung…

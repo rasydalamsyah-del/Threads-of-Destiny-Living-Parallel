@@ -15,10 +15,13 @@
     <string name="cd_skip_video">Ketuk untuk melewati video</string>
 
     <!-- Isi nama -->
-    <string name="name_title">Siapa namamu?</string>
-    <string name="name_subtitle">Nama ini akan dipakai sepanjang cerita.</string>
+    <string name="name_title">Siapa dirimu?</string>
+    <string name="name_subtitle">Nama dan jenis kelamin ini akan dipakai sepanjang cerita.</string>
     <string name="name_hint">Nama</string>
     <string name="name_error">Nama tidak boleh kosong</string>
+    <string name="gender_error">Pilih jenis kelamin dulu</string>
+    <string name="gender_male">Laki-laki</string>
+    <string name="gender_female">Perempuan</string>
     <string name="name_ok">MULAI</string>
 
     <!-- HP -->

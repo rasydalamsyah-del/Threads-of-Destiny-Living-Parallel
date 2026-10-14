@@ -63,13 +63,16 @@ class GameActivity : Activity() {
 
         const val PREFS = "player"
         const val KEY_NAME = "name"
+        const val KEY_GENDER = "gender"
+        const val GENDER_MALE = "laki-laki"
+        const val GENDER_FEMALE = "perempuan"
 
         private const val REQ_SAVE = 1
         private const val REQ_LOAD = 2
         private const val LOG_LIMIT = 80
     }
 
-    private enum class Wait { BUSY, TAP, PHONE }
+    private enum class Wait { BUSY, TAP, PHONE, CHOICE }
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -94,6 +97,7 @@ class GameActivity : Activity() {
     private lateinit var nameInput: EditText
     private lateinit var nameError: View
     private lateinit var nameSparkles: SparkleView
+    private lateinit var choiceList: LinearLayout
 
     private lateinit var audio: AudioPlayer
     private var settings = GameSettings.Values()
@@ -101,6 +105,10 @@ class GameActivity : Activity() {
     // ---- keadaan cerita (ikut disimpan) ----
     private var scriptPath = FIRST_SCRIPT
     private var script: List<Cmd> = emptyList()
+    private var labels: Map<String, Int> = emptyMap()
+    /** Variabel cerita: nama, kelamin, usia, jalur, dll. Bisa dipakai di teks sebagai {nama_variabel}. */
+    private val vars = mutableMapOf<String, String>()
+    private var playerGender = ""
     private var pc = 0
     private var currentIndex = 0
     private var playerName = ""
@@ -148,6 +156,7 @@ class GameActivity : Activity() {
         nameInput = findViewById(R.id.name_input)
         nameError = findViewById(R.id.name_error)
         nameSparkles = findViewById(R.id.name_sparkles)
+        choiceList = findViewById(R.id.choice_list)
         phone = PhoneScreen(findViewById(R.id.phone_overlay)) { onPhoneClosed() }
 
         audio = AudioPlayer(this)
@@ -299,6 +308,11 @@ class GameActivity : Activity() {
         }
         findViewById<FantasyButton>(R.id.name_ok).setOnClickListener { confirmName() }
 
+        playerGender = prefs.getString(KEY_GENDER, "") ?: ""
+        findViewById<View>(R.id.gender_male).setOnClickListener { selectGender(GENDER_MALE) }
+        findViewById<View>(R.id.gender_female).setOnClickListener { selectGender(GENDER_FEMALE) }
+        refreshGenderButtons()
+
         val card = findViewById<View>(R.id.name_card)
         card.alpha = 0f
         card.translationY = 30 * resources.displayMetrics.density
@@ -306,9 +320,36 @@ class GameActivity : Activity() {
             .setInterpolator(DecelerateInterpolator()).start()
     }
 
+    private fun selectGender(g: String) {
+        playerGender = g
+        refreshGenderButtons()
+        if ((nameError as TextView).text == getString(R.string.gender_error)) nameError.visibility = View.INVISIBLE
+    }
+
+    private fun refreshGenderButtons() {
+        val d = resources.displayMetrics.density
+        listOf(R.id.gender_male to GENDER_MALE, R.id.gender_female to GENDER_FEMALE).forEach { (id, g) ->
+            val on = playerGender == g
+            findViewById<TextView>(id).apply {
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = 14 * d
+                    if (on) {
+                        orientation = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM
+                        colors = intArrayOf(0xFFF8E3A8.toInt(), 0xFFD2AE62.toInt())
+                    } else {
+                        setColor(0xCC0A1029.toInt())
+                        setStroke((1.5f * d).toInt(), 0x99D2AE62.toInt())
+                    }
+                }
+                setTextColor(if (on) 0xFF1A1206.toInt() else 0xFFF6E7C8.toInt())
+            }
+        }
+    }
+
     private fun confirmName() {
         val name = nameInput.text.toString().trim().replace(Regex("\\s+"), " ")
-        if (name.isEmpty()) {
+        if (name.isEmpty() || playerGender.isEmpty()) {
+            (nameError as TextView).setText(if (name.isEmpty()) R.string.name_error else R.string.gender_error)
             nameError.visibility = View.VISIBLE
             nameInput.translationX = 0f
             val d = resources.displayMetrics.density
@@ -324,7 +365,11 @@ class GameActivity : Activity() {
         }
         nameError.visibility = View.INVISIBLE
         playerName = name
-        getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(KEY_NAME, name).apply()
+        getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
+            .putString(KEY_NAME, name)
+            .putString(KEY_GENDER, playerGender)
+            .apply()
+        vars.clear()
 
         (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
             .hideSoftInputFromWindow(nameInput.windowToken, 0)
@@ -343,11 +388,14 @@ class GameActivity : Activity() {
 
     private fun loadScript(path: String) {
         scriptPath = path
-        script = try {
-            assets.open(path).bufferedReader().use { StoryScript.parse(it.readLines()) }
+        try {
+            val parsed = assets.open(path).bufferedReader().use { StoryScript.parse(it.readLines()) }
+            script = parsed.cmds
+            labels = parsed.labels
         } catch (e: Exception) {
             Toast.makeText(this, getString(R.string.script_error, e.message), Toast.LENGTH_LONG).show()
-            emptyList()
+            script = emptyList()
+            labels = emptyMap()
         }
     }
 
@@ -376,13 +424,59 @@ class GameActivity : Activity() {
                 is Cmd.WaitForPhone -> { waitForPhone(); return }
                 is Cmd.Music -> if (c.name == null) audio.stopMusic() else audio.playMusic(c.name)
                 is Cmd.Sound -> audio.playSound(c.name)
+                is Cmd.Choice -> { showChoices(c); return }
+                is Cmd.Jump -> pc = labels[c.label] ?: pc
+                is Cmd.JumpIf -> if (check(c)) pc = labels[c.label] ?: pc
+                is Cmd.SetVar -> vars[c.variable] = fill(c.value)
+                is Cmd.AddVar -> {
+                    val now = vars[c.variable]?.toLongOrNull() ?: 0L
+                    vars[c.variable] = (now + c.amount).toString()
+                }
                 is Cmd.End -> { endStory(c.text); return }
             }
         }
         endStory("Bersambung…")
     }
 
-    private fun fill(s: String) = s.replace("{nama}", playerName).replace("{name}", playerName)
+    /**
+     * Isi teks: {nama} → nama pemain, {variabel} → nilai variabel,
+     * {teks laki-laki|teks perempuan} → sesuai jenis kelamin pemain.
+     */
+    private fun fill(s: String): String {
+        if (!s.contains('{')) return s
+        vars["nama"] = playerName
+        vars["kelamin"] = playerGender
+        return Regex("\\{([^{}]*)\\}").replace(s) { m ->
+            val body = m.groupValues[1]
+            if (body.contains('|')) {
+                if (playerGender == GENDER_FEMALE) body.substringAfter('|') else body.substringBefore('|')
+            } else {
+                vars[body] ?: (if (body == "name") playerName else m.value)
+            }
+        }
+    }
+
+    private fun check(c: Cmd.JumpIf): Boolean {
+        val left = vars[c.variable] ?: ""
+        val right = fill(c.value)
+        val ln = left.toDoubleOrNull()
+        val rn = right.toDoubleOrNull()
+        if (ln != null && rn != null) {
+            return when (c.op) {
+                "==" -> ln == rn
+                "!=" -> ln != rn
+                ">=" -> ln >= rn
+                "<=" -> ln <= rn
+                ">" -> ln > rn
+                else -> ln < rn
+            }
+        }
+        return when (c.op) {
+            "==" -> left.equals(right, ignoreCase = true)
+            "!=" -> !left.equals(right, ignoreCase = true)
+            else -> false
+        }
+    }
 
     private fun onScreenTap() {
         if (wait != Wait.TAP) return
@@ -399,7 +493,8 @@ class GameActivity : Activity() {
     private fun snapshot(): SaveData? {
         if (!storyStarted || wait == Wait.BUSY) return null
         val preview = when {
-            wait == Wait.PHONE -> "📱 ${messages.firstOrNull()?.first.orEmpty()}"
+            wait == Wait.PHONE -> "📱 ${messages.lastOrNull()?.first.orEmpty()}"
+            wait == Wait.CHOICE -> "Memilih: " + fill(fullText.toString())
             currentSpeaker != null -> "$currentSpeaker: $fullText"
             else -> fullText.toString()
         }
@@ -418,6 +513,7 @@ class GameActivity : Activity() {
             log = log.toList(),
             preview = preview,
             savedAt = System.currentTimeMillis(),
+            vars = vars.toMap() + mapOf("nama" to playerName, "kelamin" to playerGender),
         )
     }
 
@@ -428,6 +524,11 @@ class GameActivity : Activity() {
     /** Pulihkan layar persis seperti saat disimpan, lalu lanjutkan dari kalimat itu. */
     private fun restore(d: SaveData) {
         playerName = d.playerName
+        vars.clear()
+        vars.putAll(d.vars)
+        playerGender = d.vars["kelamin"]
+            ?: getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY_GENDER, GENDER_MALE)
+            ?: GENDER_MALE
         loadScript(d.script)
         storyStarted = true
         wait = Wait.BUSY
@@ -459,7 +560,15 @@ class GameActivity : Activity() {
         pc = d.index.coerceIn(0, script.size)
         // Kalimat yang disimpan akan tampil lagi, jangan sampai dobel di riwayat
         if (log.isNotEmpty() && script.getOrNull(pc) is Cmd.Line) log.removeLast()
-        handler.postDelayed({ fadeBlack(0f, 900) { next() } }, 300)
+        // Saat menyimpan di tengah pilihan: tampilkan lagi kalimat terakhir sebagai pertanyaan
+        val lastLine = log.lastOrNull()
+        val resumeChoice = script.getOrNull(pc) is Cmd.Choice && lastLine != null
+        handler.postDelayed({
+            fadeBlack(0f, 900) {
+                if (resumeChoice && lastLine != null) showLine(lastLine.first, lastLine.second, record = false, instant = true)
+                next()
+            }
+        }, 300)
     }
 
     // ================================================================== background & efek
@@ -563,7 +672,7 @@ class GameActivity : Activity() {
 
     // ================================================================== dialog
 
-    private fun showLine(speaker: String?, raw: String) {
+    private fun showLine(speaker: String?, raw: String, record: Boolean = true, instant: Boolean = false) {
         val text = fill(raw)
         val who = speaker?.let { fill(it) }
         narrationLine = who == null
@@ -583,14 +692,16 @@ class GameActivity : Activity() {
             dialog.animate().alpha(1f).translationY(0f).setDuration(260).start()
         }
 
-        log.addLast(who to text)
-        while (log.size > LOG_LIMIT) log.removeFirst()
+        if (record) {
+            log.addLast(who to text)
+            while (log.size > LOG_LIMIT) log.removeFirst()
+        }
 
         fullText = text
         typed = 0
         wait = Wait.TAP
         handler.removeCallbacks(typeTick)
-        if (settings.typeDelayMs <= 0L) {
+        if (instant || settings.typeDelayMs <= 0L) {
             finishTyping()
             return
         }
@@ -779,6 +890,65 @@ class GameActivity : Activity() {
     private fun closeLog() {
         logOverlay.animate().alpha(0f).setDuration(180).withEndAction {
             logOverlay.visibility = View.GONE
+        }.start()
+    }
+
+    // ================================================================== pilihan
+
+    private fun showChoices(c: Cmd.Choice) {
+        wait = Wait.CHOICE
+        if (typing) finishTyping()
+        setIndicator(false)
+        choiceList.removeAllViews()
+        val d = resources.displayMetrics.density
+        c.options.forEachIndexed { i, opt ->
+            val item = TextView(this).apply {
+                text = "${i + 1}. ${fill(opt.text)}"
+                setBackgroundResource(R.drawable.choice_item)
+                setTextColor(0xFF22222A.toInt())
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, (settings.fontSizeSp - 1f).coerceAtLeast(14f))
+                typeface = GameSettings.typeface(this@GameActivity, settings.fontStyle, false)
+                minHeight = (50 * d).toInt()
+                gravity = android.view.Gravity.CENTER_VERTICAL
+                setPadding((18 * d).toInt(), (10 * d).toInt(), (18 * d).toInt(), (10 * d).toInt())
+                elevation = 3 * d
+                alpha = 0f
+                translationY = 16 * d
+                setOnClickListener { pickChoice(c, i, this) }
+            }
+            choiceList.addView(item, LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply { if (i > 0) topMargin = (10 * d).toInt() })
+            item.animate().alpha(1f).translationY(0f)
+                .setStartDelay(120L + i * 90L).setDuration(320)
+                .setInterpolator(DecelerateInterpolator()).start()
+        }
+        choiceList.visibility = View.VISIBLE
+        // Geser kotak dialog ke atas bila tertimpa daftar pilihan
+        choiceList.post {
+            val overlap = dialog.bottom + (10 * d) - choiceList.top
+            dialog.animate().translationY(if (overlap > 0) -overlap else 0f).setDuration(250).start()
+        }
+    }
+
+    private fun pickChoice(c: Cmd.Choice, index: Int, view: View) {
+        if (wait != Wait.CHOICE) return
+        wait = Wait.BUSY
+        val opt = c.options[index]
+        log.addLast("➤ Pilihanmu" to fill(opt.text))
+        while (log.size > LOG_LIMIT) log.removeFirst()
+
+        view.animate().scaleX(1.03f).scaleY(1.03f).setDuration(120).withEndAction {
+            for (i in 0 until choiceList.childCount) {
+                choiceList.getChildAt(i).animate().alpha(0f).setDuration(220).start()
+            }
+            dialog.animate().translationY(0f).setDuration(250).start()
+            handler.postDelayed({
+                choiceList.visibility = View.GONE
+                choiceList.removeAllViews()
+                pc = labels[opt.label] ?: pc
+                next()
+            }, 260)
         }.start()
     }
 

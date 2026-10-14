@@ -1,7 +1,9 @@
 # Rancangan Game — Threads of Destiny: Living Parallel
 
 > Dokumen induk semua aturan & sistem game. Setiap keputusan baru dicatat di sini.
-> Status: ✅ sudah dibuat · 🔨 sedang dikerjakan · 📝 direncanakan · 💡 usulan Claude (menunggu persetujuan) · ❓ perlu keputusan
+> Status: ✅ sudah dibuat · 🔨 sedang dikerjakan · 📝 direncanakan · 💡 usulan Claude · ❓ perlu keputusan
+>
+> Usulan dunia (§2), cerita (§3), fase hidup (§4), dan keluarga (§7) **disetujui pemilik 14 Okt 2026**.
 >
 > Catatan progres & daftar tugas: **[PROGRES.md](PROGRES.md)** · Cara menulis naskah: **[NASKAH.md](NASKAH.md)**
 >
@@ -71,8 +73,7 @@ Tokoh utama sesekali **bermimpi tentang hidup paralelnya**, yaitu dirinya di jal
   dan memilih: memperbaiki hubungan, melepaskan, atau (setelah dewasa) menjadikannya pasangan.
 - Jenis kelamin sahabat ini menyesuaikan pilihan pemain, agar tetap bisa menjadi calon pasangan setelah dewasa.
 
-> Catatan: prolog yang sekarang (sudah tiba di kota besar, kuliah & kerja paruh waktu) **perlu ditulis ulang**
-> agar sesuai dengan awal baru: lulus SMP di Tanjung Lentera.
+> Prolog sudah ditulis ulang sesuai awal baru (build 7).
 
 ---
 
@@ -95,8 +96,8 @@ Setiap hari dalam game dimainkan ± 3–8 menit.
 
 ## 5. Alur pembuka ✅/📝
 1. Splash 3 detik → video intro → menu utama. ✅
-2. START GAME → isi nama ✅ → **pilih jenis kelamin** 📝
-3. Prolog masa lalu ✅ (isi perlu ditulis ulang sesuai Bab 1 💡)
+2. START GAME → isi nama + **pilih jenis kelamin** ✅
+3. Prolog masa kecil di Tanjung Lentera ✅ → pagi setelah lulus SMP, sarapan bersama keluarga ✅ → pesan misterius ✅ → **pilihan besar pertama** ✅
 4. Bangun tidur (kedip, buram), duduk di ranjang, pesan HP. ✅
 
 ---
@@ -131,7 +132,7 @@ Setiap hari dalam game dimainkan ± 3–8 menit.
 ---
 
 ## 7. Keluarga 📝
-- **Keluarga tokoh utama** (di desa): susunan anggota ❓ (usulan: ayah nelayan, ibu pemilik warung, satu adik).
+- **Keluarga tokoh utama** (di desa): **Ayah** (nelayan), **Ibu** (pemilik warung gorengan depan rumah), adik perempuan **Laras** (±11 tahun). ✅ muncul di Bab 1
 - **Karakter lain juga punya keluarga**: orang tua bisa merestui/menolak hubungan, saudara bisa ikut campur,
   keluarga bisa jadi jalur "orang dalam" pekerjaan.
 

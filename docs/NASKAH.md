@@ -20,6 +20,16 @@ Setelah file diubah dan di-commit, GitHub Actions otomatis membuat APK baru.
 `{nama}` bisa dipakai di mana saja (narasi, dialog, pesan HP) dan otomatis diganti nama pemain.
 Satu baris = satu kotak dialog. Pemain mengetuk layar untuk lanjut.
 
+### Teks sesuai jenis kelamin pemain
+Tulis `{teks untuk laki-laki|teks untuk perempuan}`:
+```
+Ayah: Nah, ini dia {jagoan|putri} Ayah yang baru lulus.
+```
+
+### Variabel di dalam teks
+`{nama_variabel}` diganti nilainya, misalnya `{usia}` atau `{jalur}` (lihat `@atur` di bawah).
+Variabel bawaan: `{nama}`, `{kelamin}` (`laki-laki` / `perempuan`).
+
 ## Perintah
 
 Perintah diawali `@`.
@@ -74,6 +84,45 @@ Jam ini juga dipakai di layar kunci HP.
 - Format: `.mp3`, `.ogg`, `.m4a`, atau `.wav`. Tulis nama file **tanpa** ekstensi.
 - File `assets/suara/notifikasi.mp3` (kalau ada) otomatis diputar saat pesan HP masuk.
 - Volume mengikuti halaman **Pengaturan**. Kalau file tidak ada, game tetap jalan tanpa suara.
+
+### Pilihan jawaban
+```
+@pilihan
+> Lanjut SMA di Kota Sakala -> sma
+> Tetap di desa dan bekerja -> kerja
+> SMA sambil bekerja -> keduanya
+
+:: sma
+{nama}: Aku mau lanjut SMA.
+@lompat malam
+
+:: kerja
+{nama}: Aku mau kerja dulu.
+@lompat malam
+
+:: keduanya
+{nama}: Aku mau sekolah sambil kerja.
+
+:: malam
+* Malam itu...
+```
+- Kalimat **sebelum** `@pilihan` tetap tampil sebagai pertanyaannya.
+- Setiap baris `> teks -> nama_label` adalah satu tombol pilihan (maksimal ±4 agar muat di layar).
+- `:: nama_label` menandai tempat tujuan. `@lompat nama_label` pindah ke sana.
+- Tanpa `@lompat`, cerita **lanjut ke baris berikutnya** (termasuk masuk ke label di bawahnya).
+- Nama label: huruf, angka, garis bawah, tanpa spasi. Label yang tidak ada → pesan error.
+
+### Variabel & syarat
+```
+@atur jalur = sma          isi variabel
+@atur usia = 15
+@tambah uang +50000        tambah / kurangi angka (pakai - untuk mengurangi)
+@jika jalur == kerja -> malam_kerja
+@jika usia >= 18 -> dewasa
+```
+- `@jika` melompat ke label hanya bila syaratnya benar; kalau tidak, lanjut ke baris berikutnya.
+- Pembanding: `==` `!=` `>=` `<=` `>` `<`. Angka dibandingkan sebagai angka, teks tidak membedakan huruf besar/kecil.
+- Variabel ikut tersimpan di data simpanan.
 
 ### Akhir
 ```
