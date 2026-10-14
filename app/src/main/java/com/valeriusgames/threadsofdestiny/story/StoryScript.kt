@@ -1,7 +1,7 @@
 package com.valeriusgames.threadsofdestiny.story
 
 /**
- * Pembaca file naskah (assets/naskah/*.txt).
+ * Pembaca file naskah (folder assets/naskah).
  * Panduan lengkap cara menulis naskah: docs/NASKAH.md
  */
 object StoryScript {
