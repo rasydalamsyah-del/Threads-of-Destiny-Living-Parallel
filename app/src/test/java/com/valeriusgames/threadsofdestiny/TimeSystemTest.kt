@@ -79,6 +79,53 @@ class TimeSystemTest {
         }
     }
 
+    // ---------------- jam mulai aktivitas ----------------
+
+    private fun act(name: String, places: Set<String>, slots: Set<String>, window: String? = null) = GameData.ActivityDef(
+        id = name, name = name, places = places, slots = slots, effects = emptyMap(), condition = null,
+        text = "", icon = "", minutes = 60,
+        startFrom = GameData.window(window)?.first, startUntil = GameData.window(window)?.second,
+    )
+
+    @Test fun activityStartWindow() {
+        val gd = GameDataStub.empty()
+        val melaut = act("Melaut bersama Ayah", setOf("desa"), setOf("pagi"), "04:00-06:00")
+        assertNull(gd.activityBlockedReason(melaut, 5 * 60))
+        assertNull(gd.activityBlockedReason(melaut, 6 * 60))
+        assertEquals("Sudah terlalu siang untuk melaut bersama Ayah (paling lambat 06:00)",
+            gd.activityBlockedReason(melaut, 10 * 60))
+        assertEquals("Sudah terlalu malam untuk melaut bersama Ayah (paling lambat 06:00)",
+            gd.activityBlockedReason(melaut, 20 * 60))
+        assertEquals("Belum bisa. Mulai pukul 04:00", gd.activityBlockedReason(melaut, 3 * 60))
+        // lewat tengah malam
+        val game = act("Begadang", setOf("kota"), setOf("malam"), "19:00-02:00")
+        assertNull(gd.activityBlockedReason(game, 23 * 60))
+        assertNull(gd.activityBlockedReason(game, 60))
+        assertEquals("Hanya bisa dimulai pukul 19:00–02:00", gd.activityBlockedReason(game, 10 * 60))
+        // tanpa jam mulai: pakai bagian hari
+        val dermaga = act("Dermaga", setOf("desa"), setOf("sore", "malam"))
+        assertNull(gd.activityBlockedReason(dermaga, 16 * 60))
+        assertTrue(gd.activityBlockedReason(dermaga, 9 * 60)!!.startsWith("Hanya bisa saat Sore"))
+        assertNull(gd.activityBlockedReason(act("Istirahat", setOf("semua"), setOf("semua")), 3 * 60))
+    }
+
+    /** Semua "mulai" di aktivitas.txt terbaca. */
+    @Test fun dataStartWindowsValid() {
+        File("src/main/assets/data/aktivitas.txt").readLines().map { it.trim() }.filter { it.startsWith("mulai") }.forEach { l ->
+            assertTrue("mulai tidak terbaca: $l", GameData.window(l.substringAfter('=').trim()) != null)
+        }
+    }
+
+    /** Aktivitas desa tidak muncul di kota (dan sebaliknya). */
+    @Test fun activitiesFollowLocation() {
+        val melaut = act("melaut", setOf("desa"), setOf("pagi"))
+        val mal = act("mal", setOf("kota"), setOf("siang"))
+        val rest = act("istirahat", setOf("semua"), setOf("semua"))
+        val gd = GameDataStub.with(listOf(melaut, mal, rest))
+        assertEquals(listOf("mal", "istirahat"), gd.activitiesAt("kota").map { it.id })
+        assertEquals(listOf("melaut", "istirahat"), gd.activitiesAt("desa").map { it.id })
+    }
+
     // ---------------- bagian hari ----------------
 
     @Test fun slotBoundaries() {

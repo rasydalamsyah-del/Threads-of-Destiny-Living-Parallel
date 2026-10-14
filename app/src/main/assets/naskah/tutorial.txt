@@ -78,7 +78,7 @@ Pemandu: Sewa kos, kiriman keluarga, dan gaji juga berjalan sesuai tanggal. Kamu
 
 # ---------- 6. WAKTU BEBAS ----------
 @waktu 6 · Waktu bebas
-@tunjuk bebas atas | Ini layar WAKTU BEBAS. Muncul di saat-saat tertentu, ketika cerita berhenti dan kamu menjalani hidupmu sendiri.<br><br>Atas: sisa kegiatan & waktu sekarang.<br>Daftar AKTIVITAS: makan, bekerja, istirahat, belajar... (masing-masing tertulis ⏱ lamanya & efeknya).
+@tunjuk bebas atas | Ini layar WAKTU BEBAS. Muncul di saat-saat tertentu, ketika cerita berhenti dan kamu menjalani hidupmu sendiri.<br><br>Atas: sisa kegiatan & waktu sekarang.<br>Daftar AKTIVITAS: makan, bekerja, istirahat, belajar... (masing-masing tertulis ⏱ lamanya & efeknya).<br>Yang belum/sudah lewat waktunya tampil REDUP di bagian "🕐 Belum bisa sekarang", contoh: "Sudah terlalu siang untuk melaut bersama Ayah (paling lambat 06:00)".
 @tunjuk bebas atas | Di bawahnya ada tombol Status & Tas, Belanja, HP, Menu, dan 🔎 Cari kerja.<br><br>"👥 Temui seseorang": ngobrol tentang topik tertentu atau memberi hadiah. Contoh: Bayu suka ngobrol soal laut dan sepak bola, dan senang diberi gorengan. Tapi jangan bahas pelajaran, dia bosan!<br><br>Saat Malam muncul tombol "Tidur" untuk memilih jam bangun.
 Pemandu: Sekarang giliranmu. Coba makan roti di Status & Tas, lalu pilih 2 kegiatan. Misalnya temui Bayu.
 @bebas 2

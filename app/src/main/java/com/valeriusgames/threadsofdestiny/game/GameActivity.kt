@@ -1422,18 +1422,30 @@ class GameActivity : Activity() {
             }
             sheetList.addView(sectionLabel("🕊️ Atau lakukan hal lain"))
         }
-        gameData.activitiesFor(place, life.slot)
-            .filter { a -> a.condition == null || checkCondition(a.condition) }
-            .forEach { a ->
-                val needEnergy = -(a.effects["energi"] ?: 0L)
-                val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
+        // Aktivitas di tempat ini: yang bisa dimulai sekarang di atas, yang belum/sudah lewat waktunya redup di bawah
+        val here = gameData.activitiesAt(place).filter { a -> a.condition == null || checkCondition(a.condition) }
+        val (open, blocked) = here.partition { gameData.activityBlockedReason(it, life.minute) == null }
+        open.forEach { a ->
+            val needEnergy = -(a.effects["energi"] ?: 0L)
+            val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
+            sheetList.addView(card(
+                title = "${a.icon}  ${a.name}",
+                sub = "⏱ ${LifeState.duration(a.minutes)}   " + effectSummary(a.effects),
+                note = if (tooTired) getString(R.string.too_tired) else null,
+                enabled = !tooTired,
+            ) { doActivity(a) })
+        }
+        if (blocked.isNotEmpty()) {
+            sheetList.addView(sectionLabel("🕐 Belum bisa sekarang"))
+            blocked.forEach { a ->
                 sheetList.addView(card(
                     title = "${a.icon}  ${a.name}",
                     sub = "⏱ ${LifeState.duration(a.minutes)}   " + effectSummary(a.effects),
-                    note = if (tooTired) getString(R.string.too_tired) else null,
-                    enabled = !tooTired,
-                ) { doActivity(a) })
+                    note = gameData.activityBlockedReason(a, life.minute),
+                    enabled = false,
+                ))
             }
+        }
         sheetButtonRow(
             getString(R.string.btn_status) to { openStatus(returnTo = { showFreeSheet() }) },
             getString(R.string.btn_shop) to { openShop() },

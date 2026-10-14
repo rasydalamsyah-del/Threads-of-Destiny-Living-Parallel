@@ -63,6 +63,12 @@ teks   = Kamu menggoreng pisang dan melayani pembeli seharian.
 - Bila `energi` yang dibutuhkan lebih besar dari energi pemain → tampil **"Terlalu lelah"** dan tidak bisa dipilih.
 - Setiap aktivitas memakan **satu** kesempatan dan memajukan waktu satu slot.
 
+### Jam mulai (`mulai`)
+```
+mulai  = 04:00-06:00     aktivitas hanya bisa DIMULAI di jam ini (boleh 19:00-02:00, melewati tengah malam)
+```
+Di luar jam itu tetap tampil redup dengan alasannya. Tanpa `mulai`, yang dipakai `waktu` (bagian hari).
+
 ## karakter.txt
 
 Setiap karakter punya data seperti ini (contoh lengkap ada di file-nya):

@@ -177,6 +177,9 @@ class GameData private constructor(
         val icon: String,
         /** Lama kegiatan dalam menit. */
         val minutes: Int,
+        /** Jam boleh MULAI (menit). null = mengikuti bagian hari. Bisa melewati tengah malam (19:00-02:00). */
+        val startFrom: Int? = null,
+        val startUntil: Int? = null,
     )
 
     data class ItemDef(
@@ -191,7 +194,7 @@ class GameData private constructor(
 
     companion object {
         /** Untuk unit test: data kosong. */
-        internal fun forTest(): GameData = GameData(emptyList(), emptyMap(), emptyMap(), emptyList(), emptyMap(),
+        internal fun forTest(activities: List<ActivityDef> = emptyList()): GameData = GameData(activities, emptyMap(), emptyMap(), emptyList(), emptyMap(),
             emptyMap(), emptyMap(), emptyMap(), emptyList(), emptyList(), emptyList())
 
         @Volatile private var cached: GameData? = null
@@ -210,6 +213,8 @@ class GameData private constructor(
                     text = m["teks"] ?: "",
                     icon = m["ikon"] ?: "•",
                     minutes = minutes(m["durasi"]) ?: 60,
+                    startFrom = window(m["mulai"])?.first,
+                    startUntil = window(m["mulai"])?.second,
                 )
             }
             val items = readSections(ctx, "data/barang.txt").associate { (id, m) ->
@@ -391,6 +396,14 @@ class GameData private constructor(
             return if (total > 0) total.toInt() else null
         }
 
+        /** "04:00-06:00" → (240, 360). Boleh melewati tengah malam: "19:00-02:00" → (1140, 120). */
+        internal fun window(v: String?): Pair<Int, Int>? {
+            val p = v?.split('-', '–')?.map { it.trim() }?.takeIf { it.size == 2 } ?: return null
+            val a = LifeState.parseClock(p[0]) ?: return null
+            val b = LifeState.parseClock(p[1]) ?: return null
+            return (a % 1440) to (b % 1440)
+        }
+
         /** "07:00-14:00" → (420, 840). Tanpa jam: dari bagian hari (pagi, siang, sore, malam). */
         internal fun hours(v: String?, slots: Set<String>): Pair<Int, Int>? {
             v?.split('-', '–')?.map { it.trim() }?.takeIf { it.size == 2 }?.let { (a, b) ->
@@ -449,6 +462,36 @@ class GameData private constructor(
             ("semua" in a.places || place.lowercase() in a.places) &&
                 ("semua" in a.slots || slot.label.lowercase() in a.slots)
         }
+
+    /** Semua aktivitas di tempat ini (dipakai untuk menampilkan yang belum bisa, redup). */
+    fun activitiesAt(place: String): List<ActivityDef> =
+        activities.filter { a -> "semua" in a.places || place.lowercase() in a.places }
+
+    /**
+     * Bisakah aktivitas dimulai sekarang? null = bisa. Selain itu: alasan untuk ditampilkan (redup).
+     * Bila ada jam "mulai", itu yang dipakai; kalau tidak, bagian hari ("waktu").
+     */
+    fun activityBlockedReason(a: ActivityDef, minute: Int): String? {
+        val from = a.startFrom
+        val until = a.startUntil
+        if (from != null && until != null) {
+            val wraps = until < from
+            val inWindow = if (wraps) minute >= from || minute <= until else minute in from..until
+            if (inWindow) return null
+            val range = LifeState.clock(from) + "–" + LifeState.clock(until)
+            return when {
+                wraps -> "Hanya bisa dimulai pukul $range"
+                minute < from && minute >= 4 * 60 -> "Belum bisa. Mulai pukul ${LifeState.clock(from)}"
+                minute < 4 * 60 && from >= 4 * 60 -> "Belum bisa. Mulai pukul ${LifeState.clock(from)}"
+                else -> "Sudah terlalu ${if (minute in 4 * 60 until 18 * 60) "siang" else "malam"} untuk " +
+                    a.name.replaceFirstChar { it.lowercase() } + " (paling lambat ${LifeState.clock(until)})"
+            }
+        }
+        if ("semua" in a.slots || LifeState.Slot.of(minute).label.lowercase() in a.slots) return null
+        val labels = LifeState.Slot.values().filter { it.label.lowercase() in a.slots }
+            .joinToString(" / ") { "${it.label} (${LifeState.clock(it.start)}–${LifeState.clock(it.end % 1440)})" }
+        return "Hanya bisa saat $labels"
+    }
 
     fun shopFor(place: String): List<ItemDef> =
         items.values.filter { "semua" in it.places || place.lowercase() in it.places }

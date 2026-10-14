@@ -9,6 +9,10 @@
 #  waktu  = pagi, siang, sore, malam (pisahkan koma), atau semua
 #           (Pagi 04:00–10:59 · Siang 11:00–14:59 · Sore 15:00–17:59 · Malam 18:00–03:59)
 #  durasi = lama kegiatan: 45 menit / 2 jam / 1,5 jam (bawaan 1 jam)
+#  mulai  = (opsional) jam boleh MULAI, contoh 04:00-06:00 (melaut subuh) atau 19:00-02:00 (lewat tengah malam).
+#           Di luar jam itu aktivitas tetap tampil REDUP dengan keterangan, mis. "Sudah terlalu siang untuk
+#           melaut bersama Ayah (paling lambat 06:00)". Tanpa "mulai", yang dipakai "waktu".
+#  Aktivitas hanya tampil di "tempat"-nya: aktivitas desa tidak muncul saat pemain di kota, dan sebaliknya.
 #  efek   = energi, kenyang, hidrasi, kewarasan, kesehatan, uang (+/-),
 #           atau variabel lain (mis. akademik +2)
 #  syarat = (opsional) contoh: jalur != kerja   atau   usia >= 18
@@ -32,6 +36,7 @@ ikon   = 🍳
 tempat = desa
 waktu  = pagi, siang, sore
 durasi = 3 jam
+mulai  = 05:30-17:00
 efek   = energi -20, uang +15000, kenyang -5, hidrasi -5, kewarasan -2
 teks   = Kamu menggoreng pisang dan melayani pembeli seharian. Ibu menyelipkan selembar uang ke tanganmu.
 
@@ -41,6 +46,7 @@ ikon   = 🚣
 tempat = desa
 waktu  = pagi
 durasi = 5 jam
+mulai  = 04:00-06:00
 efek   = energi -40, uang +40000, hidrasi -20, kenyang -10, kewarasan -3
 teks   = Ombak sedang tinggi. Tanganmu lecet menarik jaring, tapi hasil tangkapan hari ini lumayan.
 
@@ -59,6 +65,7 @@ ikon   = 🪁
 tempat = desa
 waktu  = siang, sore
 durasi = 1 jam
+mulai  = 13:00-20:00
 efek   = kewarasan +8, energi -8
 teks   = Laras memaksamu menerbangkan layang-layang. Kalian tertawa sampai lupa waktu.
 
@@ -98,6 +105,7 @@ ikon   = 🧭
 tempat = kota
 waktu  = siang, sore
 durasi = 2 jam
+mulai  = 08:00-17:00
 efek   = energi -15, hidrasi -10, kewarasan +4, wawasan_kota +1
 teks   = Kamu menyusuri jalan-jalan Sakala, menghafal arah dan nama-nama gang.
 
@@ -107,6 +115,7 @@ ikon   = 🔍
 tempat = kota
 waktu  = siang, sore
 durasi = 2 jam
+mulai  = 08:00-17:00
 efek   = energi -15, kewarasan -2, petunjuk_sahabat +1
 teks   = Kamu bertanya ke beberapa orang di sekitar stasiun. Tak ada yang tahu... tapi seorang tukang parkir sepertinya mengingat sesuatu.
 
@@ -118,6 +127,7 @@ ikon   = 🏛️
 tempat = kota
 waktu  = siang, sore
 durasi = 2 jam
+mulai  = 08:00-16:00
 syarat = jalur == sma
 efek   = energi -12, hidrasi -6, kewarasan -1, akademik +3, hidup_baik +1
 teks   = Perpustakaan kota sunyi dan sejuk. Kamu mengerjakan soal-soal sampai lampu baca mulai berkedip.
@@ -128,6 +138,7 @@ ikon   = 🏃
 tempat = kota
 waktu  = pagi
 durasi = 45 menit
+mulai  = 05:00-09:00
 efek   = energi -10, hidrasi -12, kesehatan +3, kewarasan +6, hidup_baik +1
 teks   = Udara pagi kota belum terlalu kotor. Napasmu terengah, tapi kepalamu terasa jernih.
 
@@ -139,6 +150,7 @@ ikon   = 🛍️
 tempat = kota
 waktu  = siang, sore, malam
 durasi = 3 jam
+mulai  = 10:00-21:00
 efek   = uang -120000, kewarasan +15, energi -10, kenyang +15, foya +1
 teks   = Lampu-lampu mal menyilaukan. Kamu membeli baju yang sebenarnya tidak perlu, lalu makan di restoran cepat saji. Rasanya menyenangkan... untuk sementara.
 
@@ -148,6 +160,7 @@ ikon   = 🧋
 tempat = kota
 waktu  = siang, sore, malam
 durasi = 1,5 jam
+mulai  = 08:00-22:00
 efek   = uang -45000, kewarasan +8, hidrasi +20, foya +1
 teks   = Segelas kopi susu seharga makan dua hari di desa. Kamu memotretnya dulu sebelum diminum.
 
@@ -157,5 +170,6 @@ ikon   = 🎮
 tempat = kota
 waktu  = malam
 durasi = 4 jam
+mulai  = 19:00-02:00
 efek   = uang -20000, kewarasan +10, energi -25, kesehatan -3, akademik -1, foya +1
 teks   = "Satu ronde lagi," katamu, untuk kesepuluh kalinya. Saat keluar warnet, langit sudah mulai terang.
