@@ -79,12 +79,12 @@ Pemandu: Sewa kos, kiriman keluarga, dan gaji juga berjalan sesuai tanggal. Kamu
 
 # ---------- 6. WAKTU BEBAS ----------
 @waktu 6 · Waktu bebas
-@tunjuk bebas atas | Ini layar WAKTU BEBAS. Muncul di saat-saat tertentu, ketika cerita berhenti dan kamu menjalani hidupmu sendiri.<br><br>Atas: sisa kegiatan & waktu sekarang.<br>Daftar AKTIVITAS: makan, bekerja, istirahat, belajar... (masing-masing tertulis ⏱ lamanya & efeknya).<br>Yang belum/sudah lewat waktunya tampil REDUP di bagian "🕐 Belum bisa sekarang", contoh: "Sudah terlalu siang untuk melaut bersama Ayah (paling lambat 06:00)".
+@tunjuk bebas atas | Ini layar WAKTU BEBAS. Muncul di saat-saat tertentu, ketika cerita berhenti dan kamu menjalani hidupmu sendiri.<br><br>Atas: jam sekarang & sampai jam berapa waktu bebasmu (contoh: "bebas sampai Senin 14:00").<br>Daftar AKTIVITAS: makan, bekerja, istirahat, belajar... (masing-masing tertulis ⏱ lamanya & efeknya).<br>Yang belum/sudah lewat waktunya tampil REDUP di bagian "🕐 Belum bisa sekarang", contoh: "Sudah terlalu siang untuk melaut bersama Ayah (paling lambat 06:00)".<br>Kegiatan juga tidak bisa diulang terus: makan bersama keluarga paling cepat 4 jam sekali, bantu warung 1× sehari, istirahat 2× sehari.
 @tunjuk bebas atas | Di bawahnya ada tombol Status & Tas, Belanja, HP, Menu, dan 🔎 Cari kerja.<br><br>"👥 Temui seseorang": hanya orang yang memang ada di sekitarmu SEKARANG. Contoh: Ayah tidur di pagi hari setelah melaut, Laras sekolah sampai siang. Teman seperti Bayu harus diajak janjian dulu lewat HP.<br><br>Saat bertemu: 💬 Ngobrol (😊 santai, 🔍 kenali ia lebih dalam, atau ❓ pertanyaan khusus sesuai cerita), 🎁 Beri hadiah (kalau tasmu berisi), 👋 Pamit.<br><br>Saat Malam muncul tombol "Tidur" untuk memilih jam bangun.
-Pemandu: Sekarang giliranmu. Coba makan roti di Status & Tas, lalu pilih 2 kegiatan. Misalnya temui Ibu dan ajak ia ngobrol.
-@bebas 2
+Pemandu: Sekarang giliranmu. Waktu bebasmu sampai pukul 14:00. Coba makan roti di Status & Tas, lalu lakukan kegiatan apa saja selama tenagamu cukup. Misalnya temui Ibu dan ajak ia ngobrol.
+@bebas sampai Senin 14:00
 
-Pemandu: Bagus! Jumlah kegiatan di waktu bebas ditentukan cerita. Setelah habis, cerita berlanjut.
+Pemandu: Bagus! Waktu bebas berjalan sampai jam yang ditentukan cerita (tertulis di atas). Kalau sudah tidak ada yang ingin dilakukan, ketuk "⏩ Santai sampai ..." untuk melanjutkan cerita.
 
 # ---------- 7. HP ----------
 @waktu 7 · HP-mu

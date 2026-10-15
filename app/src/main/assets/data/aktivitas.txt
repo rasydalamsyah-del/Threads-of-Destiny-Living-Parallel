@@ -17,6 +17,11 @@
 #           atau variabel lain (mis. akademik +2)
 #  syarat = (opsional) contoh: jalur != kerja   atau   usia >= 18
 #  teks   = narasi yang tampil setelah aktivitas dipilih
+#  batas  = (opsional) paling banyak berapa kali per hari, contoh 1
+#  jeda   = (opsional) jarak minimal sebelum boleh diulang, contoh 4 jam (makan) — dihitung dari jam mulai
+#  teks_ulang = (opsional) narasi bila dilakukan lagi di hari yang sama (mis. Ibu menegur)
+#  Yang sudah mencapai batas/jeda tampil REDUP: "Sudah dilakukan hari ini — besok lagi" /
+#  "Baru saja dilakukan — bisa lagi pukul 18:45".
 # ==========================================================
 
 # ---------------- DESA TANJUNG LENTERA ----------------
@@ -29,6 +34,9 @@ waktu  = pagi, siang, malam
 durasi = 45 menit
 efek   = kenyang +50, hidrasi +30, kewarasan +5
 teks   = Ibu memasak sayur asem dan ikan bakar. Laras tak berhenti bercerita, Ayah hanya tersenyum mendengarkan.
+batas  = 3
+jeda   = 4 jam
+teks_ulang = Kamu duduk lagi di meja makan. Ibu tertawa kecil: "Lapar lagi? Ya sudah, habiskan sisa lauk tadi."
 
 [bantu_warung]
 nama   = Bantu Ibu di warung
@@ -39,6 +47,7 @@ durasi = 3 jam
 mulai  = 05:30-17:00
 efek   = energi -20, uang +15000, kenyang -5, hidrasi -5, kewarasan -2
 teks   = Kamu menggoreng pisang dan melayani pembeli seharian. Ibu menyelipkan selembar uang ke tanganmu.
+batas  = 1
 
 [melaut]
 nama   = Melaut bersama Ayah
@@ -49,6 +58,7 @@ durasi = 5 jam
 mulai  = 04:00-06:00
 efek   = energi -40, uang +40000, hidrasi -20, kenyang -10, kewarasan -3
 teks   = Ombak sedang tinggi. Tanganmu lecet menarik jaring, tapi hasil tangkapan hari ini lumayan.
+batas  = 1
 
 [dermaga]
 nama   = Duduk di dermaga mercusuar
@@ -58,6 +68,7 @@ waktu  = sore, malam
 durasi = 1,5 jam
 efek   = kewarasan +12, energi -5
 teks   = Angin laut menyentuh wajahmu. Mercusuar tua itu masih berdiri, sama seperti dulu... hanya saja kali ini kamu duduk sendirian.
+batas  = 1
 
 [main_laras]
 nama   = Menemani Laras bermain
@@ -68,6 +79,7 @@ durasi = 1 jam
 mulai  = 13:00-20:00
 efek   = kewarasan +8, energi -8
 teks   = Laras memaksamu menerbangkan layang-layang. Kalian tertawa sampai lupa waktu.
+batas  = 1
 
 [belajar]
 nama   = Belajar untuk persiapan SMA
@@ -78,15 +90,31 @@ durasi = 2 jam
 syarat = jalur != kerja
 efek   = energi -12, kewarasan -2, akademik +2
 teks   = Kamu membuka buku-buku lama. Soal-soal matematika itu tetap saja membuat kepala pusing.
+batas  = 2
+jeda   = 2 jam
 
 [istirahat]
-nama   = Istirahat sebentar
+nama   = Istirahat sebentar di kamar
 ikon   = 🛏️
-tempat = semua
+tempat = desa
 waktu  = semua
 durasi = 1 jam
 efek   = energi +25, kewarasan +3
+batas  = 2
+jeda   = 3 jam
 teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristirahat.
+teks_ulang = Baru saja memejamkan mata, Ibu melongok dari pintu: "Tidur lagi? Anak muda kok tidur terus. Bantu Ibu sebentar, dong!" Kamu tetap berbaring... tapi rasanya tidak setenang tadi.
+[istirahat_kos]
+nama   = Istirahat sebentar di kos
+ikon   = 🛏️
+tempat = kota
+waktu  = semua
+durasi = 1 jam
+efek   = energi +25, kewarasan +3
+batas  = 2
+jeda   = 3 jam
+teks   = Kamu berbaring di kasur tipis kamar kos, memandangi langit-langit sampai matamu terpejam.
+teks_ulang = Kamu berbaring lagi. Kamar kos sepi sekali. Badanmu memang butuh istirahat, tapi rasanya hari ini terbuang begitu saja.
 
 # ---------------- KOTA SAKALA ----------------
 
@@ -98,6 +126,8 @@ waktu  = pagi, sore, malam
 durasi = 1 jam
 efek   = kewarasan +10, energi -8, hidrasi -6
 teks   = Lampu-lampu taman mulai menyala. Orang-orang berlalu-lalang, tak satu pun yang kamu kenal.
+batas  = 2
+jeda   = 3 jam
 
 [jelajah_kota]
 nama   = Menjelajah sudut kota
@@ -108,6 +138,7 @@ durasi = 2 jam
 mulai  = 08:00-17:00
 efek   = energi -15, hidrasi -10, kewarasan +4, wawasan_kota +1
 teks   = Kamu menyusuri jalan-jalan Sakala, menghafal arah dan nama-nama gang.
+batas  = 1
 
 [cari_jejak]
 nama   = Mencari jejak sahabat lama
@@ -118,6 +149,7 @@ durasi = 2 jam
 mulai  = 08:00-17:00
 efek   = energi -15, kewarasan -2, petunjuk_sahabat +1
 teks   = Kamu bertanya ke beberapa orang di sekitar stasiun. Tak ada yang tahu... tapi seorang tukang parkir sepertinya mengingat sesuatu.
+batas  = 1
 
 # ---------------- KOTA: HIDUP BAIK ----------------
 
@@ -131,6 +163,7 @@ mulai  = 08:00-16:00
 syarat = jalur == sma
 efek   = energi -12, hidrasi -6, kewarasan -1, akademik +3, hidup_baik +1
 teks   = Perpustakaan kota sunyi dan sejuk. Kamu mengerjakan soal-soal sampai lampu baca mulai berkedip.
+batas  = 1
 
 [lari_pagi]
 nama   = Lari pagi keliling taman
@@ -141,6 +174,7 @@ durasi = 45 menit
 mulai  = 05:00-09:00
 efek   = energi -10, hidrasi -12, kesehatan +3, kewarasan +6, hidup_baik +1
 teks   = Udara pagi kota belum terlalu kotor. Napasmu terengah, tapi kepalamu terasa jernih.
+batas  = 1
 
 # ---------------- KOTA: FOYA-FOYA ----------------
 
@@ -153,6 +187,7 @@ durasi = 3 jam
 mulai  = 10:00-21:00
 efek   = uang -120000, kewarasan +15, energi -10, kenyang +15, foya +1
 teks   = Lampu-lampu mal menyilaukan. Kamu membeli baju yang sebenarnya tidak perlu, lalu makan di restoran cepat saji. Rasanya menyenangkan... untuk sementara.
+batas  = 1
 
 [kafe_kekinian]
 nama   = Ngopi di kafe kekinian
@@ -163,6 +198,7 @@ durasi = 1,5 jam
 mulai  = 08:00-22:00
 efek   = uang -45000, kewarasan +8, hidrasi +20, foya +1
 teks   = Segelas kopi susu seharga makan dua hari di desa. Kamu memotretnya dulu sebelum diminum.
+batas  = 1
 
 [begadang_game]
 nama   = Begadang main game di warnet
@@ -173,3 +209,4 @@ durasi = 4 jam
 mulai  = 19:00-02:00
 efek   = uang -20000, kewarasan +10, energi -25, kesehatan -3, akademik -1, foya +1
 teks   = "Satu ronde lagi," katamu, untuk kesepuluh kalinya. Saat keluar warnet, langit sudah mulai terang.
+batas  = 1

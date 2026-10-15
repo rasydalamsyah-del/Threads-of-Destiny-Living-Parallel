@@ -166,5 +166,52 @@ if os.path.exists(ob):
             fields[k.strip().lower()] = v.strip()
     check_entry(cur, start, fields)
 
+# data/pesan.txt: setiap pesan punya balasan lengkap; pesan cerita dari karakter harus ada entrinya
+def entries(path):
+    out, cur, start = [], None, 0
+    for n, raw in enumerate(open(path, encoding="utf-8"), 1):
+        l = raw.strip()
+        if not l or l.startswith("#"):
+            continue
+        if l.startswith("[") and l.endswith("]"):
+            cur = {"_id": l[1:-1].strip(), "_line": n}
+            out.append(cur)
+        elif "=" in l and cur is not None:
+            k, v = l.split("=", 1)
+            cur[k.strip().lower()] = v.strip()
+    return out
+
+ps = os.path.join(data, "pesan.txt")
+msgs = entries(ps) if os.path.exists(ps) else []
+for m in msgs:
+    if m.get("dari", "*") != "*" and m.get("dari") not in chars:
+        err(ps, m["_line"], f"[{m['_id']}] dari '{m.get('dari')}' tidak ada di data/karakter.txt")
+    if m.get("jenis", "acak") not in ("cerita", "acak", "sistem"):
+        err(ps, m["_line"], f"[{m['_id']}] jenis harus cerita / acak / sistem")
+    for k in ("isi", "hangat", "balas_hangat", "singkat", "balas_singkat"):
+        if not m.get(k):
+            err(ps, m["_line"], f"[{m['_id']}] kolom '{k}' kosong")
+name_to_id = {}
+for c in entries(os.path.join(data, "karakter.txt")):
+    for k in ("nama", "nama_l", "nama_p"):
+        if c.get(k):
+            name_to_id[c[k].lower()] = c["_id"]
+for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
+    for n, raw in enumerate(open(f, encoding="utf-8"), 1):
+        l = raw.strip()
+        if not l.startswith("@hp pesan ") or "|" not in l:
+            continue
+        sender, text = l[len("@hp pesan "):].split("|", 1)
+        cid = name_to_id.get(sender.strip().lower())
+        if cid and not any(m.get("dari") in (cid, "*") and m.get("isi", "").strip() == text.strip() for m in msgs):
+            err(f, n, f"Pesan dari {sender.strip()} belum punya pilihan balasan di data/pesan.txt (isi harus sama persis)")
+
+# data/aktivitas.txt: batas & jeda
+for a in entries(os.path.join(data, "aktivitas.txt")):
+    if a.get("batas") and not a["batas"].isdigit():
+        err(os.path.join(data, "aktivitas.txt"), a["_line"], f"[{a['_id']}] batas harus angka")
+    if a.get("jeda") and not re.match(r"^\d+([.,]\d+)?\s*(jam|menit)?$", a["jeda"]):
+        err(os.path.join(data, "aktivitas.txt"), a["_line"], f"[{a['_id']}] jeda contoh: 4 jam / 90 menit")
+
 print(f"Pemeriksaan naskah selesai: {errors} kesalahan.")
 sys.exit(1 if errors else 0)

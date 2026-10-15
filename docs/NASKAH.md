@@ -134,9 +134,11 @@ Jam ini juga dipakai di layar kunci HP.
 @barang air_mineral 2     masukkan barang ke tas (id dari data/barang.txt)
 @maju 1                   loncat ke bagian hari berikutnya (Malam → tidur sampai 06:00)
 @maju 2 jam               majukan jam (juga: @maju 30 menit). Waktu yang dimajukan cerita tidak dihitung bolos
-@bebas 2                  waktu bebas: 2 kegiatan (tidur mengakhirinya), lalu naskah lanjut
+@bebas 2                  (lama) waktu bebas 2 kegiatan — sebaiknya tidak dipakai lagi; pakai "sampai"
 @bebas 5 hari             waktu bebas selama 5 hari (pemain makan, sekolah/kerja, tidur sendiri)
-@bebas sampai Sabtu 15:00 waktu bebas sampai hari & jam tertentu
+@bebas sampai Sabtu 15:00 waktu bebas sampai hari & jam tertentu (DISARANKAN). Pemain bebas berkegiatan selama
+                          tenaganya cukup; tombol "⏩ Santai sampai ..." untuk langsung lanjut; Tidur hanya muncul
+                          bila waktu bebas masih ≥ 8 jam (tidak melompati kelanjutan cerita)
 ```
 - Saat `@bebas`, pemain memilih aktivitas dari `data/aktivitas.txt`, bisa membuka **Status & Tas** dan **Belanja**.
   Saat Malam ada tombol **Tidur sampai pagi**.
@@ -192,6 +194,7 @@ Jam ini juga dipakai di layar kunci HP.
 @hp pesan Bayu | ...              pesan dari karakter masuk ke aplikasi Chat (bisa dibalas)
 ```
 - Pesan dari karakter yang tidak dibalas **2 hari** otomatis dihitung `abaikan_chat`.
+- `@tunggu_hp`: cerita baru lanjut setelah pesan dari cerita **dibuka di Chat** (menutup HP tanpa membaca → diingatkan). Setiap `@hp pesan` dari karakter wajib punya pilihan balasan di `data/pesan.txt`.
 - Pemain bisa **mengajak ketemu** lewat Chat. Datang = `menepati_janji`, tidak datang = `ingkar_janji` (+ pesan kecewa).
 - Variabel otomatis: `misterius_dibalas` (pemain membalas Nomor Tidak Dikenal), `bohong_wawancara_<id_pekerjaan>`.
 

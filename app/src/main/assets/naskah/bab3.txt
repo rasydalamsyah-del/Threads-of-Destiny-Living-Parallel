@@ -73,6 +73,8 @@ Nadia: ...Begitu.
 
 :: pesan_nadia
 @hp pesan Nadia | Tadi sore ada anak pakai gelang merah lewat depan toko. Dia naik kereta jurusan Pelabuhan. Sabtu sore biasanya dia lewat lagi, kata ayahku.
+@tunggu_hp
+{nama}: Gelang merah... Sabtu sore. Aku harus ke sana.
 @catatan Petunjuk #3 — Kata Nadia: anak bergelang merah lewat Stasiun Besar, naik kereta jurusan Pelabuhan, biasanya Sabtu sore.
 
 :: bebas_kedua

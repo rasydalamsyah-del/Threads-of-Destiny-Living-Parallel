@@ -15,6 +15,8 @@ class PhoneState {
         var pendingSince = -1
         /** Hari terakhir pemain membalas (bonus Cinta hanya sekali sehari). */
         var repliedDay = -1
+        /** Id pesan (data/pesan.txt) yang sedang menunggu balasan; menentukan pilihan balasannya. */
+        var pendingRef = ""
     }
 
     /** Janji ketemu dengan karakter pada hari & waktu tertentu. */
@@ -58,7 +60,7 @@ class PhoneState {
             threads.values.forEach { t ->
                 put(JSONObject().apply {
                     put("key", t.key); put("title", t.title); put("unread", t.unread)
-                    put("pending", t.pendingSince); put("replied", t.repliedDay)
+                    put("pending", t.pendingSince); put("replied", t.repliedDay); put("ref", t.pendingRef)
                     put("msgs", JSONArray().apply {
                         t.msgs.takeLast(40).forEach { m ->
                             put(JSONObject().put("me", m.fromMe).put("text", m.text).put("day", m.day))
@@ -99,6 +101,7 @@ class PhoneState {
                         t.unread = j.optInt("unread")
                         t.pendingSince = j.optInt("pending", -1)
                         t.repliedDay = j.optInt("replied", -1)
+                        t.pendingRef = j.optString("ref", "")
                         j.optJSONArray("msgs")?.let { ms ->
                             for (k in 0 until ms.length()) {
                                 val m = ms.getJSONObject(k)

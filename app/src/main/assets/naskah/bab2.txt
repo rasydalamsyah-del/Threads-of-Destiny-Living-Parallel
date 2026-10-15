@@ -79,18 +79,20 @@ Laras: Kak... nanti pulang, kan? Janji?
 * {nama} meletakkan tas di lantai. Untuk pertama kalinya, tidak ada suara Ibu dari dapur. Tidak ada Laras yang merecoki.
 * Di kota ini, tidak ada yang akan memasakkan makanan untukmu. Belanjalah di minimarket, dan jaga uangmu baik-baik.
 * HP-mu kini berisi aplikasi Chat, Kontak, Kalender, Lowongan, Dompet, Catatan, dan Sosmed. Buka lewat ikon HP, atau tombol 📱 HP saat waktu bebas.
-@bebas 1
+* Waktu bebasmu sampai malam (pukul 19:30).
+@bebas sampai Sabtu 19:30
 
 @kalender Sabtu 20:00
 @latar kos_kamar
 * Malam pertama di Kota Sakala terasa panjang.
 @hp pesan Ibu | Sudah sampai, Nak? Sudah makan belum? Jangan lupa kunci pintu.
 @tunggu_hp
-{nama}: Sudah, Bu... Aku baik-baik saja.
+* {nama} memandangi pesan Ibu lama sekali. Baru sehari pergi, rumah sudah terasa jauh.
 @maju 1
 @waktu Minggu, 12 Juli 2026
 * Hari Minggu sebelum sekolah dimulai. Waktunya mengenal kota ini, atau mencari jejak seseorang.
-@bebas 4
+* Waktu bebasmu sampai pukul 21:00.
+@bebas sampai Minggu 21:00
 
 
 # ---------- SENIN: HARI PERTAMA SEKOLAH ----------

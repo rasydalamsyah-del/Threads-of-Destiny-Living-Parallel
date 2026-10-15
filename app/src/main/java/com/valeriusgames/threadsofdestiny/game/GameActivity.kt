@@ -127,6 +127,8 @@ class GameActivity : Activity() {
     private val shownChars = linkedMapOf<String, Pair<String, String>>()
     private var panelCharId: String? = null
     private var meetingTalks = 0
+    /** Percakapan berisi pesan dari cerita yang harus dibaca sebelum cerita lanjut (@tunggu_hp). */
+    private val storyMessageKeys = mutableSetOf<String>()
     private var meetingGaveGift = false
     private var meetingGifted = false
 
@@ -539,7 +541,12 @@ class GameActivity : Activity() {
                     return
                 }
                 is Cmd.PhoneIcon -> setPhoneIconVisible(c.visible)
-                is Cmd.PhoneMessage -> receiveMessage(fill(c.sender), fill(c.text))
+                is Cmd.PhoneMessage -> {
+                    val sender = fill(c.sender)
+                    val ref = gameData.findCharacter(sender)?.let { ch -> gameData.storyMessage(ch.id, c.text)?.id }
+                    receiveMessage(sender, fill(c.text), ref)
+                    storyMessageKeys += messageKey(sender)
+                }
                 is Cmd.WaitForPhone -> { waitForPhone(); return }
                 is Cmd.Music -> if (c.name == null) audio.stopMusic() else audio.playMusic(c.name)
                 is Cmd.Sound -> audio.playSound(c.name)
@@ -1464,7 +1471,7 @@ class GameActivity : Activity() {
         }
         // Aktivitas di tempat ini: yang bisa dimulai sekarang di atas, yang belum/sudah lewat waktunya redup di bawah
         val here = gameData.activitiesAt(place).filter { a -> a.condition == null || checkCondition(a.condition) }
-        val (open, blocked) = here.partition { gameData.activityBlockedReason(it, life.minute) == null }
+        val (open, blocked) = here.partition { activityBlock(it) == null }
         open.forEach { a ->
             val needEnergy = -(a.effects["energi"] ?: 0L)
             val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
@@ -1481,7 +1488,7 @@ class GameActivity : Activity() {
                 sheetList.addView(card(
                     title = "${a.icon}  ${a.name}",
                     sub = "⏱ ${LifeState.duration(a.minutes)}   " + effectSummary(a.effects),
-                    note = gameData.activityBlockedReason(a, life.minute),
+                    note = activityBlock(a),
                     enabled = false,
                 ))
             }
@@ -1509,7 +1516,18 @@ class GameActivity : Activity() {
                 ) { meetCharacter(c) })
             }
         }
-        if (life.slot == LifeState.Slot.MALAM) {
+        // Waktu bebas sampai jam tertentu: boleh langsung lanjut tanpa kegiatan lagi
+        val left = freeMinutesLeft()
+        if (left != null && left in 1..12 * 60) {
+            val until = vars["_bebas_sampai"]?.toLongOrNull() ?: 0L
+            sheetButtonRow("⏩ Santai sampai ${LifeState.clock((until % 1440).toInt())} (lanjutkan cerita)" to {
+                closeSheet()
+                passTime(left)
+                if (!life.dead) endFree()
+            })
+        }
+        // Tidur hanya bila waktu bebas masih panjang (tidak melompati kelanjutan cerita)
+        if (life.slot == LifeState.Slot.MALAM && (left == null || left >= 8 * 60)) {
             sheetButtonRow(
                 getString(R.string.btn_sleep) to { sleepUntilMorning() },
                 "📱 HP" to { openPhoneFromSheet() },
@@ -1525,8 +1543,36 @@ class GameActivity : Activity() {
         }
     }
 
+    /** Menit tersisa sampai waktu bebas berakhir (null = waktu bebas berdasarkan jumlah kegiatan). */
+    private fun freeMinutesLeft(): Int? =
+        vars["_bebas_sampai"]?.toLongOrNull()?.let { (it - life.absMinute).coerceAtLeast(0).coerceAtMost(Int.MAX_VALUE.toLong()).toInt() }
+
+    /** Catatan pemakaian kegiatan: "hari:jumlah:menit_absolut_terakhir". */
+    private fun activityUse(id: String): Triple<Int, Int, Long?> {
+        val p = vars["_akt_$id"]?.split(':') ?: return Triple(life.day, 0, null)
+        val day = p.getOrNull(0)?.toIntOrNull() ?: life.day
+        val count = if (day == life.day) p.getOrNull(1)?.toIntOrNull() ?: 0 else 0
+        return Triple(life.day, count, p.getOrNull(2)?.toLongOrNull())
+    }
+
+    /** Alasan kegiatan belum bisa dilakukan sekarang (jam mulai, batas per hari, jeda, sisa waktu bebas). */
+    private fun activityBlock(a: GameData.ActivityDef): String? {
+        gameData.activityBlockedReason(a, life.minute)?.let { return it }
+        val (_, used, last) = activityUse(a.id)
+        GameData.repeatBlock(a.maxPerDay, a.cooldown, used, last, life.absMinute)?.let { return it }
+        val left = freeMinutesLeft()
+        if (left != null && left < a.minutes && left <= 24 * 60) {
+            val until = vars["_bebas_sampai"]?.toLongOrNull() ?: 0L
+            return "Waktunya tidak cukup — cerita berlanjut pukul ${LifeState.clock((until % 1440).toInt())}"
+        }
+        return null
+    }
+
     private fun doActivity(a: GameData.ActivityDef) {
         closeSheet()
+        val (_, used, _) = activityUse(a.id)
+        vars["_akt_${a.id}"] = "${life.day}:${used + 1}:${life.absMinute}"
+        val text = if (used > 0 && a.repeatText != null) a.repeatText else a.text
         val extra = life.applyEffects(a.effects)
         extra.forEach { (k, v) ->
             vars[k] = ((vars[k]?.toLongOrNull() ?: 0L) + v).toString()
@@ -1542,7 +1588,7 @@ class GameActivity : Activity() {
         passTime(a.minutes)
         if (life.dead) return
         afterTap = { continueFree() }
-        showLine(null, a.text.ifEmpty { a.name } + "\n(⏱ ${LifeState.duration(a.minutes)} · sekarang ${life.timeText})")
+        showLine(null, text.ifEmpty { a.name } + "\n(⏱ ${LifeState.duration(a.minutes)} · sekarang ${life.timeText})")
     }
 
     private fun continueFree() {
@@ -2030,13 +2076,13 @@ class GameActivity : Activity() {
                 val place = (vars["lokasi"] ?: "desa").lowercase()
                 if (excused || ("semua" !in c.places && place !in c.places)) {
                     // pemain sudah pindah tempat (mis. berangkat ke kota): janji batal baik-baik
-                    receiveMessage(c.name, if (excused) "Eh, tadi kamu lagi sibuk ya? Nggak apa-apa, lain kali aja 🙂"
-                        else "Oh iya, kamu udah pindah ya. Janjinya nanti aja kalau kamu pulang 🙂")
+                    val ref = if (excused) "janji_maklum" else "janji_pindah"
+                    receiveMessage(c.name, gameData.message(ref)?.text ?: "Lain kali aja, ya 🙂", ref)
                     return@let
                 }
                 announce(social.behave(gameData, c.id, "ingkar_janji"))
                 notice("💔 Kamu tidak datang ke janji dengan ${c.name}")
-                receiveMessage(c.name, "Aku nungguin kamu tadi... Kok nggak datang?")
+                receiveMessage(c.name, gameData.message("janji_kecewa")?.text ?: "Kok nggak datang?", "janji_kecewa")
             }
         }
     }
@@ -2542,6 +2588,7 @@ class GameActivity : Activity() {
         pendingEvents.clear()
         noticeQueue.clear()
         messages.clear()
+        storyMessageKeys.clear()
         log.clear()
         vars.clear()
         vars["nama"] = playerName
@@ -2888,10 +2935,12 @@ class GameActivity : Activity() {
         when {
             c != null -> {
                 val canReply = t.pendingSince >= 0
-                pButtons(
-                    Triple("😊 Balas hangat", canReply) { replyChat(c, t, warm = true) },
-                    Triple("Balas singkat", canReply) { replyChat(c, t, warm = false) },
-                )
+                if (canReply) {
+                    // pilihan balasan sesuai isi pesannya (data/pesan.txt)
+                    val m = gameData.message(t.pendingRef)
+                    pButtons(Triple("😊 " + fill(m?.warm ?: "Oke, makasih udah ngabarin!"), true) { replyChat(c, t, warm = true) })
+                    pButtons(Triple(fill(m?.short ?: "Oke."), true) { replyChat(c, t, warm = false) })
+                }
                 val place = (vars["lokasi"] ?: "desa").lowercase()
                 val sameArea = "semua" in c.places || place in c.places
                 val canMeet = sameArea && c.meetable && social.rel(c).met && phoneData.appts.none { it.charId == c.id }
@@ -2909,16 +2958,17 @@ class GameActivity : Activity() {
     }
 
     private fun replyChat(c: GameData.CharacterDef, t: PhoneState.Thread, warm: Boolean) {
-        val mine = if (warm) listOf("Hehe, iya! Kamu sendiri lagi apa?", "Makasih udah ngabarin 😊", "Aku juga kangen ngobrol sama kamu.").random()
-            else listOf("Ok.", "Iya.", "Sip.").random()
+        val m = gameData.message(t.pendingRef)
+        val mine = fill(if (warm) m?.warm ?: "Oke, makasih udah ngabarin!" else m?.short ?: "Oke.")
+        val theirs = if (warm) m?.warmReply else m?.shortReply
         t.msgs += PhoneState.Msg(true, mine, life.day)
         t.pendingSince = -1
+        t.pendingRef = ""
         if (t.repliedDay != life.day) {
             t.repliedDay = life.day
             announce(social.changeLove(gameData, c.id, if (warm) 3 else 1))
         }
-        val replies = c.text["chat_balas"]?.split('|')?.map { it.trim() }?.filter { it.isNotEmpty() }
-        replies?.randomOrNull()?.let { t.msgs += PhoneState.Msg(false, fill(it), life.day) }
+        theirs?.takeIf { it.isNotBlank() }?.let { t.msgs += PhoneState.Msg(false, fill(it), life.day) }
         renderThread(t.key)
     }
 
@@ -2945,16 +2995,26 @@ class GameActivity : Activity() {
         }
         options.take(4).chunked(2).forEach { pair ->
             val btns = pair.map { (dy, sl) ->
-                Triple("${dayLabel(dy)} ${sl.label.lowercase()}", true) { inviteMeet(c, t, dy, sl) }
+                Triple(meetLabel(dy, sl).replaceFirstChar { it.uppercase() }, true) { inviteMeet(c, t, dy, sl) }
             }
             pButtons(*btns.toTypedArray())
         }
         pButtons(Triple("Batal", true) { renderThread(t.key) })
     }
 
+    /** "sore ini", "besok siang", "Rabu pagi". */
+    private fun meetLabel(day: Int, slot: LifeState.Slot): String {
+        val s = slot.label.lowercase()
+        return when (day - life.day) {
+            0 -> "$s ini"
+            1 -> "besok $s"
+            else -> "${LifeState.WEEKDAYS[life.weekdayOf(day)]} $s"
+        }
+    }
+
     private fun inviteMeet(c: GameData.CharacterDef, t: PhoneState.Thread, day: Int, slot: LifeState.Slot) {
-        val label = "${dayLabel(day)} ${slot.label.lowercase()}"
-        t.msgs += PhoneState.Msg(true, "Ketemu yuk, $label?", life.day)
+        val label = meetLabel(day, slot)
+        t.msgs += PhoneState.Msg(true, "${label.replaceFirstChar { it.uppercase() }} ada waktu? Aku mau ketemu.", life.day)
         val blocker = social.blockedBy(gameData, c)
         val r = social.rel(c)
         val reply = when {
@@ -3328,10 +3388,18 @@ class GameActivity : Activity() {
             if (sent >= 2) return@forEach
             val r = social.rel(c)
             if (!r.met || r.love < 25) return@forEach
-            val lines = c.text["chat"]?.split('|')?.map { it.trim() }?.filter { it.isNotEmpty() } ?: return@forEach
+            // pesan sesuai keadaan (desa/kota, pekerjaan), tidak mengulang pesan terakhir, dan
+            // tidak menimpa pesan yang belum dibalas
+            val th = phoneData.threads[c.id]
+            if (th != null && th.pendingSince >= 0) return@forEach
+            val last = th?.msgs?.lastOrNull { !it.fromMe }?.text
+            val options = gameData.randomMessages(c.id)
+                .filter { (it.condition == null || checkCondition(it.condition)) && fill(it.text) != last }
+            if (options.isEmpty()) return@forEach
             val chance = 0.12f + r.love / 400f
             if (kotlin.random.Random.nextFloat() < chance) {
-                receiveMessage(c.name, fill(lines.random()))
+                val m = options.random()
+                receiveMessage(c.name, fill(m.text), m.id)
                 sent++
             }
         }
@@ -3982,14 +4050,17 @@ class GameActivity : Activity() {
         }
     }
 
-    private fun receiveMessage(sender: String, text: String) {
+    private fun receiveMessage(sender: String, text: String, ref: String? = null) {
         setPhoneIconVisible(true)
         val ch = gameData.findCharacter(sender)
         val key = messageKey(sender)
         val th = phoneData.thread(key, ch?.name ?: sender)
         th.msgs += PhoneState.Msg(false, text, life.day)
         th.unread++
-        if (ch != null) th.pendingSince = life.day
+        if (ch != null) {
+            th.pendingSince = life.day
+            th.pendingRef = ref ?: ""
+        }
         messages.add(sender to text)
         phone.addMessage(sender, text, key)
         phoneIcon.ring(true)
@@ -4030,6 +4101,18 @@ class GameActivity : Activity() {
         enterImmersiveMode()
         if (wait == Wait.FREE && !life.dead) showFreeSheet()
         if (wait == Wait.PHONE) {
+            // cerita baru lanjut setelah pesannya benar-benar dibuka di Chat
+            val unread = storyMessageKeys.filter { (phoneData.threads[it]?.unread ?: 0) > 0 }
+            if (unread.isNotEmpty()) {
+                val who = phoneData.threads[unread.first()]?.title ?: "pesan"
+                notice("📱 Buka Chat dan baca pesan dari $who dulu")
+                phoneIcon.ring(true)
+                phoneHint.animate().cancel()
+                phoneHint.alpha = 0f
+                phoneHint.animate().alpha(1f).setStartDelay(300).setDuration(400).start()
+                return
+            }
+            storyMessageKeys.clear()
             wait = Wait.BUSY
             handler.postDelayed({ next() }, 350)
         }

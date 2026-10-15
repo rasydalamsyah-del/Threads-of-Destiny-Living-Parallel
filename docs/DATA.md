@@ -61,13 +61,42 @@ teks   = Kamu menggoreng pisang dan melayani pembeli seharian.
 - `waktu`: `pagi`, `siang`, `sore`, `malam`, atau `semua`.
 - `syarat`: aktivitas hanya muncul bila syarat benar (format seperti `@jika`).
 - Bila `energi` yang dibutuhkan lebih besar dari energi pemain → tampil **"Terlalu lelah"** dan tidak bisa dipilih.
-- Setiap aktivitas memakan **satu** kesempatan dan memajukan waktu satu slot.
+- Setiap aktivitas memajukan jam sesuai `durasi`-nya. Waktu bebas berakhir di jam yang ditentukan naskah (`@bebas sampai ...`).
 
 ### Jam mulai (`mulai`)
 ```
 mulai  = 04:00-06:00     aktivitas hanya bisa DIMULAI di jam ini (boleh 19:00-02:00, melewati tengah malam)
 ```
 Di luar jam itu tetap tampil redup dengan alasannya. Tanpa `mulai`, yang dipakai `waktu` (bagian hari).
+
+### Batas kegiatan berulang (`batas`, `jeda`, `teks_ulang`)
+Supaya kegiatan tidak bisa diulang terus (makan terus, istirahat terus sampai energi penuh):
+| Kegiatan | Aturan |
+|---|---|
+| Makan bersama keluarga | jeda 4 jam (dari jam mulai), maks. 3×/hari; makan lagi → Ibu menggoda "Lapar lagi?" |
+| Istirahat sebentar (rumah / kos) | maks. 2×/hari, jeda 3 jam; di rumah, kedua kalinya Ibu menegur |
+| Belajar | maks. 2×/hari, jeda 2 jam |
+| Taman kota | maks. 2×/hari, jeda 3 jam |
+| Bantu warung, melaut, dermaga, main dengan Laras, jelajah kota, cari jejak, perpustakaan, lari pagi, mal, kafe, warnet | 1×/hari |
+Yang terkena batas tampil redup dengan alasan ("Sudah dilakukan hari ini — besok lagi", "Baru saja dilakukan — bisa lagi pukul 11:00").
+Saat waktu bebas berakhir di jam tertentu, kegiatan yang selesainya melewati jam itu juga redup ("Waktunya tidak cukup — cerita berlanjut pukul 20:00").
+
+## pesan.txt (chat di HP & pilihan balasannya)
+```
+[bayu_lulus]
+dari          = bayu
+jenis         = cerita        (cerita = dari naskah · acak = dikirim sendiri oleh karakter · sistem = dari game)
+isi           = Woy {nama}! Selamat lulus, ...    (untuk "cerita": harus sama persis dengan teks @hp pesan di naskah)
+hangat        = Makasih, Bay! Selamat juga buat kamu. Nanti aku ajak ketemu, ya.
+balas_hangat  = Sip! Pencet aja "Ajak ketemu", terus pilih jamnya.
+singkat       = Oke.
+balas_singkat = Yaelah, singkat amat 😂 Ya udah, kabari aja kalau mau ketemu.
+syarat        = lokasi == kota      (opsional, untuk "acak")
+```
+- Tombol balasan di Chat menampilkan kalimat balasannya langsung (bukan "Balas hangat/singkat"). Hangat = Cinta +3, singkat = +1 (sekali sehari).
+- Pesan acak memakai `syarat` agar sesuai keadaan: soal dermaga hanya di desa, "Kapan pulang?" hanya di kota, Juragan Darto hanya bila kerja di gudang (`kerja_buruh_ikan == 1`), PR hanya bila sekolah (`kerja_sma_sakala == 1`). Pesan terakhir tidak diulang, dan tidak dikirim bila pesan sebelumnya belum dibalas.
+- `tools/cek_naskah.py` memastikan setiap `@hp pesan` dari karakter di naskah punya entri di sini.
+- Ajak ketemu: pemain menulis "Sore ini ada waktu? Aku mau ketemu." (pilihan: "Sore ini", "Besok siang", ...).
 
 ## karakter.txt
 
@@ -97,7 +126,7 @@ hadiah_suka / hadiah_biasa / hadiah_benci = jawaban saat diberi hadiah
 larangan    = kalimat saat ia dilarang bertemu oleh orang dekatnya
 warna       = #2E8B57
 ```
-- Tambahan untuk HP: `chat` (pesan yang kadang ia kirim, pisahkan `|`), `chat_balas` (balasannya), `ajak_ya` / `ajak_tidak` (jawaban saat diajak ketemu).
+- Tambahan untuk HP: `ajak_ya` / `ajak_tidak` (jawaban saat diajak ketemu). Pesan chat yang ia kirim & pilihan balasannya ada di **pesan.txt**.
   Karakter yang sudah dikenal dan Cintanya ≥ 25 kadang mengirim pesan (maks. 2 pesan per hari dari semua karakter).
 - `kelamin = lawan` + `nama_l` / `nama_p`: karakter yang jenis kelamin & namanya menyesuaikan pemain (contoh: sahabat masa kecil Arka/Alya).
   Gambarnya: `id_l.png` / `id_p.png` (dan `id_l_foto.jpg` / `id_p_foto.jpg`). Di naskah pakai `{nama_<id>}`, mis. `{nama_sahabat}`.

@@ -84,21 +84,28 @@ Ayah: Lumayan... tapi harga ikan di pelelangan turun lagi. Juragan Darto cuma ma
 Ibu: Delapan ribu... Padahal solar naik terus.
 Ayah: Ya mau bagaimana. Yang penting dapur tetap ngebul.
 Ibu: Warung juga sepi akhir-akhir ini. Orang lebih suka beli gorengan di minimarket baru dekat jalan raya.
-Laras: Minimarket yang ada AC-nya itu ya, Bu? Aku pernah masuk, dingin banget!
+{nama}: Minimarket yang baru buka itu, Bu? Kemarin aku lewat, ramai sekali.
+Laras: Yang ada AC-nya itu! Aku pernah masuk, dingin banget!
 @tampil ibu senyum kanan
 Ibu: Hush, kamu itu.
 * Tawa kecil pecah di meja makan. Tapi {nama} melihat Ayah dan Ibu saling bertukar pandang, seolah ada yang tidak mereka ucapkan.
 @tampil ayah senyum kiri
 Ayah: Sudah. Urusan uang biar Ayah sama Ibu yang pikirkan. Kalian makan yang banyak.
+{nama}: Kalau ada yang bisa aku bantu, bilang ya, Yah.
+Ayah: Kamu pikirkan saja masa depanmu. Itu sudah bantu Ayah.
 Laras: Bu, nanti aku minta uang jajan dua ribu, ya. Ada yang jual es lilin kacang hijau di sekolah.
 Ibu: Seribu. Yang seribu lagi masuk celengan.
 @tampil laras kesal tengah
 Laras: Yaaah...
+{nama}: Nanti Kakak tambahin seribu, Ras. Asal jangan bilang Ibu.
+@tampil laras senyum tengah
+Laras: Kakak terbaik!
+Ibu: Ibu dengar, lho.
+* Laras buru-buru menunduk menghabiskan nasinya. Ayah menahan tawa.
 @maju 35 menit
 
 # ---------- Laras berangkat sekolah ----------
 * Selesai makan, Ibu bergegas ke dapur dan kembali membawa kotak bekal berwarna biru.
-@tampil laras senyum tengah
 Ibu: Laras, ini bekalmu. Dihabiskan, jangan dikasih ke kucing lagi.
 Laras: Iya, Bu~
 @sembunyi laras
@@ -218,9 +225,13 @@ Ibu: Ini titipan Ayah semalam. Hadiah kelulusan, katanya. Simpan baik-baik, ya.
 * Ketuk tombol 📊 di sisi kiri layar kapan saja untuk menarik panel status. Ketuk panelnya untuk melihat isi tas.
 @kenal bayu
 @hp pesan Bayu | Woy {nama}! Selamat lulus, {bro|cuy}! Nanti sore aku nongkrong di dermaga. Kalau mau ketemu, janjian dulu ya lewat Chat!
+* HP-mu bergetar lagi. Ada pesan dari Bayu.
+@tunggu_hp
+{nama}: Dasar Bayu, baru lulus sudah ngajak nongkrong.
 * Di waktu bebas, kamu bisa menemui orang yang memang ada di dekatmu. Keluarga ada di rumah (Ayah baru bangun siang, Laras pulang sekolah pukul 13:00).
 * Teman seperti Bayu harus diajak janjian dulu lewat Chat di HP.
-@bebas 2
+* Waktu bebasmu berjalan sampai pukul 20:00 malam ini. Lakukan apa saja selama tenagamu cukup.
+@bebas sampai Senin 20:00
 
 
 # ----------------------------------------------------------

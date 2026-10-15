@@ -23,6 +23,7 @@ class GameData private constructor(
     val events: List<EventDef>,
     val posts: List<PostDef>,
     val chats: List<ChatDef> = emptyList(),
+    val messages: List<MessageDef> = emptyList(),
 ) {
 
     /**
@@ -65,6 +66,27 @@ class GameData private constructor(
         val condition: String?,
         val once: Boolean,
     )
+
+    /** Pesan chat & pilihan balasannya (data/pesan.txt). */
+    data class MessageDef(
+        val id: String,
+        val from: String,
+        val kind: String,
+        val text: String,
+        val warm: String,
+        val warmReply: String,
+        val short: String,
+        val shortReply: String,
+        val condition: String?,
+    )
+
+    /** Pesan dari naskah: dicocokkan lewat pengirim + isi (teks mentah sebelum {nama} diisi). */
+    fun storyMessage(charId: String, rawText: String): MessageDef? =
+        messages.firstOrNull { (it.from == charId || it.from == "*") && it.text.trim() == rawText.trim() }
+
+    fun message(id: String?): MessageDef? = id?.let { i -> messages.firstOrNull { it.id == i } }
+
+    fun randomMessages(charId: String): List<MessageDef> = messages.filter { it.kind == "acak" && it.from == charId }
 
     fun chatsOf(charId: String, kind: String): List<ChatDef> = chats.filter { it.charId == charId && it.kind == kind }
 
@@ -205,6 +227,12 @@ class GameData private constructor(
         /** Jam boleh MULAI (menit). null = mengikuti bagian hari. Bisa melewati tengah malam (19:00-02:00). */
         val startFrom: Int? = null,
         val startUntil: Int? = null,
+        /** Paling banyak berapa kali per hari (null = tanpa batas). */
+        val maxPerDay: Int? = null,
+        /** Jeda minimal sebelum boleh diulang, dalam menit. */
+        val cooldown: Int? = null,
+        /** Teks bila diulang di hari yang sama (mis. Ibu menegur karena tidur lagi). */
+        val repeatText: String? = null,
     )
 
     data class ItemDef(
@@ -240,6 +268,9 @@ class GameData private constructor(
                     minutes = minutes(m["durasi"]) ?: 60,
                     startFrom = window(m["mulai"])?.first,
                     startUntil = window(m["mulai"])?.second,
+                    maxPerDay = m["batas"]?.filter { it.isDigit() }?.toIntOrNull(),
+                    cooldown = minutes(m["jeda"]),
+                    repeatText = m["teks_ulang"]?.takeIf { it.isNotBlank() },
                 )
             }
             val items = readSections(ctx, "data/barang.txt").associate { (id, m) ->
@@ -378,7 +409,8 @@ class GameData private constructor(
                 )
             }
             val chats = readSections(ctx, "data/obrolan.txt").map { (id, m) -> chat(id, m) }
-            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats)
+            val msgs = readSections(ctx, "data/pesan.txt").map { (id, m) -> message(id, m) }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats, msgs)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {
@@ -493,6 +525,33 @@ class GameData private constructor(
 
         private fun list(v: String?): Set<String> =
             v?.split(',')?.map { it.trim().lowercase() }?.filter { it.isNotEmpty() }?.toSet() ?: emptySet()
+
+        /** Satu entri pesan.txt → [MessageDef]. */
+        internal fun message(id: String, m: Map<String, String>) = MessageDef(
+            id = id,
+            from = (m["dari"] ?: "*").trim().lowercase(),
+            kind = (m["jenis"] ?: "acak").trim().lowercase(),
+            text = m["isi"] ?: "",
+            warm = m["hangat"] ?: "",
+            warmReply = m["balas_hangat"] ?: "",
+            short = m["singkat"] ?: "",
+            shortReply = m["balas_singkat"] ?: "",
+            condition = m["syarat"]?.takeIf { it.isNotBlank() },
+        )
+
+        /**
+         * Kegiatan yang sedang tidak boleh diulang: sudah mencapai batas hari ini, atau jedanya belum lewat.
+         * Hasil: alasan (untuk ditampilkan redup) atau null bila boleh.
+         */
+        internal fun repeatBlock(maxPerDay: Int?, cooldown: Int?, usedToday: Int, lastAbs: Long?, nowAbs: Long): String? {
+            if (maxPerDay != null && usedToday >= maxPerDay)
+                return if (maxPerDay == 1) "Sudah dilakukan hari ini — besok lagi" else "Sudah ${usedToday}× hari ini (paling banyak ${maxPerDay}×) — besok lagi"
+            if (cooldown != null && lastAbs != null && nowAbs - lastAbs < cooldown) {
+                val at = ((lastAbs + cooldown) % 1440).toInt()
+                return "Baru saja dilakukan — bisa lagi pukul ${LifeState.clock(at)}"
+            }
+            return null
+        }
 
         /** Satu entri obrolan.txt → [ChatDef]. internal agar bisa diuji. */
         internal fun chat(id: String, m: Map<String, String>): ChatDef {

@@ -1,0 +1,340 @@
+# ==========================================================
+#  PESAN CHAT DI HP (dan pilihan balasannya)
+#  Panduan lengkap: docs/DATA.md
+#
+#  Setiap pesan punya 2 pilihan balasan yang NYAMBUNG dengan isi pesannya,
+#  dan jawaban si pengirim untuk masing-masing balasan.
+#
+#  [id]
+#  dari          = id karakter (* = siapa saja; dipakai pesan dari sistem, mis. janji batal)
+#  jenis         = cerita  → dikirim dari naskah (@hp pesan ...). "isi" harus sama persis dengan teks di naskah.
+#                  acak    → kadang dikirim sendiri oleh karakter (maks. 2 pesan per hari dari semua karakter)
+#                  sistem  → dikirim oleh game (janji batal, dll.)
+#  isi           = isi pesan masuk
+#  hangat        = balasan hangat pemain (Cinta +3, sekali sehari per orang)
+#  balas_hangat  = jawaban pengirim atas balasan hangat
+#  singkat       = balasan singkat pemain (Cinta +1)
+#  balas_singkat = jawaban pengirim atas balasan singkat
+#  syarat        = (opsional, untuk acak) contoh: lokasi == kota
+# ==========================================================
+
+
+# ======================= DARI NASKAH =======================
+
+[bayu_lulus]
+dari          = bayu
+jenis         = cerita
+isi           = Woy {nama}! Selamat lulus, {bro|cuy}! Nanti sore aku nongkrong di dermaga. Kalau mau ketemu, janjian dulu ya lewat Chat!
+hangat        = Makasih, Bay! Selamat juga buat kamu. Nanti aku ajak ketemu, ya.
+balas_hangat  = Sip! Pencet aja "Ajak ketemu", terus pilih jamnya. Aku di dermaga sampai magrib.
+singkat       = Oke.
+balas_singkat = Yaelah, singkat amat 😂 Ya udah, kabari aja kalau mau ketemu.
+
+[bayu_tutorial]
+dari          = bayu
+jenis         = cerita
+isi           = Eh, tadi seru juga ya. Besok main lagi? 😄
+hangat        = Seru banget! Besok aku kabari, ya.
+balas_hangat  = Asik! Ditunggu 😄
+singkat       = Lihat nanti.
+balas_singkat = Yah... oke deh.
+
+[ibu_sampai_kota]
+dari          = ibu
+jenis         = cerita
+isi           = Sudah sampai, Nak? Sudah makan belum? Jangan lupa kunci pintu.
+hangat        = Sudah sampai, Bu. Kosnya lumayan. Nanti aku cari makan, ya. Ibu jangan khawatir.
+balas_hangat  = Alhamdulillah. Jaga diri baik-baik, Nak. Salam dari Ayah sama Laras.
+singkat       = Sudah, Bu.
+balas_singkat = Ya sudah. Istirahat sana, pasti capek di jalan.
+
+[bayu_gudang]
+dari          = bayu
+jenis         = cerita
+isi           = Woy, katanya kamu kerja di gudang Juragan Darto? Mantap, {bro|cuy}! Sore-sore main ke dermaga, ya.
+hangat        = Iya, Bay! Capek sih, tapi lumayan. Kalau sempat, nanti aku ajak ketemu.
+balas_hangat  = Gas! Nanti aku bawain kopi sachet, hehe.
+singkat       = Iya.
+balas_singkat = Wkwk, kayaknya capek banget. Semangat, {bro|cuy}!
+
+[nadia_gelang]
+dari          = nadia
+jenis         = cerita
+isi           = Tadi sore ada anak pakai gelang merah lewat depan toko. Dia naik kereta jurusan Pelabuhan. Sabtu sore biasanya dia lewat lagi, kata ayahku.
+hangat        = Serius, Nad? Makasih banyak! Sabtu sore aku ke Stasiun Besar.
+balas_hangat  = Sama-sama. Hati-hati, ya. Kabari aku kalau ketemu.
+singkat       = Oke, makasih.
+balas_singkat = Iya. Semoga berhasil.
+
+
+# ======================= DARI GAME =======================
+
+[janji_maklum]
+dari          = *
+jenis         = sistem
+isi           = Eh, tadi kamu lagi sibuk ya? Nggak apa-apa, lain kali aja 🙂
+hangat        = Iya, maaf ya. Makasih udah ngerti. Lain kali aku pasti datang.
+balas_hangat  = Santai aja 🙂
+singkat       = Iya, maaf.
+balas_singkat = Oke.
+
+[janji_kecewa]
+dari          = *
+jenis         = sistem
+isi           = Aku nungguin kamu tadi... Kok nggak datang?
+hangat        = Maaf banget, aku lupa. Lain kali aku pasti datang, janji.
+balas_hangat  = Ya sudah... jangan diulang, ya.
+singkat       = Maaf.
+balas_singkat = ...Hm.
+
+[janji_pindah]
+dari          = *
+jenis         = sistem
+isi           = Oh iya, kamu udah pindah ya. Janjinya nanti aja kalau kamu pulang 🙂
+hangat        = Iya, maaf ya. Nanti kalau pulang, kita ketemu.
+balas_hangat  = Siap! Hati-hati di sana 🙂
+singkat       = Oke.
+balas_singkat = Oke.
+
+# ======================= AYAH =======================
+
+[ayah_makan]
+dari          = ayah
+jenis         = acak
+isi           = Sudah makan, Nak?
+hangat        = Sudah, Yah. Ayah juga jangan lupa makan, ya.
+balas_hangat  = Hm. Ayah makan nanti sepulang melaut.
+singkat       = Sudah.
+balas_singkat = Ya sudah.
+
+[ayah_ikan]
+dari          = ayah
+jenis         = acak
+isi           = Ayah tadi dapat ikan banyak.
+hangat        = Wah, alhamdulillah, Yah! Laras pasti senang.
+balas_hangat  = Iya. Ibumu langsung bikin ikan bakar.
+singkat       = Oh, bagus.
+balas_singkat = Hm.
+
+[ayah_jaga]
+dari          = ayah
+jenis         = acak
+syarat        = lokasi == kota
+isi           = Jaga kesehatan. Jangan begadang.
+hangat        = Iya, Yah. Ayah juga hati-hati di laut.
+balas_hangat  = Hm. Ayah selalu pulang. Kamu tahu itu.
+singkat       = Iya, Yah.
+balas_singkat = Ya sudah.
+
+
+# ======================= IBU =======================
+
+[ibu_makan]
+dari          = ibu
+jenis         = acak
+isi           = Nak, sudah makan belum?
+hangat        = Sudah, Bu. Tadi makan nasi sama telur.
+balas_hangat  = Syukurlah. Jangan cuma mi instan terus, ya.
+singkat       = Sudah.
+balas_singkat = Ya sudah, Ibu tenang.
+
+[ibu_minum]
+dari          = ibu
+jenis         = acak
+isi           = Jangan lupa minum air putih, ya. Cuaca lagi panas.
+hangat        = Siap, Bu! Ibu juga jangan kecapekan di warung.
+balas_hangat  = Iya, Nak. Ibu senang kamu perhatian.
+singkat       = Iya.
+balas_singkat = Jaga diri, ya.
+
+[ibu_kangen]
+dari          = ibu
+jenis         = acak
+syarat        = lokasi == kota
+isi           = Ibu kangen. Kapan pulang?
+hangat        = Aku juga kangen, Bu. Nanti kalau libur aku pulang.
+balas_hangat  = Ibu tunggu, ya. Laras sudah tanya terus.
+singkat       = Belum tahu, Bu.
+balas_singkat = ...Ya sudah. Kabari kalau mau pulang.
+
+[ibu_uang]
+dari          = ibu
+jenis         = acak
+syarat        = lokasi == kota
+isi           = Uangnya cukup? Jangan boros, ya.
+hangat        = Cukup, Bu. Aku catat semua pengeluaran.
+balas_hangat  = Pintar. Kalau kurang, bilang. Jangan ditahan-tahan.
+singkat       = Cukup.
+balas_singkat = Ya sudah. Hemat-hemat, ya.
+
+
+# ======================= LARAS =======================
+
+[laras_nilai]
+dari          = laras
+jenis         = acak
+isi           = Kakaaak! Aku dapat nilai 90 di ulangan IPA!
+hangat        = Wah, hebat banget, Ras! Kakak bangga.
+balas_hangat  = Hehehe! Nanti aku tunjukin kertasnya!
+singkat       = Oh, bagus.
+balas_singkat = Kok cuma "bagus"... 😤
+
+[laras_oleh]
+dari          = laras
+jenis         = acak
+syarat        = lokasi == kota
+isi           = Kak, nanti pulang bawain oleh-oleh, ya!
+hangat        = Iya, nanti Kakak bawain. Mau apa?
+balas_hangat  = Gantungan kunci kereta api! Yang ada lampunya!
+singkat       = Lihat nanti.
+balas_singkat = Yaaah... Kakak pelit!
+
+[laras_bosan]
+dari          = laras
+jenis         = acak
+isi           = Kakak lagi apa? Aku bosen.
+hangat        = Lagi istirahat, Ras. Kamu sudah bikin PR?
+balas_hangat  = Iiih, Kakak kayak Ibu aja! 😝
+singkat       = Sibuk.
+balas_singkat = Huh. Ya udah.
+
+
+# ======================= BAYU =======================
+
+[bayu_lagi_apa]
+dari          = bayu
+jenis         = acak
+isi           = Woy, lagi apa?
+hangat        = Lagi santai, Bay. Kamu?
+balas_hangat  = Bantuin bapak benerin jaring. Bosen, wkwk.
+singkat       = Sibuk.
+balas_singkat = Sibuk mulu, kayak pejabat 😂
+
+[bayu_dermaga]
+dari          = bayu
+jenis         = acak
+syarat        = lokasi == desa
+isi           = Sore ini ke dermaga, yuk! Anginnya enak.
+hangat        = Ayo! Nanti aku ajak ketemu lewat Chat, ya.
+balas_hangat  = Gas! Aku tunggu, {bro|cuy}!
+singkat       = Lihat nanti.
+balas_singkat = Oke deh, kabari aja.
+
+[bayu_kota]
+dari          = bayu
+jenis         = acak
+syarat        = lokasi == kota
+isi           = Gimana rasanya di kota? Kangen gorengan Ibumu, nggak?
+hangat        = Kangen banget, Bay. Di sini gorengan mahal!
+balas_hangat  = Hahaha! Nanti pas pulang kita makan sepuasnya.
+singkat       = Biasa aja.
+balas_singkat = Ciee, sok anak kota 😂
+
+
+# ======================= SEKAR =======================
+
+[sekar_novel]
+dari          = sekar
+jenis         = acak
+isi           = Lagi baca apa sekarang? Aku butuh rekomendasi novel.
+hangat        = Novel tentang laut, bagus banget. Nanti kuceritakan.
+balas_hangat  = Oke. Aku tunggu ceritanya.
+singkat       = Nggak baca apa-apa.
+balas_singkat = Oh. Ya sudah.
+
+[sekar_semangat]
+dari          = sekar
+jenis         = acak
+isi           = Lagi sibuk? Aku cuma mau bilang... semangat, ya.
+hangat        = Makasih, Sekar. Kamu juga semangat belajarnya.
+balas_hangat  = ...Iya. Makasih.
+singkat       = Oke.
+balas_singkat = Oh, oke.
+
+
+# ======================= JURAGAN DARTO =======================
+
+[darto_telat]
+dari          = darto
+jenis         = acak
+syarat        = kerja_buruh_ikan == 1
+isi           = Besok jangan telat. Ada kiriman ikan dari pelabuhan.
+hangat        = Siap, Juragan. Saya datang pagi.
+balas_hangat  = Bagus.
+singkat       = Ya.
+balas_singkat = Hm.
+
+[darto_kerja]
+dari          = darto
+jenis         = acak
+syarat        = kerja_buruh_ikan == 1
+isi           = Kerjamu kemarin lumayan. Pertahankan.
+hangat        = Terima kasih, Juragan. Saya akan lebih rajin.
+balas_hangat  = Buktikan saja.
+singkat       = Ya.
+balas_singkat = Hm.
+
+
+# ======================= DIMAS =======================
+
+[dimas_pr]
+dari          = dimas
+jenis         = acak
+syarat        = kerja_sma_sakala == 1
+isi           = {Bro|Sis}, PR matematika udah? Nomor 5 susah banget.
+hangat        = Udah! Nanti di sekolah kita bahas bareng.
+balas_hangat  = Penyelamat! Nanti kutraktir es teh 😆
+singkat       = Belum.
+balas_singkat = Yah, sama aja kita 😂
+
+[dimas_lapar]
+dari          = dimas
+jenis         = acak
+isi           = Lapar... kamu ada makanan nggak? Uangku tinggal goceng 😭
+hangat        = Ada roti, nanti aku bagi.
+balas_hangat  = Kamu emang teman terbaik!
+singkat       = Nggak ada.
+balas_singkat = Huhu... ya udah, puasa dulu.
+
+[dimas_bola]
+dari          = dimas
+jenis         = acak
+isi           = Nanti malam ada bola! Nonton di warung kopi, yuk.
+hangat        = Boleh! Nanti aku ajak ketemu lewat Chat.
+balas_hangat  = Gas! Aku tunggu.
+singkat       = Lihat nanti.
+balas_singkat = Oke, oke.
+
+
+# ======================= NADIA =======================
+
+[nadia_tugas]
+dari          = nadia
+jenis         = acak
+syarat        = kerja_sma_sakala == 1
+isi           = Jangan lupa tugas kelompok dikumpulkan Senin.
+hangat        = Siap, Nad. Bagianku hampir selesai.
+balas_hangat  = Bagus. Kirim ke aku dulu, ya, biar kurapikan.
+singkat       = Oke.
+balas_singkat = Oke.
+
+[nadia_baca]
+dari          = nadia
+jenis         = acak
+isi           = Lagi baca apa? Toko baru kedatangan novel bagus.
+hangat        = Belum ada. Rekomendasikan dong!
+balas_hangat  = Datang saja ke toko. Nanti kupilihkan.
+singkat       = Nggak baca.
+balas_singkat = Hmm. Sayang sekali.
+
+
+# ======================= SAHABAT =======================
+
+[sahabat_hujan]
+dari          = sahabat
+jenis         = acak
+isi           = Hari ini hujan. Kamu ingat dermaga kita?
+hangat        = Ingat. Aku masih sering ke sana.
+balas_hangat  = ...Aku senang.
+singkat       = Ingat.
+balas_singkat = ...Begitu, ya.
