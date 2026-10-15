@@ -238,6 +238,8 @@ Tempel kalimat pengunci, lalu SATU baris berikut:
 | `id_menangis.png` *(opsional)* | `Change only the facial expression to crying quietly: teary eyes, a single tear on one cheek, trembling lips.` |
 
 ### Daftar ekspresi per karakter (checklist)
+✅ **Sudah terpasang (build 34):** ayah (senyum, sedih, kesal, kaget) · ibu (senyum, sedih, kesal, kaget, menangis) · laras (sedih, kesal, kaget, menangis) · bayu (senyum, sedih, kesal, kaget, menangis) · sekar (semua 6) · darto (senyum, sedih, kesal, kaget) · dimas (senyum, sedih, kesal, kaget) · nadia (senyum, sedih, kesal, kaget, malu) · pemain_l/p (semua 6, disimpan). **Belum:** sahabat_l / sahabat_p, bayu_malu, ayah/ibu malu tidak perlu.
+
 Prioritas: ★ = dipakai sistem ngobrol/hadiah untuk semua orang (😊 saat senang, 😠 saat topik/hadiah dibenci) atau sudah dipakai cerita · ☆ = untuk adegan cerita berikutnya · ○ = opsional.
 Ekspresi yang belum ada otomatis memakai gambar biasa (tidak error).
 

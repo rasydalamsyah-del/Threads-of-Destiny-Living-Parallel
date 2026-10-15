@@ -37,7 +37,7 @@ Ayah: Kamu bilang mau sambil kerja... Jadi tiap bulan Ayah kirim empat ratus lim
 Ayah: Tapi kalau kerjamu mengganggu sekolah, bilang. Ayah tidak marah.
 
 :: pamit
-@tampil laras sedih tengah
+@tampil laras menangis tengah
 Laras: Kak... nanti pulang, kan? Janji?
 {nama}: Janji, Laras. Kakak pasti pulang.
 * Kata "janji" itu terasa berat di lidahnya.

@@ -123,7 +123,7 @@ Nadia: ...Begitu.
 @latar rumah_warung
 @terang 1500
 * Seminggu bekerja. Tanganmu mulai kapalan, tapi kamu mulai terbiasa dengan bau garam dan panas matahari.
-@tampil laras sedih tengah
+@tampil laras menangis tengah
 Laras: Kak! Kak! Ibu... Ibu pingsan di warung!
 @sembunyi semua
 @latar ruang_makan
@@ -153,8 +153,10 @@ Ibu: Uang hasil kerjamu... Nak, Ibu jadi malu.
 :: pinjam_darto
 @kenal darto
 @sembunyi ibu
+@tampil darto kaget
+Juragan Darto: Seratus lima puluh ribu?
 @tampil darto biasa
-Juragan Darto: Seratus lima puluh ribu? ...Ibumu orang baik. Saya bayarkan ke mantri langsung.
+Juragan Darto: ...Ibumu orang baik. Saya bayarkan ke mantri langsung.
 Juragan Darto: Tapi itu hutang. Kerja yang rajin sampai lunas.
 @atur hutang_darto = 150000
 @percaya darto +5
@@ -164,7 +166,7 @@ Juragan Darto: Tapi itu hutang. Kerja yang rajin sampai lunas.
 
 :: serahkan_ayah
 @sembunyi ibu
-@tampil ayah biasa
+@tampil ayah sedih
 Ayah: Biar Ayah yang urus. Ayah jual semua hasil tangkapan minggu ini.
 * Malam itu, Ayah melaut lebih jauh dari biasanya. Kamu tidak bisa tidur memikirkannya.
 @cinta ayah +3

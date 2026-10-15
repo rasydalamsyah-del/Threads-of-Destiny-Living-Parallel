@@ -29,10 +29,18 @@ if n2:
     with np.errstate(invalid="ignore"):
         ring = np.nan_to_num(ndi.mean(mn, ring_lab, idx), nan=255.0)
     dark_around = ring < 140
+    # lindungi bagian dalam wajah/kulit: putih mata, kilau mata & air mata bukan celah rambut
+    R, G, B = P[..., 0], P[..., 1], P[..., 2]
+    skin = (R > 150) & (R - B > 25) & (R >= G) & (G >= B - 5) & (mn < 235) & ~bg
+    face = ndi.binary_fill_holes(ndi.binary_closing(skin, iterations=4))
+    in_face = ndi.mean(face.astype(np.float32), lab2, idx)
+    dark_around &= in_face < 0.3
     for _ in range(6):
         d = ndi.distance_transform_edt(~(bg | holes))
         mind = ndi.minimum(d, lab2, idx)
-        keep = idx[dark_around & (((sizes < 2500) & (mind <= 45)) | ((mean >= 240) & (sizes < 60000) & (mind <= 60)))]
+        # celah di samping pipi/leher (di dalam daerah "wajah") hanya bila menempel langsung ke latar
+        near_face = (in_face >= 0.3) & (mind <= 3) & (mean >= 238) & (sizes < 8000)
+        keep = idx[(dark_around & (((sizes < 2500) & (mind <= 45)) | ((mean >= 240) & (sizes < 60000) & (mind <= 60)))) | near_face]
         new_holes = np.isin(lab2, keep)
         if (new_holes & ~holes).sum() == 0:
             break
@@ -43,7 +51,7 @@ if n2:
     for _ in range(2):
         d = ndi.distance_transform_edt(~bg_all)
         mind = ndi.minimum(d, lab2, idx)
-        extra = idx[(sizes < 400) & (mean >= 238) & (mind <= 2)]
+        extra = idx[(sizes < 400) & (mean >= 238) & (mind <= 2) & (in_face < 0.3)]
         add = np.isin(lab2, extra) & ~bg_all
         if not add.any():
             break
@@ -60,7 +68,7 @@ Fc = np.take_along_axis(F, c[..., None], 2)[..., 0]
 Pc = np.take_along_axis(P, c[..., None], 2)[..., 0]
 denom = 255 - Fc
 a_est = np.clip((255 - Pc) / np.maximum(denom, 1), 0, 1)
-a = np.where(bg, 0.0, 1.0)
+a = np.where(bg | holes, 0.0, 1.0)
 a = np.where(unknown & (denom > 35), a_est, a)
 # 4) warna tanpa campuran putih
 safe = np.maximum(a, 1e-3)[..., None]
