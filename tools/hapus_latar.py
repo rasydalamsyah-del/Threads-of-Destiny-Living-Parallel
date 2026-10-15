@@ -39,7 +39,7 @@ if n2:
         d = ndi.distance_transform_edt(~(bg | holes))
         mind = ndi.minimum(d, lab2, idx)
         # celah di samping pipi/leher (di dalam daerah "wajah") hanya bila menempel langsung ke latar
-        near_face = (in_face >= 0.3) & (mind <= 3) & (mean >= 238) & (sizes < 8000)
+        near_face = (in_face >= 0.3) & (sizes < 8000) & (((mind <= 3) & (mean >= 238)) | ((mind <= 12) & (mean >= 240) & (ring < 150)))
         keep = idx[(dark_around & (((sizes < 2500) & (mind <= 45)) | ((mean >= 240) & (sizes < 60000) & (mind <= 60)))) | near_face]
         new_holes = np.isin(lab2, keep)
         if (new_holes & ~holes).sum() == 0:

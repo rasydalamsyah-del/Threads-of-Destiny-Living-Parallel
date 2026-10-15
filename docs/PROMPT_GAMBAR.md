@@ -238,7 +238,9 @@ Tempel kalimat pengunci, lalu SATU baris berikut:
 | `id_menangis.png` *(opsional)* | `Change only the facial expression to crying quietly: teary eyes, a single tear on one cheek, trembling lips.` |
 
 ### Daftar ekspresi per karakter (checklist)
-✅ **Sudah terpasang (build 34):** ayah (senyum, sedih, kesal, kaget) · ibu (senyum, sedih, kesal, kaget, menangis) · laras (sedih, kesal, kaget, menangis) · bayu (senyum, sedih, kesal, kaget, menangis) · sekar (semua 6) · darto (senyum, sedih, kesal, kaget) · dimas (senyum, sedih, kesal, kaget) · nadia (senyum, sedih, kesal, kaget, malu) · pemain_l/p (semua 6, disimpan). **Belum:** sahabat_l / sahabat_p, bayu_malu, ayah/ibu malu tidak perlu.
+✅ **Sudah terpasang (build 34):** ayah (senyum, sedih, kesal, kaget) · ibu (senyum, sedih, kesal, kaget, menangis) · laras (sedih, kesal, kaget, menangis) · bayu (senyum, sedih, kesal, kaget, malu) · sekar (semua 6) · darto (senyum, sedih, kesal, kaget) · dimas (senyum, sedih, kesal, kaget) · nadia (senyum, sedih, kesal, kaget, malu) · pemain_l/p (semua 6, disimpan). **Build 35:** sahabat_l (Arka) & sahabat_p (Alya) semua 6, bayu_malu. Semua ekspresi utama sudah lengkap.
+
+> Catatan nama: `sahabat_l` = versi **laki-laki** (Arka), `sahabat_p` = versi **perempuan** (Alya). Game memilih yang berlawanan jenis dengan tokoh utama.
 
 Prioritas: ★ = dipakai sistem ngobrol/hadiah untuk semua orang (😊 saat senang, 😠 saat topik/hadiah dibenci) atau sudah dipakai cerita · ☆ = untuk adegan cerita berikutnya · ○ = opsional.
 Ekspresi yang belum ada otomatis memakai gambar biasa (tidak error).
