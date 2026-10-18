@@ -439,6 +439,45 @@ Urutan prioritas: rumah_warung_malam → kamar_pagi_malam → ruang_makan_malam 
 
 ---
 
+### Rumah desa: kamar → ruang tengah → ruang makan (set baru, saling terhubung)
+Tata letak: kamar tokoh utama punya pintu ke ruang tengah. Ruang tengah punya pintu kamar, pintu depan (ke warung),
+dan lorong terbuka tanpa pintu ke ruang makan di belakangnya. Simpan sebagai `kamar_pagi.jpg` (mengganti),
+`ruang_tengah.jpg` (baru), `ruang_makan.jpg` (mengganti). Lampirkan gambar latar lama sebagai referensi gaya agar serasi.
+Prompt lengkapnya ada di percakapan 19 Okt 2026 dan disalin di bawah.
+
+**1. `kamar_pagi.jpg`**
+```
+Style: modern Japanese anime visual novel art, clean thin lineart, soft cel shading, warm cinematic lighting, gentle pastel colors, detailed but clean, high quality. Background art only, no people, no characters, no text, vertical 9:16 aspect ratio (1080x1920), visual novel background, eye-level camera at standing height.
+A simple, cozy bedroom of a 15-year-old in a modest Indonesian fishing-village house, early morning around 6 am. The house style: whitewashed plaster walls slightly worn, dark brown wooden ceiling beams and wooden planks, warm brown wooden door and window frames, light cream ceramic tile floor.
+LEFT side: a single bed with a thin mattress and a blue floral bedsheet, slightly messy blanket, a pillow; a small wooden shelf above it with a few books and a potted plant.
+BACK wall center-left: a wooden window with louvered shutters open, thin white curtains, soft golden morning sunlight streaming in, palm trees and village roofs visible outside.
+RIGHT side, clearly visible and fully inside the frame (around 65–75% of the image width, NOT at the very edge): a warm brown wooden door, half open, through which a glimpse of the living room is visible (part of an old sofa and a wall with a family photo).
+Near the door: a small wooden study desk with a desk lamp, school books, a pencil cup, a wall calendar above it, a school bag hanging on the chair.
+Center of the room: open empty floor space with a woven rug, leaving room for characters. Warm, peaceful, nostalgic mood.
+```
+
+**2. `ruang_tengah.jpg`**
+```
+Style: modern Japanese anime visual novel art, clean thin lineart, soft cel shading, warm cinematic lighting, gentle pastel colors, detailed but clean, high quality. Background art only, no people, no characters, no text, vertical 9:16 aspect ratio (1080x1920), visual novel background, eye-level camera at standing height.
+The living room (ruang tengah) of the same modest Indonesian fishing-village house, morning. Same house style: whitewashed plaster walls slightly worn, dark brown wooden ceiling beams, warm brown wooden door and window frames, light cream ceramic tile floor.
+LEFT side, fully inside the frame (around 20–30% of the image width): the wooden FRONT DOOR of the house, closed, with a small glass window, a pair of sandals on a mat in front of it, soft daylight around its edges.
+RIGHT side, fully inside the frame (around 70–80% of the image width): a warm brown wooden BEDROOM DOOR, closed, the same style as the bedroom door.
+BACK WALL CENTER: a wide open archway with NO door, leading straight to the dining room behind it; through the archway we see a wooden dining table with four wooden chairs, a woven bamboo food cover (tudung saji) on the table, a rattan pendant lamp, and a kitchen doorway at the far back.
+Furniture: an old wooden sofa with faded cushions against the left wall, a low wooden coffee table with a teapot and glasses, an old TV on a wooden cabinet, a framed family photo and a wall clock, a small potted plant, a ceiling fan.
+Center of the room: open empty floor space for characters. Warm, homely, slightly old but clean.
+```
+
+**3. `ruang_makan.jpg`**
+```
+Style: modern Japanese anime visual novel art, clean thin lineart, soft cel shading, warm cinematic lighting, gentle pastel colors, detailed but clean, high quality. Background art only, no people, no characters, no text, vertical 9:16 aspect ratio (1080x1920), visual novel background, eye-level camera at standing height.
+The dining room at the back of the same modest Indonesian fishing-village house, morning. Same house style: whitewashed plaster walls slightly worn, dark brown wooden ceiling beams, warm brown wooden frames, light cream ceramic tile floor.
+CENTER: a wooden dining table with a woven placemat and four simple wooden chairs (two on the left side, two on the right side, chairs slightly pulled out), plates, glasses, a teapot, rice and side dishes partly covered by a woven bamboo food cover (tudung saji). A rattan pendant lamp hangs above the table.
+LEFT side, fully inside the frame (around 15–25% of the image width): a wide open archway with NO door leading back to the living room; through it we see part of the old wooden sofa and the family photo on the living room wall.
+BACK WALL RIGHT, fully inside the frame (around 70–80% of the image width): an open doorway to a small kitchen with a stove, pots and pans hanging, spice jars on a shelf.
+BACK WALL LEFT: a wooden window with morning sunlight, village roofs and the sea faintly visible outside. A wall calendar and a framed family photo on the wall.
+Leave open floor space around the table for characters. Warm, cozy family breakfast mood.
+```
+
 ### Gambar adegan untuk menjelajah (karakter yang benar-benar sedang beraktivitas)
 Dipakai saat waktu bebas: karakter tampil menyatu dengan latar (duduk makan, menggoreng di warung, dst.) dan bisa disentuh.
 **Cara:** lampirkan 2 gambar: (1) latarnya, (2) gambar biasa karakternya. Kirim prompt di bawah. Simpan dengan nama
