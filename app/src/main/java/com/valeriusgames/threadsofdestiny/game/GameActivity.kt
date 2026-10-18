@@ -194,6 +194,7 @@ class GameActivity : Activity() {
         dialogBox = findViewById(R.id.dialog_box)
         dialogText = findViewById(R.id.dialog_text)
         nameTag = findViewById(R.id.name_tag)
+        setupDialogBust()
         nextIndicator = findViewById(R.id.next_indicator)
         phoneIcon = findViewById(R.id.phone_icon)
         phoneHint = findViewById(R.id.phone_hint)
@@ -835,6 +836,111 @@ class GameActivity : Activity() {
         }
     }
 
+    // ================================================================== karakter di kotak dialog
+    //
+    // Semua dialog: satu kotak di bawah. Pembicara tampil setengah badan (kepala sampai pinggang) di
+    // sisi kiri kotak, kepalanya sedikit menyembul ke atas; teks di sisi kanan, tidak menimpa badan.
+    // Ekspresi mengikuti @tampil terakhir (mis. @tampil ayah sedih). Narasi: tanpa gambar, teks selebar kotak.
+
+    private lateinit var dialogBust: android.widget.ImageView
+    private var bustKey: String? = null
+    private val bustCache = HashMap<String, Bitmap?>()
+    /** Titik tengah badan (piksel x) pada gambar setengah badan, per gambar. */
+    private val bustCenter = HashMap<Bitmap, Int>()
+
+    private fun setupDialogBust() {
+        val d = resources.displayMetrics.density
+        val frame = dialog as FrameLayout
+        frame.clipChildren = false
+        (frame.parent as? ViewGroup)?.clipChildren = false
+        dialogBust = android.widget.ImageView(this).apply {
+            scaleType = android.widget.ImageView.ScaleType.MATRIX
+            visibility = View.GONE
+            elevation = 5 * d
+        }
+        frame.addView(dialogBust, 1, FrameLayout.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT).apply {
+            gravity = android.view.Gravity.BOTTOM or android.view.Gravity.START
+            leftMargin = (3 * d).toInt()
+            bottomMargin = (3 * d).toInt()
+        })
+        frame.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> if (dialogBust.visibility == View.VISIBLE) fitBust() }
+    }
+
+    /** Bagian kepala–pinggang dari gambar karakter, dipusatkan pada badannya. */
+    private fun bustBitmap(id: String, expr: String): Bitmap? = bustCache.getOrPut("$id/$expr") {
+        val src = charBitmap(id, expr) ?: return@getOrPut null
+        val w = src.width
+        val h = src.height
+        val px = IntArray(w * h)
+        src.getPixels(px, 0, w, 0, 0, w, h)
+        var top = -1; var bottom = 0; var minX = w; var maxX = 0
+        for (y in 0 until h step 2) for (x in 0 until w step 2) {
+            if ((px[y * w + x] ushr 24) > 100) {
+                if (top < 0) top = y
+                bottom = y
+                if (x < minX) minX = x
+                if (x > maxX) maxX = x
+            }
+        }
+        if (top < 0) return@getOrPut src
+        val bustH = ((bottom - top) * 0.50f).toInt().coerceAtLeast(1)
+        val y0 = (top - (bustH * 0.03f).toInt()).coerceAtLeast(0)
+        val y1 = (y0 + bustH).coerceAtMost(h)
+        Bitmap.createBitmap(src, 0, y0, w, y1 - y0).also { bustCenter[it] = (minX + maxX) / 2 }
+    }
+
+    private fun updateDialogBust(def: GameData.CharacterDef?, isPlayer: Boolean) {
+        if (!::dialogBust.isInitialized) return
+        val id = when {
+            memoryMode -> null
+            def != null -> def.id
+            isPlayer -> "pemain_" + (if (playerGender == GENDER_FEMALE) "p" else "l")
+            else -> null
+        }
+        val expr = id?.let { shownChars[it]?.first } ?: "biasa"
+        val key = id?.let { "$it/$expr" }
+        if (key == bustKey) return
+        bustKey = key
+        val d = resources.displayMetrics.density
+        val box = findViewById<View>(R.id.dialog_box)
+        val bmp = id?.let { bustBitmap(it, expr) }
+        if (bmp == null) {
+            dialogBust.visibility = View.GONE
+            box.setPadding((22 * d).toInt(), box.paddingTop, box.paddingRight, box.paddingBottom)
+            (nameTag.layoutParams as FrameLayout.LayoutParams).let { it.marginStart = (14 * d).toInt(); nameTag.layoutParams = it }
+            return
+        }
+        dialogBust.setImageDrawable(android.graphics.drawable.BitmapDrawable(resources, bmp).apply { setTargetDensity(bmp.density) })
+        dialogBust.visibility = View.VISIBLE
+        fitBust()
+    }
+
+    /** Ukur ulang gambar setengah badan mengikuti tinggi kotak dialog. */
+    private fun fitBust() {
+        val d = resources.displayMetrics.density
+        val bmp = (dialogBust.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap ?: return
+        val box = findViewById<View>(R.id.dialog_box)
+        val fullW = (dialog.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels)
+        val zoneW = (fullW * 0.38f).toInt()
+        val lp = dialogBust.layoutParams as FrameLayout.LayoutParams
+        if (lp.width != zoneW) { lp.width = zoneW; dialogBust.layoutParams = lp }
+        val textStart = zoneW + (14 * d).toInt()
+        if (box.paddingLeft != textStart) box.setPadding(textStart, box.paddingTop, box.paddingRight, box.paddingBottom)
+        val nl = nameTag.layoutParams as FrameLayout.LayoutParams
+        if (nl.marginStart != textStart) { nl.marginStart = textStart; nameTag.layoutParams = nl }
+        // tinggi gambar = tinggi kotak + sedikit menyembul ke atas; rata bawah; dipusatkan pada badan
+        val viewH = (dialog.height.takeIf { it > 0 } ?: (box.height + (18 * d).toInt())) - (3 * d).toInt()
+        val targetH = viewH + 58 * d
+        val sc = targetH / bmp.height
+        val cx = (bustCenter[bmp] ?: (bmp.width / 2)).toFloat()
+        val m = android.graphics.Matrix()
+        m.setScale(sc, sc)
+        m.postTranslate(zoneW / 2f - cx * sc, viewH - targetH)
+        dialogBust.imageMatrix = m
+        // potong rapi di batas kanan zona (tidak menimpa teks) dan di bawah kotak
+        dialogBust.clipBounds = android.graphics.Rect(0, -(80 * d).toInt(), zoneW, viewH)
+    }
+
     // ================================================================== jelajah (waktu bebas)
     //
     // Saat waktu bebas, latar bisa dijelajahi: ketuk pintu untuk pindah tempat, ketuk orang untuk
@@ -1374,6 +1480,7 @@ class GameActivity : Activity() {
         val speakerDef = who?.let { w -> gameData.findCharacter(w) ?: speakerIdFromRaw(speaker) }
         updateCharPanel(speakerDef)
         highlightSpeaker(speakerDef?.id)
+        updateDialogBust(speakerDef, isPlayer = speaker?.contains("{nama}") == true || (who != null && who == playerName))
 
         // Selalu batalkan animasi sebelumnya: perintah "sembunyikan dialog" yang baru dijadwalkan
         // (alpha masih 1) bisa menghapus kalimat ini kalau tidak dibatalkan.
@@ -4152,6 +4259,10 @@ class GameActivity : Activity() {
             ))
             if (animate) iv.translationY = 24 * d
         }
+        // Karakter tampil di kotak dialog (setengah badan, sisi kiri). Gambar besar di tengah layar
+        // hanya untuk yang tidak punya data karakter (mis. sosok misterius) atau ditandai tampil_besar = ya.
+        val cdef = gameData.characters[id]
+        iv.visibility = if (cdef == null || cdef.text["tampil_besar"] == "ya") View.VISIBLE else View.GONE
         // posisi baru selalu ditaruh paling akhir supaya urutan kiri→kanan stabil
         shownChars.remove(id)
         shownChars[id] = expr to pos

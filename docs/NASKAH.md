@@ -262,3 +262,11 @@ Saat masih tahap pengembangan, ini wajar: cukup mulai ulang dengan START GAME.
 Kalau naskah salah tulis (misalnya perintah tidak dikenal), game menampilkan pesan
 **"Naskah bermasalah: Naskah baris X: ..."** saat Start Game. Cek baris tersebut.
 Kalau gambar tidak ditemukan, muncul pesan *"Gambar latar/… tidak ditemukan"* dan layar hitam.
+
+
+## Tampilan karakter saat dialog (sejak build 45)
+- Semua dialog memakai satu kotak di bawah: pembicara tampil **setengah badan di sisi kiri kotak**, teks di kanan.
+- `@tampil ayah sedih` sekarang menentukan **ekspresi** Ayah saat ia bicara (gambar besar di tengah layar tidak ditampilkan).
+  Posisi kiri/tengah/kanan tidak berpengaruh lagi, tapi tetap boleh ditulis.
+- Kalimat `{nama}:` memakai gambar tokoh utama (pemain_l / pemain_p). Narasi `*` tanpa gambar. Adegan kenangan tanpa gambar.
+- Gambar besar tetap muncul untuk sosok tanpa data karakter (mis. `@tampil sosok biasa`) atau karakter dengan `tampil_besar = ya` di karakter.txt.
