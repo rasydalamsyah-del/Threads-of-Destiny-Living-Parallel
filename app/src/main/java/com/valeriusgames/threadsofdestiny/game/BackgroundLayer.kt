@@ -31,7 +31,11 @@ class BackgroundLayer(private val container: FrameLayout) {
     private val a = ImageView(container.context).apply { scaleType = ImageView.ScaleType.CENTER_CROP }
     private val b = ImageView(container.context).apply { scaleType = ImageView.ScaleType.CENTER_CROP }
     private var front: ImageView = a
-    private var motionAnim: ValueAnimator? = null
+    /** Animasi gerak kamera per lapis gambar (lapis lama tetap bergerak selama crossfade, tidak membeku). */
+    private val panAnims = HashMap<ImageView, ValueAnimator>()
+    /** Posisi gerak kamera terakhir (0..1, arah) — lapis baru melanjutkan dari sini supaya tidak meloncat. */
+    private var panPhase = 0f
+    private var panForward = true
     private var memoryShown = false
     /** Pewarnaan sesuai jam yang sedang dipakai (null = warna asli). */
     private var timeMatrix: FloatArray? = null
@@ -70,8 +74,8 @@ class BackgroundLayer(private val container: FrameLayout) {
         val outgoing = front
         front = incoming
 
-        motionAnim?.cancel()
-        motionAnim = null
+        stopPan(incoming)
+        val wasPanning = panAnims.containsKey(outgoing)
         incoming.animate().cancel()
         outgoing.animate().cancel()
 
@@ -80,11 +84,13 @@ class BackgroundLayer(private val container: FrameLayout) {
         reset(incoming)
         incoming.bringToFront()
 
+        if (motion == Motion.PAN) startPan(incoming, continueFrom = wasPanning) else panPhase = 0f
+
         if (instant) {
             incoming.alpha = 1f
             outgoing.alpha = 0f
+            stopPan(outgoing)
             reset(outgoing)
-            if (motion == Motion.PAN) startPan(incoming)
             done()
             return
         }
@@ -103,10 +109,12 @@ class BackgroundLayer(private val container: FrameLayout) {
                     .setInterpolator(AccelerateDecelerateInterpolator())
                     .withEndAction {
                         outgoing.alpha = 0f
+                        stopPan(outgoing)
                         reset(outgoing)
                         done()
                     }
                     .start()
+                stopPan(outgoing)
                 outgoing.animate()
                     .translationY(-shift)
                     .setDuration(RISE_MS)
@@ -115,13 +123,13 @@ class BackgroundLayer(private val container: FrameLayout) {
             }
             else -> {
                 incoming.alpha = 0f
-                if (motion == Motion.PAN) startPan(incoming)
                 incoming.animate()
                     .alpha(1f)
                     .setDuration(CROSSFADE_MS)
                     .setInterpolator(DecelerateInterpolator())
                     .withEndAction {
                         outgoing.alpha = 0f
+                        stopPan(outgoing)
                         reset(outgoing)
                         done()
                     }
@@ -164,28 +172,48 @@ class BackgroundLayer(private val container: FrameLayout) {
     }
 
     fun release() {
-        motionAnim?.cancel()
+        panAnims.values.forEach { it.cancel() }
+        panAnims.clear()
         timeAnim?.cancel()
         a.animate().cancel()
         b.animate().cancel()
     }
 
-    private fun startPan(view: ImageView) {
+    private fun stopPan(view: ImageView) {
+        panAnims.remove(view)?.cancel()
+    }
+
+    /**
+     * Kamera zoom & geser pelan bolak-balik. Lapis baru langsung diberi posisi awal (bukan menunggu
+     * frame berikutnya) dan melanjutkan posisi lapis lama, jadi saat berganti gambar tidak ada
+     * loncatan zoom / potongan tiba-tiba.
+     */
+    private fun startPan(view: ImageView, continueFrom: Boolean) {
         val w = container.width.takeIf { it > 0 }?.toFloat() ?: 1080f
-        motionAnim = ValueAnimator.ofFloat(0f, 1f).apply {
+        fun apply(t: Float) {
+            val s = 1.06f + 0.08f * t
+            view.scaleX = s
+            view.scaleY = s
+            view.translationX = w * 0.025f * (t * 2f - 1f)
+        }
+        val start = if (continueFrom) panPhase else 0f
+        val forward = if (continueFrom) panForward else true
+        apply(start)
+        val anim = ValueAnimator.ofFloat(0f, 1f).apply {
             duration = PAN_MS
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
             interpolator = LinearInterpolator()
             addUpdateListener {
                 val t = it.animatedValue as Float
-                val s = 1.06f + 0.08f * t
-                view.scaleX = s
-                view.scaleY = s
-                view.translationX = w * 0.025f * (t * 2f - 1f)
+                apply(t)
+                if (panAnims[view] === it) { panPhase = t; panForward = (it.currentPlayTime / PAN_MS) % 2 == 0L }
             }
-            start()
         }
+        // mulai dari posisi yang sama dengan gambar sebelumnya (arah bolak-baliknya juga dipertahankan)
+        anim.currentPlayTime = ((if (forward) start else 2f - start) * PAN_MS).toLong()
+        panAnims[view] = anim
+        anim.start()
     }
 
     private fun reset(v: ImageView) {

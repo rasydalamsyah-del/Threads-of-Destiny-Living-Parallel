@@ -120,6 +120,18 @@ class StoryTimelineTest {
         }
     }
 
+    @Test fun breakfastHasExpressions() {
+        // adegan sarapan memakai gambar keluarga, tapi ekspresi di kotak dialog tetap berganti
+        val l = File(dir, "prolog.txt").readLines().map { it.trim() }
+        val start = l.indexOf("@latar sarapan_keluarga")
+        val end = l.indexOf("@latar ruang_makan")
+        assertTrue(start in 0 until end)
+        val scene = l.subList(start, end)
+        listOf("@tampil ayah sedih", "@tampil ibu sedih", "@tampil laras kesal").forEach { e ->
+            assertTrue("sarapan tanpa $e", scene.any { it.startsWith(e) })
+        }
+    }
+
     @Test fun newTimeCommandsParse() {
         val s = StoryScript.parse(listOf("@bebas 5 hari", "@bebas sampai Sabtu 15:00", "@bebas 3", "@maju 2 jam", "@maju 30 menit", "@maju 2",
             "@kalender Senin 07:30", "@tunjuk hp kalender atas | contoh", "@info bayu hobi"))

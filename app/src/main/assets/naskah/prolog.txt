@@ -72,6 +72,10 @@ Ibu: {nama}! Sudah bangun belum? Sarapan sudah siap. Ayahmu juga baru pulang!
 @latar sarapan_keluarga
 @kenal ayah
 @kenal laras
+# gambar besar tidak ditampilkan (sudah ada di gambar keluarga); @tampil di sini hanya mengatur ekspresi di kotak dialog
+@tampil ayah biasa kiri
+@tampil laras senyum tengah
+@tampil ibu senyum kanan
 * Di ruang makan yang sempit, meja kayu sudah penuh: nasi hangat, sayur asem, sambal, dan ikan goreng hasil tangkapan Ayah semalam.
 * Ayah baru pulang melaut. Rambutnya masih kaku oleh garam laut, matanya merah karena semalaman terjaga.
 Ayah: Nah, ini dia {jagoan|putri} Ayah yang sudah lulus SMP.
@@ -80,21 +84,27 @@ Laras: Kak {nama} kemarin nangis waktu perpisahan sekolah, lho!
 Ibu: Sudah, sudah. Ayo makan dulu, keburu dingin.
 * Mereka makan bersama. Sendok beradu dengan piring seng, diselingi celoteh Laras soal kucing tetangga yang tidur di warung.
 Ibu: Yah, tangkapan semalam bagaimana?
+@tampil ayah sedih kiri
 Ayah: Lumayan... tapi harga ikan di pelelangan turun lagi. Juragan Darto cuma mau bayar delapan ribu sekilo.
+@tampil ibu sedih kanan
 Ibu: Delapan ribu... Padahal solar naik terus.
 Ayah: Ya mau bagaimana. Yang penting dapur tetap ngebul.
 Ibu: Warung juga sepi akhir-akhir ini. Orang lebih suka beli gorengan di minimarket baru dekat jalan raya.
 {nama}: Minimarket yang baru buka itu, Bu? Kemarin aku lewat, ramai sekali.
 Laras: Yang ada AC-nya itu! Aku pernah masuk, dingin banget!
+@tampil ibu senyum kanan
 Ibu: Hush, kamu itu.
 * Tawa kecil pecah di meja makan. Tapi {nama} melihat Ayah dan Ibu saling bertukar pandang, seolah ada yang tidak mereka ucapkan.
+@tampil ayah senyum kiri
 Ayah: Sudah. Urusan uang biar Ayah sama Ibu yang pikirkan. Kalian makan yang banyak.
 {nama}: Kalau ada yang bisa aku bantu, bilang ya, Yah.
 Ayah: Kamu pikirkan saja masa depanmu. Itu sudah bantu Ayah.
 Laras: Bu, nanti aku minta uang jajan dua ribu, ya. Ada yang jual es lilin kacang hijau di sekolah.
 Ibu: Seribu. Yang seribu lagi masuk celengan.
+@tampil laras kesal tengah
 Laras: Yaaah...
 {nama}: Nanti Kakak tambahin seribu, Ras. Asal jangan bilang Ibu.
+@tampil laras senyum tengah
 Laras: Kakak terbaik!
 Ibu: Ibu dengar, lho.
 * Laras buru-buru menunduk menghabiskan nasinya. Ayah menahan tawa.
@@ -104,14 +114,18 @@ Ibu: Ibu dengar, lho.
 * Selesai makan, Ibu bergegas ke dapur dan kembali membawa kotak bekal berwarna biru.
 Ibu: Laras, ini bekalmu. Dihabiskan, jangan dikasih ke kucing lagi.
 Laras: Iya, Bu~
+@sembunyi laras
 @latar sarapan_tanpa_laras
 * Laras berlari ke teras dan memasang sepatu hitamnya yang mulai sobek di ujung.
 * Ia kembali sebentar untuk mencium tangan Ayah dan Ibu, mengucap salam, lalu mengayuh sepeda kecilnya menyusuri jalan tanah menuju sekolah.
 * Bunyi bel sepedanya terdengar sampai menghilang di tikungan dekat dermaga.
+@tampil ayah biasa kiri
 Ayah: Ayah tidur dulu, ya. Nanti siang Ayah bangun.
+@sembunyi ayah
 * Ayah masuk ke kamar. Tak lama kemudian, terdengar dengkurnya yang khas.
 Ibu: {nama}, siap-siap, ya. Tolong buka warung duluan. Ibu cuci piring sebentar, nanti Ibu menyusul.
 {nama}: Iya, Bu.
+@sembunyi semua
 @latar ruang_makan
 * Ibu membawa piring-piring kotor ke dapur. Ruang makan kini sepi.
 @maju 15 menit

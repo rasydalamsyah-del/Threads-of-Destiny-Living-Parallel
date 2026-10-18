@@ -917,6 +917,8 @@ class GameActivity : Activity() {
     }
 
     /** Ukur ulang gambar setengah badan mengikuti tinggi kotak dialog. */
+    private val BUST_HEIGHT_DP = 186f
+
     private fun fitBust() {
         val d = resources.displayMetrics.density
         val bmp = (dialogBust.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap ?: return
@@ -934,8 +936,10 @@ class GameActivity : Activity() {
         if (box.paddingLeft != textStart) box.setPadding(textStart, box.paddingTop, box.paddingRight, box.paddingBottom)
         val nl = nameTag.layoutParams as FrameLayout.LayoutParams
         if (nl.marginStart != textStart) { nl.marginStart = textStart; nameTag.layoutParams = nl }
-        // tinggi gambar = tinggi kotak + kepala menyembul ±52dp di atas kotak; rata bawah; dipusatkan pada badan
-        val targetH = (box.height - inset) + 52 * d
+        // UKURAN DIKUNCI: tinggi gambar selalu sama (tidak ikut panjang-pendeknya kalimat / tinggi kotak).
+        // Pada kotak 3 baris kepala menyembul ±52dp di atas kotak; kalau kalimat panjang kotak tumbuh ke atas
+        // dan kepala terlihat lebih masuk ke kotak. Rata bawah, dipusatkan pada badan.
+        val targetH = BUST_HEIGHT_DP * d
         val sc = targetH / bmp.height
         val cx = (bustCenter[bmp] ?: (bmp.width / 2)).toFloat()
         val m = android.graphics.Matrix()
