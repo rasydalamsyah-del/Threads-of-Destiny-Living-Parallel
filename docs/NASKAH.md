@@ -139,6 +139,8 @@ Jam ini juga dipakai di layar kunci HP.
 @bebas sampai Sabtu 15:00 waktu bebas sampai hari & jam tertentu (DISARANKAN). Pemain bebas berkegiatan selama
 @jalan ruang_makan | petunjuk   pemain berjalan sendiri (mengetuk pintu) sampai lokasi itu, lalu naskah lanjut.
                           Lokasi dari data/lokasi.txt. Selama berjalan hanya pintu yang bisa disentuh.
+@atur latar_ruang_tengah = ruang_tengah_sarapan   ganti sementara gambar sebuah lokasi (mis. keluarga sedang makan);
+                          kembalikan dengan @atur latar_ruang_tengah = -
                           tenaganya cukup; tombol "⏩ Santai sampai ..." untuk langsung lanjut; Tidur hanya muncul
                           bila waktu bebas masih ≥ 8 jam (tidak melompati kelanjutan cerita)
 ```

@@ -31,6 +31,12 @@ waktu = pagi
 [sarapan_keluarga]
 waktu = pagi
 
+[sarapan_tanpa_laras]
+waktu = pagi
+
+[ruang_tengah_sarapan]
+waktu = pagi
+
 [rumah_warung]
 waktu = pagi
 

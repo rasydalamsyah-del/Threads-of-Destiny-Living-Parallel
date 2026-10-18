@@ -1211,6 +1211,9 @@ class GameActivity : Activity() {
 
     /** File yang seharusnya tampil: versi khusus jam ini bila ada, selain itu gambar biasa. */
     private fun bgFileNow(name: String): String {
+        // naskah bisa mengganti sementara gambar sebuah lokasi, mis. ruang tengah saat keluarga sedang sarapan:
+        // @atur latar_ruang_tengah = ruang_tengah_sarapan   (kembalikan dengan "-")
+        vars["latar_${bgBaseFile(name)}"]?.trim()?.takeIf { it.isNotEmpty() && it != "-" && it in latarFiles }?.let { return it }
         val base = bgBaseFile(name)
         val t = timeKey() ?: return base
         if (gameData.backgroundTimes[base] == "tetap") return base
