@@ -24,6 +24,8 @@ class GameData private constructor(
     val posts: List<PostDef>,
     val chats: List<ChatDef> = emptyList(),
     val messages: List<MessageDef> = emptyList(),
+    /** Waktu asli tiap gambar latar (data/latar.txt): pagi / siang / sore / malam / tetap. */
+    val backgroundTimes: Map<String, String> = emptyMap(),
 ) {
 
     /**
@@ -410,7 +412,8 @@ class GameData private constructor(
             }
             val chats = readSections(ctx, "data/obrolan.txt").map { (id, m) -> chat(id, m) }
             val msgs = readSections(ctx, "data/pesan.txt").map { (id, m) -> message(id, m) }
-            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats, msgs)
+            val bgTimes = readSections(ctx, "data/latar.txt").associate { (id, m) -> id to (m["waktu"] ?: "tetap").trim().lowercase() }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats, msgs, bgTimes)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {

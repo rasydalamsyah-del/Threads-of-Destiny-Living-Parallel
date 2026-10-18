@@ -1,0 +1,71 @@
+# ==========================================================
+#  WAKTU ASLI SETIAP GAMBAR LATAR
+#  Panduan: docs/DATA.md (bagian latar.txt)
+#
+#  Gambar latar hanya satu, tapi jam di game berjalan (pagi → siang → sore → malam).
+#  Supaya tidak aneh (misalnya langit terang padahal sudah jam 21:00), warna latar
+#  otomatis disesuaikan dengan jam: pagi hangat, siang terang, sore jingga, malam gelap kebiruan.
+#  Karakter ikut sedikit menyesuaikan.
+#
+#  [nama_file_tanpa_.jpg]
+#  waktu = pagi / siang / sore / malam  → suasana yang tergambar di gambar aslinya
+#          tetap                         → tidak pernah diubah (kenangan, adegan khusus)
+#
+#  Gambar versi khusus (lebih bagus dari pewarnaan otomatis) boleh ditambahkan kapan saja:
+#    latar/rumah_warung_malam.jpg, latar/rumah_warung_sore.jpg, dst.
+#  Bila ada, game memakai gambar itu dan tidak mewarnai ulang.
+# ==========================================================
+
+[kamar_pagi]
+waktu = pagi
+
+[plafon]
+waktu = tetap
+
+[ruang_makan]
+waktu = pagi
+
+[rumah_warung]
+waktu = pagi
+
+[gudang_ikan]
+waktu = siang
+
+[kota_kecil]
+waktu = sore
+
+[sekolah]
+waktu = tetap
+
+[stasiun_hujan]
+waktu = tetap
+
+[stasiun_desa]
+waktu = pagi
+
+[dermaga_malam]
+waktu = tetap
+
+[kota_besar]
+waktu = sore
+
+[kos_kamar]
+waktu = malam
+
+[kos_cendana]
+waktu = sore
+
+[kos_pusat]
+waktu = sore
+
+[kelas_sma]
+waktu = pagi
+
+[stasiun_besar]
+waktu = sore
+
+[toko_buku]
+waktu = malam
+
+[taman_kota]
+waktu = sore

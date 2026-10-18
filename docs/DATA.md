@@ -81,6 +81,18 @@ Supaya kegiatan tidak bisa diulang terus (makan terus, istirahat terus sampai en
 Yang terkena batas tampil redup dengan alasan ("Sudah dilakukan hari ini — besok lagi", "Baru saja dilakukan — bisa lagi pukul 11:00").
 Saat waktu bebas berakhir di jam tertentu, kegiatan yang selesainya melewati jam itu juga redup ("Waktunya tidak cukup — cerita berlanjut pukul 20:00").
 
+## latar.txt (latar mengikuti jam)
+Gambar latar hanya satu per tempat, padahal jam berjalan. Supaya tidak aneh (langit terang padahal jam 21:00),
+game **mewarnai latar otomatis** sesuai bagian hari: pagi hangat, siang terang, sore jingga, malam gelap kebiruan.
+Perubahan terjadi perlahan saat waktu berganti; karakter ikut menyesuaikan tapi lebih lembut (45%).
+```
+[rumah_warung]
+waktu = pagi      (suasana di gambar aslinya: pagi / siang / sore / malam, atau "tetap" = tidak diubah)
+```
+- `tetap`: kenangan & adegan khusus (plafon, sekolah SMP, stasiun hujan, dermaga malam). Adegan kenangan juga tidak pernah diwarnai.
+- Gambar asli malam tidak dibuat terang (hasilnya pucat).
+- **Versi khusus** lebih bagus dari pewarnaan: simpan `latar/<nama>_<waktu>.jpg` (mis. `rumah_warung_malam.jpg`). Bila ada, game memakainya otomatis (berganti halus saat jamnya tiba) dan tidak mewarnai ulang.
+
 ## pesan.txt (chat di HP & pilihan balasannya)
 ```
 [bayu_lulus]

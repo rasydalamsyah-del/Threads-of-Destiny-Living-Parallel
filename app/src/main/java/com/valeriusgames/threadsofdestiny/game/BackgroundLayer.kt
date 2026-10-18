@@ -32,6 +32,10 @@ class BackgroundLayer(private val container: FrameLayout) {
     private val b = ImageView(container.context).apply { scaleType = ImageView.ScaleType.CENTER_CROP }
     private var front: ImageView = a
     private var motionAnim: ValueAnimator? = null
+    private var memoryShown = false
+    /** Pewarnaan sesuai jam yang sedang dipakai (null = warna asli). */
+    private var timeMatrix: FloatArray? = null
+    private var timeAnim: ValueAnimator? = null
 
     private val memoryFilter: ColorMatrixColorFilter by lazy {
         val m = ColorMatrix().apply { setSaturation(0.28f) }
@@ -58,7 +62,10 @@ class BackgroundLayer(private val container: FrameLayout) {
         b.alpha = 0f
     }
 
-    fun show(bitmap: Bitmap?, memory: Boolean, motion: Motion, instant: Boolean, done: () -> Unit) {
+    fun show(bitmap: Bitmap?, memory: Boolean, motion: Motion, instant: Boolean, time: FloatArray? = timeMatrix, done: () -> Unit) {
+        timeAnim?.cancel()
+        timeMatrix = time
+        memoryShown = memory
         val incoming = if (front === a) b else a
         val outgoing = front
         front = incoming
@@ -69,7 +76,7 @@ class BackgroundLayer(private val container: FrameLayout) {
         outgoing.animate().cancel()
 
         incoming.setImageBitmap(bitmap)
-        incoming.colorFilter = if (memory) memoryFilter else null
+        incoming.colorFilter = if (memory) memoryFilter else time?.let { ColorMatrixColorFilter(it) }
         reset(incoming)
         incoming.bringToFront()
 
@@ -123,6 +130,30 @@ class BackgroundLayer(private val container: FrameLayout) {
         }
     }
 
+    /**
+     * Ganti pewarnaan sesuai jam tanpa mengganti gambar (mis. sore → malam saat waktu berjalan).
+     * Perubahan dibuat perlahan agar tidak mengagetkan.
+     */
+    fun setTime(target: FloatArray?, animate: Boolean) {
+        if (memoryShown) { timeMatrix = target; return }
+        timeAnim?.cancel()
+        val from = timeMatrix
+        timeMatrix = target
+        val view = front
+        if (!animate) {
+            view.colorFilter = target?.let { ColorMatrixColorFilter(it) }
+            return
+        }
+        timeAnim = ValueAnimator.ofFloat(0f, 1f).apply {
+            duration = 1400L
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener {
+                view.colorFilter = ColorMatrixColorFilter(TimeLook.lerp(from, target, it.animatedValue as Float))
+            }
+            start()
+        }
+    }
+
     /** Buram (0 = jelas). Hanya Android 12 ke atas; di bawahnya diabaikan. */
     fun setBlur(radius: Float) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
@@ -134,6 +165,7 @@ class BackgroundLayer(private val container: FrameLayout) {
 
     fun release() {
         motionAnim?.cancel()
+        timeAnim?.cancel()
         a.animate().cancel()
         b.animate().cancel()
     }

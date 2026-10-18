@@ -414,6 +414,31 @@ Style: modern Japanese anime visual novel art, clean thin lineart, soft cel shad
 
 ---
 
+### Versi latar per waktu (opsional, lebih bagus dari pewarnaan otomatis)
+Game sudah mewarnai latar sesuai jam secara otomatis. Tapi untuk tempat yang paling sering dipakai, versi asli per waktu
+jauh lebih bagus (lampu menyala, bintang, bayangan panjang). Lampirkan gambar aslinya, lalu kirim prompt. Simpan dengan
+nama `<nama>_<waktu>.jpg` — gambar asli JANGAN diganti.
+
+Kalimat pengunci (tempel di depan setiap prompt):
+```
+Use the attached image as the exact reference background. Keep EVERYTHING identical: same composition, same camera angle, same buildings, furniture and objects in the same places, same art style. This is an edit of the attached image, not a new picture. Change ONLY the time of day and lighting as described. No people, no text, vertical 9:16.
+```
+
+| Simpan sebagai (lampirkan) | Tambahan prompt |
+|---|---|
+| `rumah_warung_sore.jpg` (rumah_warung.jpg) | `Late afternoon around 5 pm: warm orange sunlight from a low sun, long soft shadows on the road, golden sky over the sea, the lighthouse glowing in the sunset light.` |
+| `rumah_warung_malam.jpg` (rumah_warung.jpg) | `Night around 8 pm: dark blue starry sky, a warm yellow bulb lit under the warung roof, soft lamp glow on the table and stools, the lighthouse dark in the distance, dim moonlight on the road, houses with lit windows.` |
+| `kamar_pagi_malam.jpg` (kamar_pagi.jpg) | `Night: dark blue night outside the window, curtains half closed, a small warm desk lamp turned on, soft warm light on the bed and desk, the rest of the room in gentle shadow.` |
+| `ruang_makan_malam.jpg` (ruang_makan.jpg) | `Night dinner time: dark night outside the window with a few village lights, the rattan ceiling lamp turned on with warm yellow light, warm glow on the dining table, cozy family dinner mood.` |
+| `ruang_makan_siang.jpg` (ruang_makan.jpg) | `Midday: bright neutral daylight through the window, clear blue sky outside, short shadows, fresh lunch time mood.` |
+| `kos_kamar_pagi.jpg` (kos_kamar.jpg) | `Early morning: pale blue morning light through the small window, the lamp turned off, soft cool daylight on the mattress, train tracks outside in morning haze.` |
+| `gudang_ikan_sore.jpg` (gudang_ikan.jpg) | `Late afternoon: warm orange low sunlight, long shadows from the drying racks, golden reflections on the sea.` |
+| `kota_kecil_malam.jpg` (kota_kecil.jpg) | `Night: dark blue sky full of stars, moon reflected on the calm sea, warm lit windows in the wooden houses, small lamps along the pier, the old lighthouse dark.` |
+
+Urutan prioritas: rumah_warung_malam → kamar_pagi_malam → ruang_makan_malam → rumah_warung_sore → sisanya.
+
+---
+
 ## 5. Adegan spesial (CG, gambar gabungan) — opsional
 
 Dipasang dengan `@latar nama_file`. Gambar karakter tidak perlu ditampilkan di atasnya.

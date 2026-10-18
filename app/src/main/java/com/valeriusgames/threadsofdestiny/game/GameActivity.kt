@@ -776,7 +776,9 @@ class GameActivity : Activity() {
         bgMotion = runCatching { Motion.valueOf(d.motion) }.getOrDefault(Motion.NONE)
         if (d.bg != null) {
             val motion = if (bgMotion == Motion.PAN) Motion.PAN else Motion.NONE
-            bg.show(loadBackground(d.bg), d.memory, motion, instant = true) {}
+            val bmp = loadBackground(d.bg)
+            bg.show(bmp, d.memory, motion, instant = true, time = bgTimeMatrix()) {}
+            updateCharTint()
         }
         vignette.alpha = if (d.memory) 1f else 0f
         setClock(d.clock)
@@ -825,17 +827,85 @@ class GameActivity : Activity() {
         hideDialog {
             vignette.animate().alpha(if (c.memory) 1f else 0f)
                 .setDuration(if (instant) 0 else BackgroundLayer.CROSSFADE_MS).start()
-            bg.show(loadBackground(c.name), c.memory, c.motion, instant, done)
+            val bmp = loadBackground(c.name)
+            bg.show(bmp, c.memory, c.motion, instant, bgTimeMatrix(), done)
+            updateCharTint()
         }
+    }
+
+    // ---------------- latar mengikuti jam ----------------
+
+    /** Nama file latar yang tersedia (tanpa ekstensi). */
+    private val latarFiles: Set<String> by lazy {
+        (assets.list("latar") ?: emptyArray()).map { it.substringBeforeLast('.') }.toSet()
+    }
+    /** File latar yang sedang tampil (bisa versi khusus, mis. rumah_warung_malam). */
+    private var shownBgFile: String? = null
+
+    /** "kos_kamar" = kamar kos yang sedang disewa (latar/kos_rel_utara.jpg, dst.) bila gambarnya ada. */
+    private fun bgBaseFile(name: String): String =
+        if (name == "kos_kamar" && life.kosId.isNotEmpty() && life.kosId in latarFiles) life.kosId else name
+
+    /** Bagian hari sekarang untuk pewarnaan; null saat kenangan atau sistem waktu belum berjalan. */
+    private fun timeKey(): String? =
+        if (life.active && !memoryMode) life.slot.label.lowercase() else null
+
+    /** File yang seharusnya tampil: versi khusus jam ini bila ada, selain itu gambar biasa. */
+    private fun bgFileNow(name: String): String {
+        val base = bgBaseFile(name)
+        val t = timeKey() ?: return base
+        if (gameData.backgroundTimes[base] == "tetap") return base
+        return "${base}_$t".takeIf { it in latarFiles } ?: base
+    }
+
+    /** Pewarnaan latar sekarang (null bila memakai versi khusus / waktunya sama / "tetap"). */
+    private fun bgTimeMatrix(): FloatArray? {
+        val name = bgName ?: return null
+        val base = bgBaseFile(name)
+        if (bgFileNow(name) != base) return null
+        return TimeLook.matrix(gameData.backgroundTimes[base], timeKey())
+    }
+
+    /** Karakter digambar dengan cahaya siang: ikut menyesuaikan jam, tapi lebih lembut dari latar. */
+    private fun updateCharTint() {
+        if (!::charLayer.isInitialized) return
+        val name = bgName
+        val m = if (name == null || gameData.backgroundTimes[bgBaseFile(name)] == "tetap") null
+            else TimeLook.blend(TimeLook.matrix("siang", timeKey()), 0.45f)
+        if (m == null) {
+            charLayer.setLayerType(View.LAYER_TYPE_NONE, null)
+        } else {
+            charLayer.setLayerType(View.LAYER_TYPE_HARDWARE, android.graphics.Paint().apply {
+                colorFilter = android.graphics.ColorMatrixColorFilter(m)
+            })
+        }
+    }
+
+    /** Dipanggil saat jam berubah: ganti ke versi khusus atau ubah pewarnaan perlahan. */
+    private var lastTimeLookKey: String? = null
+    private fun updateTimeLook() {
+        val name = bgName ?: return
+        val key = "$name|${timeKey()}|${life.kosId}"
+        if (key == lastTimeLookKey) return
+        lastTimeLookKey = key
+        val want = bgFileNow(name)
+        if (want != shownBgFile && shownBgFile != null) {
+            bg.show(loadBackground(name), memoryMode, StoryScript.Motion.NONE, instant = false, time = bgTimeMatrix()) {}
+        } else {
+            bg.setTime(bgTimeMatrix(), animate = true)
+        }
+        updateCharTint()
     }
 
     private fun loadBackground(name: String): Bitmap? {
         val opts = BitmapFactory.Options().apply { inPreferredConfig = Bitmap.Config.ARGB_8888 }
-        // "kos_kamar" = kamar kos yang sedang disewa (latar/kos_rel_utara.jpg, dst.) bila gambarnya ada
-        if (name == "kos_kamar" && life.kosId.isNotEmpty()) {
+        val file = bgFileNow(name)
+        shownBgFile = file
+        lastTimeLookKey = "$name|${timeKey()}|${life.kosId}"
+        if (file != name) {
             for (ext in listOf("jpg", "jpeg", "png", "webp")) {
                 try {
-                    return assets.open("latar/${life.kosId}.$ext").use { BitmapFactory.decodeStream(it, null, opts) }
+                    return assets.open("latar/$file.$ext").use { BitmapFactory.decodeStream(it, null, opts) }
                 } catch (_: Exception) {
                 }
             }
@@ -1263,6 +1333,7 @@ class GameActivity : Activity() {
 
     /** Perbarui panel status, jam, dan variabel kehidupan. */
     private fun refreshLife() {
+        if (::bg.isInitialized && bgName != null) updateTimeLook()
         val show = life.active && storyStarted && !memoryMode
         if (show && lifeDrawer.visibility != View.VISIBLE) {
             lifeDrawer.visibility = View.VISIBLE
