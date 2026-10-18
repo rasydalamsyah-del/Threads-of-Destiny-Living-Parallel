@@ -25,7 +25,7 @@
 nama   = Kamarmu
 tempat = desa
 pintu  = ruang_tengah | 🚪 Ke ruang tengah | 0.80, 0.42 | 0
-benda  = istirahat | 🛏️ Berbaring | 0.30, 0.86 ; belajar | 📚 Meja belajar | 0.56, 0.56
+benda  = istirahat | 🛏️ Kasur | 0.30, 0.86 ; belajar | 📚 Meja belajar | 0.56, 0.56
 tidur  = ya
 
 [ruang_tengah]

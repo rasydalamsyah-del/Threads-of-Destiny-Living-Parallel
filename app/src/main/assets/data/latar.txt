@@ -28,6 +28,9 @@ waktu = pagi
 [ruang_makan]
 waktu = pagi
 
+[sarapan_keluarga]
+waktu = pagi
+
 [rumah_warung]
 waktu = pagi
 

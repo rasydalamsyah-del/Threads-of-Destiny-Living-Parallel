@@ -58,20 +58,23 @@
 Ibu: {nama}! Sudah bangun belum? Sarapan sudah siap. Ayahmu juga baru pulang!
 {nama}: Iya, Bu! Sebentar!
 @maju 10 menit
+* {nama} merapikan selimut, lalu keluar kamar menuju ruang makan.
+@jalan ruang_makan | Ibu memanggil untuk sarapan
 
 
 # ----------------------------------------------------------
 #  SARAPAN DI RUANG MAKAN (obrolan keluarga, tanpa pilihan)
 # ----------------------------------------------------------
 
-@latar ruang_makan
+@latar sarapan_keluarga
 @kenal ayah
 @kenal laras
+* Di ruang makan yang sempit, meja kayu sudah penuh: nasi hangat, sayur asem, sambal, dan ikan goreng hasil tangkapan Ayah semalam.
+* Ayah baru pulang melaut. Rambutnya masih kaku oleh garam laut, matanya merah karena semalaman terjaga.
+@latar ruang_makan
 @tampil ayah biasa kiri
 @tampil laras senyum tengah
 @tampil ibu senyum kanan
-* Di ruang makan yang sempit, meja kayu sudah penuh: nasi hangat, sayur asem, sambal, dan ikan goreng hasil tangkapan Ayah semalam.
-* Ayah baru pulang melaut. Rambutnya masih kaku oleh garam laut, matanya merah karena semalaman terjaga.
 Ayah: Nah, ini dia {jagoan|putri} Ayah yang sudah lulus SMP.
 Laras: Kak {nama} kemarin nangis waktu perpisahan sekolah, lho!
 {nama}: Laras! Jangan ngarang!

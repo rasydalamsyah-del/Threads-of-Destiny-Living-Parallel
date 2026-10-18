@@ -549,6 +549,7 @@ class GameActivity : Activity() {
                     storyMessageKeys += messageKey(sender)
                 }
                 is Cmd.WaitForPhone -> { waitForPhone(); return }
+                is Cmd.Walk -> { startWalk(c); return }
                 is Cmd.Music -> if (c.name == null) audio.stopMusic() else audio.playMusic(c.name)
                 is Cmd.Sound -> audio.playSound(c.name)
                 is Cmd.Choice -> { showChoices(c); return }
@@ -845,6 +846,33 @@ class GameActivity : Activity() {
     private var bgImgW = 941
     private var bgImgH = 1672
 
+    /** Tujuan @jalan: pemain harus berjalan sendiri (mengetuk pintu) sampai ke lokasi ini. */
+    private var walkTarget: String? = null
+    private var walkHint: String = ""
+
+    private fun startWalk(c: Cmd.Walk) {
+        val target = resolveLoc(c.target)
+        if (currentLocation() == null || currentLocation()?.id == target || gameData.locations[target] == null) { next(); return }
+        hideDialog()
+        walkTarget = target
+        walkHint = fill(c.hint)
+        wait = Wait.FREE
+        closeSheet()
+        renderExplore()
+        notice("🚶 Pergi ke ${gameData.locations[target]?.name}: ketuk pintunya")
+    }
+
+    /** Sampai di tujuan @jalan → cerita lanjut. */
+    private fun checkWalkArrived(): Boolean {
+        val t = walkTarget ?: return false
+        if (currentLocation()?.id != t) return false
+        walkTarget = null
+        hideExploreUi()
+        wait = Wait.BUSY
+        handler.postDelayed({ next() }, 250)
+        return true
+    }
+
     private fun setupExplore() {
         val root = charLayer.parent as ViewGroup
         val d = resources.displayMetrics.density
@@ -956,7 +984,9 @@ class GameActivity : Activity() {
         bgName = target
         bgMotion = Motion.NONE
         val bmp = loadBackground(target)
-        bg.show(bmp, false, Motion.NONE, instant = false, time = bgTimeMatrix()) { if (wait == Wait.FREE) done() }
+        bg.show(bmp, false, Motion.NONE, instant = false, time = bgTimeMatrix()) {
+            if (wait == Wait.FREE && !checkWalkArrived()) done()
+        }
         updateCharTint()
     }
 
@@ -972,8 +1002,14 @@ class GameActivity : Activity() {
             return
         }
         exploreLayer.visibility = View.VISIBLE
-        freeToggle.visibility = View.VISIBLE
-        placePill.text = "📍 ${loc.name}\n${life.clockText}" + (freeUntilText()?.let { "\n$it" } ?: "")
+        val walking = walkTarget != null
+        freeToggle.visibility = if (walking) View.GONE else View.VISIBLE
+        placePill.text = if (walking) {
+            "🚶 Pergi ke ${gameData.locations[walkTarget!!]?.name}" + (if (walkHint.isNotEmpty()) "\n$walkHint" else "") +
+                "\nKetuk pintu untuk berpindah"
+        } else {
+            (if (settings.exploreHints) "📍 ${loc.name}\n" else "") + life.clockText + (freeUntilText()?.let { "\n$it" } ?: "")
+        }
         placePill.visibility = View.VISIBLE
         if (exploreLayer.width == 0) exploreLayer.post { buildExplore(loc) } else buildExplore(loc)
     }
@@ -1026,8 +1062,9 @@ class GameActivity : Activity() {
         val bgTint = bgTimeMatrix()?.let { android.graphics.ColorMatrixColorFilter(it) }
         val charTint = TimeLook.blend(TimeLook.matrix("siang", timeKey()), 0.45f)?.let { android.graphics.ColorMatrixColorFilter(it) }
 
+        val walking = walkTarget != null
         // orang: gambar adegan (bila ada) atau gambar berdiri
-        peopleAt(loc).forEach { c ->
+        if (!walking) peopleAt(loc).forEach { c ->
             val scene = loadAsset(listOf("adegan/${loc.id}__${c.id}.webp", "adegan/${loc.id}__${c.id}.png"))
             if (scene != null) {
                 val iv = android.widget.ImageView(this).apply {
@@ -1071,7 +1108,7 @@ class GameActivity : Activity() {
             }
         }
         // benda: aktivitas di tempat ini
-        loc.objects.forEach { o ->
+        if (!walking) loc.objects.forEach { o ->
             val a = gameData.activities.firstOrNull { it.id == o.target } ?: return@forEach
             if (a.condition != null && !checkCondition(a.condition)) return@forEach
             val block = activityBlock(a)
@@ -1087,7 +1124,7 @@ class GameActivity : Activity() {
         }
         // tidur di kasur (malam, bila waktu bebas masih panjang)
         val left = freeMinutesLeft()
-        if (loc.bed && life.slot == LifeState.Slot.MALAM && (left == null || left >= 8 * 60)) {
+        if (!walking && loc.bed && life.slot == LifeState.Slot.MALAM && (left == null || left >= 8 * 60)) {
             val bed = loc.objects.firstOrNull { it.target.startsWith("istirahat") }
             addMarker("😴 Tidur", bed?.x ?: 0.5f, (bed?.y ?: 0.8f) - 0.07f, 0, always = true) { sleepUntilMorning() }
         }
@@ -1120,6 +1157,14 @@ class GameActivity : Activity() {
             elevation = 4 * d
             if (!settings.exploreHints) alpha = 0.01f
             setOnClickListener { onTap() }
+        }
+        if (!settings.exploreHints) {
+            // nama lokasi dimatikan: tidak ada tulisan, tapi area sentuhnya dibuat lebar (seukuran pintu/benda)
+            tv.text = ""
+            tv.minWidth = (110 * d).toInt()
+            tv.minHeight = (150 * d).toInt()
+            tv.background = null
+            tv.elevation = 0f
         }
         tv.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
         val (sx, sy) = imgToScreen(x, y)
@@ -1809,6 +1854,7 @@ class GameActivity : Activity() {
             endFree()
             return
         }
+        if (walkTarget != null) { renderExplore(); return }
         // Kejadian yang menunggu (rintangan, ujian, dll.) tampil dulu
         if (showPendingEvent()) return
         wait = Wait.FREE

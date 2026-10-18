@@ -5,6 +5,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import com.valeriusgames.threadsofdestiny.story.StoryScript
 import java.io.File
 
 /** Lokasi jelajah saat waktu bebas (data/lokasi.txt) & di mana karakter berada. */
@@ -110,5 +111,17 @@ class ExploreTest {
             }
         }
         assertEquals("ruang_makan", acts.getValue("makan_keluarga")["lokasi"])
+    }
+
+    @Test fun walkCommandParses() {
+        val c = StoryScript.parse(listOf("@jalan ruang_makan | Ibu memanggil")).cmds[0]
+        assertEquals(StoryScript.Cmd.Walk("ruang_makan", "Ibu memanggil"), c)
+        // prolog: setelah bangun, pemain berjalan sendiri dari kamar ke ruang makan
+        val prolog = File("src/main/assets/naskah/prolog.txt").readLines().map { it.trim() }
+        assertTrue(prolog.any { it.startsWith("@jalan ruang_makan") })
+        val path = setOf("kamar_pagi", "ruang_tengah", "ruang_makan")
+        assertTrue(locs.getValue("kamar_pagi").doors.any { it.target == "ruang_tengah" })
+        assertTrue(locs.getValue("ruang_tengah").doors.any { it.target == "ruang_makan" })
+        assertTrue(path.all { it in locs })
     }
 }

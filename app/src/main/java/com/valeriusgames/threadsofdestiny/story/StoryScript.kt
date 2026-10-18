@@ -110,6 +110,8 @@ object StoryScript {
         data class Info(val id: String, val key: String) : Cmd()
         /** Tutorial: tampilkan bagian layar (hp, status, tas, bebas, ...) beserta penjelasan. */
         data class Show(val target: String, val sub: String?, val top: Boolean, val text: String) : Cmd()
+        /** @jalan ruang_makan | petunjuk — pemain berjalan sendiri (ketuk pintu) sampai lokasi itu, lalu cerita lanjut. */
+        data class Walk(val target: String, val hint: String) : Cmd()
     }
 
     data class Option(val text: String, val label: String)
@@ -374,6 +376,11 @@ object StoryScript {
             "info" -> {
                 if (args.size < 2) throw ParseError(n, "format: @info id_karakter hobi  (hobi, kegemaran, pelajaran, keahlian, cita_cita, kisah_1..3, semua)")
                 Cmd.Info(args[0].lowercase(), args[1].lowercase())
+            }
+            "jalan", "walk" -> {
+                val target = rest.substringBefore('|').trim().lowercase()
+                if (target.isEmpty()) throw ParseError(n, "format: @jalan ruang_makan | petunjuk")
+                Cmd.Walk(target, rest.substringAfter('|', "").trim())
             }
             "tunjuk", "show_ui" -> {
                 val head = rest.substringBefore('|').trim().split(Regex("\\s+")).filter { it.isNotEmpty() }

@@ -15,7 +15,7 @@ wait_phone musik music suara sound sfx lompat jump goto jika if atur set tambah 
 bebas free maju advance uang money stat barang item lokasi location tampil show sembunyi hide kenal meet cinta love
 percaya trust perilaku behave bohong lie terbongkar reveal ungkapkan confess naskah script tanggal date kos kiriman
 allowance kerja_mulai sekolah_mulai job_start kerja_berhenti sekolah_berhenti job_stop lamar apply catatan note
-dokumen doc kejadian event tamat end pilihan choice mulai_ulang reset tunjuk show_ui info""".split())
+dokumen doc kejadian event tamat end pilihan choice mulai_ulang reset tunjuk show_ui info jalan walk""".split())
 
 
 def sections(path):
@@ -258,6 +258,15 @@ if os.path.exists(lk):
         for loc in [t.strip() for t in a.get("lokasi", "").split(",") if t.strip()]:
             if loc != "kos" and loc not in locs:
                 err(os.path.join(data, "aktivitas.txt"), a["_line"], f"[{a['_id']}] lokasi '{loc}' tidak ada di lokasi.txt")
+
+# @jalan: tujuan harus lokasi di lokasi.txt
+for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
+    for n, raw in enumerate(open(f, encoding="utf-8"), 1):
+        l = raw.strip()
+        if l.startswith("@jalan ") or l.startswith("@walk "):
+            t = l.split(None, 1)[1].split("|")[0].strip()
+            if os.path.exists(lk) and t != "kos" and t not in locs:
+                err(f, n, f"@jalan: lokasi '{t}' tidak ada di data/lokasi.txt")
 
 print(f"Pemeriksaan naskah selesai: {errors} kesalahan.")
 sys.exit(1 if errors else 0)

@@ -100,7 +100,7 @@ tidur  = ya                                                    (hanya kamar / ko
 - **Di mana orang berada** (`lokasi` di karakter.txt): Ayah ruang makan 12:00–13:30 lalu depan rumah sampai 18:30; Ibu warung 05:00–17:00 lalu ruang makan sampai 21:00; Laras ruang makan / depan rumah sepulang sekolah; Darto gudang ikan; Nadia toko buku. Yang janjian menunggu di `tempat_janji` (Bayu & Sekar di depan rumah, Dimas di taman kota).
 - "👥 Temui seseorang" di halaman waktu bebas kini hanya **keterangan** ("Ayah · 📍 Ruang makan"). Untuk bertemu, datangi tempatnya lalu ketuk orangnya.
 - **Gambar adegan** (karakter yang benar-benar sedang beraktivitas, mis. Ayah duduk makan): `assets/adegan/<lokasi>__<karakter>.webp`, ukuran sama dengan latar, transparan selain karakternya. Bila ada, dipakai menggantikan gambar berdiri dan bisa diketuk tepat di badannya (area sentuh = bentuk karakter itu sendiri, jadi tidak perlu mengatur posisi). Tanda nama "💬" otomatis diletakkan di atas kepalanya. Posisi di kolom `orang` hanya dipakai untuk gambar berdiri sementara. Saat diketuk, dialog tetap memakai gambar setengah badan seperti biasa.
-- Tanda bisa dimatikan di **Pengaturan → Tanda yang bisa disentuh** (pintu & benda tetap bisa disentuh).
+- **Pengaturan → Nama lokasi & benda**: bila mati, tidak ada tulisan apa pun (nama tempat, pintu, benda, orang); pintu & benda tetap bisa disentuh langsung di gambar (area sentuh diperlebar).
 
 ## latar.txt (latar mengikuti jam)
 Gambar latar hanya satu per tempat, padahal jam berjalan. Supaya tidak aneh (langit terang padahal jam 21:00),

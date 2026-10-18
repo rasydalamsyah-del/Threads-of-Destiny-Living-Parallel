@@ -137,6 +137,8 @@ Jam ini juga dipakai di layar kunci HP.
 @bebas 2                  (lama) waktu bebas 2 kegiatan — sebaiknya tidak dipakai lagi; pakai "sampai"
 @bebas 5 hari             waktu bebas selama 5 hari (pemain makan, sekolah/kerja, tidur sendiri)
 @bebas sampai Sabtu 15:00 waktu bebas sampai hari & jam tertentu (DISARANKAN). Pemain bebas berkegiatan selama
+@jalan ruang_makan | petunjuk   pemain berjalan sendiri (mengetuk pintu) sampai lokasi itu, lalu naskah lanjut.
+                          Lokasi dari data/lokasi.txt. Selama berjalan hanya pintu yang bisa disentuh.
                           tenaganya cukup; tombol "⏩ Santai sampai ..." untuk langsung lanjut; Tidur hanya muncul
                           bila waktu bebas masih ≥ 8 jam (tidak melompati kelanjutan cerita)
 ```
