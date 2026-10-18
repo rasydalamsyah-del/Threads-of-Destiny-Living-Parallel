@@ -439,6 +439,34 @@ Urutan prioritas: rumah_warung_malam → kamar_pagi_malam → ruang_makan_malam 
 
 ---
 
+### Gambar adegan untuk menjelajah (karakter yang benar-benar sedang beraktivitas)
+Dipakai saat waktu bebas: karakter tampil menyatu dengan latar (duduk makan, menggoreng di warung, dst.) dan bisa disentuh.
+**Cara:** lampirkan 2 gambar: (1) latarnya, (2) gambar biasa karakternya. Kirim prompt di bawah. Simpan dengan nama
+`<lokasi>__<karakter>.jpg` (dua garis bawah). Claude memotong karakternya menjadi lapisan transparan (`tools/potong_adegan.py`).
+**Satu gambar = satu karakter**, latar lain tetap kosong, supaya beberapa orang bisa tampil bersamaan.
+
+Kalimat pengunci:
+```
+Use the FIRST attached image as the exact background and keep it pixel-identical: same composition, camera angle, furniture, objects, lighting and art style. Use the SECOND attached image only as the reference for the character: same face, hair, outfit and colors. ADD ONLY this one character into the scene, drawn in the same art style and lighting as the background, with correct perspective and size. Do not change anything else. No other people, no text.
+```
+
+| Simpan sebagai (lampirkan) | Tambahan prompt |
+|---|---|
+| `ruang_makan__ayah.jpg` (ruang_makan + ayah) | `The father sits on the wooden chair on the LEFT side of the dining table, facing the table, eating rice and fried fish with his right hand, relaxed after waking up.` |
+| `ruang_makan__laras.jpg` (ruang_makan + laras) | `The little girl (11 years old, small) sits on the chair on the RIGHT side of the table, doing homework in a notebook with a pencil, leaning on the table.` |
+| `ruang_makan__ibu.jpg` (ruang_makan + ibu) | `The mother stands near the kitchen doorway on the right, holding a plate of food, about to put it on the table, warm smile.` |
+| `rumah_warung__ibu.jpg` (rumah_warung + ibu) | `The mother stands behind the warung table on the left, frying banana fritters in a wok, facing slightly toward the viewer.` |
+| `rumah_warung__ayah.jpg` (rumah_warung + ayah) | `The father sits on a small wooden stool on the right side of the road, repairing a fishing net laid across his lap.` |
+| `rumah_warung__laras.jpg` (rumah_warung + laras) | `The little girl (11 years old, small) stands in the middle of the road holding a kite string, a colorful kite flying in the sky, cheerful.` |
+| `rumah_warung__bayu.jpg` (rumah_warung + bayu) | `The teenage boy leans against the wooden fence on the right side of the road, waving at the viewer, waiting for a friend.` |
+| `gudang_ikan__darto.jpg` (gudang_ikan + darto) | `The fish boss stands near the drying racks on the left, hands on his hips, supervising, a small notebook in his shirt pocket.` |
+| `toko_buku__nadia.jpg` (toko_buku + nadia) | `The girl sits behind the wooden cashier counter on the left, reading a book, a cup of coffee beside her.` |
+| `taman_kota__dimas.jpg` (taman_kota + dimas) | `The teenage boy sits on the park bench on the left with a delivery bicycle parked beside it, smiling and raising one hand to greet.` |
+
+Prioritas: ruang_makan__ayah → rumah_warung__ibu → ruang_makan__laras → rumah_warung__ayah → sisanya.
+
+---
+
 ## 5. Adegan spesial (CG, gambar gabungan) — opsional
 
 Dipasang dengan `@latar nama_file`. Gambar karakter tidak perlu ditampilkan di atasnya.
