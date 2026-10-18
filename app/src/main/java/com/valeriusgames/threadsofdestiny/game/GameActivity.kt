@@ -858,7 +858,8 @@ class GameActivity : Activity() {
             visibility = View.GONE
             elevation = 5 * d
         }
-        frame.addView(dialogBust, 1, FrameLayout.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT).apply {
+        // ukuran diatur di fitBust() (tinggi pasti, bukan MATCH_PARENT, supaya kotak dialog tidak ikut membesar)
+        frame.addView(dialogBust, 1, FrameLayout.LayoutParams(1, 1).apply {
             gravity = android.view.Gravity.BOTTOM or android.view.Gravity.START
             leftMargin = (3 * d).toInt()
             bottomMargin = (3 * d).toInt()
@@ -920,17 +921,21 @@ class GameActivity : Activity() {
         val d = resources.displayMetrics.density
         val bmp = (dialogBust.drawable as? android.graphics.drawable.BitmapDrawable)?.bitmap ?: return
         val box = findViewById<View>(R.id.dialog_box)
-        val fullW = (dialog.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels)
+        if (box.height == 0 || dialog.width == 0) { dialog.post { fitBust() }; return }
+        val fullW = dialog.width
         val zoneW = (fullW * 0.38f).toInt()
+        val boxTop = (box.layoutParams as ViewGroup.MarginLayoutParams).topMargin
+        val inset = (3 * d).toInt()
+        // tinggi area = dari atas kotak dialog (termasuk tempat label nama) sampai dasar kotak
+        val viewH = box.height + boxTop - inset
         val lp = dialogBust.layoutParams as FrameLayout.LayoutParams
-        if (lp.width != zoneW) { lp.width = zoneW; dialogBust.layoutParams = lp }
+        if (lp.width != zoneW || lp.height != viewH) { lp.width = zoneW; lp.height = viewH; dialogBust.layoutParams = lp }
         val textStart = zoneW + (14 * d).toInt()
         if (box.paddingLeft != textStart) box.setPadding(textStart, box.paddingTop, box.paddingRight, box.paddingBottom)
         val nl = nameTag.layoutParams as FrameLayout.LayoutParams
         if (nl.marginStart != textStart) { nl.marginStart = textStart; nameTag.layoutParams = nl }
-        // tinggi gambar = tinggi kotak + sedikit menyembul ke atas; rata bawah; dipusatkan pada badan
-        val viewH = (dialog.height.takeIf { it > 0 } ?: (box.height + (18 * d).toInt())) - (3 * d).toInt()
-        val targetH = viewH + 58 * d
+        // tinggi gambar = tinggi kotak + kepala menyembul ±52dp di atas kotak; rata bawah; dipusatkan pada badan
+        val targetH = (box.height - inset) + 52 * d
         val sc = targetH / bmp.height
         val cx = (bustCenter[bmp] ?: (bmp.width / 2)).toFloat()
         val m = android.graphics.Matrix()
@@ -938,7 +943,7 @@ class GameActivity : Activity() {
         m.postTranslate(zoneW / 2f - cx * sc, viewH - targetH)
         dialogBust.imageMatrix = m
         // potong rapi di batas kanan zona (tidak menimpa teks) dan di bawah kotak
-        dialogBust.clipBounds = android.graphics.Rect(0, -(80 * d).toInt(), zoneW, viewH)
+        dialogBust.clipBounds = android.graphics.Rect(0, -(90 * d).toInt(), zoneW, viewH)
     }
 
     // ================================================================== jelajah (waktu bebas)
@@ -968,10 +973,23 @@ class GameActivity : Activity() {
         notice("🚶 Pergi ke ${gameData.locations[target]?.name}: ketuk pintunya")
     }
 
+    /** @latar yang akan dijalankan naskah sesudah ini (melewati @atur / @tambah / @kenal), atau null. */
+    private fun peekStoryBackground(): Cmd.Background? {
+        var i = pc
+        while (i < script.size) {
+            when (val c = script[i]) {
+                is Cmd.Background -> return c.takeIf { !it.memory }
+                is Cmd.SetVar, is Cmd.AddVar, is Cmd.Meet -> i++
+                else -> return null
+            }
+        }
+        return null
+    }
+
     /** Sampai di tujuan @jalan → cerita lanjut. */
     private fun checkWalkArrived(): Boolean {
         val t = walkTarget ?: return false
-        if (currentLocation()?.id != t) return false
+        if (vars["_tempat"] != t) return false
         walkTarget = null
         hideExploreUi()
         wait = Wait.BUSY
@@ -1087,9 +1105,12 @@ class GameActivity : Activity() {
         vars["_tempat"] = target
         memoryMode = false
         vignette.animate().alpha(0f).setDuration(300).start()
-        bgName = target
+        // sampai di tujuan @jalan: langsung tampilkan gambar adegan berikutnya dari naskah (mis. keluarga
+        // sedang sarapan), jangan sempat menampilkan ruangan kosong dulu
+        val sceneBg = if (walkTarget == target) peekStoryBackground() else null
+        bgName = sceneBg?.name ?: target
         bgMotion = Motion.NONE
-        val bmp = loadBackground(target)
+        val bmp = loadBackground(bgName!!)
         bg.show(bmp, false, Motion.NONE, instant = false, time = bgTimeMatrix()) {
             if (wait == Wait.FREE && !checkWalkArrived()) done()
         }
