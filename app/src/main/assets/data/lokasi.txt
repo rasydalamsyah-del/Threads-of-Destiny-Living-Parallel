@@ -76,7 +76,6 @@ nama   = Pusat Kota Sakala
 tempat = kota
 pintu  = kos | 🏠 Pulang ke kos | 0.30, 0.82 | 10 ; kelas_sma | 🏫 Sekolah | 0.20, 0.46 | 10 ; toko_buku | 📚 Toko buku | 0.48, 0.56 | 15 ; taman_kota | 🌳 Taman kota | 0.78, 0.62 | 15 ; stasiun_besar | 🚉 Stasiun Besar | 0.70, 0.36 | 15
 benda  = jelajah_kota | 🧭 Jelajah | 0.62, 0.74 ; nongkrong_mal | 🛍️ Mal | 0.40, 0.66 ; kafe_kekinian | 🧋 Kafe | 0.58, 0.46 ; begadang_game | 🎮 Warnet | 0.82, 0.80 ; perpustakaan | 🏛️ Perpustakaan | 0.30, 0.38
-orang  = dimas 0.50, 0.80, 0.38
 
 [kelas_sma]
 nama   = Kelas SMA
@@ -88,6 +87,7 @@ nama   = Taman Kota
 tempat = kota
 pintu  = kota_besar | ⬅ Kembali ke pusat kota | 0.50, 0.90 | 15
 benda  = taman_kota | 🌳 Bangku taman | 0.30, 0.62 ; lari_pagi | 🏃 Jalur lari | 0.62, 0.76
+orang  = dimas 0.66, 0.80, 0.40
 
 [toko_buku]
 nama   = Toko buku depan Stasiun Besar
