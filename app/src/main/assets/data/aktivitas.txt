@@ -17,6 +17,8 @@
 #           atau variabel lain (mis. akademik +2)
 #  syarat = (opsional) contoh: jalur != kerja   atau   usia >= 18
 #  teks   = narasi yang tampil setelah aktivitas dipilih
+#  lokasi = (opsional) lokasi di lokasi.txt tempat aktivitas ini dilakukan, mis. ruang_makan ("kos" = kamar kos).
+#           Di lokasi lain aktivitas tampil redup: "📍 di Ruang makan". Bisa juga diketuk langsung di layar.
 #  batas  = (opsional) paling banyak berapa kali per hari, contoh 1
 #  jeda   = (opsional) jarak minimal sebelum boleh diulang, contoh 4 jam (makan) — dihitung dari jam mulai
 #  teks_ulang = (opsional) narasi bila dilakukan lagi di hari yang sama (mis. Ibu menegur)
@@ -27,6 +29,7 @@
 # ---------------- DESA TANJUNG LENTERA ----------------
 
 [makan_keluarga]
+lokasi = ruang_makan
 nama   = Makan bersama keluarga
 ikon   = 🍲
 tempat = desa
@@ -39,6 +42,7 @@ jeda   = 4 jam
 teks_ulang = Kamu duduk lagi di meja makan. Ibu tertawa kecil: "Lapar lagi? Ya sudah, habiskan sisa lauk tadi."
 
 [bantu_warung]
+lokasi = rumah_warung
 nama   = Bantu Ibu di warung
 ikon   = 🍳
 tempat = desa
@@ -50,6 +54,7 @@ teks   = Kamu menggoreng pisang dan melayani pembeli seharian. Ibu menyelipkan s
 batas  = 1
 
 [melaut]
+lokasi = rumah_warung
 nama   = Melaut bersama Ayah
 ikon   = 🚣
 tempat = desa
@@ -61,6 +66,7 @@ teks   = Ombak sedang tinggi. Tanganmu lecet menarik jaring, tapi hasil tangkapa
 batas  = 1
 
 [dermaga]
+lokasi = rumah_warung
 nama   = Duduk di dermaga mercusuar
 ikon   = 🌅
 tempat = desa
@@ -71,6 +77,7 @@ teks   = Angin laut menyentuh wajahmu. Mercusuar tua itu masih berdiri, sama sep
 batas  = 1
 
 [main_laras]
+lokasi = rumah_warung
 nama   = Menemani Laras bermain
 ikon   = 🪁
 tempat = desa
@@ -82,6 +89,7 @@ teks   = Laras memaksamu menerbangkan layang-layang. Kalian tertawa sampai lupa 
 batas  = 1
 
 [belajar]
+lokasi = kamar_pagi, kos
 nama   = Belajar untuk persiapan SMA
 ikon   = 📚
 tempat = semua
@@ -94,6 +102,7 @@ batas  = 2
 jeda   = 2 jam
 
 [istirahat]
+lokasi = kamar_pagi
 nama   = Istirahat sebentar di kamar
 ikon   = 🛏️
 tempat = desa
@@ -105,6 +114,7 @@ jeda   = 3 jam
 teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristirahat.
 teks_ulang = Baru saja memejamkan mata, Ibu melongok dari pintu: "Tidur lagi? Anak muda kok tidur terus. Bantu Ibu sebentar, dong!" Kamu tetap berbaring... tapi rasanya tidak setenang tadi.
 [istirahat_kos]
+lokasi = kos
 nama   = Istirahat sebentar di kos
 ikon   = 🛏️
 tempat = kota
@@ -119,6 +129,7 @@ teks_ulang = Kamu berbaring lagi. Kamar kos sepi sekali. Badanmu memang butuh is
 # ---------------- KOTA SAKALA ----------------
 
 [taman_kota]
+lokasi = taman_kota
 nama   = Jalan-jalan di Taman Kota
 ikon   = 🌳
 tempat = kota
@@ -130,6 +141,7 @@ batas  = 2
 jeda   = 3 jam
 
 [jelajah_kota]
+lokasi = kota_besar
 nama   = Menjelajah sudut kota
 ikon   = 🧭
 tempat = kota
@@ -141,6 +153,7 @@ teks   = Kamu menyusuri jalan-jalan Sakala, menghafal arah dan nama-nama gang.
 batas  = 1
 
 [cari_jejak]
+lokasi = stasiun_besar
 nama   = Mencari jejak sahabat lama
 ikon   = 🔍
 tempat = kota
@@ -154,6 +167,7 @@ batas  = 1
 # ---------------- KOTA: HIDUP BAIK ----------------
 
 [perpustakaan]
+lokasi = kota_besar
 nama   = Belajar di perpustakaan kota
 ikon   = 🏛️
 tempat = kota
@@ -166,6 +180,7 @@ teks   = Perpustakaan kota sunyi dan sejuk. Kamu mengerjakan soal-soal sampai la
 batas  = 1
 
 [lari_pagi]
+lokasi = taman_kota
 nama   = Lari pagi keliling taman
 ikon   = 🏃
 tempat = kota
@@ -179,6 +194,7 @@ batas  = 1
 # ---------------- KOTA: FOYA-FOYA ----------------
 
 [nongkrong_mal]
+lokasi = kota_besar
 nama   = Nongkrong & belanja di mal
 ikon   = 🛍️
 tempat = kota
@@ -190,6 +206,7 @@ teks   = Lampu-lampu mal menyilaukan. Kamu membeli baju yang sebenarnya tidak pe
 batas  = 1
 
 [kafe_kekinian]
+lokasi = kota_besar
 nama   = Ngopi di kafe kekinian
 ikon   = 🧋
 tempat = kota
@@ -201,6 +218,7 @@ teks   = Segelas kopi susu seharga makan dua hari di desa. Kamu memotretnya dulu
 batas  = 1
 
 [begadang_game]
+lokasi = kota_besar
 nama   = Begadang main game di warnet
 ikon   = 🎮
 tempat = kota

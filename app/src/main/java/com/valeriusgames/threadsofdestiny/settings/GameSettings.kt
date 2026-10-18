@@ -34,6 +34,8 @@ object GameSettings {
         val sfx: Int = 80,
         val vibration: Boolean = true,
         val skipIntro: Boolean = false,
+        /** Tanda kecil di pintu / orang / benda yang bisa disentuh saat waktu bebas. */
+        val exploreHints: Boolean = true,
     ) {
         val fontSizeSp: Float get() = FONT_SIZES[fontSize.coerceIn(0, FONT_SIZES.size - 1)]
         val typeDelayMs: Long get() = TEXT_SPEEDS[textSpeed.coerceIn(0, TEXT_SPEEDS.size - 1)]
@@ -57,6 +59,7 @@ object GameSettings {
             sfx = p.getInt("sfx", d.sfx),
             vibration = p.getBoolean("vibration", d.vibration),
             skipIntro = p.getBoolean("skip_intro", d.skipIntro),
+            exploreHints = p.getBoolean("explore_hints", d.exploreHints),
         )
     }
 
@@ -71,6 +74,7 @@ object GameSettings {
             .putInt("sfx", v.sfx)
             .putBoolean("vibration", v.vibration)
             .putBoolean("skip_intro", v.skipIntro)
+            .putBoolean("explore_hints", v.exploreHints)
             .apply()
     }
 

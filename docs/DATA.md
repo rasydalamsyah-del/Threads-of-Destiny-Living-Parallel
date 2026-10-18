@@ -81,6 +81,27 @@ Supaya kegiatan tidak bisa diulang terus (makan terus, istirahat terus sampai en
 Yang terkena batas tampil redup dengan alasan ("Sudah dilakukan hari ini — besok lagi", "Baru saja dilakukan — bisa lagi pukul 11:00").
 Saat waktu bebas berakhir di jam tertentu, kegiatan yang selesainya melewati jam itu juga redup ("Waktunya tidak cukup — cerita berlanjut pukul 20:00").
 
+## lokasi.txt (menjelajah saat waktu bebas)
+Saat waktu bebas, halaman waktu bebas bisa **ditutup** (✕ / ketuk di luar) untuk menjelajah, dan dibuka lagi lewat tombol **📋** di kanan bawah.
+Di layar jelajah: **pintu** (pindah tempat), **orang** (ketuk → mengobrol), **benda** (ketuk → kegiatan), dan **😴 Tidur** di kasur saat malam.
+```
+[ruang_makan]                       (id = nama file latar)
+nama   = Ruang makan
+tempat = desa
+pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.84, 0.36 | 0 ; rumah_warung | ⬅ Keluar ke depan rumah | 0.16, 0.90 | 0
+benda  = makan_keluarga | 🍲 Makan | 0.52, 0.56
+orang  = ayah 0.30, 0.66, 0.40 ; laras 0.62, 0.58, 0.30      (x, y kaki, tinggi — untuk gambar berdiri)
+tidur  = ya                                                    (hanya kamar / kos)
+```
+- x, y = posisi di gambar (0–1). Layar HP memotong ±10% kiri-kanan → taruh tanda di x 0.12–0.88.
+- Pintu: menit perjalanan (di dalam rumah 0, ke gudang ikan 15, kos ↔ pusat kota 10, pusat kota ↔ tempat lain 15). Tujuan `kos` = kos yang sedang disewa.
+- **Peta sekarang** — desa: kamar ↔ ruang makan ↔ depan rumah & warung ↔ gudang ikan. Kota: kamar kos ↔ pusat kota ↔ sekolah / toko buku / taman / Stasiun Besar.
+- **Kegiatan terikat lokasi** (`lokasi` di aktivitas.txt): makan di ruang makan, istirahat & belajar di kamar, bantu warung / melaut / dermaga / main dengan Laras di depan rumah, dst. Di tempat lain tampil redup "Pergi ke Ruang makan".
+- **Di mana orang berada** (`lokasi` di karakter.txt): Ayah ruang makan 12:00–13:30 lalu depan rumah sampai 18:30; Ibu warung 05:00–17:00 lalu ruang makan sampai 21:00; Laras ruang makan / depan rumah sepulang sekolah; Darto gudang ikan; Nadia toko buku. Yang janjian menunggu di `tempat_janji` (Bayu & Sekar di depan rumah, Dimas di pusat kota).
+- "👥 Temui seseorang" di halaman waktu bebas kini hanya **keterangan** ("Ayah · 📍 Ruang makan"). Untuk bertemu, datangi tempatnya lalu ketuk orangnya.
+- **Gambar adegan** (karakter yang benar-benar sedang beraktivitas, mis. Ayah duduk makan): `assets/adegan/<lokasi>__<karakter>.webp`, ukuran sama dengan latar, transparan selain karakternya. Bila ada, dipakai menggantikan gambar berdiri dan bisa diketuk tepat di badannya. Saat diketuk, dialog tetap memakai gambar setengah badan seperti biasa.
+- Tanda bisa dimatikan di **Pengaturan → Tanda yang bisa disentuh** (pintu & benda tetap bisa disentuh).
+
 ## latar.txt (latar mengikuti jam)
 Gambar latar hanya satu per tempat, padahal jam berjalan. Supaya tidak aneh (langit terang padahal jam 21:00),
 game **mewarnai latar otomatis** sesuai bagian hari: pagi hangat, siang terang, sore jingga, malam gelap kebiruan.

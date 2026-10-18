@@ -140,6 +140,9 @@ class SettingsActivity : Activity() {
         switchRow(R.string.set_skip_intro, R.string.set_skip_intro_desc, { v.skipIntro }) { on ->
             update({ it.copy(skipIntro = on) })
         }
+        switchRow(R.string.set_explore_hints, R.string.set_explore_hints_desc, { v.exploreHints }) { on ->
+            update({ it.copy(exploreHints = on) })
+        }
 
         section(R.string.sec_data)
         dangerRow(R.string.set_delete_data) { confirmDeleteData() }

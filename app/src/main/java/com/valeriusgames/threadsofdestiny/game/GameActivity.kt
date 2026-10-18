@@ -228,6 +228,7 @@ class GameActivity : Activity() {
         sheetButtons = findViewById(R.id.sheet_buttons)
         deathOverlay = findViewById(R.id.death_overlay)
         charLayer = findViewById(R.id.char_layer)
+        setupExplore()
         charPanel = findViewById(R.id.char_panel)
         findViewById<View>(R.id.char_panel_photo).clipToOutline = true
         lifeHud.setOnClickListener { if (wait != Wait.BUSY) openStatus(returnTo = currentSheetReturn()) }
@@ -833,6 +834,300 @@ class GameActivity : Activity() {
         }
     }
 
+    // ================================================================== jelajah (waktu bebas)
+    //
+    // Saat waktu bebas, latar bisa dijelajahi: ketuk pintu untuk pindah tempat, ketuk orang untuk
+    // mengobrol, ketuk benda untuk berkegiatan. Halaman waktu bebas dibuka/ditutup lewat tombol 📋.
+
+    private lateinit var exploreLayer: FrameLayout
+    private lateinit var freeToggle: TextView
+    private lateinit var placePill: TextView
+    private var bgImgW = 941
+    private var bgImgH = 1672
+
+    private fun setupExplore() {
+        val root = charLayer.parent as ViewGroup
+        val d = resources.displayMetrics.density
+        exploreLayer = FrameLayout(this).apply { visibility = View.GONE }
+        root.addView(exploreLayer, root.indexOfChild(charLayer),
+            FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        freeToggle = TextView(this).apply {
+            text = "📋"
+            textSize = 24f
+            gravity = android.view.Gravity.CENTER
+            background = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.OVAL
+                setColor(0xE6182040.toInt())
+                setStroke((2 * d).toInt(), 0xFFD2AE62.toInt())
+            }
+            elevation = 8 * d
+            visibility = View.GONE
+            contentDescription = "Waktu bebas"
+            setOnClickListener { if (wait == Wait.FREE) showFreeSheet() }
+        }
+        root.addView(freeToggle, FrameLayout.LayoutParams((60 * d).toInt(), (60 * d).toInt()).apply {
+            gravity = android.view.Gravity.BOTTOM or android.view.Gravity.END
+            setMargins(0, 0, (18 * d).toInt(), (26 * d).toInt())
+        })
+        placePill = TextView(this).apply {
+            textSize = 12.5f
+            setTextColor(0xFFF6E7C8.toInt())
+            setPadding((12 * d).toInt(), (7 * d).toInt(), (12 * d).toInt(), (7 * d).toInt())
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 14 * d
+                setColor(0xCC10162E.toInt())
+            }
+            elevation = 6 * d
+            visibility = View.GONE
+        }
+        root.addView(placePill, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+            gravity = android.view.Gravity.BOTTOM or android.view.Gravity.START
+            setMargins((16 * d).toInt(), 0, (90 * d).toInt(), (34 * d).toInt())
+        })
+    }
+
+    /** "kos" = kamar kos yang sedang disewa. */
+    private fun resolveLoc(id: String): String = if (id == "kos") bgBaseFile("kos_kamar") else id
+
+    private fun currentLocation(): GameData.LocationDef? = bgName?.let { gameData.locations[bgBaseFile(it)] }
+
+    private fun activityAtLocation(a: GameData.ActivityDef, locId: String): Boolean =
+        a.locations.isEmpty() || a.locations.any { resolveLoc(it) == locId }
+
+    /** Mulai waktu bebas: tentukan lokasi dari latar cerita (atau rumah/kos), lalu buka halaman waktu bebas. */
+    private fun enterExplore() {
+        val area = vars["lokasi"] ?: "desa"
+        val fromBg = currentLocation()?.takeIf { it.area == area }
+        val target = fromBg?.id ?: if (area == "kota") bgBaseFile("kos_kamar") else "rumah_warung"
+        if (gameData.locations[target] == null) {
+            showFreeSheet()
+            return
+        }
+        vars["_tempat"] = target
+        if (fromBg == null) {
+            moveTo(target) { showFreeSheet() }
+        } else {
+            renderExplore()
+            showFreeSheet()
+        }
+    }
+
+    /** Tutup halaman waktu bebas → layar jelajah. */
+    private fun closeFreePanel() {
+        closeSheet()
+        renderExplore()
+    }
+
+    private fun hideExploreToggle() {
+        if (::freeToggle.isInitialized) {
+            freeToggle.visibility = View.GONE
+            placePill.visibility = View.GONE
+        }
+    }
+
+    private fun hideExploreUi() {
+        if (!::exploreLayer.isInitialized) return
+        exploreLayer.removeAllViews()
+        exploreLayer.visibility = View.GONE
+        hideExploreToggle()
+    }
+
+    /** Kejadian yang menunggu tampil lebih dulu. true bila ada. */
+    private fun showPendingEvent(): Boolean {
+        val pending = pendingEvents.removeFirstOrNull() ?: return false
+        closeSheet()
+        hideExploreUi()
+        runPending(pending) { continueFree() }
+        return true
+    }
+
+    /** Pindah lokasi (latar berganti halus), memakan waktu perjalanan bila ada. */
+    private fun moveTo(target: String, minutes: Int = 0, done: () -> Unit = { renderExplore() }) {
+        hideExploreUi()
+        if (minutes > 0) {
+            passTime(minutes)
+            if (life.dead) return
+            notice("🚶 ${LifeState.duration(minutes)} perjalanan · sekarang ${life.timeText}")
+            if (freeUntilReached()) { endFree(); return }
+        }
+        vars["_tempat"] = target
+        memoryMode = false
+        vignette.animate().alpha(0f).setDuration(300).start()
+        bgName = target
+        bgMotion = Motion.NONE
+        val bmp = loadBackground(target)
+        bg.show(bmp, false, Motion.NONE, instant = false, time = bgTimeMatrix()) { if (wait == Wait.FREE) done() }
+        updateCharTint()
+    }
+
+    /** Gambar ulang layar jelajah: tanda pintu, benda, dan orang yang ada di lokasi ini sekarang. */
+    private fun renderExplore() {
+        if (!::exploreLayer.isInitialized) return
+        exploreLayer.removeAllViews()
+        if (wait != Wait.FREE) { hideExploreUi(); return }
+        val loc = currentLocation()
+        if (loc == null) {
+            exploreLayer.visibility = View.GONE
+            freeToggle.visibility = View.VISIBLE
+            return
+        }
+        exploreLayer.visibility = View.VISIBLE
+        freeToggle.visibility = View.VISIBLE
+        placePill.text = "📍 ${loc.name}\n${life.clockText}" + (freeUntilText()?.let { "\n$it" } ?: "")
+        placePill.visibility = View.VISIBLE
+        if (exploreLayer.width == 0) exploreLayer.post { buildExplore(loc) } else buildExplore(loc)
+    }
+
+    /** Posisi di gambar (0..1) → posisi di layar, mengikuti cara latar dipotong (center-crop). */
+    private fun imgToScreen(x: Float, y: Float): Pair<Float, Float> {
+        val vw = exploreLayer.width.toFloat()
+        val vh = exploreLayer.height.toFloat()
+        val sc = maxOf(vw / bgImgW, vh / bgImgH)
+        val ox = (vw - bgImgW * sc) / 2f
+        val oy = (vh - bgImgH * sc) / 2f
+        return (ox + x * bgImgW * sc) to (oy + y * bgImgH * sc)
+    }
+
+    /** Orang yang ada di lokasi ini sekarang (sesuai jadwal, atau sedang janjian di sini). */
+    private fun peopleAt(loc: GameData.LocationDef): List<GameData.CharacterDef> =
+        gameData.characters.values.filter { c ->
+            if (!social.rel(c).met) return@filter false
+            val byPlan = gameData.characterLocation(c, life.weekdayIndex, life.minute) == loc.id
+            val byAppt = phoneData.appts.any { it.charId == c.id && it.day == life.day && it.slot == life.slot.name } &&
+                c.text["tempat_janji"]?.let { resolveLoc(it) } == loc.id
+            byPlan || byAppt
+        }
+
+    private fun buildExplore(loc: GameData.LocationDef) {
+        if (wait != Wait.FREE || currentLocation()?.id != loc.id) return
+        exploreLayer.removeAllViews()
+        val d = resources.displayMetrics.density
+        val hints = settings.exploreHints
+        val vh = exploreLayer.height.toFloat()
+        val sc = maxOf(exploreLayer.width.toFloat() / bgImgW, vh / bgImgH)
+        val bgTint = bgTimeMatrix()?.let { android.graphics.ColorMatrixColorFilter(it) }
+        val charTint = TimeLook.blend(TimeLook.matrix("siang", timeKey()), 0.45f)?.let { android.graphics.ColorMatrixColorFilter(it) }
+
+        // orang: gambar adegan (bila ada) atau gambar berdiri
+        peopleAt(loc).forEach { c ->
+            val scene = loadAsset(listOf("adegan/${loc.id}__${c.id}.webp", "adegan/${loc.id}__${c.id}.png"))
+            if (scene != null) {
+                val iv = android.widget.ImageView(this).apply {
+                    scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
+                    setImageBitmap(scene)
+                    colorFilter = bgTint
+                }
+                // ketukan hanya kena bila tepat di badan karakter (piksel tidak transparan)
+                iv.setOnTouchListener { v, e ->
+                    if (e.action != android.view.MotionEvent.ACTION_DOWN && e.action != android.view.MotionEvent.ACTION_UP) return@setOnTouchListener true
+                    val ix = ((e.x - (v.width - scene.width * sc) / 2f) / sc).toInt()
+                    val iy = ((e.y - (v.height - scene.height * sc) / 2f) / sc).toInt()
+                    val hit = ix in 0 until scene.width && iy in 0 until scene.height && (scene.getPixel(ix, iy) ushr 24) > 40
+                    if (hit && e.action == android.view.MotionEvent.ACTION_UP) meetCharacter(c)
+                    hit
+                }
+                exploreLayer.addView(iv, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                if (hints) {
+                    val spot = loc.people.firstOrNull { it.charId == c.id }
+                    if (spot != null) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height, 0) { meetCharacter(c) }
+                }
+            } else {
+                val bmp = charBitmap(c.id, "biasa") ?: return@forEach
+                val spot = loc.people.firstOrNull { it.charId == c.id } ?: GameData.PersonSpot(c.id, 0.5f, 0.82f, 0.36f)
+                val skala = c.text["skala"]?.toFloatOrNull() ?: 1f
+                val h = spot.height * bgImgH * sc * skala
+                val w = h * bmp.width / bmp.height
+                val (fx, fy) = imgToScreen(spot.x, spot.y)
+                val iv = android.widget.ImageView(this).apply {
+                    setImageBitmap(bmp)
+                    scaleType = android.widget.ImageView.ScaleType.FIT_XY
+                    colorFilter = charTint
+                    setOnClickListener { meetCharacter(c) }
+                }
+                exploreLayer.addView(iv, FrameLayout.LayoutParams(w.toInt(), h.toInt()).apply {
+                    leftMargin = (fx - w / 2f).toInt().coerceIn(0, maxOf(0, exploreLayer.width - w.toInt()))
+                    topMargin = (fy - h).toInt().coerceAtLeast(0)
+                })
+                if (hints) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height * skala, 0) { meetCharacter(c) }
+            }
+        }
+        // benda: aktivitas di tempat ini
+        loc.objects.forEach { o ->
+            val a = gameData.activities.firstOrNull { it.id == o.target } ?: return@forEach
+            if (a.condition != null && !checkCondition(a.condition)) return@forEach
+            val block = activityBlock(a)
+            val needEnergy = -(a.effects["energi"] ?: 0L)
+            val tired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
+            addMarker(o.label, o.x, o.y, if (block != null || tired) 1 else 0, always = true) {
+                when {
+                    block != null -> notice("🕐 ${a.name}: $block")
+                    tired -> notice("😮‍💨 ${getString(R.string.too_tired)}")
+                    else -> doActivity(a)
+                }
+            }
+        }
+        // tidur di kasur (malam, bila waktu bebas masih panjang)
+        val left = freeMinutesLeft()
+        if (loc.bed && life.slot == LifeState.Slot.MALAM && (left == null || left >= 8 * 60)) {
+            val bed = loc.objects.firstOrNull { it.target.startsWith("istirahat") }
+            addMarker("😴 Tidur", bed?.x ?: 0.5f, (bed?.y ?: 0.8f) - 0.07f, 0, always = true) { sleepUntilMorning() }
+        }
+        // pintu
+        loc.doors.forEach { door ->
+            val target = resolveLoc(door.target)
+            if (gameData.locations[target] == null) return@forEach
+            val label = door.label + if (door.minutes > 0) " · ${door.minutes} mnt" else ""
+            addMarker(label, door.x, door.y, 2, always = true) { moveTo(target, door.minutes) }
+        }
+    }
+
+    /**
+     * Tanda yang bisa disentuh. style 0 = orang/benda, 1 = redup (belum bisa), 2 = pintu.
+     * always = tetap tampil walau tanda dimatikan di Pengaturan (dibuat transparan, tapi tetap bisa disentuh).
+     */
+    private fun addMarker(label: String, x: Float, y: Float, style: Int, always: Boolean = false, onTap: () -> Unit) {
+        if (!settings.exploreHints && !always) return
+        val d = resources.displayMetrics.density
+        val tv = TextView(this).apply {
+            text = label
+            textSize = 13f
+            setTextColor(if (style == 1) 0xAAF6E7C8.toInt() else 0xFFF6E7C8.toInt())
+            setPadding((11 * d).toInt(), (6 * d).toInt(), (11 * d).toInt(), (6 * d).toInt())
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 16 * d
+                setColor(when (style) { 2 -> 0xD9203A2E.toInt(); 1 -> 0x99181E32.toInt(); else -> 0xD9182040.toInt() })
+                setStroke((1.5f * d).toInt(), if (style == 1) 0x66D2AE62 else 0xFFD2AE62.toInt())
+            }
+            elevation = 4 * d
+            if (!settings.exploreHints) alpha = 0.01f
+            setOnClickListener { onTap() }
+        }
+        tv.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+        val (sx, sy) = imgToScreen(x, y)
+        val w = tv.measuredWidth
+        val h = tv.measuredHeight
+        val maxX = exploreLayer.width - w - (8 * d).toInt()
+        val maxY = exploreLayer.height - h - (110 * d).toInt()
+        exploreLayer.addView(tv, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+            leftMargin = (sx - w / 2f).toInt().coerceIn((8 * d).toInt(), maxOf((8 * d).toInt(), maxX))
+            topMargin = (sy - h / 2f).toInt().coerceIn((70 * d).toInt(), maxOf((70 * d).toInt(), maxY))
+        })
+        if (settings.exploreHints && style != 1) {
+            tv.animate().scaleX(1.06f).scaleY(1.06f).setDuration(700).withEndAction {
+                tv.animate().scaleX(1f).scaleY(1f).setDuration(700).start()
+            }.start()
+        }
+    }
+
+    /** Untuk tutorial: tampilkan layar jelajah sebentar. */
+    private fun showExploreDemo() {
+        val prev = wait
+        wait = Wait.FREE
+        closeSheet()
+        renderExplore()
+        wait = prev
+    }
+
     // ---------------- latar mengikuti jam ----------------
 
     /** Nama file latar yang tersedia (tanpa ekstensi). */
@@ -897,7 +1192,9 @@ class GameActivity : Activity() {
         updateCharTint()
     }
 
-    private fun loadBackground(name: String): Bitmap? {
+    private fun loadBackground(name: String): Bitmap? = loadBackgroundRaw(name)?.also { bgImgW = it.width; bgImgH = it.height }
+
+    private fun loadBackgroundRaw(name: String): Bitmap? {
         val opts = BitmapFactory.Options().apply { inPreferredConfig = Bitmap.Config.ARGB_8888 }
         val file = bgFileNow(name)
         shownBgFile = file
@@ -1475,7 +1772,7 @@ class GameActivity : Activity() {
         vars["_bebas_sisa"] = freeLeft.toString()
         wait = Wait.FREE
         hideDialog()
-        showFreeSheet()
+        enterExplore()
     }
 
     /** Waktu bebas "sampai kapan" sudah tercapai. */
@@ -1494,29 +1791,40 @@ class GameActivity : Activity() {
             return
         }
         // Kejadian yang menunggu (rintangan, ujian, dll.) tampil dulu
-        val pending = pendingEvents.removeFirstOrNull()
-        if (pending != null) {
-            closeSheet()
-            runPending(pending) { showFreeSheet() }
-            return
-        }
+        if (showPendingEvent()) return
         wait = Wait.FREE
         val place = vars["lokasi"] ?: "desa"
+        val here = currentLocation()
+        hideExploreToggle()
         openSheet(
             getString(R.string.free_title),
-            freeUntilText()?.let { "${life.clockText} · $it" } ?: getString(R.string.free_sub, life.clockText, freeLeft),
-            back = null,
+            (here?.let { "📍 ${it.name} · " } ?: "") +
+                (freeUntilText()?.let { "${life.clockText} · $it" } ?: getString(R.string.free_sub, life.clockText, freeLeft)),
+            back = if (here != null) ({ closeFreePanel() }) else null,
         )
+        if (here != null) {
+            sheetButtonRow("✕ Tutup · jelajahi ${here.name}" to { closeFreePanel() })
+        }
         // Janji temu di waktu ini
         phoneData.appts.filter { it.day == life.day && it.slot == life.slot.name }.forEach { a ->
             val c = gameData.characters[a.charId] ?: return@forEach
             sheetList.addView(sectionLabel("📅 Janji temu"))
-            sheetList.addView(card(
-                title = "🤝  Ketemu ${c.name}",
-                sub = "Kalian sudah janjian di waktu ini.",
-                note = "Tidak datang = ingkar janji",
-                noteWarn = true,
-            ) { meetCharacter(c) })
+            val spot = c.text["tempat_janji"]?.let { gameData.locations[resolveLoc(it)] }
+            if (here != null && spot != null) {
+                sheetList.addView(card(
+                    title = "🤝  ${c.name}",
+                    sub = "Menunggu di ${spot.name}" + (if (spot.id == here.id) " · ada di sini, ketuk dia di layar" else ""),
+                    note = "Tidak datang = ingkar janji",
+                    noteWarn = true,
+                ))
+            } else {
+                sheetList.addView(card(
+                    title = "🤝  Ketemu ${c.name}",
+                    sub = "Kalian sudah janjian di waktu ini.",
+                    note = "Tidak datang = ingkar janji",
+                    noteWarn = true,
+                ) { meetCharacter(c) })
+            }
         }
         // Jadwal sekolah / kerja di waktu ini
         val duties = life.jobs.mapNotNull { j -> gameData.jobs[j.id] }
@@ -1541,8 +1849,9 @@ class GameActivity : Activity() {
             sheetList.addView(sectionLabel("🕊️ Atau lakukan hal lain"))
         }
         // Aktivitas di tempat ini: yang bisa dimulai sekarang di atas, yang belum/sudah lewat waktunya redup di bawah
-        val here = gameData.activitiesAt(place).filter { a -> a.condition == null || checkCondition(a.condition) }
-        val (open, blocked) = here.partition { activityBlock(it) == null }
+        val acts = gameData.activitiesAt(place).filter { a -> a.condition == null || checkCondition(a.condition) }
+        val (atHere, elsewhere) = acts.partition { here == null || activityAtLocation(it, here.id) }
+        val (open, blocked) = atHere.partition { activityBlock(it) == null }
         open.forEach { a ->
             val needEnergy = -(a.effects["energi"] ?: 0L)
             val tooTired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
@@ -1552,6 +1861,17 @@ class GameActivity : Activity() {
                 note = if (tooTired) getString(R.string.too_tired) else null,
                 enabled = !tooTired,
             ) { doActivity(a) })
+        }
+        if (elsewhere.isNotEmpty()) {
+            sheetList.addView(sectionLabel("📍 Di tempat lain"))
+            elsewhere.forEach { a ->
+                sheetList.addView(card(
+                    title = "${a.icon}  ${a.name}",
+                    sub = "⏱ ${LifeState.duration(a.minutes)}   " + effectSummary(a.effects),
+                    note = "Pergi ke " + a.locations.mapNotNull { gameData.locations[resolveLoc(it)]?.name }.distinct().joinToString(" / "),
+                    enabled = false,
+                ))
+            }
         }
         if (blocked.isNotEmpty()) {
             sheetList.addView(sectionLabel("🕐 Belum bisa sekarang"))
@@ -1580,11 +1900,22 @@ class GameActivity : Activity() {
             people.forEach { c ->
                 val r = social.rel(c)
                 val loveText = loveText(c)
-                sheetList.addView(card(
-                    title = c.name,
-                    sub = "${c.role}\n${social.stageOf(c).label}   ·   $loveText   🤝 ${r.trust}",
-                    note = if (r.lastGiftDay == life.day) "🎁 Sudah diberi hadiah hari ini" else null,
-                ) { meetCharacter(c) })
+                val where = gameData.characterLocation(c, life.weekdayIndex, life.minute)?.let { gameData.locations[it] }
+                if (here != null && where != null) {
+                    // hanya keterangan: datangi tempatnya, lalu ketuk orangnya di layar
+                    sheetList.addView(card(
+                        title = c.name,
+                        sub = "📍 ${where.name}" + (if (where.id == here.id) " · ada di sini, ketuk dia di layar" else "") +
+                            "\n${social.stageOf(c).label}   ·   $loveText   🤝 ${r.trust}",
+                        note = if (r.lastGiftDay == life.day) "🎁 Sudah diberi hadiah hari ini" else null,
+                    ))
+                } else {
+                    sheetList.addView(card(
+                        title = c.name,
+                        sub = "${c.role}\n${social.stageOf(c).label}   ·   $loveText   🤝 ${r.trust}",
+                        note = if (r.lastGiftDay == life.day) "🎁 Sudah diberi hadiah hari ini" else null,
+                    ) { meetCharacter(c) })
+                }
             }
         }
         // Waktu bebas sampai jam tertentu: boleh langsung lanjut tanpa kegiatan lagi
@@ -1598,7 +1929,10 @@ class GameActivity : Activity() {
             })
         }
         // Tidur hanya bila waktu bebas masih panjang (tidak melompati kelanjutan cerita)
-        if (life.slot == LifeState.Slot.MALAM && (left == null || left >= 8 * 60)) {
+        if (life.slot == LifeState.Slot.MALAM && (left == null || left >= 8 * 60) && here != null && !here.bed) {
+            sheetList.addView(infoText("😴 Untuk tidur, pulang dulu ke " + (if (place == "kota") "kamar kos" else "kamarmu") + "."))
+        }
+        if (life.slot == LifeState.Slot.MALAM && (left == null || left >= 8 * 60) && (here == null || here.bed)) {
             sheetButtonRow(
                 getString(R.string.btn_sleep) to { sleepUntilMorning() },
                 "📱 HP" to { openPhoneFromSheet() },
@@ -1641,6 +1975,7 @@ class GameActivity : Activity() {
 
     private fun doActivity(a: GameData.ActivityDef) {
         closeSheet()
+        hideExploreUi()
         val (_, used, _) = activityUse(a.id)
         vars["_akt_${a.id}"] = "${life.day}:${used + 1}:${life.absMinute}"
         val text = if (used > 0 && a.repeatText != null) a.repeatText else a.text
@@ -1665,13 +2000,16 @@ class GameActivity : Activity() {
     private fun continueFree() {
         if (freeLeft > 0 && !freeUntilReached()) {
             hideDialog()
-            showFreeSheet()
+            // kembali ke layar jelajah (halaman waktu bebas tertutup; buka lewat tombol 📋)
+            wait = Wait.FREE
+            if (!showPendingEvent()) renderExplore()
         } else {
             endFree()
         }
     }
 
     private fun endFree() {
+        hideExploreUi()
         vars.remove("_bebas_sisa")
         vars.remove("_bebas_sampai")
         freeLeft = 0
@@ -2431,6 +2769,7 @@ class GameActivity : Activity() {
             "jam" -> pulse(clock)
             "menu" -> pulse(burger)
             "ikon_hp" -> pulse(phoneIcon)
+            "jelajah" -> showExploreDemo()
             "panel" -> pulse(charPanel)
         }
         tourTarget = c.target
@@ -2463,7 +2802,8 @@ class GameActivity : Activity() {
         when (tourTarget) {
             "hp" -> phone.close()
             "status" -> setHudOpen(false)
-            "bebas" -> { freeLeft = 0; closeSheet() }
+            "jelajah" -> hideExploreUi()
+            "bebas" -> { freeLeft = 0; closeSheet(); hideExploreUi() }
             "tas", "belanja", "kerja", "kos", "karakter", "karakter_detail" -> closeSheet()
         }
         tourTarget = null
@@ -3867,6 +4207,7 @@ class GameActivity : Activity() {
 
     private fun meetCharacter(c: GameData.CharacterDef) {
         closeSheet()
+        hideExploreUi()
         val blocker = social.blockedBy(gameData, c)
         if (blocker != null) {
             afterTap = { showFreeSheet() }

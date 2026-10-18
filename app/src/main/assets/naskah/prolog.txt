@@ -228,7 +228,8 @@ Ibu: Ini titipan Ayah semalam. Hadiah kelulusan, katanya. Simpan baik-baik, ya.
 * HP-mu bergetar lagi. Ada pesan dari Bayu.
 @tunggu_hp
 {nama}: Dasar Bayu, baru lulus sudah ngajak nongkrong.
-* Di waktu bebas, kamu bisa menemui orang yang memang ada di dekatmu. Keluarga ada di rumah (Ayah baru bangun siang, Laras pulang sekolah pukul 13:00).
+* Di waktu bebas, jelajahi sekitarmu: ketuk pintu untuk pindah tempat, ketuk orang untuk mengobrol, ketuk benda untuk berkegiatan. Tombol 📋 membuka daftar waktu bebas.
+* Ayah baru bangun siang dan makan di ruang makan. Laras pulang sekolah pukul 13:00. Ibu menjaga warung.
 * Teman seperti Bayu harus diajak janjian dulu lewat Chat di HP.
 * Waktu bebasmu berjalan sampai pukul 20:00 malam ini. Lakukan apa saja selama tenagamu cukup.
 @bebas sampai Senin 20:00

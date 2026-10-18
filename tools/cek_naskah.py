@@ -213,5 +213,51 @@ for a in entries(os.path.join(data, "aktivitas.txt")):
     if a.get("jeda") and not re.match(r"^\d+([.,]\d+)?\s*(jam|menit)?$", a["jeda"]):
         err(os.path.join(data, "aktivitas.txt"), a["_line"], f"[{a['_id']}] jeda contoh: 4 jam / 90 menit")
 
+# data/lokasi.txt: pintu, benda, orang, posisi; lokasi karakter & aktivitas harus ada
+lk = os.path.join(data, "lokasi.txt")
+if os.path.exists(lk):
+    locs = {e["_id"]: e for e in entries(lk)}
+    act_ids = {a["_id"] for a in entries(os.path.join(data, "aktivitas.txt"))}
+    def xy_ok(v):
+        try:
+            x, y = [float(t) for t in v.split(",")[:2]]
+            return 0.0 <= x <= 1.0 and 0.0 <= y <= 1.0, x
+        except Exception:
+            return False, 0.5
+    for lid, e in locs.items():
+        if lid not in latar:
+            err(lk, e["_line"], f"[{lid}] gambar latar/{lid} tidak ada")
+        for part in [p for p in e.get("pintu", "").split(";") if p.strip()]:
+            f = [t.strip() for t in part.split("|")]
+            if len(f) < 3 or (f[0] != "kos" and f[0] not in locs):
+                err(lk, e["_line"], f"[{lid}] pintu ke '{f[0]}' tidak ada di lokasi.txt")
+            ok, x = xy_ok(f[2] if len(f) > 2 else "")
+            if not ok:
+                err(lk, e["_line"], f"[{lid}] posisi pintu salah: {part.strip()}")
+            elif not 0.1 <= x <= 0.9:
+                err(lk, e["_line"], f"[{lid}] pintu terlalu ke pinggir (x {x}), bisa terpotong layar")
+        for part in [p for p in e.get("benda", "").split(";") if p.strip()]:
+            f = [t.strip() for t in part.split("|")]
+            if len(f) < 3 or f[0] not in act_ids:
+                err(lk, e["_line"], f"[{lid}] benda '{f[0]}' bukan aktivitas di aktivitas.txt")
+            elif not xy_ok(f[2])[0]:
+                err(lk, e["_line"], f"[{lid}] posisi benda salah: {part.strip()}")
+        for part in [p for p in e.get("orang", "").split(";") if p.strip()]:
+            cid = part.strip().split()[0]
+            if cid not in chars:
+                err(lk, e["_line"], f"[{lid}] orang '{cid}' tidak ada di karakter.txt")
+    for c in entries(os.path.join(data, "karakter.txt")):
+        for part in [p for p in c.get("lokasi", "").split(",") if p.strip()]:
+            loc = part.strip().split()[-1]
+            if loc not in locs:
+                err(os.path.join(data, "karakter.txt"), c["_line"], f"[{c['_id']}] lokasi '{loc}' tidak ada di lokasi.txt")
+        tj = c.get("tempat_janji")
+        if tj and tj != "kos" and tj not in locs:
+            err(os.path.join(data, "karakter.txt"), c["_line"], f"[{c['_id']}] tempat_janji '{tj}' tidak ada di lokasi.txt")
+    for a in entries(os.path.join(data, "aktivitas.txt")):
+        for loc in [t.strip() for t in a.get("lokasi", "").split(",") if t.strip()]:
+            if loc != "kos" and loc not in locs:
+                err(os.path.join(data, "aktivitas.txt"), a["_line"], f"[{a['_id']}] lokasi '{loc}' tidak ada di lokasi.txt")
+
 print(f"Pemeriksaan naskah selesai: {errors} kesalahan.")
 sys.exit(1 if errors else 0)

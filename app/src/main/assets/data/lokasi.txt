@@ -1,0 +1,102 @@
+# ==========================================================
+#  LOKASI YANG BISA DIJELAJAHI SAAT WAKTU BEBAS
+#  Panduan: docs/DATA.md (bagian lokasi.txt)
+#
+#  [id]            = nama file latar (tanpa .jpg). Satu latar = satu lokasi.
+#  nama            = nama tempat yang tampil
+#  tempat          = desa / kota (aktivitas & orang mengikuti ini)
+#  pintu           = tujuan | teks tombol | x, y | menit perjalanan        (pisahkan beberapa pintu dengan ;)
+#                    tujuan "kos" = kamar kos yang sedang disewa
+#  benda           = id_aktivitas | teks | x, y                           (ketuk → lakukan aktivitas itu)
+#  orang           = id_karakter x, y, tinggi                              (posisi berdiri bila belum ada gambar adegan)
+#  tidur           = ya → bisa tidur di sini (kasur)
+#
+#  x, y = posisi di gambar (0 = kiri/atas, 1 = kanan/bawah). Layar HP memotong ±10% kiri & kanan,
+#  jadi taruh tanda di antara x 0.12 – 0.88.
+#
+#  Gambar adegan (karakter yang benar-benar sedang beraktivitas, mis. Ayah duduk makan):
+#  assets/adegan/<lokasi>__<karakter>.webp — ukuran sama dengan latar, transparan selain karakternya.
+#  Bila ada, dipakai menggantikan gambar berdiri. Bisa diketuk tepat di badan karakternya.
+# ==========================================================
+
+# ---------------- RUMAH (DESA) ----------------
+
+[kamar_pagi]
+nama   = Kamarmu
+tempat = desa
+pintu  = ruang_makan | 🚪 Ke ruang makan | 0.86, 0.45 | 0
+benda  = istirahat | 🛏️ Berbaring | 0.50, 0.86 ; belajar | 📚 Meja belajar | 0.24, 0.50
+tidur  = ya
+
+[ruang_makan]
+nama   = Ruang makan
+tempat = desa
+pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.84, 0.36 | 0 ; rumah_warung | ⬅ Keluar ke depan rumah | 0.16, 0.90 | 0
+benda  = makan_keluarga | 🍲 Makan | 0.52, 0.56
+orang  = ayah 0.30, 0.66, 0.40 ; laras 0.62, 0.58, 0.30 ; ibu 0.80, 0.64, 0.40
+
+[rumah_warung]
+nama   = Depan rumah & warung
+tempat = desa
+pintu  = ruang_makan | 🚪 Masuk rumah | 0.14, 0.32 | 0 ; gudang_ikan | ➡ Ke gudang ikan | 0.66, 0.50 | 15
+benda  = bantu_warung | 🍳 Warung | 0.22, 0.52 ; melaut | 🚣 Laut | 0.42, 0.45 ; dermaga | 🌅 Dermaga | 0.58, 0.42 ; main_laras | 🪁 Lapangan | 0.78, 0.66
+orang  = ibu 0.30, 0.66, 0.40 ; ayah 0.74, 0.72, 0.40 ; laras 0.56, 0.74, 0.30 ; bayu 0.64, 0.70, 0.38 ; sekar 0.46, 0.70, 0.38
+
+[gudang_ikan]
+nama   = Gudang ikan Juragan Darto
+tempat = desa
+pintu  = rumah_warung | ⬅ Pulang ke rumah | 0.40, 0.88 | 15
+orang  = darto 0.36, 0.64, 0.42
+
+# ---------------- KOTA SAKALA ----------------
+
+[kos_kamar]
+nama   = Kamar kos
+tempat = kota
+pintu  = kota_besar | 🚪 Keluar kos | 0.86, 0.45 | 10
+benda  = istirahat_kos | 🛏️ Berbaring | 0.22, 0.74
+tidur  = ya
+
+[kos_cendana]
+nama   = Kamar kos
+tempat = kota
+pintu  = kota_besar | 🚪 Keluar kos | 0.86, 0.45 | 10
+benda  = istirahat_kos | 🛏️ Berbaring | 0.20, 0.58
+tidur  = ya
+
+[kos_pusat]
+nama   = Kamar kos
+tempat = kota
+pintu  = kota_besar | 🚪 Keluar kos | 0.86, 0.45 | 10
+benda  = istirahat_kos | 🛏️ Berbaring | 0.30, 0.56
+tidur  = ya
+
+[kota_besar]
+nama   = Pusat Kota Sakala
+tempat = kota
+pintu  = kos | 🏠 Pulang ke kos | 0.30, 0.82 | 10 ; kelas_sma | 🏫 Sekolah | 0.20, 0.46 | 10 ; toko_buku | 📚 Toko buku | 0.48, 0.56 | 15 ; taman_kota | 🌳 Taman kota | 0.78, 0.62 | 15 ; stasiun_besar | 🚉 Stasiun Besar | 0.70, 0.36 | 15
+benda  = jelajah_kota | 🧭 Jelajah | 0.62, 0.74 ; nongkrong_mal | 🛍️ Mal | 0.40, 0.66 ; kafe_kekinian | 🧋 Kafe | 0.58, 0.46 ; begadang_game | 🎮 Warnet | 0.82, 0.80 ; perpustakaan | 🏛️ Perpustakaan | 0.30, 0.38
+orang  = dimas 0.50, 0.80, 0.38
+
+[kelas_sma]
+nama   = Kelas SMA
+tempat = kota
+pintu  = kota_besar | ⬅ Keluar sekolah | 0.84, 0.86 | 10
+
+[taman_kota]
+nama   = Taman Kota
+tempat = kota
+pintu  = kota_besar | ⬅ Kembali ke pusat kota | 0.50, 0.90 | 15
+benda  = taman_kota | 🌳 Bangku taman | 0.30, 0.62 ; lari_pagi | 🏃 Jalur lari | 0.62, 0.76
+
+[toko_buku]
+nama   = Toko buku depan Stasiun Besar
+tempat = kota
+pintu  = kota_besar | ⬅ Keluar toko | 0.56, 0.62 | 15
+orang  = nadia 0.36, 0.62, 0.40
+
+[stasiun_besar]
+nama   = Stasiun Besar
+tempat = kota
+pintu  = kota_besar | ⬅ Keluar stasiun | 0.30, 0.86 | 15
+benda  = cari_jejak | 🔍 Tanya orang di peron | 0.60, 0.62

@@ -26,7 +26,25 @@ class GameData private constructor(
     val messages: List<MessageDef> = emptyList(),
     /** Waktu asli tiap gambar latar (data/latar.txt): pagi / siang / sore / malam / tetap. */
     val backgroundTimes: Map<String, String> = emptyMap(),
+    /** Lokasi yang bisa dijelajahi saat waktu bebas (data/lokasi.txt), kunci = nama file latar. */
+    val locations: Map<String, LocationDef> = emptyMap(),
 ) {
+
+    data class Spot(val target: String, val label: String, val x: Float, val y: Float, val minutes: Int = 0)
+    data class PersonSpot(val charId: String, val x: Float, val y: Float, val height: Float)
+    data class LocationDef(
+        val id: String,
+        val name: String,
+        val area: String,
+        val doors: List<Spot>,
+        val objects: List<Spot>,
+        val people: List<PersonSpot>,
+        val bed: Boolean,
+    )
+
+    /** Di lokasi mana karakter berada sekarang (kolom "lokasi" di karakter.txt), atau null. */
+    fun characterLocation(c: CharacterDef, weekdayIndex: Int, minute: Int): String? =
+        locationAt(c.text["lokasi"], weekdayIndex, minute)
 
     /**
      * Karakter yang nama/jenis kelaminnya menyesuaikan pemain (kolom nama_l / nama_p,
@@ -235,6 +253,8 @@ class GameData private constructor(
         val cooldown: Int? = null,
         /** Teks bila diulang di hari yang sama (mis. Ibu menegur karena tidur lagi). */
         val repeatText: String? = null,
+        /** Lokasi (lokasi.txt) tempat aktivitas dilakukan; kosong = di mana saja. "kos" = kamar kos. */
+        val locations: Set<String> = emptySet(),
     )
 
     data class ItemDef(
@@ -273,6 +293,7 @@ class GameData private constructor(
                     maxPerDay = m["batas"]?.filter { it.isDigit() }?.toIntOrNull(),
                     cooldown = minutes(m["jeda"]),
                     repeatText = m["teks_ulang"]?.takeIf { it.isNotBlank() },
+                    locations = list(m["lokasi"]),
                 )
             }
             val items = readSections(ctx, "data/barang.txt").associate { (id, m) ->
@@ -413,7 +434,8 @@ class GameData private constructor(
             val chats = readSections(ctx, "data/obrolan.txt").map { (id, m) -> chat(id, m) }
             val msgs = readSections(ctx, "data/pesan.txt").map { (id, m) -> message(id, m) }
             val bgTimes = readSections(ctx, "data/latar.txt").associate { (id, m) -> id to (m["waktu"] ?: "tetap").trim().lowercase() }
-            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats, msgs, bgTimes)
+            val locs = readSections(ctx, "data/lokasi.txt").associate { (id, m) -> id to location(id, m) }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats, msgs, bgTimes, locs)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {
@@ -528,6 +550,53 @@ class GameData private constructor(
 
         private fun list(v: String?): Set<String> =
             v?.split(',')?.map { it.trim().lowercase() }?.filter { it.isNotEmpty() }?.toSet() ?: emptySet()
+
+        /** Satu entri lokasi.txt → [LocationDef]. */
+        internal fun location(id: String, m: Map<String, String>): LocationDef {
+            fun xy(v: String): Pair<Float, Float>? {
+                val p = v.split(',').map { it.trim().toFloatOrNull() }
+                return if (p.size >= 2 && p[0] != null && p[1] != null) p[0]!! to p[1]!! else null
+            }
+            fun spots(v: String?, withMinutes: Boolean) = v.orEmpty().split(';').mapNotNull { part ->
+                val f = part.split('|').map { it.trim() }
+                if (f.size < 3) return@mapNotNull null
+                val (x, y) = xy(f[2]) ?: return@mapNotNull null
+                Spot(f[0], f[1], x, y, if (withMinutes) f.getOrNull(3)?.toIntOrNull() ?: 0 else 0)
+            }
+            val people = m["orang"].orEmpty().split(';').mapNotNull { part ->
+                val t = part.trim()
+                val idc = t.substringBefore(' ').trim().lowercase()
+                val n = t.substringAfter(' ', "").split(',').map { it.trim().toFloatOrNull() }
+                if (idc.isEmpty() || n.size < 3 || n.any { it == null }) null else PersonSpot(idc, n[0]!!, n[1]!!, n[2]!!)
+            }
+            return LocationDef(
+                id = id,
+                name = m["nama"] ?: id,
+                area = (m["tempat"] ?: "desa").trim().lowercase(),
+                doors = spots(m["pintu"], true),
+                objects = spots(m["benda"], false),
+                people = people,
+                bed = (m["tidur"] ?: "").trim().lowercase() == "ya",
+            )
+        }
+
+        /**
+         * "setiap hari 12:00-13:30 ruang_makan, senin-sabtu 07:00-16:00 gudang_ikan" → lokasi pada hari & jam itu.
+         * Jendela boleh melewati tengah malam.
+         */
+        internal fun locationAt(spec: String?, weekdayIndex: Int, minute: Int): String? {
+            if (spec.isNullOrBlank()) return null
+            spec.split(',').forEach { part ->
+                val m = Regex("^(.*?)\\s*(\\d{1,2}[:.]\\d{2}\\s*[-–]\\s*\\d{1,2}[:.]\\d{2})\\s+(\\w+)\\s*$").find(part.trim()) ?: return@forEach
+                val w = window(m.groupValues[2].replace(" ", "")) ?: return@forEach
+                val days = days(m.groupValues[1].trim().ifEmpty { null })
+                val (from, to) = w
+                val inside = if (to < from) (weekdayIndex in days && minute >= from) || (((weekdayIndex + 6) % 7) in days && minute < to)
+                    else weekdayIndex in days && minute in from until to
+                if (inside) return m.groupValues[3]
+            }
+            return null
+        }
 
         /** Satu entri pesan.txt → [MessageDef]. */
         internal fun message(id: String, m: Map<String, String>) = MessageDef(
