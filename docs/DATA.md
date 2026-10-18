@@ -95,7 +95,7 @@ tidur  = ya                                                    (hanya kamar / ko
 ```
 - x, y = posisi di gambar (0–1). Layar HP memotong ±10% kiri-kanan → taruh tanda di x 0.12–0.88.
 - Pintu: menit perjalanan (di dalam rumah 0, ke gudang ikan 15, kos ↔ pusat kota 10, pusat kota ↔ tempat lain 15). Tujuan `kos` = kos yang sedang disewa.
-- **Peta sekarang** — desa: kamar ↔ ruang makan ↔ depan rumah & warung ↔ gudang ikan. Kota: kamar kos ↔ pusat kota ↔ sekolah / toko buku / taman / Stasiun Besar.
+- **Peta sekarang** — desa: kamar ↔ ruang tengah ↔ ruang makan; ruang tengah ↔ depan rumah & warung ↔ gudang ikan. Kota: kamar kos ↔ pusat kota ↔ sekolah / toko buku / taman / Stasiun Besar.
 - **Kegiatan terikat lokasi** (`lokasi` di aktivitas.txt): makan di ruang makan, istirahat & belajar di kamar, bantu warung / melaut / dermaga / main dengan Laras di depan rumah, dst. Di tempat lain tampil redup "Pergi ke Ruang makan".
 - **Di mana orang berada** (`lokasi` di karakter.txt): Ayah ruang makan 12:00–13:30 lalu depan rumah sampai 18:30; Ibu warung 05:00–17:00 lalu ruang makan sampai 21:00; Laras ruang makan / depan rumah sepulang sekolah; Darto gudang ikan; Nadia toko buku. Yang janjian menunggu di `tempat_janji` (Bayu & Sekar di depan rumah, Dimas di taman kota).
 - "👥 Temui seseorang" di halaman waktu bebas kini hanya **keterangan** ("Ayah · 📍 Ruang makan"). Untuk bertemu, datangi tempatnya lalu ketuk orangnya.

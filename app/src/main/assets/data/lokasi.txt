@@ -24,21 +24,26 @@
 [kamar_pagi]
 nama   = Kamarmu
 tempat = desa
-pintu  = ruang_makan | 🚪 Ke ruang makan | 0.86, 0.45 | 0
-benda  = istirahat | 🛏️ Berbaring | 0.50, 0.86 ; belajar | 📚 Meja belajar | 0.24, 0.50
+pintu  = ruang_tengah | 🚪 Ke ruang tengah | 0.80, 0.42 | 0
+benda  = istirahat | 🛏️ Berbaring | 0.30, 0.86 ; belajar | 📚 Meja belajar | 0.56, 0.56
 tidur  = ya
+
+[ruang_tengah]
+nama   = Ruang tengah
+tempat = desa
+pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.87, 0.46 | 0 ; ruang_makan | ➡ Ke ruang makan | 0.59, 0.40 | 0 ; rumah_warung | 🚪 Keluar rumah | 0.13, 0.44 | 0
 
 [ruang_makan]
 nama   = Ruang makan
 tempat = desa
-pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.84, 0.36 | 0 ; rumah_warung | ⬅ Keluar ke depan rumah | 0.16, 0.90 | 0
-benda  = makan_keluarga | 🍲 Makan | 0.52, 0.56
-orang  = ayah 0.30, 0.66, 0.40 ; laras 0.62, 0.58, 0.30 ; ibu 0.80, 0.64, 0.40
+pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.13, 0.46 | 0
+benda  = makan_keluarga | 🍲 Makan | 0.52, 0.55
+orang  = ayah 0.30, 0.74, 0.40 ; laras 0.70, 0.72, 0.30 ; ibu 0.80, 0.64, 0.40
 
 [rumah_warung]
 nama   = Depan rumah & warung
 tempat = desa
-pintu  = ruang_makan | 🚪 Masuk rumah | 0.14, 0.32 | 0 ; gudang_ikan | ➡ Ke gudang ikan | 0.66, 0.50 | 15
+pintu  = ruang_tengah | 🚪 Masuk rumah | 0.14, 0.32 | 0 ; gudang_ikan | ➡ Ke gudang ikan | 0.66, 0.50 | 15
 benda  = bantu_warung | 🍳 Warung | 0.22, 0.52 ; melaut | 🚣 Laut | 0.42, 0.45 ; dermaga | 🌅 Dermaga | 0.58, 0.42 ; main_laras | 🪁 Lapangan | 0.78, 0.66
 orang  = ibu 0.30, 0.66, 0.40 ; ayah 0.74, 0.72, 0.40 ; laras 0.56, 0.74, 0.30 ; bayu 0.64, 0.70, 0.38 ; sekar 0.46, 0.70, 0.38
 

@@ -90,7 +90,8 @@ class ExploreTest {
             l.doors.forEach { assertTrue("${l.id}: menit", it.minutes in 0..60) }
         }
         // di dalam rumah tidak memakan waktu, ke gudang ikan 15 menit
-        assertEquals(0, locs.getValue("ruang_makan").doors.first { it.target == "kamar_pagi" }.minutes)
+        assertEquals(0, locs.getValue("ruang_tengah").doors.first { it.target == "kamar_pagi" }.minutes)
+        assertTrue("ruang tengah tersambung ke ruang makan", locs.getValue("ruang_tengah").doors.any { it.target == "ruang_makan" })
         assertEquals(15, locs.getValue("rumah_warung").doors.first { it.target == "gudang_ikan" }.minutes)
     }
 

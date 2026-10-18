@@ -22,6 +22,9 @@ waktu = pagi
 [plafon]
 waktu = tetap
 
+[ruang_tengah]
+waktu = pagi
+
 [ruang_makan]
 waktu = pagi
 
