@@ -988,6 +988,24 @@ class GameActivity : Activity() {
         return (ox + x * bgImgW * sc) to (oy + y * bgImgH * sc)
     }
 
+    /** Posisi (0..1) tepat di atas kepala karakter pada gambar adegan: tengah-atas daerah yang tidak transparan. */
+    private val sceneBoxCache = HashMap<Int, Pair<Float, Float>?>()
+    private fun sceneBox(bmp: Bitmap): Pair<Float, Float>? = sceneBoxCache.getOrPut(System.identityHashCode(bmp)) {
+        val w = bmp.width
+        val h = bmp.height
+        val px = IntArray(w * h)
+        bmp.getPixels(px, 0, w, 0, 0, w, h)
+        var minX = w; var maxX = -1; var minY = h
+        for (y in 0 until h step 3) for (x in 0 until w step 3) {
+            if ((px[y * w + x] ushr 24) > 80) {
+                if (x < minX) minX = x
+                if (x > maxX) maxX = x
+                if (y < minY) minY = y
+            }
+        }
+        if (maxX < 0) null else ((minX + maxX) / 2f / w) to ((minY / h.toFloat()) - 0.03f).coerceAtLeast(0f)
+    }
+
     /** Orang yang ada di lokasi ini sekarang (sesuai jadwal, atau sedang janjian di sini). */
     private fun peopleAt(loc: GameData.LocationDef): List<GameData.CharacterDef> =
         gameData.characters.values.filter { c ->
@@ -1028,8 +1046,9 @@ class GameActivity : Activity() {
                 }
                 exploreLayer.addView(iv, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                 if (hints) {
-                    val spot = loc.people.firstOrNull { it.charId == c.id }
-                    if (spot != null) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height, 0) { meetCharacter(c) }
+                    // tanda nama diletakkan otomatis di atas kepala karakter pada gambar adegan
+                    val box = sceneBox(scene)
+                    if (box != null) addMarker("💬 ${c.name}", box.first, box.second, 0) { meetCharacter(c) }
                 }
             } else {
                 val bmp = charBitmap(c.id, "biasa") ?: return@forEach
