@@ -178,6 +178,28 @@ disita → Darto diam-diam merasa bersalah. Menghubungkan Darto, Raka, dan sahab
 
 ---
 
+## 5b. Solusi yang DISETUJUI pemilik (19 Okt 2026)
+
+Semua usulan diterima (termasuk usul pengikat Darto–keluarga sahabat & pengurangan kiriman). Solusi tiap masalah:
+1. **Jadwal libur Laras** (± 27 Juni – 12 Juli): bangun siang, bantu warung pagi, lapangan siang, sore–malam seperti biasa; otomatis di tanggal libur;
+   jadi bahan cerita (merengek ikut ke gudang / diajak ke dermaga).
+2. Bab 1–2 memakai **`condong`**; `jalur` diisi saat keputusan 26 Juni; "Belajar persiapan SMA" untuk condong kota/ragu; pemeriksa naskah
+   memperingatkan `jalur` dipakai sebelum 26 Juni.
+3. **SKL** menggantikan ijazah; adegan mengambil SKL di SMP (Selasa Bab 1) bertemu Rani, Dodi, guru; gudang tanpa berkas.
+4. Kucing = **Si Belang**; unggahan Laras: "Ibu nggak bolehin namanya Gorengan, jadi Si Belang 😤".
+5. Sosmed Bayu: versi gudang (syarat sama-sama di gudang) + versi perahu ("Subuh-subuh narik jaring bareng {nama} 🌊").
+6. Sosmed Sekar: "kalian yang di kota" hanya bila Sekar tinggal; versi asrama bila pergi.
+7. Sekar tanpa kerudung (rambut hitam panjang, bando ungu, kacamata) di semua naskah & prompt.
+8. Jaga warnet & kasir tampil terkunci (🔒 minimal 16/18 th); kerja kecil baru di kota: bantu Bu Sum jualan nasi uduk subuh, merapikan rak toko buku
+   Pak Hendra (lewat Nadia).
+9. Mercusuar jalur kota menyala bila: 💸 menyumbang / Kepercayaan Darto ≥ 55 / Cinta Bayu ≥ 55 / Sekar tinggal; selain itu versi padam.
+10. Setelah 3 Agustus kiriman dikurangi Rp150.000 (Ibu minta maaf lewat chat); kembali normal bila perahu beres atau pemain ikut mencicil.
+11. Satu pesan sahabat 17 Agustus, versinya mengikuti tempat pemain malam itu (desa — termasuk pemain kota yang pulang — / kota).
+12. `bab2.txt` & `bab3.txt` jalur kota dipecah & dipakai ulang sebagai Minggu 0–2 Bab 4 Kota.
+13. Tutorial disesuaikan dengan timeline 1 Juni & sistem baru.
+14. Darto pernah menolak meminjamkan uang ke keluarga sahabat → mereka terjerat rentenir kota. Bab 4: isyarat saja (Darto memandangi rumah kosong
+    keluarga sahabat); pengakuan penuh di bab berikutnya saat Kepercayaan Darto sangat tinggi.
+
 ## 6. Fitur mesin yang dibutuhkan untuk rancangan ini
 
 | Fitur | Untuk |
