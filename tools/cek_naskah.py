@@ -15,7 +15,7 @@ wait_phone musik music suara sound sfx lompat jump goto jika if atur set tambah 
 bebas free maju advance uang money stat barang item lokasi location tampil show sembunyi hide kenal meet cinta love
 percaya trust perilaku behave bohong lie terbongkar reveal ungkapkan confess naskah script tanggal date kos kiriman
 allowance kerja_mulai sekolah_mulai job_start kerja_berhenti sekolah_berhenti job_stop lamar apply catatan note
-dokumen doc kejadian event tamat end pilihan choice mulai_ulang reset tunjuk show_ui info jalan walk""".split())
+dokumen doc kejadian event tamat end pilihan choice mulai_ulang reset tunjuk show_ui info jalan walk kembali return""".split())
 
 
 def sections(path):
@@ -225,8 +225,8 @@ if os.path.exists(lk):
         except Exception:
             return False, 0.5
     for lid, e in locs.items():
-        if lid not in latar:
-            err(lk, e["_line"], f"[{lid}] gambar latar/{lid} tidak ada")
+        if lid not in latar and e.get("cadangan", "") not in latar:
+            err(lk, e["_line"], f"[{lid}] gambar latar/{lid} tidak ada (dan tidak ada 'cadangan')")
         for part in [p for p in e.get("pintu", "").split(";") if p.strip()]:
             f = [t.strip() for t in part.split("|")]
             if len(f) < 3 or (f[0] != "kos" and f[0] not in locs):
@@ -267,6 +267,75 @@ for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
             t = l.split(None, 1)[1].split("|")[0].strip()
             if os.path.exists(lk) and t != "kos" and t not in locs:
                 err(f, n, f"@jalan: lokasi '{t}' tidak ada di data/lokasi.txt")
+
+# @atur _tempat = lokasi (adegan memindahkan pemain)
+for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
+    for n, raw in enumerate(open(f, encoding="utf-8"), 1):
+        m = re.match(r"^@atur\s+_tempat\s*=\s*(\w+)", raw.strip())
+        if m and os.path.exists(lk) and m.group(1) not in locs:
+            err(f, n, f"_tempat: lokasi '{m.group(1)}' tidak ada di data/lokasi.txt")
+
+# data/aktivitas.txt: bersama & efek hubungan menunjuk karakter yang ada
+ak = os.path.join(data, "aktivitas.txt")
+for a in entries(ak):
+    if a.get("bersama") and a["bersama"] not in chars:
+        err(ak, a["_line"], f"[{a['_id']}] bersama '{a['bersama']}' tidak ada di karakter.txt")
+    for k in re.findall(r"(?:cinta|percaya)_(\w+)", a.get("efek", "")):
+        if k not in chars:
+            err(ak, a["_line"], f"[{a['_id']}] efek untuk karakter '{k}' yang tidak ada")
+    if a.get("mulai"):
+        for w in a["mulai"].split(","):
+            if not re.match(r"^\s*\d{1,2}[:.]\d{2}\s*-\s*\d{1,2}[:.]\d{2}\s*$", w):
+                err(ak, a["_line"], f"[{a['_id']}] mulai salah tulis: '{w.strip()}' (contoh 05:00-06:15, 17:15-17:45)")
+
+# data/adegan.txt: naskah & label ada, lokasi/orang ada, setiap adegan ditutup @kembali
+ad = os.path.join(data, "adegan.txt")
+if os.path.exists(ad):
+    scene_list = entries(ad)
+    seen_ids = set()
+    file_lines = {}
+    for sc in scene_list:
+        sid, ln = sc["_id"], sc["_line"]
+        if sid in seen_ids:
+            err(ad, ln, f"id adegan '{sid}' dobel")
+        seen_ids.add(sid)
+        fn = sc.get("naskah", "")
+        path = os.path.join(ROOT, "naskah", fn)
+        if not fn or not os.path.exists(path):
+            err(ad, ln, f"[{sid}] naskah '{fn}' tidak ada")
+            continue
+        if fn not in file_lines:
+            file_lines[fn] = [r.strip() for r in open(path, encoding="utf-8")]
+        lab = sc.get("label", sid)
+        if f":: {lab}" not in file_lines[fn] and f"::{lab}" not in file_lines[fn]:
+            err(ad, ln, f"[{sid}] label ':: {lab}' tidak ada di {fn}")
+        trig = sc.get("pemicu", "orang" if sc.get("orang") else "masuk")
+        if trig not in ("masuk", "orang"):
+            err(ad, ln, f"[{sid}] pemicu harus masuk / orang")
+        if trig == "orang" and sc.get("orang") not in chars:
+            err(ad, ln, f"[{sid}] orang '{sc.get('orang')}' tidak ada di karakter.txt")
+        if trig == "masuk" and not sc.get("lokasi"):
+            err(ad, ln, f"[{sid}] pemicu masuk butuh 'lokasi'")
+        if sc.get("lokasi") and os.path.exists(lk) and sc["lokasi"] not in locs:
+            err(ad, ln, f"[{sid}] lokasi '{sc['lokasi']}' tidak ada di lokasi.txt")
+        for part in [p for p in sc.get("waktu", "").split(",") if p.strip()]:
+            if not re.search(r"\d{1,2}[:.]\d{2}\s*-\s*\d{1,2}[:.]\d{2}\s*$", part):
+                err(ad, ln, f"[{sid}] waktu salah tulis: '{part.strip()}' (contoh: senin-sabtu 15:00-17:30)")
+    # setiap adegan harus sampai @kembali sebelum adegan berikutnya di file yang sama
+    for fn, lines in file_lines.items():
+        starts = {sc.get("label", sc["_id"]) for sc in scene_list if sc.get("naskah") == fn}
+        cur, cur_line, has_ret = None, 0, False
+        for n, l in enumerate(lines, 1):
+            if l.startswith("::"):
+                lab = l[2:].strip()
+                if lab in starts:
+                    if cur and not has_ret:
+                        err(os.path.join(ROOT, "naskah", fn), cur_line, f"adegan '{cur}' tidak ditutup @kembali")
+                    cur, cur_line, has_ret = lab, n, False
+            elif l.startswith("@kembali") or l.startswith("@return"):
+                has_ret = True
+        if cur and not has_ret:
+            err(os.path.join(ROOT, "naskah", fn), cur_line, f"adegan '{cur}' tidak ditutup @kembali")
 
 print(f"Pemeriksaan naskah selesai: {errors} kesalahan.")
 sys.exit(1 if errors else 0)

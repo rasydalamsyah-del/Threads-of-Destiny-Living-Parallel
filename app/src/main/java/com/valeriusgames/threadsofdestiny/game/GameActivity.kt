@@ -666,8 +666,11 @@ class GameActivity : Activity() {
                     notice("📖 Info baru tentang ${ch.name}")
                 }
                 is Cmd.Show -> { showTour(c); return }
+                is Cmd.Return -> if (returnFromScene()) return
             }
         }
+        // adegan yang lupa ditutup @kembali: tetap kembali ke waktu bebas
+        if (vars["_kembali_naskah"] != null && returnFromScene()) return
         endStory("Bersambung…")
     }
 
@@ -990,6 +993,53 @@ class GameActivity : Activity() {
         return null
     }
 
+    // ---------------- adegan waktu bebas (data/adegan.txt) ----------------
+
+    private var exploreDemo = false
+
+    /** Adegan yang siap dimainkan di sini & sekarang. trigger "masuk" = datang ke lokasi, "orang" = menemui [personId]. */
+    private fun availableScene(trigger: String, locId: String?, personId: String?): GameData.SceneDef? =
+        gameData.scenes.firstOrNull { sc ->
+            sc.trigger == trigger &&
+                (sc.location == null || sc.location == locId) &&
+                (trigger != "orang" || sc.person == personId) &&
+                !(sc.once && vars["adegan_${sc.id}"] == "1") &&
+                GameData.inSchedule(sc.schedule, life.weekdayIndex, life.minute) &&
+                (sc.condition == null || checkCondition(sc.condition))
+        }
+
+    /** Mainkan adegan, lalu (@kembali) lanjut waktu bebas di perintah @bebas yang sama. */
+    private fun runScene(sc: GameData.SceneDef) {
+        closeSheet()
+        hideExploreUi()
+        vars["_kembali_naskah"] = scriptPath
+        vars["_kembali_pc"] = currentIndex.toString()
+        vars["adegan_${sc.id}"] = "1"
+        vars["_adegan"] = sc.id
+        wait = Wait.BUSY
+        loadScript("naskah/${sc.file}")
+        pc = labels[sc.label] ?: script.size
+        next()
+    }
+
+    /** @kembali: tutup adegan, kembali ke naskah utama & waktu bebas. false bila tidak sedang dalam adegan. */
+    private fun returnFromScene(): Boolean {
+        val path = vars.remove("_kembali_naskah") ?: return false
+        val idx = vars.remove("_kembali_pc")?.toIntOrNull() ?: 0
+        vars.remove("_adegan")
+        hideCharacter(null)
+        hideDialog()
+        loadScript(path)
+        pc = idx.coerceIn(0, script.size)
+        // adegan bisa memindahkan pemain (@atur _tempat = dermaga) atau memakai gambar khusus → kembali ke lokasinya
+        val target = vars["_tempat"]?.let { resolveLoc(it) }
+        if (target != null && currentLocation()?.id != target) bgName = null
+        vars["_tanpa_panel"] = "1"
+        wait = Wait.BUSY
+        next()
+        return true
+    }
+
     /** Sampai di tujuan @jalan → cerita lanjut. */
     private fun checkWalkArrived(): Boolean {
         val t = walkTarget ?: return false
@@ -1054,14 +1104,19 @@ class GameActivity : Activity() {
     private fun enterExplore() {
         val area = vars["lokasi"] ?: "desa"
         val fromBg = currentLocation()?.takeIf { it.area == area }
-        val target = fromBg?.id ?: if (area == "kota") bgBaseFile("kos_kamar") else "rumah_warung"
+        val last = vars["_tempat"]?.let { gameData.locations[resolveLoc(it)] }?.takeIf { it.area == area }
+        val target = fromBg?.id ?: last?.id ?: if (area == "kota") bgBaseFile("kos_kamar") else "rumah_warung"
         if (gameData.locations[target] == null) {
             showFreeSheet()
             return
         }
         vars["_tempat"] = target
+        // setelah adegan: langsung ke layar jelajah (halaman waktu bebas tetap tertutup)
+        val quiet = vars.remove("_tanpa_panel") != null
         if (fromBg == null) {
-            moveTo(target) { showFreeSheet() }
+            moveTo(target) { if (quiet) continueFree() else showFreeSheet() }
+        } else if (quiet) {
+            continueFree()
         } else {
             renderExplore()
             showFreeSheet()
@@ -1126,14 +1181,19 @@ class GameActivity : Activity() {
         if (!::exploreLayer.isInitialized) return
         exploreLayer.removeAllViews()
         if (wait != Wait.FREE) { hideExploreUi(); return }
+        updateTimeLook()
         val loc = currentLocation()
         if (loc == null) {
             exploreLayer.visibility = View.GONE
             freeToggle.visibility = View.VISIBLE
             return
         }
-        exploreLayer.visibility = View.VISIBLE
         val walking = walkTarget != null
+        if (!walking && !exploreDemo) availableScene("masuk", loc.id, null)?.let { sc ->
+            handler.post { if (wait == Wait.FREE && !freeUntilReached()) runScene(sc) }
+            return
+        }
+        exploreLayer.visibility = View.VISIBLE
         freeToggle.visibility = if (walking) View.GONE else View.VISIBLE
         placePill.text = if (walking) {
             "🚶 Pergi ke ${gameData.locations[walkTarget!!]?.name}" + (if (walkHint.isNotEmpty()) "\n$walkHint" else "") +
@@ -1155,24 +1215,6 @@ class GameActivity : Activity() {
         return (ox + x * bgImgW * sc) to (oy + y * bgImgH * sc)
     }
 
-    /** Posisi (0..1) tepat di atas kepala karakter pada gambar adegan: tengah-atas daerah yang tidak transparan. */
-    private val sceneBoxCache = HashMap<Int, Pair<Float, Float>?>()
-    private fun sceneBox(bmp: Bitmap): Pair<Float, Float>? = sceneBoxCache.getOrPut(System.identityHashCode(bmp)) {
-        val w = bmp.width
-        val h = bmp.height
-        val px = IntArray(w * h)
-        bmp.getPixels(px, 0, w, 0, 0, w, h)
-        var minX = w; var maxX = -1; var minY = h
-        for (y in 0 until h step 3) for (x in 0 until w step 3) {
-            if ((px[y * w + x] ushr 24) > 80) {
-                if (x < minX) minX = x
-                if (x > maxX) maxX = x
-                if (y < minY) minY = y
-            }
-        }
-        if (maxX < 0) null else ((minX + maxX) / 2f / w) to ((minY / h.toFloat()) - 0.03f).coerceAtLeast(0f)
-    }
-
     /** Orang yang ada di lokasi ini sekarang (sesuai jadwal, atau sedang janjian di sini). */
     private fun peopleAt(loc: GameData.LocationDef): List<GameData.CharacterDef> =
         gameData.characters.values.filter { c ->
@@ -1186,56 +1228,22 @@ class GameActivity : Activity() {
     private fun buildExplore(loc: GameData.LocationDef) {
         if (wait != Wait.FREE || currentLocation()?.id != loc.id) return
         exploreLayer.removeAllViews()
-        val d = resources.displayMetrics.density
         val hints = settings.exploreHints
         val vh = exploreLayer.height.toFloat()
         val sc = maxOf(exploreLayer.width.toFloat() / bgImgW, vh / bgImgH)
-        val bgTint = bgTimeMatrix()?.let { android.graphics.ColorMatrixColorFilter(it) }
-        val charTint = TimeLook.blend(TimeLook.matrix("siang", timeKey()), 0.45f)?.let { android.graphics.ColorMatrixColorFilter(it) }
-
         val walking = walkTarget != null
-        // orang: gambar adegan (bila ada) atau gambar berdiri
-        if (!walking) peopleAt(loc).forEach { c ->
-            val scene = loadAsset(listOf("adegan/${loc.id}__${c.id}.webp", "adegan/${loc.id}__${c.id}.png"))
-            if (scene != null) {
-                val iv = android.widget.ImageView(this).apply {
-                    scaleType = android.widget.ImageView.ScaleType.CENTER_CROP
-                    setImageBitmap(scene)
-                    colorFilter = bgTint
+        // orang: sudah tergambar di latar (latar/<lokasi>__<orang>.jpg) → area sentuh tak terlihat di badannya.
+        // Bila gambar gabungan itu belum ada, latar kosong yang tampil → tanda nama selalu terlihat.
+        if (!walking) {
+            val drawn = shownBgFile?.let { stripTimeVariant(it) } == presenceFile(loc)
+            peopleAt(loc).forEach { c ->
+                val spot = loc.people.firstOrNull { it.charId == c.id } ?: GameData.PersonSpot(c.id, 0.5f, 0.80f, 0.36f)
+                if (drawn) {
+                    addTapZone(spot.x, spot.y, spot.height, sc) { meetCharacter(c) }
+                    if (hints) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height, 0) { meetCharacter(c) }
+                } else {
+                    addMarker("👤 ${c.name}", spot.x, spot.y - spot.height * 0.6f, 0, always = true, showLabel = true) { meetCharacter(c) }
                 }
-                // ketukan hanya kena bila tepat di badan karakter (piksel tidak transparan)
-                iv.setOnTouchListener { v, e ->
-                    if (e.action != android.view.MotionEvent.ACTION_DOWN && e.action != android.view.MotionEvent.ACTION_UP) return@setOnTouchListener true
-                    val ix = ((e.x - (v.width - scene.width * sc) / 2f) / sc).toInt()
-                    val iy = ((e.y - (v.height - scene.height * sc) / 2f) / sc).toInt()
-                    val hit = ix in 0 until scene.width && iy in 0 until scene.height && (scene.getPixel(ix, iy) ushr 24) > 40
-                    if (hit && e.action == android.view.MotionEvent.ACTION_UP) meetCharacter(c)
-                    hit
-                }
-                exploreLayer.addView(iv, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-                if (hints) {
-                    // tanda nama diletakkan otomatis di atas kepala karakter pada gambar adegan
-                    val box = sceneBox(scene)
-                    if (box != null) addMarker("💬 ${c.name}", box.first, box.second, 0) { meetCharacter(c) }
-                }
-            } else {
-                val bmp = charBitmap(c.id, "biasa") ?: return@forEach
-                val spot = loc.people.firstOrNull { it.charId == c.id } ?: GameData.PersonSpot(c.id, 0.5f, 0.82f, 0.36f)
-                val skala = c.text["skala"]?.toFloatOrNull() ?: 1f
-                val h = spot.height * bgImgH * sc * skala
-                val w = h * bmp.width / bmp.height
-                val (fx, fy) = imgToScreen(spot.x, spot.y)
-                val iv = android.widget.ImageView(this).apply {
-                    setImageBitmap(bmp)
-                    scaleType = android.widget.ImageView.ScaleType.FIT_XY
-                    colorFilter = charTint
-                    setOnClickListener { meetCharacter(c) }
-                }
-                exploreLayer.addView(iv, FrameLayout.LayoutParams(w.toInt(), h.toInt()).apply {
-                    leftMargin = (fx - w / 2f).toInt().coerceIn(0, maxOf(0, exploreLayer.width - w.toInt()))
-                    topMargin = (fy - h).toInt().coerceAtLeast(0)
-                })
-                if (hints) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height * skala, 0) { meetCharacter(c) }
             }
         }
         // benda: aktivitas di tempat ini
@@ -1272,8 +1280,9 @@ class GameActivity : Activity() {
      * Tanda yang bisa disentuh. style 0 = orang/benda, 1 = redup (belum bisa), 2 = pintu.
      * always = tetap tampil walau tanda dimatikan di Pengaturan (dibuat transparan, tapi tetap bisa disentuh).
      */
-    private fun addMarker(label: String, x: Float, y: Float, style: Int, always: Boolean = false, onTap: () -> Unit) {
+    private fun addMarker(label: String, x: Float, y: Float, style: Int, always: Boolean = false, showLabel: Boolean = false, onTap: () -> Unit) {
         if (!settings.exploreHints && !always) return
+        val hidden = !settings.exploreHints && !showLabel
         val d = resources.displayMetrics.density
         val tv = TextView(this).apply {
             text = label
@@ -1286,10 +1295,10 @@ class GameActivity : Activity() {
                 setStroke((1.5f * d).toInt(), if (style == 1) 0x66D2AE62 else 0xFFD2AE62.toInt())
             }
             elevation = 4 * d
-            if (!settings.exploreHints) alpha = 0.01f
+            if (hidden) alpha = 0.01f
             setOnClickListener { onTap() }
         }
-        if (!settings.exploreHints) {
+        if (hidden) {
             // nama lokasi dimatikan: tidak ada tulisan, tapi area sentuhnya dibuat lebar (seukuran pintu/benda)
             tv.text = ""
             tv.minWidth = (110 * d).toInt()
@@ -1307,19 +1316,36 @@ class GameActivity : Activity() {
             leftMargin = (sx - w / 2f).toInt().coerceIn((8 * d).toInt(), maxOf((8 * d).toInt(), maxX))
             topMargin = (sy - h / 2f).toInt().coerceIn((70 * d).toInt(), maxOf((70 * d).toInt(), maxY))
         })
-        if (settings.exploreHints && style != 1) {
+        if (!hidden && style != 1) {
             tv.animate().scaleX(1.06f).scaleY(1.06f).setDuration(700).withEndAction {
                 tv.animate().scaleX(1f).scaleY(1f).setDuration(700).start()
             }.start()
         }
     }
 
+    /** Area sentuh tak terlihat di badan orang pada gambar latar (x, y = kaki; tinggi = bagian tinggi gambar). */
+    private fun addTapZone(x: Float, y: Float, height: Float, sc: Float, onTap: () -> Unit) {
+        val h = (height * bgImgH * sc).coerceAtLeast(80f)
+        val w = h * 0.55f
+        val (fx, fy) = imgToScreen(x, y)
+        val v = View(this).apply {
+            setOnClickListener { onTap() }
+            contentDescription = "orang"
+        }
+        exploreLayer.addView(v, FrameLayout.LayoutParams(w.toInt(), h.toInt()).apply {
+            leftMargin = (fx - w / 2f).toInt().coerceIn(0, maxOf(0, exploreLayer.width - w.toInt()))
+            topMargin = (fy - h).toInt().coerceAtLeast(0)
+        })
+    }
+
     /** Untuk tutorial: tampilkan layar jelajah sebentar. */
     private fun showExploreDemo() {
         val prev = wait
         wait = Wait.FREE
+        exploreDemo = true
         closeSheet()
         renderExplore()
+        exploreDemo = false
         wait = prev
     }
 
@@ -1340,23 +1366,53 @@ class GameActivity : Activity() {
     private fun timeKey(): String? =
         if (life.active && !memoryMode) life.slot.label.lowercase() else null
 
+    /**
+     * Gambar gabungan latar + orang yang sedang ada di lokasi ini (dibuat pemilik game), mis.
+     * latar/ruang_makan__ayah_ibu_laras.jpg. Hanya orang yang sudah dikenal; id diurutkan abjad. null bila belum ada.
+     */
+    private fun presenceFile(loc: GameData.LocationDef): String? {
+        val ids = peopleAt(loc).map { it.id }.sorted()
+        if (ids.isEmpty()) return null
+        return "${loc.id}__${ids.joinToString("_")}".takeIf { it in latarFiles }
+    }
+
+    /** Latar mengikuti siapa yang ada: saat waktu bebas, dan selama adegan yang dipicu dari waktu bebas. */
+    private fun presenceOn(): Boolean = wait == Wait.FREE || vars["_kembali_naskah"] != null
+
+    /** "rumah_warung__ibu_malam" → "rumah_warung__ibu" (versi khusus jam); nama lain tidak berubah. */
+    private fun stripTimeVariant(f: String): String {
+        for (t in listOf("pagi", "siang", "sore", "malam")) {
+            if (f.endsWith("_$t")) {
+                val b = f.removeSuffix("_$t")
+                if (b in latarFiles || gameData.locations[b] != null) return b
+            }
+        }
+        return f
+    }
+
     /** File yang seharusnya tampil: versi khusus jam ini bila ada, selain itu gambar biasa. */
     private fun bgFileNow(name: String): String {
         // naskah bisa mengganti sementara gambar sebuah lokasi, mis. ruang tengah saat keluarga sedang sarapan:
         // @atur latar_ruang_tengah = ruang_tengah_sarapan   (kembalikan dengan "-")
         vars["latar_${bgBaseFile(name)}"]?.trim()?.takeIf { it.isNotEmpty() && it != "-" && it in latarFiles }?.let { return it }
         val base = bgBaseFile(name)
-        val t = timeKey() ?: return base
-        if (gameData.backgroundTimes[base] == "tetap") return base
-        return "${base}_$t".takeIf { it in latarFiles } ?: base
+        val loc = gameData.locations[base]
+        var file = base
+        if (loc != null && presenceOn()) presenceFile(loc)?.let { file = it }
+        if (file == base && base !in latarFiles) loc?.fallback?.takeIf { it in latarFiles }?.let { file = it }
+        val t = timeKey() ?: return file
+        if ((gameData.backgroundTimes[file] ?: gameData.backgroundTimes[base]) == "tetap") return file
+        return "${file}_$t".takeIf { it in latarFiles } ?: file
     }
 
-    /** Pewarnaan latar sekarang (null bila memakai versi khusus / waktunya sama / "tetap"). */
+    /** Pewarnaan latar sekarang (null bila memakai versi khusus jam / "tetap" / gambar pengganti naskah). */
     private fun bgTimeMatrix(): FloatArray? {
         val name = bgName ?: return null
         val base = bgBaseFile(name)
-        if (bgFileNow(name) != base) return null
-        return TimeLook.matrix(gameData.backgroundTimes[base], timeKey())
+        val file = bgFileNow(name)
+        if (vars["latar_$base"]?.trim()?.let { it.isNotEmpty() && it != "-" && it in latarFiles } == true) return null
+        if (stripTimeVariant(file) != file) return null
+        return TimeLook.matrix(gameData.backgroundTimes[file] ?: gameData.backgroundTimes[base], timeKey())
     }
 
     /** Karakter digambar dengan cahaya siang: ikut menyesuaikan jam, tapi lebih lembut dari latar. */
@@ -1378,12 +1434,15 @@ class GameActivity : Activity() {
     private var lastTimeLookKey: String? = null
     private fun updateTimeLook() {
         val name = bgName ?: return
-        val key = "$name|${timeKey()}|${life.kosId}"
+        val want = bgFileNow(name)
+        val key = "$name|${timeKey()}|${life.kosId}|$want"
         if (key == lastTimeLookKey) return
         lastTimeLookKey = key
-        val want = bgFileNow(name)
         if (want != shownBgFile && shownBgFile != null) {
-            bg.show(loadBackground(name), memoryMode, StoryScript.Motion.NONE, instant = false, time = bgTimeMatrix()) {}
+            bg.show(loadBackground(name), memoryMode, StoryScript.Motion.NONE, instant = false, time = bgTimeMatrix()) {
+                // orang di lokasi berganti (mis. Ayah datang) → tanda & area sentuh ikut diperbarui
+                if (wait == Wait.FREE && currentLocation() != null) renderExplore()
+            }
         } else {
             bg.setTime(bgTimeMatrix(), animate = true)
         }
@@ -1396,7 +1455,7 @@ class GameActivity : Activity() {
         val opts = BitmapFactory.Options().apply { inPreferredConfig = Bitmap.Config.ARGB_8888 }
         val file = bgFileNow(name)
         shownBgFile = file
-        lastTimeLookKey = "$name|${timeKey()}|${life.kosId}"
+        lastTimeLookKey = "$name|${timeKey()}|${life.kosId}|$file"
         if (file != name) {
             for (ext in listOf("jpg", "jpeg", "png", "webp")) {
                 try {
@@ -1850,6 +1909,9 @@ class GameActivity : Activity() {
             vars["hari_ke"] = (life.day + 1).toString()
             life.date()?.let { d ->
                 vars["bulan"] = d.monthValue.toString()
+                vars["tanggal"] = d.dayOfMonth.toString()
+                // bulan & tanggal dalam satu angka, untuk syarat rentang tanggal: 627 = 27 Juni, 817 = 17 Agustus
+                vars["tgl"] = (d.monthValue * 100 + d.dayOfMonth).toString()
                 vars["musim"] = if (d.monthValue >= 11 || d.monthValue <= 3) "hujan" else "kemarau"
             }
             if (clockText != life.shortClockText) setClock(life.shortClockText)
@@ -2163,6 +2225,13 @@ class GameActivity : Activity() {
     /** Alasan kegiatan belum bisa dilakukan sekarang (jam mulai, batas per hari, jeda, sisa waktu bebas). */
     private fun activityBlock(a: GameData.ActivityDef): String? {
         gameData.activityBlockedReason(a, life.minute)?.let { return it }
+        a.with?.let { id ->
+            val c = gameData.characters[id]
+            val here = currentLocation()
+            if (c == null || !social.rel(c).met) return "Belum kenal"
+            if (here == null || gameData.characterLocation(c, life.weekdayIndex, life.minute) != here.id)
+                return "Hanya bisa saat ${c.name} ada di sini"
+        }
         val (_, used, last) = activityUse(a.id)
         GameData.repeatBlock(a.maxPerDay, a.cooldown, used, last, life.absMinute)?.let { return it }
         val left = freeMinutesLeft()
@@ -2181,7 +2250,16 @@ class GameActivity : Activity() {
         val text = if (used > 0 && a.repeatText != null) a.repeatText else a.text
         val extra = life.applyEffects(a.effects)
         extra.forEach { (k, v) ->
-            vars[k] = ((vars[k]?.toLongOrNull() ?: 0L) + v).toString()
+            when {
+                // efek hubungan: cinta_ayah +2, percaya_bayu +1
+                k.startsWith("cinta_") && gameData.characters[k.removePrefix("cinta_")] != null ->
+                    announce(social.changeLove(gameData, k.removePrefix("cinta_"), v.toInt()))
+                k.startsWith("percaya_") && gameData.characters[k.removePrefix("percaya_")] != null -> {
+                    social.changeTrust(gameData, k.removePrefix("percaya_"), v.toInt())
+                    syncSocialVars()
+                }
+                else -> vars[k] = ((vars[k]?.toLongOrNull() ?: 0L) + v).toString()
+            }
         }
         a.effects["uang"]?.let {
             if (it != 0L) {
@@ -2275,7 +2353,11 @@ class GameActivity : Activity() {
         return effects.entries.joinToString("   ") { (k, v) ->
             val sign = if (v >= 0) "+" else "-"
             val amount = if (k == "uang") rupiah(kotlin.math.abs(v)) else kotlin.math.abs(v).toString()
-            "${icons[k] ?: k} $sign$amount"
+            val label = icons[k]
+                ?: k.removePrefix("cinta_").takeIf { k.startsWith("cinta_") }?.let { "💗 " + (gameData.characters[it]?.name ?: it) }
+                ?: k.removePrefix("percaya_").takeIf { k.startsWith("percaya_") }?.let { "🤝 " + (gameData.characters[it]?.name ?: it) }
+                ?: k.replace('_', ' ')
+            "$label $sign$amount"
         }
     }
 
@@ -4284,10 +4366,9 @@ class GameActivity : Activity() {
             ))
             if (animate) iv.translationY = 24 * d
         }
-        // Karakter tampil di kotak dialog (setengah badan, sisi kiri). Gambar besar di tengah layar
-        // hanya untuk yang tidak punya data karakter (mis. sosok misterius) atau ditandai tampil_besar = ya.
-        val cdef = gameData.characters[id]
-        iv.visibility = if (cdef == null || cdef.text["tampil_besar"] == "ya") View.VISIBLE else View.GONE
+        // gambar besar di tengah layar tidak dipakai lagi: tokoh hanya tampil setengah badan di kotak dialog
+        // (@tampil tetap mengatur ekspresinya). Orang di latar sudah tergambar di gambar latar buatan pemilik.
+        iv.visibility = View.GONE
         // posisi baru selalu ditaruh paling akhir supaya urutan kiri→kanan stabil
         shownChars.remove(id)
         shownChars[id] = expr to pos
@@ -4425,6 +4506,8 @@ class GameActivity : Activity() {
             announce(social.behave(gameData, c.id, "menepati_janji"))
             notice("🤝 Kamu menepati janji dengan ${c.name}")
         }
+        // ada cerita dengan orang ini sekarang → mainkan adegannya dulu
+        availableScene("orang", currentLocation()?.id, c.id)?.let { runScene(it); return }
         meetingTalks = 0
         meetingGaveGift = false
         meetingGifted = social.rel(c).lastGiftDay == life.day

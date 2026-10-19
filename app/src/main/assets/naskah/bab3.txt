@@ -97,11 +97,9 @@ Nadia: ...Begitu.
 
 :: stasiun_dekat
 * Berkat petunjuk-petunjuk yang kamu kumpulkan, kamu tahu: setiap Sabtu sore, dia lewat peron jurusan Pelabuhan.
-@tampil sosok biasa
 * Di ujung peron, seseorang berdiri memunggungimu. Di pergelangan tangannya... gelang benang merah.
 {nama}: {nama_sahabat}...?
 * Sosok itu tersentak. Tanpa menoleh, ia melangkah masuk ke kereta yang pintunya mulai menutup.
-@sembunyi sosok
 * Kereta melaju. Tapi kali ini kamu yakin.
 @atur melihat_sahabat = 1
 @catatan Aku melihatnya di peron jurusan Pelabuhan, Sabtu sore. Gelang benang merah itu. Itu benar-benar {nama_sahabat}.

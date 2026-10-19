@@ -106,6 +106,8 @@ object StoryScript {
         data class End(val text: String) : Cmd()
         /** Hapus semua hasil latihan (tutorial): hidup, hubungan, HP, variabel. Nama & kelamin tetap. */
         object ResetState : Cmd()
+        /** Akhir adegan waktu bebas (data/adegan.txt): kembali ke waktu bebas. */
+        object Return : Cmd()
         /** Pemain mengetahui info profil karakter: @info bayu hobi  (atau: semua) */
         data class Info(val id: String, val key: String) : Cmd()
         /** Tutorial: tampilkan bagian layar (hp, status, tas, bebas, ...) beserta penjelasan. */
@@ -373,6 +375,7 @@ object StoryScript {
             "kejadian", "event" -> Cmd.Event(args.firstOrNull() ?: throw ParseError(n, "format: @kejadian id_kejadian"))
             "tamat", "end" -> Cmd.End(rest.ifEmpty { "Bersambung…" })
             "mulai_ulang", "reset" -> Cmd.ResetState
+            "kembali", "return" -> Cmd.Return
             "info" -> {
                 if (args.size < 2) throw ParseError(n, "format: @info id_karakter hobi  (hobi, kegemaran, pelajaran, keahlian, cita_cita, kisah_1..3, semua)")
                 Cmd.Info(args[0].lowercase(), args[1].lowercase())

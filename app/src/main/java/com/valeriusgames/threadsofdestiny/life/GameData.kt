@@ -28,7 +28,27 @@ class GameData private constructor(
     val backgroundTimes: Map<String, String> = emptyMap(),
     /** Lokasi yang bisa dijelajahi saat waktu bebas (data/lokasi.txt), kunci = nama file latar. */
     val locations: Map<String, LocationDef> = emptyMap(),
+    /** Adegan cerita yang muncul saat waktu bebas (data/adegan.txt). */
+    val scenes: List<SceneDef> = emptyList(),
 ) {
+
+    /**
+     * Adegan waktu bebas: dipicu saat pemain datang ke [location] ("masuk") atau menemui [person] ("orang"),
+     * pada [schedule] (hari & jam) dan bila [condition] terpenuhi. Isinya ada di naskah/[file] mulai label [label],
+     * diakhiri @kembali.
+     */
+    data class SceneDef(
+        val id: String,
+        val file: String,
+        val label: String,
+        val title: String,
+        val trigger: String,
+        val location: String?,
+        val person: String?,
+        val schedule: List<Triple<Set<Int>, Int, Int>>,
+        val condition: String?,
+        val once: Boolean,
+    )
 
     data class Spot(val target: String, val label: String, val x: Float, val y: Float, val minutes: Int = 0)
     data class PersonSpot(val charId: String, val x: Float, val y: Float, val height: Float)
@@ -40,6 +60,8 @@ class GameData private constructor(
         val objects: List<Spot>,
         val people: List<PersonSpot>,
         val bed: Boolean,
+        /** Gambar pengganti selama latar/<id>.jpg belum ada (mis. lapangan memakai gambar lain dulu). */
+        val fallback: String? = null,
     )
 
     /** Di lokasi mana karakter berada sekarang (kolom "lokasi" di karakter.txt), atau null. */
@@ -255,6 +277,10 @@ class GameData private constructor(
         val repeatText: String? = null,
         /** Lokasi (lokasi.txt) tempat aktivitas dilakukan; kosong = di mana saja. "kos" = kamar kos. */
         val locations: Set<String> = emptySet(),
+        /** Semua jendela jam boleh mulai (kolom "mulai" boleh berisi beberapa: 05:00-06:15, 17:15-17:45). */
+        val windows: List<Pair<Int, Int>> = emptyList(),
+        /** Hanya bisa dilakukan saat karakter ini ada di lokasi yang sama (kolom "bersama"). */
+        val with: String? = null,
     )
 
     data class ItemDef(
@@ -288,8 +314,10 @@ class GameData private constructor(
                     text = m["teks"] ?: "",
                     icon = m["ikon"] ?: "•",
                     minutes = minutes(m["durasi"]) ?: 60,
-                    startFrom = window(m["mulai"])?.first,
-                    startUntil = window(m["mulai"])?.second,
+                    startFrom = windows(m["mulai"]).firstOrNull()?.first,
+                    startUntil = windows(m["mulai"]).firstOrNull()?.second,
+                    windows = windows(m["mulai"]),
+                    with = m["bersama"]?.trim()?.lowercase()?.takeIf { it.isNotEmpty() },
                     maxPerDay = m["batas"]?.filter { it.isDigit() }?.toIntOrNull(),
                     cooldown = minutes(m["jeda"]),
                     repeatText = m["teks_ulang"]?.takeIf { it.isNotBlank() },
@@ -435,7 +463,8 @@ class GameData private constructor(
             val msgs = readSections(ctx, "data/pesan.txt").map { (id, m) -> message(id, m) }
             val bgTimes = readSections(ctx, "data/latar.txt").associate { (id, m) -> id to (m["waktu"] ?: "tetap").trim().lowercase() }
             val locs = readSections(ctx, "data/lokasi.txt").associate { (id, m) -> id to location(id, m) }
-            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats, msgs, bgTimes, locs)
+            val scenes = readSections(ctx, "data/adegan.txt").map { (id, m) -> scene(id, m) }
+            return GameData(acts, items, chars, rels, topics, jobs, kos, docs, questions, events, posts, chats, msgs, bgTimes, locs, scenes)
         }
 
         private fun readLines(ctx: Context, path: String): List<String> = try {
@@ -509,6 +538,10 @@ class GameData private constructor(
             return (a % 1440) to (b % 1440)
         }
 
+        /** "05:00-06:15, 17:15-17:45" → beberapa jendela jam. */
+        internal fun windows(v: String?): List<Pair<Int, Int>> =
+            v.orEmpty().split(',').mapNotNull { window(it.trim()) }
+
         /** "07:00-14:00" → (420, 840). Tanpa jam: dari bagian hari (pagi, siang, sore, malam). */
         internal fun hours(v: String?, slots: Set<String>): Pair<Int, Int>? {
             v?.split('-', '–')?.map { it.trim() }?.takeIf { it.size == 2 }?.let { (a, b) ->
@@ -577,6 +610,7 @@ class GameData private constructor(
                 objects = spots(m["benda"], false),
                 people = people,
                 bed = (m["tidur"] ?: "").trim().lowercase() == "ya",
+                fallback = m["cadangan"]?.trim()?.takeIf { it.isNotEmpty() },
             )
         }
 
@@ -597,6 +631,27 @@ class GameData private constructor(
             }
             return null
         }
+
+        /** Satu entri adegan.txt → [SceneDef]. */
+        internal fun scene(id: String, m: Map<String, String>) = SceneDef(
+            id = id,
+            file = (m["naskah"] ?: "").trim(),
+            label = (m["label"] ?: id).trim(),
+            title = m["judul"] ?: id,
+            trigger = (m["pemicu"] ?: if (m["orang"] != null) "orang" else "masuk").trim().lowercase(),
+            location = m["lokasi"]?.trim()?.takeIf { it.isNotEmpty() },
+            person = m["orang"]?.trim()?.lowercase()?.takeIf { it.isNotEmpty() },
+            schedule = schedule(m["waktu"]),
+            condition = m["syarat"]?.takeIf { it.isNotBlank() },
+            once = (m["sekali"] ?: "ya").trim().lowercase() != "tidak",
+        )
+
+        /** Apakah sekarang termasuk jadwal (kosong = kapan saja). */
+        internal fun inSchedule(sched: List<Triple<Set<Int>, Int, Int>>, weekdayIndex: Int, minute: Int): Boolean =
+            sched.isEmpty() || sched.any { (days, from, to) ->
+                if (to < from) (weekdayIndex in days && minute >= from) || (((weekdayIndex + 6) % 7) in days && minute < to)
+                else weekdayIndex in days && minute in from until to
+            }
 
         /** Satu entri pesan.txt → [MessageDef]. */
         internal fun message(id: String, m: Map<String, String>) = MessageDef(
@@ -674,8 +729,14 @@ class GameData private constructor(
      * ditemui = tidak → tidak pernah · ditemui = janji → hanya lewat janji di Chat ·
      * jadwal = "senin-sabtu 13:00-20:00, minggu 07:00-20:00" → sesuai jadwal · tanpa jadwal → bagian hari ("waktu").
      */
-    fun meetableNow(c: CharacterDef, weekdayIndex: Int, minute: Int): Boolean =
-        meetable(c.text["ditemui"], c.text["jadwal"], c.slots, weekdayIndex, minute)
+    fun meetableNow(c: CharacterDef, weekdayIndex: Int, minute: Int): Boolean {
+        // karakter dengan kolom "lokasi": bisa ditemui tepat saat ia berada di salah satu lokasinya
+        if (!c.text["lokasi"].isNullOrBlank()) {
+            val mode = (c.text["ditemui"] ?: "ya").trim().lowercase()
+            return mode != "tidak" && characterLocation(c, weekdayIndex, minute) != null
+        }
+        return meetable(c.text["ditemui"], c.text["jadwal"], c.slots, weekdayIndex, minute)
+    }
 
     /** Hanya bisa ditemui lewat janji (Chat → Ajak ketemu). */
     fun meetByAppointmentOnly(c: CharacterDef): Boolean = (c.text["ditemui"] ?: "").trim().lowercase() == "janji"
@@ -689,6 +750,12 @@ class GameData private constructor(
      * Bila ada jam "mulai", itu yang dipakai; kalau tidak, bagian hari ("waktu").
      */
     fun activityBlockedReason(a: ActivityDef, minute: Int): String? {
+        if (a.windows.size > 1) {
+            if (a.windows.any { (f, u) -> if (u < f) minute >= f || minute <= u else minute in f..u }) return null
+            val next = a.windows.map { it.first }.filter { it > minute }.minOrNull()
+            val all = a.windows.joinToString(" / ") { LifeState.clock(it.first) + "–" + LifeState.clock(it.second) }
+            return if (next != null) "Belum bisa. Mulai pukul ${LifeState.clock(next)} (jamnya: $all)" else "Hanya bisa dimulai pukul $all"
+        }
         val from = a.startFrom
         val until = a.startUntil
         if (from != null && until != null) {
