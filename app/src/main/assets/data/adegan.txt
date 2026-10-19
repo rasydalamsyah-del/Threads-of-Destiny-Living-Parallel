@@ -284,6 +284,13 @@ lokasi = ruang_tengah
 waktu  = setiap hari 18:30-20:30
 syarat = bab >= 3 && jalur == kerja && adegan_b3_laras_gelang == 1
 
+[b3_darto_lembur]
+naskah = adegan_desa.txt
+judul  = Lembur Sabtu bersama Juragan Darto
+lokasi = gudang_ikan
+waktu  = sabtu 14:00-16:30
+syarat = bab == 3 && jalur == kerja && kerja_desa == gudang
+
 # ---------------- BAB 4 KOTA — Kota yang Tak Pernah Tidur (11 Juli – 17 Agustus) ----------------
 #  Kamar kos: Rel Utara = kos_kamar · Melati = kos_cendana · Residence = kos_pusat
 
@@ -545,3 +552,43 @@ judul  = Naik ke puncak mercusuar, ukiran janji
 lokasi = dermaga
 waktu  = senin-sabtu 15:30-17:15
 syarat = desa_bab == 4 && mercusuar_tahap == 2 && hari_ke > {mercu1_hari}
+
+[b4_paket_c]
+naskah = adegan_desa.txt
+judul  = Paket C bersama Kak Wulan (Sabtu siang)
+lokasi = rumah_warung
+waktu  = sabtu 11:00-13:00
+syarat = desa_bab == 4 && paket_c_daftar == 1
+
+[b4_raka_sosmed]
+naskah = adegan_desa.txt
+judul  = Darto & foto Raka di Sosmed
+orang  = darto
+syarat = desa_bab == 4 && foto_raka == 1 && tgl >= 727
+
+[b4_sekar_vc]
+naskah = adegan_desa.txt
+judul  = Video call Sekar dari asrama
+lokasi = kamar_pagi
+waktu  = setiap hari 19:00-22:00
+syarat = desa_bab == 4 && sekar_pergi == 1 && adegan_b2_sekar_kenalan == 1 && tgl >= 727
+
+[b4_wati_mata]
+naskah = adegan_desa.txt
+judul  = Mata Bu Wati & tabungan Sekar
+orang  = sekar
+syarat = desa_bab == 4 && sekar_pergi != 1 && adegan_b2_sekar_kenalan == 1 && tgl >= 727
+
+[b4_wati_ibu]
+naskah = adegan_desa.txt
+judul  = Bu Wati & benang merah ketiga ibu
+orang  = sekar
+syarat = desa_bab == 4 && jahitan_bazar == 1 && tgl >= 810
+
+[b4_bayu_tutup]
+naskah = adegan_desa.txt
+judul  = Menutupi kerja Bayu di gudang
+lokasi = gudang_ikan
+waktu  = senin-sabtu 08:00-13:00
+syarat = desa_bab == 4 && bayu_kerja_gudang == 1 && kerja_desa == gudang && adegan_b4_bola_ajak == 1
+

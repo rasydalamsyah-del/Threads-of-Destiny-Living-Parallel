@@ -102,6 +102,7 @@ Pemandu: Bagus! Waktu bebas berjalan sampai jam yang ditentukan cerita (tertulis
 @tunjuk hp dompet atas | 👛 DOMPET: sisa uang dan riwayat uang masuk/keluar. Contoh: uang saku Rp50.000 tadi tercatat di sini.
 @tunjuk hp catatan atas | 📝 CATATAN: petunjuk penting cerita tersimpan otomatis di sini.
 @tunjuk hp sosmed atas | 📷 SOSMED: kabar teman-teman (ketuk 🤍 untuk menyukai, Keakraban +1).<br>"🔍 Cari": telusuri jejak sahabatmu sekali sehari. Siapa tahu menemukan petunjuk baru.
+Pemandu: 📞 TELEPON: di saat penting, keluargamu atau temanmu akan menelepon. Layarnya muncul sendiri, kamu cukup mendengarkan dan memilih jawaban. Kalau tinggal jauh dari rumah, telepon dan chat adalah cara menjaga hubungan: yang lama tidak dihubungi bisa merenggang.
 
 # ---------- 8. PEKERJAAN & SEKOLAH ----------
 @waktu 8 · Sekolah & pekerjaan

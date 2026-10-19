@@ -81,7 +81,7 @@ Bayu: Woy! Akhirnya datang! Sini, ikannya hampir matang!
 @jika adegan_b2_sekar_kenalan == 1 -> b2bi_sekar
 @kenal sekar
 @atur adegan_b2_sekar_kenalan = 1
-* Di sebelah Bayu, seorang perempuan berkerudung biru duduk memeluk lutut. Bayu buru-buru memperkenalkan.
+* Di sebelah Bayu, seorang perempuan berkacamata dengan bando ungu di rambut hitam panjangnya duduk memeluk lutut. Bayu buru-buru memperkenalkan.
 Bayu: Kamu ingat Sekar, kan? Juara kelas! Yang galak itu!
 @tampil sekar kesal
 Sekar: Aku nggak galak. Kalian aja yang berisik.

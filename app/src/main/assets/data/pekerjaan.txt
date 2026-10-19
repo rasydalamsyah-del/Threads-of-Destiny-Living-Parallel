@@ -147,6 +147,36 @@ sulit       = 15
 keterangan  = Upah kecil, tapi dapat makan gratis setiap kali kerja.
 teks        = Piring kotor tak ada habisnya. Tapi Bu Tini menyisihkan sepiring nasi hangat untukmu.
 
+[bantu_bu_sum]
+nama        = Bantu Bu Sum jualan nasi uduk (subuh)
+ikon        = 🍙
+jenis       = paruh_waktu
+tempat      = kota
+hari        = senin-sabtu
+waktu       = pagi
+jam         = 04:30-06:30
+gaji        = 20000
+efek        = energi -12, kenyang +15, kewarasan +1, keahlian_masak +1
+usia_min    = 15
+cara        = cerita
+keterangan  = Membungkus nasi uduk dan melayani pembeli di mulut gang Rel Utara sebelum sekolah. Dapat sarapan.
+teks        = Daun pisang, nasi hangat, sambal kacang. Bu Sum membungkus secepat kilat; kamu belajar mengikutinya.
+
+[rak_toko_buku]
+nama        = Merapikan rak toko buku Pak Hendra
+ikon        = 📚
+jenis       = paruh_waktu
+tempat      = kota
+hari        = sabtu, minggu
+waktu       = siang
+jam         = 13:00-17:00
+gaji        = 35000
+efek        = energi -10, kewarasan +2, akademik +1
+usia_min    = 15
+cara        = cerita
+keterangan  = Menyusun buku baru dan bekas di toko buku depan Stasiun Besar. Dikenalkan Nadia.
+teks        = Kamu menyusun buku berdasarkan abjad. Sesekali membaca halaman pertama sebelum menaruhnya di rak.
+
 [jaga_warnet]
 nama        = Jaga warnet malam
 ikon        = 🖥️

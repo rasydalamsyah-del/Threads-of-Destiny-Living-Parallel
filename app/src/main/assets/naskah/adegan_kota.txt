@@ -245,10 +245,11 @@ Bu Rahma: Hari ini kita pilih ketua kelas. Calonnya dua: Nadia dan Reno. Tulis s
 Dimas: Mau lihat kerjaku? Ayo, ikut sebentar.
 * Gudang paket di belakang ruko: ratusan kardus, timbangan, dan anak-anak muda yang memuat sepeda motor dan sepeda. Dimas menyapa semua orang.
 Dimas: Kurir sepeda. Upahnya per paket. Capek, tapi bebas jam-nya. Kalau mau, aku kenalin ke mandor.
-Dimas: Atau cuci piring di Warung Bu Tini. Dapat makan. Atau jaga warnet malam, tapi kamu bakal tidur di kelas.
+Dimas: Atau cuci piring di Warung Bu Tini, dapat makan. Atau bantu ibuku bungkus nasi uduk subuh-subuh. Jaga warnet? Harus enam belas tahun, kita belum boleh.
 @pilihan
 > "Aku mau jadi kurir, Dim." -> k4dk_kurir
 > "Cuci piring di Bu Tini saja. Biar dapat makan." -> k4dk_tini
+> "Aku bantu ibumu jualan subuh." -> k4dk_sum
 > "Aku fokus sekolah dulu." -> k4dk_sekolah
 
 :: k4dk_kurir
@@ -265,6 +266,16 @@ Dimas: Sip! Besok sore aku jemput. Siapin betis, ya.
 @atur kerja_kota = cuci_piring
 * Bu Tini, perempuan bertubuh besar dengan celemek bermotif bunga, menatap tanganmu. "Pernah cuci piring?" "Di rumah, Bu." "Bagus. Mulai besok."
 @catatan Mulai kerja cuci piring di Warung Makan Bu Tini (dapat makan).
+@lompat k4dk_akhir
+
+:: k4dk_sum
+@kenal sum
+@kerja_mulai bantu_bu_sum
+@atur kerja_kota = bu_sum
+* Bu Sum menatapmu tidak percaya. "Subuh, lho, Nak. Jam setengah lima." Lalu ia tertawa. "Ya sudah. Upahnya kecil, tapi sarapannya kenyang."
+@cinta sum +4
+@cinta dimas +3
+@catatan Mulai bantu Bu Sum jualan nasi uduk subuh di mulut gang Rel Utara (04:30–06:30).
 @lompat k4dk_akhir
 
 :: k4dk_sekolah
@@ -485,6 +496,20 @@ Nadia: Iya. Pasti. Makasih.
 
 :: k4ni_akhir
 @sembunyi nadia
+@jika cinta_nadia < 30 -> k4ni_selesai
+@jika kerja_kota == toko_buku -> k4ni_selesai
+* Sebelum kamu pulang, Pak Hendra memanggil dari meja kasir tanpa mengangkat mata dari koran.
+Pak Hendra: Nadia bilang kamu butuh kerja. Sabtu-Minggu siang, rapikan rak. Tiga puluh lima ribu. Mau?
+@pilihan
+> "Mau, Pak. Terima kasih." -> k4ni_kerja
+> "Terima kasih, Pak. Saya pikir dulu." -> k4ni_selesai
+
+:: k4ni_kerja
+@kerja_mulai rak_toko_buku
+@atur kerja_kota = toko_buku
+@catatan Kerja merapikan rak toko buku Pak Hendra, Sabtu–Minggu 13:00–17:00.
+
+:: k4ni_selesai
 @kembali
 
 

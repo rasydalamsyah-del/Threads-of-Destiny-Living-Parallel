@@ -35,7 +35,7 @@ isi     = Daftar bacaan liburan: 7 buku. Target: habis sebelum tahun ajaran baru
 [laras_kucing]
 penulis = laras
 hari    = 2
-isi     = Kucing tetangga tidur di warung Ibu lagi 🐱 namanya aku kasih Gorengan
+isi     = Kucing tetangga tidur di warung Ibu lagi 🐱 Ibu nggak bolehin namanya Gorengan, jadi Si Belang 😤
 
 [bayu_dermaga]
 penulis = bayu
@@ -61,8 +61,15 @@ isi     = Jaga toko buku Ayah sambil ngerjain PR. Hujan, kopi, dan antrean keret
 
 [sekar_rindu]
 penulis = sekar
-hari    = 10
+hari    = 30
+syarat  = sekar_pergi != 1
 isi     = Kelas kosong rasanya aneh. Semoga kalian yang di kota baik-baik aja ya.
+
+[sekar_asrama]
+penulis = sekar
+hari    = 45
+syarat  = sekar_pergi == 1
+isi     = Perpustakaan asrama tiga lantai 📚 Masih kangen bau laut sih.
 
 [laras_kangen]
 penulis = laras
@@ -73,8 +80,14 @@ isi     = Kak {nama} kapan pulang?? Kamar Kakak aku pakai buat main boneka ya �
 [bayu_kerja]
 penulis = bayu
 hari    = 12
-syarat  = jalur == kerja
+syarat  = bayu_kerja_gudang == 1 && kerja_desa == gudang
 isi     = Kerja bareng {nama} di gudang Juragan Darto. Tangan bau ikan seharian, tapi seru juga 😂🐟
+
+[bayu_perahu]
+penulis = bayu
+hari    = 5
+syarat  = kerja_desa == perahu
+isi     = Subuh-subuh narik jaring bareng {nama} 🌊
 
 [darto_lowongan]
 penulis = darto

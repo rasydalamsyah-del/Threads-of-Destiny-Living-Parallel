@@ -283,7 +283,7 @@ Bayu: Wah, gaya bener tasnya Dodi. Kayak mau naik haji.
 @jika adegan_b2_sekar_kenalan == 1 -> stasiun_sekar_ada
 @kenal sekar
 @atur adegan_b2_sekar_kenalan = 1
-* Di ujung peron, seorang perempuan berkerudung biru berdiri sendirian, memeluk sebuah buku tebal.
+* Di ujung peron, seorang perempuan berkacamata dengan bando ungu berdiri sendirian, memeluk sebuah buku tebal.
 Bayu: Itu Sekar. Juara kelas kita. Kamu masih ingat, kan? Dia jarang keluar rumah, sibuk bantu ibunya menjahit.
 @tampil sekar biasa
 Sekar: ...Hai. Kamu {nama}, ya? Yang dulu selalu duduk paling belakang dekat jendela.

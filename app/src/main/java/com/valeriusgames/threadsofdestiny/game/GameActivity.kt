@@ -2390,10 +2390,13 @@ class GameActivity : Activity() {
 
     /** Syarat aktivitas, contoh "jalur != kerja" atau "usia >= 18". */
     /** Syarat, contoh "jalur != kerja" atau gabungan "musim == hujan && kos == kos_rel_utara". */
-    private fun checkCondition(cond: String): Boolean = cond.split("&&").all { part ->
-        val m = Regex("^\\s*(\\w+)\\s*(==|!=|>=|<=|>|<)\\s*(.+?)\\s*$").find(part) ?: return@all true
-        val (v, op, value) = m.destructured
-        check(Cmd.JumpIf(v, op, value, ""))
+    /** "a == 1 && b != 2" (semua) · "a == 1 || b == 2" (salah satu; || dicek lebih dulu, tiap bagian boleh berisi &&). */
+    private fun checkCondition(cond: String): Boolean = cond.split("||").any { alt ->
+        alt.split("&&").all { part ->
+            val m = Regex("^\\s*(\\w+)\\s*(==|!=|>=|<=|>|<)\\s*(.+?)\\s*$").find(part) ?: return@all true
+            val (v, op, value) = m.destructured
+            check(Cmd.JumpIf(v, op, value, ""))
+        }
     }
 
     private fun effectSummary(effects: Map<String, Long>): String {

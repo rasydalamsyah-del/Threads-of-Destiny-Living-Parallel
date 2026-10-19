@@ -229,7 +229,9 @@ for a in entries(os.path.join(data, "aktivitas.txt")):
 lk = os.path.join(data, "lokasi.txt")
 if os.path.exists(lk):
     locs = {e["_id"]: e for e in entries(lk)}
-    act_ids = {a["_id"] for a in entries(os.path.join(data, "aktivitas.txt"))}
+    act_list = entries(os.path.join(data, "aktivitas.txt"))
+    act_ids = {a["_id"] for a in act_list}
+    act_where = {a["_id"]: [w.strip() for w in a.get("lokasi", "").split(",") if w.strip()] for a in act_list}
     def xy_ok(v):
         try:
             x, y = [float(t) for t in v.split(",")[:2]]
@@ -254,6 +256,8 @@ if os.path.exists(lk):
                 err(lk, e["_line"], f"[{lid}] benda '{f[0]}' bukan aktivitas di aktivitas.txt")
             elif not xy_ok(f[2])[0]:
                 err(lk, e["_line"], f"[{lid}] posisi benda salah: {part.strip()}")
+            elif lid not in act_where[f[0]] and not ("kos" in act_where[f[0]] and lid.startswith("kos_")):
+                err(lk, e["_line"], f"[{lid}] benda '{f[0]}': tambahkan {lid} ke 'lokasi' aktivitas itu di aktivitas.txt")
         for part in [p for p in e.get("orang", "").split(";") if p.strip()]:
             cid = part.strip().split()[0]
             if cid not in chars:

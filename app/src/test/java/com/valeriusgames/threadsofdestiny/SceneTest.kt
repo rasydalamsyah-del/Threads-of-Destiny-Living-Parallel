@@ -46,7 +46,7 @@ class SceneTest {
             if (s.trigger == "orang") assertTrue("${s.id}: orang ${s.person}", s.person in chars)
             if (s.trigger == "masuk") assertTrue("${s.id}: lokasi ${s.location}", s.location in locs)
             s.location?.let { assertTrue("${s.id}: lokasi $it", it in locs) }
-            s.condition?.split("&&")?.forEach { part ->
+            s.condition?.split("&&", "||")?.forEach { part ->
                 assertTrue("${s.id}: syarat '$part'", Regex("^\\s*(\\w+)\\s*(==|!=|>=|<=|>|<)\\s*(.+?)\\s*$").matches(part))
             }
         }

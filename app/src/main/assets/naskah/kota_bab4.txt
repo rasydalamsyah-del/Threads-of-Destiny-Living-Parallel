@@ -866,8 +866,12 @@ Laras: Kakak NEPATIN JANJI!
 @terang 1500
 * Malam tujuh belasan. Seluruh desa berkumpul di dermaga. Lampu-lampu kecil digantung di tiang-tiang perahu.
 @jika sumbang_mercusuar == 1 -> mercu_nyala
-@jika cinta_bayu >= 60 -> mercu_nyala
-@jika percaya_darto >= 60 -> mercu_nyala
+@jika cinta_bayu >= 55 -> mercu_nyala
+@jika percaya_darto >= 55 -> mercu_nyala
+@jika sekar_pergi == 1 -> mercu_padam
+@jika adegan_b2_sekar_kenalan == 1 -> mercu_nyala
+
+:: mercu_padam
 * Mercusuar tetap gelap. Akinya kurang, kata Pak Kades. Tahun depan, mungkin.
 * Tapi Laras menggenggam tanganmu, dan Ayah berdiri di sebelahmu, dan untuk malam ini, itu cukup terang.
 @lompat akhir_desa_kembali
@@ -876,6 +880,7 @@ Laras: Kakak NEPATIN JANJI!
 * Pukul delapan tepat, Pak Kades memberi aba-aba. Lalu, setelah dua puluh tahun gelap...
 * Mercusuar Tanjung Lentera menyala.
 * Cahayanya berputar perlahan di atas laut. Orang-orang bersorak. Juragan Darto, di ujung dermaga, menatap cahaya itu tanpa berkedip, seperti berharap seseorang di kejauhan juga melihatnya.
+* Sebelum pulang, kamu melihatnya berhenti di depan rumah kosong keluarga {nama_sahabat}. Lama. Lalu ia berjalan pergi tanpa menoleh.
 @atur mercusuar_nyala = 1
 @stat kewarasan +10
 
@@ -965,15 +970,24 @@ Sekar: Kembang apinya bagus. Tapi aku kangen gelapnya langit desa.
 
 :: malam_17_foto
 @jika sumbang_mercusuar == 1 -> foto_mercu
-@jika cinta_bayu >= 60 -> foto_mercu
-@jika percaya_darto >= 60 -> foto_mercu
+@jika cinta_bayu >= 55 -> foto_mercu
+@jika percaya_darto >= 55 -> foto_mercu
+@jika sekar_pergi == 1 -> foto_padam
+@jika adegan_b2_sekar_kenalan == 1 -> foto_mercu
+
+:: foto_padam
 * HP-mu bergetar. Bayu mengirim foto dermaga: lampu-lampu kecil, orang-orang berkumpul. Mercusuar masih gelap. "Akinya kurang. Tahun depan pasti nyala!"
 @lompat akhir_bab
 
 :: foto_mercu
 @atur mercusuar_nyala = 1
 * HP-mu bergetar. Bayu mengirim foto: Mercusuar Tanjung Lentera, menyala. Cahayanya membelah langit malam di atas laut. Fotonya beredar di Sosmed, dibagikan ratusan kali.
-* Kamu menatap foto itu lama sekali. Di sana, ada namamu di daftar penyumbang. Di sini, kamu hanya bisa melihatnya lewat layar.
+* Kamu menatap foto itu lama sekali. Kamu hanya bisa melihatnya lewat layar.
+@jika sumbang_mercusuar == 1 -> foto_nama
+@lompat akhir_bab
+
+:: foto_nama
+* Di daftar penyumbang yang ditempel di kaki mercusuar, kata Bayu, namamu paling atas.
 
 
 # ==========================================================
@@ -987,12 +1001,16 @@ Sekar: Kembang apinya bagus. Tapi aku kangen gelapnya langit desa.
 @lompat akhir_tutup
 
 :: akhir_nyala
+@jika pulang_17an == 1 -> akhir_nyala_desa
 @hp pesan Nomor Tidak Dikenal | Aku lihat fotonya. Mercusuar kita menyala lagi. ...Kamu di Sakala juga malam ini, kan? Lihat ke arah pelabuhan.
 @tunggu_hp
-@jika pulang_17an == 1 -> akhir_tutup
 * Kamu berdiri, menoleh ke arah pelabuhan. Gelap. Lalu, jauh di sana, sebuah lampu senter berkedip. Satu. Dua. Tiga.
 * Tiga kedipan. Kode lama kalian di dermaga, waktu kecil: "Aku di sini."
 @atur senter_tiga = 1
+
+:: akhir_nyala_desa
+@hp pesan Nomor Tidak Dikenal | Aku lihat fotonya. Mercusuar kita menyala lagi. ...Kamu yang menyalakannya, kan?
+@tunggu_hp
 
 :: akhir_tutup
 @gelap 2000

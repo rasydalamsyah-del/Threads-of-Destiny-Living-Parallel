@@ -389,7 +389,7 @@ batas  = 2
 jeda   = 3 jam
 
 [jelajah_kota]
-lokasi = kota_besar
+lokasi = kota_besar, pasar_lama
 nama   = Menjelajah sudut kota
 ikon   = 🧭
 tempat = kota
@@ -401,7 +401,7 @@ teks   = Kamu menyusuri jalan-jalan Sakala, menghafal arah dan nama-nama gang.
 batas  = 1
 
 [cari_jejak]
-lokasi = stasiun_besar
+lokasi = stasiun_besar, pelabuhan
 nama   = Mencari jejak sahabat lama
 ikon   = 🔍
 tempat = kota

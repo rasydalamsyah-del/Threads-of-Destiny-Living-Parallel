@@ -1,0 +1,263 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — TAMBAHAN JALUR DESA (Bab 3 & Bab 4)
+#  Pemicu & jam: data/adegan.txt · Alur: docs/CERITA.md 6c · docs/ALUR_BAB4.md (Bab 4 Desa)
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  BAB 3 DESA — LEMBUR SABTU BERSAMA JURAGAN DARTO
+# ----------------------------------------------------------
+
+:: b3_darto_lembur
+@tampil darto biasa
+* Sabtu sore. Gudang sudah sepi. Hanya Juragan Darto yang masih menghitung karung ikan asin di bawah lampu neon yang berkedip.
+Juragan Darto: Kamu belum pulang?
+{nama}: Masih ada tampah yang belum diangkat, Juragan.
+* Ia mengangguk ke arah tumpukan karung. Kalian bekerja berdua tanpa bicara. Satu jam. Dua jam.
+@maju 1 jam 30 menit
+@stat energi -12
+@uang +30000
+@tampil darto senyum
+Juragan Darto: Raka dulu juga begini. Kalau saya lembur, dia ikut. Umur dua belas sudah bisa menghitung karung lebih cepat dari saya.
+Juragan Darto: Lalu dia besar, dan tiba-tiba gudang ini terlalu kecil buat dia.
+@pilihan
+> "Gudang ini tidak kecil, Juragan. Cuma sepi." -> b3dl_sepi
+> Diam dan terus bekerja -> b3dl_diam
+
+:: b3dl_sepi
+* Juragan Darto berhenti menghitung. Ia menatapmu, lalu tertawa pendek, serak.
+Juragan Darto: Kamu ini bicara seperti orang tua.
+* Tapi saat kamu pamit, ia menyelipkan sebungkus ikan asin terbaik ke tanganmu. "Buat ibumu."
+@percaya darto +6
+@cinta darto +4
+@barang ikan_asin 1
+@lompat b3dl_akhir
+
+:: b3dl_diam
+* Kalian menyelesaikan tumpukan terakhir. Juragan Darto menepuk bahumu sekali, keras, lalu mematikan lampu.
+@percaya darto +4
+
+:: b3dl_akhir
+@sembunyi darto
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 4 DESA — PAKET C BERSAMA KAK WULAN (Sabtu siang)
+# ----------------------------------------------------------
+
+:: b4_paket_c
+@kenal wulan
+@tampil wulan senyum
+* PKBM kecamatan, Sabtu siang. Kipas angin berderit. Di papan tulis: "Persamaan Linear Satu Variabel".
+* Teman belajarmu: Bu Narsih yang ingin bisa membantu PR cucunya, Mas Joni yang putus sekolah karena harus jadi kuli bangunan, dan Pak Tarmo, enam puluh tahun, yang ingin punya ijazah sebelum pensiun.
+Kak Wulan: x ditambah tujuh sama dengan lima belas. Siapa yang bisa?
+@pilihan
+> Angkat tangan dan jawab -> b4pc_jawab
+> Bantu Pak Tarmo yang kebingungan di sebelahmu -> b4pc_bantu
+> Lewatkan kelas hari ini, ambil kerja tambahan -> b4pc_bolos
+
+:: b4pc_jawab
+{nama}: Delapan, Kak.
+Kak Wulan: Betul! Caranya?
+* Kamu menjelaskan, terbata-bata, seperti dulu Sekar menjelaskan padamu. Bu Narsih bertepuk tangan kecil.
+@tambah akademik +2
+@cinta wulan +3
+@lompat b4pc_akhir
+
+:: b4pc_bantu
+* Pak Tarmo memegang pensilnya seperti memegang pancing. Kamu menuliskan langkahnya pelan-pelan di pojok bukunya. Ia mengangguk-angguk, lalu tiba-tiba tersenyum lebar.
+Pak Tarmo: Oh! Jadi x itu cuma... angka yang malu-malu!
+Kak Wulan: Persis, Pak! Itu definisi terbaik yang pernah saya dengar.
+@tambah akademik +1
+@tambah komunikasi +1
+@cinta wulan +4
+@lompat b4pc_akhir
+
+:: b4pc_bolos
+@uang +30000
+@stat energi -10
+* Kamu mengangkat karung di pasar ikan sampai sore. Tiga puluh ribu. Malamnya, Kak Wulan mengirim pesan: "Minggu depan datang, ya. Kursimu kosong."
+@percaya wulan -3
+
+:: b4pc_akhir
+@sembunyi wulan
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 4 DESA — FOTO RAKA DI SOSMED (bila kisah Raka sudah diceritakan)
+# ----------------------------------------------------------
+
+:: b4_raka_sosmed
+@tampil darto biasa
+* Juragan Darto memanggilmu ke kantornya. Di meja, foto pudar seorang pemuda delapan belas tahun.
+Juragan Darto: Kamu punya... apa itu namanya. Sosmed. Anak-anak muda katanya bisa mencari orang lewat situ.
+Juragan Darto: Unggah ini. Tulis: "Mencari Raka, anak Darto, Tanjung Lentera." Itu saja.
+* Kamu memotret foto itu dan mengunggahnya. Juragan Darto memperhatikan layar HP-mu seperti memperhatikan cuaca.
+@maju 30 menit
+* Dua hari kemudian, ada satu komentar dari akun tanpa foto: "Kayak Bang Raka bengkel kapal Pelabuhan Sakala."
+* Kamu menunjukkannya pada Juragan Darto. Ia membaca kalimat itu berkali-kali. Tangannya yang besar gemetar sedikit.
+@tampil darto sedih
+Juragan Darto: Bengkel kapal... Dari kecil dia suka membongkar mesin perahu.
+@pilihan
+> "Juragan ke Sakala saja. Temui dia." -> b4rs_pergi
+> "Telepon bengkelnya dulu, Juragan. Pelan-pelan." -> b4rs_telepon
+> "Itu keputusan Juragan sendiri." -> b4rs_biarkan
+
+:: b4rs_pergi
+@atur darto_ke_sakala = rencana
+Juragan Darto: Saya? Ke kota? Sudah dua puluh tahun saya tidak naik kereta.
+* Ia diam lama, lalu memasukkan foto itu ke saku bajunya, dekat dada.
+Juragan Darto: ...Nanti. Setelah tujuh belasan.
+@percaya darto +6
+@lompat b4rs_akhir
+
+:: b4rs_telepon
+@atur darto_ke_sakala = telepon
+* Kamu mencari nomor bengkel-bengkel kapal Pelabuhan Sakala di internet. Ada tiga. Kamu menuliskannya di secarik kertas.
+* Juragan Darto menerima kertas itu, melipatnya kecil-kecil, dan menyimpannya di dompet, di sebelah foto Raka.
+@percaya darto +8
+@lompat b4rs_akhir
+
+:: b4rs_biarkan
+@atur darto_ke_sakala = sendiri
+Juragan Darto: Ya. Keputusan saya. Seperti dulu, waktu saya memutuskan untuk tidak mengejarnya ke stasiun.
+@percaya darto +3
+
+:: b4rs_akhir
+@catatan Foto Raka diunggah ke Sosmed. Komentar: "Kayak Bang Raka bengkel kapal Pelabuhan Sakala."
+@sembunyi darto
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 4 DESA — SEKAR DARI KOTA (video call, bila Sekar pergi)
+# ----------------------------------------------------------
+
+:: b4_sekar_vc
+@telepon Sekar
+@tampil sekar sedih
+* Panggilan video dari Sekar. Latarnya dinding asrama berwarna krem. Matanya sembap.
+Sekar: Maaf, tiba-tiba telepon. Aku cuma... butuh dengar suara orang desa.
+Sekar: Peringkatku dua puluh tiga dari tiga puluh. Di sini semua orang les sejak SD. Aku mau pulang. Ibu juga sendirian.
+@pilihan
+> "Kamu ke sana bukan untuk jadi nomor satu, Sekar. Untuk belajar." -> b4sv_semangat
+> "Pulang saja kalau berat." -> b4sv_pulang
+> Ceritakan kabar desa: mercusuar, Bu Wati, Bayu -> b4sv_desa
+
+:: b4sv_semangat
+Sekar: ...Untuk belajar. Iya. Aku lupa.
+@tampil sekar senyum
+* Ia mengusap matanya dengan lengan seragam, lalu tertawa kecil. "Kamu kok jadi bijak sejak kerja di gudang."
+@percaya sekar +6
+@lompat b4sv_akhir
+
+:: b4sv_pulang
+Sekar: Kamu juga mikir aku nggak sanggup?
+* Panggilan terputus. Sinyal, katanya kemudian lewat pesan. Kamu tidak yakin.
+@percaya sekar -4
+@lompat b4sv_akhir
+
+:: b4sv_desa
+* Kamu bercerita: mercusuar mau dinyalakan lagi, Bu Wati masih menjahit walau pelan, Bayu latihan bola tiap sore sampai gosong.
+@tampil sekar senyum
+Sekar: Bayu gosong? Hahaha. ...Titip salam buat Ibu, ya. Dan Bayu. Eh, nggak usah. Ibu saja.
+@cinta sekar +5
+
+:: b4sv_akhir
+@telepon selesai
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 4 DESA — MATA BU WATI (bila Sekar tinggal)
+# ----------------------------------------------------------
+
+:: b4_wati_mata
+@kenal wati
+@tampil sekar sedih
+* Sekar menemuimu dengan amplop cokelat di tangan. Surat dari puskesmas kecamatan.
+Sekar: Katarak. Dua mata. Harus operasi di Sakala. Tiga juta, kata dokter, kalau tidak ditanggung.
+Sekar: Aku menabung dari antar jahitan. Baru dua ratus ribu.
+@pilihan
+> "Aku bantu antar jahitan lebih banyak. Upahnya buat tabunganmu." -> b4wm_bantu
+> "Ibuku mau pesan jahitan untuk bazar. Banyak." -> b4wm_bazar
+
+:: b4wm_bantu
+@atur bantu_tabungan_sekar = 1
+Sekar: Kamu sudah kerja di gudang. Nanti kamu capek.
+{nama}: Capek itu bisa tidur. Mata Bu Wati nggak bisa ditunda.
+@tampil sekar menangis
+* Sekar menunduk. Kacamatanya berembun.
+@cinta sekar +6
+@percaya sekar +6
+@lompat b4wm_akhir
+
+:: b4wm_bazar
+@atur jahitan_bazar = 1
+@tampil sekar kaget
+Sekar: Beneran? Taplak, celemek, serbet?
+* Sore itu, Ibu datang sendiri ke rumah Bu Wati membawa daftar pesanan panjang. Dua ibu itu duduk di depan mesin jahit, dan obrolan mereka tidak berhenti sampai magrib.
+@cinta sekar +4
+@cinta ibu +3
+
+:: b4wm_akhir
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 4 DESA — BU WATI & BENANG MERAH KETIGA IBU
+# ----------------------------------------------------------
+
+:: b4_wati_ibu
+@kenal wati
+* Sekar mengajakmu mampir ke rumahnya. "Ibu mau ketemu kamu," katanya.
+@tampil wati biasa
+* Rumah Bu Wati penuh kain perca warna-warni pesanan bazar Ibu. Bu Wati menjahit sambil mendekatkan kain ke matanya.
+Bu Wati: Ibumu itu, Nak... dulu kami bertiga sering menjahit bersama. Ibumu, saya, dan ibunya {nama_sahabat}.
+* Kamu tertegun.
+Bu Wati: Ibunya {nama_sahabat} yang paling rapi jahitannya. Sebelum mereka pindah, dia menitipkan sesuatu ke saya. Katanya, "Kalau anak-anak sudah besar, kasih ke mereka."
+* Bu Wati membuka laci mesin jahit dan mengeluarkan gulungan benang merah. Benang yang sama dengan gelang di pergelangan tanganmu.
+Bu Wati: Sisa benang gelang kalian. Saya simpan tiga tahun. Mata saya sudah kabur, tapi warna merah ini saya masih bisa lihat.
+@atur benang_merah_wati = 1
+@tambah petunjuk_sahabat +1
+@catatan Bu Wati menyimpan sisa benang gelang merah dari ibu {nama_sahabat}. Ketiga ibu dulu menjahit bersama.
+@cinta wati +6
+@sembunyi wati
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 4 DESA — MENUTUPI KERJA BAYU DI GUDANG
+# ----------------------------------------------------------
+
+:: b4_bayu_tutup
+@tampil bayu sedih
+* Bayu tertidur di balik tumpukan karung, kaus bolanya masih dipakai di bawah baju kerja. Latihan subuh, kerja siang, latihan lagi sore.
+* Dari ujung gudang, terdengar langkah berat Juragan Darto.
+@pilihan
+> Kerjakan bagian Bayu diam-diam -> b4bt_tutup
+> Bangunkan Bayu -> b4bt_bangun
+
+:: b4bt_tutup
+* Kamu mengangkat tampah-tampah bagian Bayu secepat mungkin. Juragan Darto lewat, melirik tumpukan yang sudah rapi, lalu melirik karung tempat Bayu tidur.
+Juragan Darto: Hm.
+* Ia tidak bilang apa-apa. Tapi kamu tahu ia tahu.
+@stat energi -10
+@cinta bayu +6
+@percaya darto -3
+@lompat b4bt_akhir
+
+:: b4bt_bangun
+* Kamu menendang pelan sepatu Bayu. Ia terlonjak bangun tepat sebelum Juragan Darto berbelok ke lorong.
+@tampil bayu senyum
+Bayu: Makasih... nyaris. Final nanti aku cetak gol buat kamu.
+@cinta bayu +3
+
+:: b4bt_akhir
+@sembunyi bayu
+@kembali

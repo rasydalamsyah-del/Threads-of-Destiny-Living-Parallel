@@ -222,7 +222,7 @@ tempat      = desa
 waktu       = siang, sore
 ditemui     = ya
 lokasi      = senin-sabtu 15:30-17:15 dermaga
-ada_bila    = sekar_pergi != 1
+ada_bila    = sekar_pergi != 1 || tgl <= 710
 tempat_janji= dermaga
 cinta_awal  = 35
 percaya_awal = 50
