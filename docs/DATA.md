@@ -66,8 +66,17 @@ teks   = Kamu menggoreng pisang dan melayani pembeli seharian.
 ### Jam mulai (`mulai`)
 ```
 mulai  = 04:00-06:00     aktivitas hanya bisa DIMULAI di jam ini (boleh 19:00-02:00, melewati tengah malam)
+mulai  = 05:00-06:15, 17:15-17:45     boleh beberapa jendela jam (mis. membantu Ibu memasak pagi & sore)
 ```
 Di luar jam itu tetap tampil redup dengan alasannya. Tanpa `mulai`, yang dipakai `waktu` (bagian hari).
+
+### Kegiatan bersama seseorang (`bersama`) & efek hubungan
+```
+bersama = ibu                          hanya bisa saat Ibu ada di lokasi yang sama (tandanya di layar baru muncul saat Ibu ada)
+efek    = kewarasan +4, cinta_ibu +2   cinta_<id> / percaya_<id> mengubah hubungan dengan karakter itu
+```
+Contoh: melipat pakaian bersama Ibu (ruang tengah 18:30–21:00), membantu PR Laras, menemani Ayah mendengarkan radio,
+membantu Ayah memperbaiki jaring, main bola bersama Bayu, membayar cicilan perahu ke Juragan Darto.
 
 ### Batas kegiatan berulang (`batas`, `jeda`, `teks_ulang`)
 Supaya kegiatan tidak bisa diulang terus (makan terus, istirahat terus sampai energi penuh):
@@ -90,17 +99,44 @@ nama   = Ruang makan
 tempat = desa
 pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.84, 0.36 | 0 ; rumah_warung | ⬅ Keluar ke depan rumah | 0.16, 0.90 | 0
 benda  = makan_keluarga | 🍲 Makan | 0.52, 0.56
-orang  = ayah 0.30, 0.66, 0.40 ; laras 0.62, 0.58, 0.30      (x, y kaki, tinggi — untuk gambar berdiri)
+orang  = ayah 0.30, 0.66, 0.40 ; laras 0.62, 0.58, 0.30      (x, y kaki, tinggi orang itu di gambar latar)
 tidur  = ya                                                    (hanya kamar / kos)
+cadangan = kota_kecil                                          (gambar pengganti selama latar/<id>.jpg belum ada)
 ```
 - x, y = posisi di gambar (0–1). Layar HP memotong ±10% kiri-kanan → taruh tanda di x 0.12–0.88.
-- Pintu: menit perjalanan (di dalam rumah 0, ke gudang ikan 15, kos ↔ pusat kota 10, pusat kota ↔ tempat lain 15). Tujuan `kos` = kos yang sedang disewa.
-- **Peta sekarang** — desa: kamar ↔ ruang tengah ↔ ruang makan; ruang tengah ↔ depan rumah & warung ↔ gudang ikan. Kota: kamar kos ↔ pusat kota ↔ sekolah / toko buku / taman / Stasiun Besar.
-- **Kegiatan terikat lokasi** (`lokasi` di aktivitas.txt): makan di ruang makan, istirahat & belajar di kamar, bantu warung / melaut / dermaga / main dengan Laras di depan rumah, dst. Di tempat lain tampil redup "Pergi ke Ruang makan".
-- **Di mana orang berada** (`lokasi` di karakter.txt): Ayah ruang makan 12:00–13:30 lalu depan rumah sampai 18:30; Ibu warung 05:00–17:00 lalu ruang makan sampai 21:00; Laras ruang makan / depan rumah sepulang sekolah; Darto gudang ikan; Nadia toko buku. Yang janjian menunggu di `tempat_janji` (Bayu & Sekar di depan rumah, Dimas di taman kota).
-- "👥 Temui seseorang" di halaman waktu bebas kini hanya **keterangan** ("Ayah · 📍 Ruang makan"). Untuk bertemu, datangi tempatnya lalu ketuk orangnya.
-- **Gambar adegan** (karakter yang benar-benar sedang beraktivitas, mis. Ayah duduk makan): `assets/adegan/<lokasi>__<karakter>.webp`, ukuran sama dengan latar, transparan selain karakternya. Bila ada, dipakai menggantikan gambar berdiri dan bisa diketuk tepat di badannya (area sentuh = bentuk karakter itu sendiri, jadi tidak perlu mengatur posisi). Tanda nama "💬" otomatis diletakkan di atas kepalanya. Posisi di kolom `orang` hanya dipakai untuk gambar berdiri sementara. Saat diketuk, dialog tetap memakai gambar setengah badan seperti biasa.
+- Pintu: menit perjalanan (di dalam rumah 0, depan rumah ↔ lapangan / dermaga 5, ke gudang ikan 15, kos ↔ pusat kota 10, pusat kota ↔ tempat lain 15). Tujuan `kos` = kos yang sedang disewa.
+- **Peta sekarang** — desa: kamar ↔ ruang tengah ↔ ruang makan; ruang tengah ↔ depan rumah & warung ↔ lapangan / dermaga / gudang ikan; lapangan ↔ dermaga. Kota: kamar kos ↔ pusat kota ↔ sekolah / toko buku / taman / Stasiun Besar.
+- **Kegiatan terikat lokasi** (`lokasi` di aktivitas.txt). Daftar lengkap desa: [CERITA.md](CERITA.md) bagian 5. Di tempat lain tampil redup "Pergi ke Ruang makan".
+- **Di mana orang berada** (`lokasi` di karakter.txt). Jadwal lengkap desa: [CERITA.md](CERITA.md) bagian 3. Yang janjian menunggu di `tempat_janji` (Bayu & Sekar di dermaga, Dimas di taman kota).
+- "👥 Temui seseorang" di halaman waktu bebas hanya **keterangan** ("Ayah · 📍 Ruang makan"). Untuk bertemu, datangi tempatnya lalu ketuk orangnya.
+- **Latar + orang (gambar buatan pemilik):** saat waktu bebas, latar berganti otomatis ke `latar/<lokasi>__<id orang urut abjad>.jpg`
+  sesuai siapa yang sedang ada di situ (hanya yang sudah dikenal), mis. `ruang_makan__ayah_ibu_laras.jpg`, `rumah_warung__ayah_ibu.jpg`.
+  Orang di gambar disentuh lewat area tak terlihat di titik `orang` (jadi posisi orang di gambar harus sama dengan titik itu).
+  Bila gambar gabungannya belum ada, latar kosong yang tampil dan setiap orang ditandai **👤 nama** (selalu terlihat).
+  Gambar yang perlu dibuat & posisinya: [CERITA.md](CERITA.md) bagian 4. Tokoh tidak lagi ditempel di atas latar.
 - **Pengaturan → Nama lokasi & benda**: bila mati, tidak ada tulisan apa pun (nama tempat, pintu, benda, orang); pintu & benda tetap bisa disentuh langsung di gambar (area sentuh diperlebar).
+
+## adegan.txt (cerita kecil saat waktu bebas)
+Adegan muncul sendiri saat pemain **datang ke suatu lokasi** (`pemicu = masuk`) atau **menemui seseorang** (`pemicu = orang`),
+pada hari & jam tertentu, bila syaratnya terpenuhi. Isinya ditulis di file naskah biasa dan **wajib diakhiri `@kembali`**
+(lalu waktu bebas berlanjut).
+```
+[b2_ayah_jaring]
+naskah = adegan_keluarga.txt         file naskah berisi adegannya
+label  = b2_ayah_jaring              (opsional, bawaan = id) label awal adegan
+judul  = Belajar simpul jaring dari Ayah
+orang  = ayah                        pemicu orang: muncul saat Ayah diketuk (menggantikan sapaan biasa sekali itu)
+lokasi = rumah_warung                (opsional untuk orang) hanya bila ditemui di sini
+waktu  = senin-sabtu 15:00-17:30     (opsional) hari & jam
+syarat = desa_bab == 2               (opsional) gabungkan dengan &&
+sekali = ya                          (bawaan ya)
+```
+- Adegan yang sudah dimainkan tercatat `adegan_<id> = 1` → dipakai sebagai syarat tahap berikutnya.
+- Variabel tanggal: `tgl` = bulan×100 + tanggal (627 = 27 Juni, 817 = 17 Agustus), `hari_ke`, `jam_menit`.
+  Contoh "minimal sehari setelah tahap sebelumnya": di tahap 1 `@atur tahap1_hari = {hari_ke}`, di tahap 2 `syarat = hari_ke > {tahap1_hari}`.
+- Variabel yang belum pernah diisi dianggap 0 bila dibandingkan dengan angka.
+- Urutan di file = prioritas. Pemeriksa naskah & tes `SceneTest` mengecek setiap cabang adegan berakhir di `@kembali`.
+- Daftar adegan desa per bab: [CERITA.md](CERITA.md) bagian 7–10.
 
 ## latar.txt (latar mengikuti jam)
 Gambar latar hanya satu per tempat, padahal jam berjalan. Supaya tidak aneh (langit terang padahal jam 21:00),
@@ -193,16 +229,20 @@ Cara info terbuka:
 - Dari naskah: `@info bayu hobi` (atau `@info bayu semua`).
 
 ### Siapa yang bisa ditemui (waktu bebas → Temui seseorang)
-Hanya orang yang **sudah dikenal**, ada di **tempat yang sama** (desa/kota), dan **memang ada sekarang** menurut `jadwal`:
-| Karakter | ditemui | jadwal |
+Hanya orang yang **sudah dikenal**, ada di **tempat yang sama** (desa/kota), dan **memang ada sekarang** menurut kolom `lokasi`
+(karakter tanpa `lokasi` memakai `jadwal`). Jadwal desa lengkap: [CERITA.md](CERITA.md) bagian 3.
+| Karakter | ditemui | kapan & di mana (ringkas) |
 |---|---|---|
-| Ayah | ya | setiap hari 12:00–18:30 (pagi tidur setelah melaut) |
-| Ibu | ya | setiap hari 05:00–21:00 |
-| Laras | ya | Senin–Sabtu 13:00–20:00 (pagi sekolah), Minggu 07:00–20:00 |
-| Bayu, Sekar, Dimas | janji | — (Chat → 📅 Ajak ketemu → muncul di "📅 Janji temu") |
-| Juragan Darto | ya | Senin–Sabtu 07:00–16:00 (di gudang) |
-| Nadia | ya | setiap hari 14:00–20:00 (di toko buku) |
-| Sahabat | tidak | — (hanya lewat cerita) |
+| Ayah | ya | sarapan 06:15, makan siang 12:00, jaring di depan rumah 13:00–16:00, radio 16:00–17:45, makan malam, dermaga 18:30–19:15 |
+| Ibu | ya | memasak 05:00, warung 07:15–17:15, memasak & makan malam, ruang tengah 18:30–21:00 |
+| Laras | ya | sarapan, (sekolah), makan siang 13:00, PR 14:00–16:00, depan rumah 16:00–17:15, TV 18:30–20:30; Minggu warung & lapangan |
+| Bayu | ya (+ janji) | lapangan 15:00–17:30, dermaga 17:30–18:30; Minggu lapangan pagi & dermaga sore |
+| Sekar | ya (+ janji) | dermaga Senin–Sabtu 15:30–17:15 (`ada_bila = sekar_pergi != 1`) |
+| Juragan Darto | ya | gudang Senin–Sabtu 07:00–16:00 |
+| Dimas | janji | Chat → 📅 Ajak ketemu |
+| Nadia | ya | toko buku 14:00–20:00 |
+| Sahabat | tidak | hanya lewat cerita |
+`ada_bila` (opsional) = syarat karakter masih ada di tempatnya; mis. Sekar tidak ada lagi di desa bila memilih beasiswa ke Sakala.
 
 ### Saat bertemu
 Menu menyesuaikan keadaan: **💬 Ngobrol** (maks. 2× per pertemuan) · **🎁 Beri hadiah** (hanya bila tas berisi & belum memberi hari itu) · **👋 Pamit**.

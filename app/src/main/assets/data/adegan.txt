@@ -260,6 +260,7 @@ syarat = desa_bab == 4 && layangan_tahap == 3
 naskah = adegan_tujuhbelas.txt
 judul  = Ayah membelah bambu untuk layangan
 orang  = ayah
+lokasi = rumah_warung
 syarat = desa_bab == 4 && layangan_tahap == 1
 
 [b4_ayah_laut]

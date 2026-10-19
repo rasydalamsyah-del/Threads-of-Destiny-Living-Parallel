@@ -264,9 +264,32 @@ Kalau naskah salah tulis (misalnya perintah tidak dikenal), game menampilkan pes
 Kalau gambar tidak ditemukan, muncul pesan *"Gambar latar/… tidak ditemukan"* dan layar hitam.
 
 
-## Tampilan karakter saat dialog (sejak build 45)
+## Tampilan karakter saat dialog
 - Semua dialog memakai satu kotak di bawah: pembicara tampil **setengah badan di sisi kiri kotak**, teks di kanan.
-- `@tampil ayah sedih` sekarang menentukan **ekspresi** Ayah saat ia bicara (gambar besar di tengah layar tidak ditampilkan).
-  Posisi kiri/tengah/kanan tidak berpengaruh lagi, tapi tetap boleh ditulis.
+- `@tampil ayah sedih` menentukan **ekspresi** Ayah saat ia bicara. Tidak ada lagi gambar tokoh besar di tengah layar
+  (sejak build 48), posisi kiri/tengah/kanan boleh tetap ditulis tapi tidak berpengaruh.
 - Kalimat `{nama}:` memakai gambar tokoh utama (pemain_l / pemain_p). Narasi `*` tanpa gambar. Adegan kenangan tanpa gambar.
-- Gambar besar tetap muncul untuk sosok tanpa data karakter (mis. `@tampil sosok biasa`) atau karakter dengan `tampil_besar = ya` di karakter.txt.
+- Orang yang terlihat di layar adalah bagian dari **gambar latar** (dibuat pemilik), mis. `@latar sarapan_keluarga`.
+
+## Adegan waktu bebas (`data/adegan.txt` + `@kembali`)
+Cerita kecil yang muncul saat waktu bebas, ketika pemain datang ke suatu tempat atau menemui seseorang. Ditulis di file
+naskah tersendiri (mis. `adegan_keluarga.txt`), mulai dari sebuah label, dan **diakhiri `@kembali`**:
+```
+:: b2_ayah_jaring
+@tampil ayah biasa
+Ayah: Sini. Pegang ujungnya.
+@pilihan
+> Coba lagi dengan sabar -> b2aj_sabar
+> "Susah, Yah." -> b2aj_nyerah
+:: b2aj_sabar
+@cinta ayah +3
+@lompat b2aj_akhir
+:: b2aj_nyerah
+Ayah: Nanti itu kapan?
+:: b2aj_akhir
+@kembali
+```
+- Pemicu, jam, dan syaratnya di `data/adegan.txt` (lihat [DATA.md](DATA.md)).
+- Di dalam adegan boleh `@maju`, `@latar` (gambar khusus), `@kerja_mulai`, `@hp pesan`, dll. Jangan memakai `@bebas`, `@naskah`, `@tamat`.
+- Adegan bisa memindahkan pemain: `@atur _tempat = dermaga` (setelah `@kembali`, pemain berada di dermaga).
+- Alur & daftar adegan desa: [CERITA.md](CERITA.md).

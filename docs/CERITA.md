@@ -137,8 +137,8 @@ Selama gambarnya belum ada, game memakai gambar kosong dan menampilkan tanda nam
 | `ruang_makan__laras.jpg` | 13:00–14:00 | Laras makan siang, seragam SD, duduk **tengah-kanan** |
 | `ruang_tengah__laras.jpg` | Sen–Sab 14:00–16:00 | Laras tengkurap di tikar mengerjakan PR/menggambar, **tengah** |
 | `ruang_tengah__ayah.jpg` | 16:00–17:45 | Ayah duduk di sofa tua, kopi & radio, **kiri** |
-| `ruang_tengah__ibu_laras.jpg` | 18:30–20:30 | Ibu melipat pakaian di sofa **kanan**, Laras di tikar depan TV **tengah** |
-| `ruang_tengah__ibu.jpg` | 20:30–21:00 | Ibu sendiri melipat pakaian, **kanan** |
+| `ruang_tengah__ibu_laras.jpg` | 18:30–20:30 | Ibu melipat pakaian di sofa **kiri**, Laras di tikar depan TV **tengah** |
+| `ruang_tengah__ibu.jpg` | 20:30–21:00 | Ibu sendiri melipat pakaian di sofa **kiri** |
 | `rumah_warung__ibu.jpg` | 07:15–13:00 (dan Minggu 12:00–13:00) | Ibu menggoreng di warung, **kiri** |
 | `rumah_warung__ayah_ibu.jpg` | 13:00–16:00 | Ibu di warung **kiri** + Ayah memperbaiki jaring di bale-bale **kanan** |
 | `rumah_warung__ibu_laras.jpg` | 16:00–17:15 (Minggu juga 07:15–12:00) | Ibu di warung **kiri** + Laras jongkok memberi makan kucing **tengah** |
@@ -255,10 +255,12 @@ Adegan di waktu bebas hari itu:
 | Laras diejek | Ruang tengah 14:00–16:00 (otomatis, Kamis/Jumat) | Laras menangis, diejek "bau ikan". Hibur & ajari menjawab / adukan ke Ibu / datangi anak-anak itu besok. → `laras_diejek` |
 | Bakar ikan malam Minggu | Dermaga Sabtu 19:00–21:00 (otomatis) | Bayu, Sekar, pemain. Ketahuan Bayu suka Sekar. Bantu Bayu / ledek / simpan rahasia. |
 
-**Senin 29 Juni (utama): hari pertama kerja.** Gudang: kenal Mbak Yati & Pak Usman, Darto galak, pilihan bekerja cepat vs teliti.
-Jalur perahu: subuh pertama di perahu Pak Karta bersama Bayu. Tanpa kerja: menjaga warung bersama Ibu.
+**Kamis 25 Juni (utama): hari pertama kerja.** Gudang (07:00): kenal Mbak Yati & Pak Usman, Darto galak, pilihan teliti / cepat /
+beralasan, upah pertama Rp65.000. Jalur perahu (04:15): subuh pertama di perahu Pak Karta bersama Bayu.
 
-**Waktu bebas sampai Minggu 5 Juli 20:00, adegan:**
+**Minggu 28 Juni malam (utama): uang pertama.** Memberi Ibu Rp50.000 / Rp20.000 / menyimpan semuanya; gambar Laras "Kakak pahlawan bersayap".
+
+**Waktu bebas Kamis 25 Juni – Minggu 5 Juli 19:30, adegan:**
 | Adegan | Tempat & jam | Isi & cabang |
 |---|---|---|
 | Perkutut Juragan | Temui Darto (setelah kenal) | Darto & burung perkututnya; sikap sopan → Kepercayaan; isyarat anaknya yang pergi ke kota. |
@@ -286,9 +288,10 @@ Pilihan: masuk dan bertanya / pura-pura tidak dengar / diam-diam berencana memba
 Pemain menatap kereta yang sama dengan kereta sahabatnya dulu → mimpi singkat "hidup paralel" (dirinya di kereta itu).
 Bila Sekar tinggal dan cukup percaya: ia mengaku pernah melihat **{nama_sahabat} menangis di stasiun ini** sehari sebelum pergi (kisah_3, petunjuk).
 
-**Senin 13 Juli (utama): Ibu pingsan.** Ibu dibaringkan di tikar ruang tengah; mantri: kelelahan & darah tinggi, obat Rp150.000.
-Bayar sendiri / pinjam Darto / serahkan Ayah. Lalu: siapa menjaga warung seminggu? Pemain (izin kerja, Darto kesal) /
-Laras sepulang sekolah / tutup warung.
+**Senin 13 Juli 05:45 (utama): Ibu jatuh di dapur.** Laras membangunkan pemain; Ayah (baru pulang) membopong Ibu ke tikar ruang tengah;
+Mantri Joko: kelelahan & darah tinggi, obat Rp150.000. Bayar sendiri / pinjam Darto (hutang atas nama pemain) / serahkan Ayah.
+Lalu: siapa menjaga warung? Pemain sebelum kerja / Laras sepulang sekolah / tutup warung. Dua hari Ibu berbaring → Rabu 15 Juli
+Ibu kembali berjualan pelan-pelan (`ibu_sakit = 1`).
 
 **Waktu bebas sampai Minggu 19 Juli 20:00:**
 | Adegan | Tempat & jam | Isi & cabang |
@@ -315,14 +318,36 @@ Empat alur berjalan bersamaan selama waktu bebas (adegan bertahap, tiap tahap bu
 | 🍳 **Bazar warung Ibu** | memilih menu (dari `warung_ide`) → belanja bahan → promosi | laku / sepi, uang keluarga |
 | 🗼 **Mercusuar** | rapat relawan → mencari lampu & aki → sumbangan (Darto/pemain) | mercusuar menyala / tidak |
 
-**Jumat 7 Agustus malam (utama): badai.** Ayah tidak pulang sampai subuh. Pilihan: ikut perahu Pak Karta mencari
-(berisiko; lebih aman bila keahlian laut cukup atau Bayu ikut) / menunggu di dermaga bersama Ibu & Laras /
-minta tolong Darto dengan perahu motornya (gratis bila Kepercayaan Darto cukup, kalau tidak jadi hutang).
-Ayah selamat, tapi **perahunya rusak** → biaya perbaikan atau Darto menawar membeli perahu.
+**Senin 3 Agustus (utama): Juragan datang saat sarapan.** Bila cicilan yang sudah dibayar pemain < Rp400.000: tenggat Sabtu 8 Agustus
+(separuh hutang) → `tekanan_hutang = 1`. Bila ≥ Rp400.000: Darto memberi waktu sampai akhir tahun; Ayah bangga (kalau sudah diberi tahu)
+atau tersinggung (kalau dicicil diam-diam → kebohongan `cicilan_rahasia` terbongkar).
+
+**Jumat 7 Agustus 17:30 (utama): langit merah tembaga.** Tanpa tekanan hutang, Ayah tidak berangkat (aturannya sendiri) — badai
+hanya meretakkan perahu di tambatan (perbaikan Rp300.000). Dengan tekanan hutang, Ayah nekat berangkat: pemain bisa mencegah
+(berhasil bila Cinta Ayah ≥ 75), memaksa ikut (ditolak), atau membiarkan. Bila berangkat: malam badai di rumah → subuh Ayah belum pulang →
+cari dengan perahu Pak Karta (lebih aman bila keahlian laut ≥ 3) / minta perahu motor Darto (gratis bila Kepercayaan ≥ 45) / menunggu.
+Ayah ditemukan berpegangan di tiang bagan; **perahunya tenggelam**.
+
+**Sabtu 8 Agustus siang (utama): rapat keluarga.** Perahu tenggelam: terima tawaran Darto (hutang lunas, Ayah jadi anak buah kapal motornya) /
+menabung untuk perahu bekas / minta tolong orang desa (berhasil bila Cinta Bayu ≥ 55 atau Kepercayaan Darto ≥ 55 → gotong royong,
+Darto memberi lambung perahu tuanya). Perahu retak: bayar Rp300.000 / dicicil. → `perahu_ayah`
 
 **Minggu 16 Agustus (utama):** final sepak bola antar-RT.
 **Senin 17 Agustus (utama):** upacara, lomba layangan, bazar, malamnya mercusuar (menyala bila berhasil). Pesan misterius:
 *"Aku lihat fotonya. Mercusuar kita menyala lagi."* → Bersambung.
+
+### File naskah desa
+| File | Isi |
+|---|---|
+| `prolog.txt` | Bab 1 (semua pemain) |
+| `adegan_prolog.txt` | 5 adegan waktu bebas hari pertama |
+| `desa_bab2.txt`, `desa_bab3.txt`, `desa_bab4.txt` | alur utama Bab 2–4 desa |
+| `adegan_keluarga.txt` | adegan Ayah, Ibu, Laras (Bab 2–3) |
+| `adegan_teman.txt` | adegan Bayu & Sekar (Bab 2–3) |
+| `adegan_darto.txt` | adegan Juragan Darto (Bab 2–3) |
+| `adegan_tujuhbelas.txt` | Bab 4: tim bola, layangan, bazar, mercusuar, setelah badai |
+
+Pemicu semua adegan: `data/adegan.txt` (43 adegan). Nama tambahan: Ayah = Pak Darman, Ibu = Bu Ratna.
 
 ---
 

@@ -478,31 +478,45 @@ BACK WALL LEFT: a wooden window with morning sunlight, village roofs and the sea
 Leave open floor space around the table for characters. Warm, cozy family breakfast mood.
 ```
 
-### Gambar adegan untuk menjelajah (karakter yang benar-benar sedang beraktivitas)
-Dipakai saat waktu bebas: karakter tampil menyatu dengan latar (duduk makan, menggoreng di warung, dst.) dan bisa disentuh.
-**Cara:** lampirkan 2 gambar: (1) latarnya, (2) gambar biasa karakternya. Kirim prompt di bawah. Simpan dengan nama
-`<lokasi>__<karakter>.jpg` (dua garis bawah). Claude memotong karakternya menjadi lapisan transparan (`tools/potong_adegan.py`).
-**Satu gambar = satu karakter**, latar lain tetap kosong, supaya beberapa orang bisa tampil bersamaan.
+### Gambar latar + orang untuk menjelajah (desa)
+Saat waktu bebas, latar berganti otomatis sesuai siapa yang sedang ada di lokasi itu. Satu gambar = latar + semua orang
+yang ada di jam itu. Jadwal, daftar lengkap, dan alasannya: **[CERITA.md](CERITA.md) bagian 3–4**.
 
-Kalimat pengunci:
+**Cara:** lampirkan latarnya (gambar kosong) + gambar biasa setiap karakter yang ada di gambar itu, lalu kirim prompt.
+Simpan dengan nama persis di tabel (dua garis bawah, nama orang urut abjad), upload ke `app/src/main/assets/latar/`.
+**Posisi orang harus sama di semua gambar lokasi itu** (kiri / tengah / kanan seperti di tabel), karena titik ketuknya tetap.
+
+Kalimat pengunci (tempel paling atas):
 ```
-Use the FIRST attached image as the exact background and keep it pixel-identical: same composition, camera angle, furniture, objects, lighting and art style. Use the SECOND attached image only as the reference for the character: same face, hair, outfit and colors. ADD ONLY this one character into the scene, drawn in the same art style and lighting as the background, with correct perspective and size. Do not change anything else. No other people, no text.
+Use the FIRST attached image as the exact background and keep it pixel-identical: same composition, camera angle, furniture, objects, lighting and art style. Use the other attached images only as references for the characters: same faces, hair, outfits and colors. ADD ONLY the characters described below into the scene, drawn in the same art style and lighting as the background, with correct perspective and size (adults about 40% of the image height when standing in the middle distance; the 11-year-old girl clearly smaller). Do not change anything else. No other people, no text. Vertical 9:16.
 ```
 
 | Simpan sebagai (lampirkan) | Tambahan prompt |
 |---|---|
-| `ruang_makan__ayah.jpg` (ruang_makan + ayah) | `The father sits on the wooden chair on the LEFT side of the dining table, facing the table, eating rice and fried fish with his right hand, relaxed after waking up.` |
-| `ruang_makan__laras.jpg` (ruang_makan + laras) | `The little girl (11 years old, small) sits on the chair on the RIGHT side of the table, doing homework in a notebook with a pencil, leaning on the table.` |
-| `ruang_makan__ibu.jpg` (ruang_makan + ibu) | `The mother stands near the kitchen doorway on the right, holding a plate of food, about to put it on the table, warm smile.` |
-| `rumah_warung__ibu.jpg` (rumah_warung + ibu) | `The mother stands behind the warung table on the left, frying banana fritters in a wok, facing slightly toward the viewer.` |
-| `rumah_warung__ayah.jpg` (rumah_warung + ayah) | `The father sits on a small wooden stool on the right side of the road, repairing a fishing net laid across his lap.` |
-| `rumah_warung__laras.jpg` (rumah_warung + laras) | `The little girl (11 years old, small) stands in the middle of the road holding a kite string, a colorful kite flying in the sky, cheerful.` |
-| `rumah_warung__bayu.jpg` (rumah_warung + bayu) | `The teenage boy leans against the wooden fence on the right side of the road, waving at the viewer, waiting for a friend.` |
-| `gudang_ikan__darto.jpg` (gudang_ikan + darto) | `The fish boss stands near the drying racks on the left, hands on his hips, supervising, a small notebook in his shirt pocket.` |
-| `toko_buku__nadia.jpg` (toko_buku + nadia) | `The girl sits behind the wooden cashier counter on the left, reading a book, a cup of coffee beside her.` |
-| `taman_kota__dimas.jpg` (taman_kota + dimas) | `The teenage boy sits on the park bench on the left with a delivery bicycle parked beside it, smiling and raising one hand to greet.` |
+| `rumah_warung__ibu.jpg` (rumah_warung + ibu) | `The mother stands behind the warung table on the LEFT, frying banana fritters in a wok, facing slightly toward the viewer.` |
+| `rumah_warung__ayah_ibu.jpg` (rumah_warung + ayah + ibu) | `The mother stands behind the warung table on the LEFT, frying. The father sits cross-legged on a low bamboo bench on the RIGHT side of the road, repairing a green fishing net laid across his lap.` |
+| `rumah_warung__ibu_laras.jpg` (rumah_warung + ibu + laras) | `The mother stands behind the warung table on the LEFT, frying. The little girl (11 years old, school uniform changed to a simple home dress) squats in the MIDDLE of the road near the warung, feeding a calico cat.` |
+| `ruang_makan__ibu.jpg` (ruang_makan + ibu) | `The mother stands near the kitchen doorway on the RIGHT, carrying a plate of food toward the table, warm smile.` |
+| `ruang_makan__ayah_ibu_laras.jpg` (ruang_makan + 3 karakter) | `The family eats together: the father sits on the LEFT side of the table, the little girl sits on the RIGHT side nearer the center, the mother sits on the far RIGHT. Warm family meal.` (boleh memakai gambar sarapan_keluarga) |
+| `ruang_makan__ayah.jpg` (ruang_makan + ayah) | `The father sits alone on the LEFT side of the dining table, eating rice and fried fish with his right hand, hair still wet after waking up.` |
+| `ruang_makan__laras.jpg` (ruang_makan + laras) | `The little girl (11 years old, red-and-white elementary school uniform) sits on the RIGHT side of the table nearer the center, eating lunch, school bag on the next chair.` |
+| `ruang_tengah__laras.jpg` (ruang_tengah + laras) | `The little girl (11 years old, simple home dress) lies on her stomach on the woven mat in the MIDDLE, in front of the coffee table, drawing in a notebook with colored pencils.` |
+| `ruang_tengah__ayah.jpg` (ruang_tengah + ayah) | `The father sits relaxed on the old wooden sofa on the LEFT, a glass of black coffee in his hand, an old radio on the cabinet behind him.` |
+| `ruang_tengah__ibu_laras.jpg` (ruang_tengah + ibu + laras) | `Evening. The mother sits on the wooden sofa on the LEFT, folding clothes, looking at the TV on the right. The little girl sits on the mat in the MIDDLE in front of the TV, hugging her knees.` |
+| `ruang_tengah__ibu.jpg` (ruang_tengah + ibu) | `Evening. The mother sits alone on the wooden sofa on the LEFT, folding clothes, a pile of laundry beside her, watching the TV on the right.` |
+| `gudang_ikan__darto.jpg` (gudang_ikan + darto) | `The fish boss stands near the drying racks on the LEFT, hands on his hips, supervising, a small notebook in his shirt pocket.` |
+| `lapangan__bayu.jpg` (lapangan + bayu) | `The teenage boy dribbles a worn plastic football on the RIGHT side of the dirt field, barefoot, grinning.` |
+| `lapangan__laras.jpg` (lapangan + laras) | `The little girl (11 years old) runs on the LEFT side of the field holding a kite string, a colorful kite high in the sky.` |
+| `dermaga__sekar.jpg` (dermaga + sekar) | `The girl in a blue hijab sits at the edge of the wooden pier on the LEFT, legs dangling over the water, reading a worn novel.` |
+| `dermaga__bayu.jpg` (dermaga + bayu) | `The teenage boy sits at the edge of the pier on the RIGHT, holding a bamboo fishing rod, a small bucket beside him.` |
+| `dermaga__ayah.jpg` (dermaga + ayah) | `Dusk. The father stands in the MIDDLE beside his small faded-blue wooden fishing boat, coiling a mooring rope, looking at the western sky.` |
 
-Prioritas: ruang_makan__ayah → rumah_warung__ibu → ruang_makan__laras → rumah_warung__ayah → sisanya.
+**Latar dasar baru (tanpa orang, pakai prompt latar biasa di atas):**
+- `lapangan.jpg` — `A small dirt football field in an Indonesian fishing village, bamboo goalposts, a big ketapang (Indian almond) tree with reddish leaves on the left, wooden houses and coconut trees around, the old white lighthouse visible far away on the cape, sunny afternoon. Background art only, no people.`
+- `dermaga.jpg` — `An old wooden pier in an Indonesian fishing village in the afternoon, small colorful wooden fishing boats moored on the left, the old white lighthouse on the rocky cape at the end, calm sea, ropes and baskets on the planks. Background art only, no people.` (versi malam sudah ada: dermaga_malam.jpg)
+
+Prioritas: rumah_warung (3) → ruang_makan (3) → dermaga (dasar + 3) → lapangan (dasar + 2) → ruang_tengah (4) → gudang (1).
+Selama belum ada, game memakai latar kosong + tanda 👤 nama orangnya.
 
 ---
 
