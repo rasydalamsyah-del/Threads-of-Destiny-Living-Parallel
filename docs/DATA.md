@@ -128,7 +128,7 @@ judul  = Belajar simpul jaring dari Ayah
 orang  = ayah                        pemicu orang: muncul saat Ayah diketuk (menggantikan sapaan biasa sekali itu)
 lokasi = rumah_warung                (opsional untuk orang) hanya bila ditemui di sini
 waktu  = senin-sabtu 15:00-17:30     (opsional) hari & jam
-syarat = desa_bab == 2               (opsional) gabungkan dengan &&
+syarat = desa_bab == 2               (opsional) gabungkan dengan && (semua) atau || (salah satu)
 sekali = ya                          (bawaan ya)
 ```
 - Adegan yang sudah dimainkan tercatat `adegan_<id> = 1` → dipakai sebagai syarat tahap berikutnya.
@@ -237,12 +237,15 @@ Hanya orang yang **sudah dikenal**, ada di **tempat yang sama** (desa/kota), dan
 | Ibu | ya | memasak 05:00, warung 07:15–17:15, memasak & makan malam, ruang tengah 18:30–21:00 |
 | Laras | ya | sarapan, (sekolah), makan siang 13:00, PR 14:00–16:00, depan rumah 16:00–17:15, TV 18:30–20:30; Minggu warung & lapangan |
 | Bayu | ya (+ janji) | lapangan 15:00–17:30, dermaga 17:30–18:30; Minggu lapangan pagi & dermaga sore |
-| Sekar | ya (+ janji) | dermaga Senin–Sabtu 15:30–17:15 (`ada_bila = sekar_pergi != 1`) |
+| Sekar | ya (+ janji) | dermaga Senin–Sabtu 15:30–17:15 (`ada_bila = sekar_pergi != 1 \|\| tgl <= 710` — bila memilih beasiswa, pergi 11 Juli) |
 | Juragan Darto | ya | gudang Senin–Sabtu 07:00–16:00 |
 | Dimas | janji | Chat → 📅 Ajak ketemu |
 | Nadia | ya | toko buku 14:00–20:00 |
 | Sahabat | tidak | hanya lewat cerita |
-`ada_bila` (opsional) = syarat karakter masih ada di tempatnya; mis. Sekar tidak ada lagi di desa bila memilih beasiswa ke Sakala.
+`ada_bila` (opsional) = syarat karakter masih ada di tempatnya; mis. Sekar tidak ada lagi di desa setelah berangkat beasiswa ke Sakala.
+Boleh memakai `&&` (semua harus benar) dan `||` (salah satu cukup), juga di `syarat` adegan, aktivitas, pekerjaan, Sosmed.
+`libur` + `lokasi_libur` (opsional) = jadwal pengganti di rentang tanggal tertentu, mis. Laras `libur = 622-712` (libur kenaikan kelas,
+tanggal = bulan×100 + hari) dengan `lokasi_libur` berisi jadwal seharian di rumah/warung/lapangan.
 
 ### Saat bertemu
 Menu menyesuaikan keadaan: **💬 Ngobrol** (maks. 2× per pertemuan) · **🎁 Beri hadiah** (hanya bila tas berisi & belum memberi hari itu) · **👋 Pamit**.

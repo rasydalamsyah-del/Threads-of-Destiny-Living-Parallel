@@ -192,7 +192,7 @@ Bu Rahma: Dua hari tidak ikut MPLS. Tanpa surat. Hari pertama sekolah sudah begi
 {nama}: Ibu saya jatuh sakit, Bu. Di desa. Saya pulang.
 * Bu Rahma terdiam. Lalu ia melepas kacamatanya.
 Bu Rahma: Lain kali, kabari saya. Satu pesan saja. Saya bukan musuhmu. Saya wali kelasmu.
-Bu Rahma: Bolosmu saya catat sebagai izin. Sekali ini.
+Bu Rahma: Absenmu tetap tercatat di buku, tapi saya tulis keterangannya: urusan keluarga. Jangan sampai bertambah, ya.
 @cinta rahma +3
 @percaya rahma +4
 @sembunyi rahma

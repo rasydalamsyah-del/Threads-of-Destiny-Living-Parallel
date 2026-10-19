@@ -1,6 +1,6 @@
 # Alur Detail Bab 4 — Kota & Desa
 
-> Rancangan (19 Okt 2026), **belum dibuat di game**. Bab 4 bukan akhir cerita, hanya **batas sementara**: kedua jalur berhenti di
+> Rancangan (19 Okt 2026), **✅ dibuat di game build 49** — Kota: `kota_bab4.txt` + `adegan_kota.txt` (k4_*); Desa: `desa_bab4.txt` + `adegan_tujuhbelas.txt` + `adegan_desa.txt`. Bab 4 bukan akhir cerita, hanya **batas sementara**: kedua jalur berhenti di
 > **malam Senin, 17 Agustus 2026**, dengan pesan yang sama dari sahabat (cerita berlanjut di bab-bab berikutnya).
 > Struktur & bab sebelumnya: [CERITA.md](CERITA.md) bagian 6a–6d. Analisis keterkaitan Bab 1–4: [ANALISIS_CERITA.md](ANALISIS_CERITA.md).
 >

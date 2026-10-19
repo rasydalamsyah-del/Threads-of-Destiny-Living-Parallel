@@ -217,7 +217,7 @@ Jalur kota tetap: prolog → Sabtu 11 Juli berangkat ke Sakala.
 
 ---
 
-## 6a. RANCANGAN BARU (disetujui 19 Okt 2026, BELUM dibuat di game) — Bab 1 jadi 3 hari, keputusan kota/desa mundur
+## 6a. RANCANGAN BARU (disetujui 19 Okt 2026, ✅ dibuat di game build 49: prolog.txt, bab1.txt) — Bab 1 jadi 3 hari, keputusan kota/desa mundur
 
 > Dibuat bersama Bab 2 setelah Bab 2 selesai dibahas, karena saling menyambung.
 
@@ -247,7 +247,7 @@ yang sudah ada). Jalur desa: Sabtu 11 Juli mengantar teman-teman di stasiun (mom
   jaga anak tetangga, jemur jaring nelayan lain — kadang dengan cerita kecil.
 - Bab 1 fokus membangun hubungan + 1–2 cerita sampingan kecil; cerita besar (Laras diejek, hutang Ayah) tetap di Bab 2.
 
-## 6b. RANCANGAN BARU lanjutan (disetujui 19 Okt 2026, BELUM dibuat) — timeline mulai 1 Juni, Bab 2 tiga minggu
+## 6b. RANCANGAN BARU lanjutan (disetujui 19 Okt 2026, ✅ dibuat build 49: bab2.txt, adegan_bab2.txt) — timeline mulai 1 Juni, Bab 2 tiga minggu
 
 **Timeline baru** (menggantikan tanggal di 6a): cerita dimajukan supaya pemain jalur kota juga lama di desa (± 6 minggu).
 | Bagian | Tanggal |
@@ -288,7 +288,7 @@ kacamata bulat, kardigan lavender. Perbaiki naskah & prompt `dermaga__sekar.jpg`
 **Tokoh tambahan bergambar (prompt di PROMPT_GAMBAR.md):** Pak Karta (`karta`, bapak Bayu) ★ · Pak Usman (`usman`) ★ · Mbak Yati (`yati`) ★ ·
 Pak Haji Somad (`haji`) ☆ · Bu Wati (`wati`, ibu Sekar) ○. Dino (pengejek Laras) tanpa gambar.
 
-## 6c. RANCANGAN BARU — Bab 3 (disetujui 19 Okt 2026, BELUM dibuat)
+## 6c. RANCANGAN BARU — Bab 3 (disetujui 19 Okt 2026, ✅ dibuat build 49: kota_bab3.txt + adegan_pamit.txt, desa_bab3.txt + adegan_desa.txt)
 
 **Bab 3 Kota — "Pamit" (Sabtu 27 Juni – Sabtu 11 Juli)**
 - Minggu 1, urusan berangkat: daftar ulang & berkas di kecamatan bersama Ibu · info 3 kos lewat HP (pilihan kos tetap saat tiba,
@@ -300,7 +300,7 @@ Pak Haji Somad (`haji`) ☆ · Bu Wati (`wati`, ibu Sekar) ○. Dino (pengejek L
   Ayah di dermaga (pisau lipat nelayan; bila tahu hutang 🔀 "aku kirim uang" / "jangan melaut kalau langit merah" → kunci malam badai) ·
   Ibu (bekal, menangis di dapur) · Bayu (titip untuk Sekar / mengaku iri lalu berdamai) · Darto (foto Raka, bila percaya cukup) ·
   malam terakhir di dermaga, pesan misterius "Aku dengar kamu akan datang."
-- Sabtu 11 Juli berangkat (sendiri / bersama Sekar). **Tiba di Sakala: menjelajah kota & survei 3 kos langsung** (kondisi asli
+- Sabtu 11 Juli berangkat (sendiri / bersama Sekar). *(Dibuat: tiba di Sakala & survei kos ada di awal Bab 4 Kota, sesuai ALUR_BAB4.)* **Tiba di Sakala: menjelajah kota & survei 3 kos langsung** (kondisi asli
   baru ketahuan), 🔀 menawar, memilih sebelum malam. Sekar ke asrama beasiswa, menemani berkeliling dulu.
 
 **Bab 3 Desa — "Musim Ombak Tinggi" (27 Juni – 19 Juli)** (bukan "angin barat": Juli = musim angin timur, kemarau, ombak tinggi)
@@ -351,7 +351,7 @@ Bab 4 Kota     Bab 4 Desa
 - Bab 3 & 4 Desa = pemain tetap di desa.
 - "Desa dari jauh" BUKAN bab gabungan: di Bab 4 Kota kabar desa hanya datang lewat chat / telepon / kirim uang / pulang kampung.
 - Setiap bab 3 & 4 (desa maupun kota) harus punya arah cerita jelas, banyak adegan, banyak percabangan.
-- Tahap berikutnya: merancang isi Bab 4 Kota (menyesuaikan cerita kota lama dengan Bab 3 Kota baru), lalu dibuat di game sekaligus.
+- ✅ Bab 4 Kota dirancang (ALUR_BAB4.md) dan dibuat di game build 49 (kota_bab4.txt + adegan_kota.txt).
 
 **Bab 4 Desa "Tujuh Belasan" (20 Juli – 17 Agustus)** — isi seperti bagian 10 dengan penyesuaian: Darto datang 3 Agustus (cicilan dari
 Bab 2–3), Sekar memimpin mercusuar bila tinggal (Pak Kades bila pergi), hadiah Bayu untuk Sekar, malam 17 Agustus Darto menatap

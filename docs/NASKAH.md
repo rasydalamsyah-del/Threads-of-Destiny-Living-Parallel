@@ -75,6 +75,15 @@ Jam ini juga dipakai di layar kunci HP.
 - `@hp pesan` → pesan masuk, ikon HP bergetar dan bertitik merah
 - `@tunggu_hp` → cerita berhenti sampai pemain membuka HP lalu menutupnya
 
+**Telepon / video call** (untuk momen penting jarak jauh: Ibu sakit, malam badai, Laras menagih janji):
+```
+@telepon Laras
+Laras: Kak... Ibu jatuh di dapur.
+@telepon selesai
+```
+- `@telepon Nama` → muncul banner "📞 Nama" di atas layar; dialog di bawahnya terasa seperti lewat telepon
+- `@telepon selesai` (atau `tutup`) → banner hilang
+
 ### Musik & efek suara
 ```
 @musik nama_file      putar musik latar berulang (dari folder assets/musik)
