@@ -64,9 +64,15 @@ class GameData private constructor(
         val fallback: String? = null,
     )
 
-    /** Di lokasi mana karakter berada sekarang (kolom "lokasi" di karakter.txt), atau null. */
-    fun characterLocation(c: CharacterDef, weekdayIndex: Int, minute: Int): String? =
-        locationAt(c.text["lokasi"], weekdayIndex, minute)
+    /**
+     * Di lokasi mana karakter berada sekarang (kolom "lokasi" di karakter.txt), atau null.
+     * Saat tanggal [tgl] (bulan×100 + tanggal) termasuk kolom "libur", dipakai "lokasi_libur" (mis. libur sekolah Laras).
+     */
+    fun characterLocation(c: CharacterDef, weekdayIndex: Int, minute: Int, tgl: Int = 0): String? {
+        val alt = c.text["lokasi_libur"]
+        if (!alt.isNullOrBlank() && tgl > 0 && inDateRange(c.text["libur"], tgl)) return locationAt(alt, weekdayIndex, minute)
+        return locationAt(c.text["lokasi"], weekdayIndex, minute)
+    }
 
     /**
      * Karakter yang nama/jenis kelaminnya menyesuaikan pemain (kolom nama_l / nama_p,
@@ -632,6 +638,17 @@ class GameData private constructor(
             return null
         }
 
+        /** "627-712, 1221-104" (bulan×100+tanggal, boleh melewati tahun baru) → apakah [tgl] termasuk. */
+        internal fun inDateRange(spec: String?, tgl: Int): Boolean {
+            if (spec.isNullOrBlank()) return false
+            return spec.split(',').any { part ->
+                val p = part.trim().split('-').map { it.trim().toIntOrNull() }
+                if (p.size != 2 || p[0] == null || p[1] == null) return@any false
+                val a = p[0]!!; val b = p[1]!!
+                if (a <= b) tgl in a..b else tgl >= a || tgl <= b
+            }
+        }
+
         /** Satu entri adegan.txt → [SceneDef]. */
         internal fun scene(id: String, m: Map<String, String>) = SceneDef(
             id = id,
@@ -729,11 +746,11 @@ class GameData private constructor(
      * ditemui = tidak → tidak pernah · ditemui = janji → hanya lewat janji di Chat ·
      * jadwal = "senin-sabtu 13:00-20:00, minggu 07:00-20:00" → sesuai jadwal · tanpa jadwal → bagian hari ("waktu").
      */
-    fun meetableNow(c: CharacterDef, weekdayIndex: Int, minute: Int): Boolean {
+    fun meetableNow(c: CharacterDef, weekdayIndex: Int, minute: Int, tgl: Int = 0): Boolean {
         // karakter dengan kolom "lokasi": bisa ditemui tepat saat ia berada di salah satu lokasinya
         if (!c.text["lokasi"].isNullOrBlank()) {
             val mode = (c.text["ditemui"] ?: "ya").trim().lowercase()
-            return mode != "tidak" && characterLocation(c, weekdayIndex, minute) != null
+            return mode != "tidak" && characterLocation(c, weekdayIndex, minute, tgl) != null
         }
         return meetable(c.text["ditemui"], c.text["jadwal"], c.slots, weekdayIndex, minute)
     }

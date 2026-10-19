@@ -15,7 +15,7 @@ wait_phone musik music suara sound sfx lompat jump goto jika if atur set tambah 
 bebas free maju advance uang money stat barang item lokasi location tampil show sembunyi hide kenal meet cinta love
 percaya trust perilaku behave bohong lie terbongkar reveal ungkapkan confess naskah script tanggal date kos kiriman
 allowance kerja_mulai sekolah_mulai job_start kerja_berhenti sekolah_berhenti job_stop lamar apply catatan note
-dokumen doc kejadian event tamat end pilihan choice mulai_ulang reset tunjuk show_ui info jalan walk kembali return""".split())
+dokumen doc kejadian event tamat end pilihan choice mulai_ulang reset tunjuk show_ui info jalan walk kembali return telepon call""".split())
 
 
 def sections(path):

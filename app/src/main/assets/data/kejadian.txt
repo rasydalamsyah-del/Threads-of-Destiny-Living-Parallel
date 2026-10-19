@@ -259,3 +259,45 @@ syarat  = kenal_laras == 1
 teks    = Laras menangis tersedu-sedu. Si Belang, kucing warung, tidak pulang sejak semalam.
 pilih_a = Cari keliling desa bersama Laras | energi -10, cinta_laras +6 | Kalian menemukan Si Belang di gudang perahu Pak Haji, bersama empat anak kucing yang baru lahir. Laras berteriak kegirangan: "BELANG JADI IBU!"
 pilih_b = "Nanti juga pulang sendiri, Ras." | cinta_laras -2 | Dua hari kemudian Si Belang pulang sendiri. Tapi Laras masih cemberut padamu.
+
+# ---------------- KERJA SERABUTAN DESA (sesekali, bayaran kecil) ----------------
+
+[serabutan_karung]
+judul   = Kios beras butuh tenaga
+ikon    = 🌾
+tempat  = desa
+peluang = 7
+syarat  = bab <= 4 && lokasi == desa
+teks    = Truk beras berhenti di depan kios Pak Mamat. Sopirnya buru-buru, dan Pak Mamat melambai padamu: "Bantu angkat, ya! Nanti dibayar!"
+pilih_a = Bantu angkat karung (Rp15.000) | energi -12, hidrasi -8, uang +15000 | Dua puluh karung beras. Punggungmu protes, tapi Pak Mamat menyelipkan selembar sepuluh ribu dan lima ribu, plus segenggam kacang.
+pilih_b = Maaf, sedang buru-buru | kewarasan +1 | Pak Mamat mengangguk dan memanggil anak lain yang lewat.
+
+[serabutan_cat_pagar]
+judul   = Mengecat pagar balai desa
+ikon    = 🖌️
+tempat  = desa
+peluang = 5
+syarat  = bab <= 4 && lokasi == desa
+teks    = Pak RT mencari anak muda untuk mengecat ulang pagar balai desa. Catnya merah putih, bayarannya nasi bungkus dan uang rokok — "uang jajan, maksudnya," kata Pak RT.
+pilih_a = Ikut mengecat (Rp20.000) | energi -15, uang +20000, kenyang +20 | Tanganmu belang merah putih sampai malam. Laras tertawa melihatmu: "Kakak kayak bendera!"
+pilih_b = Tidak hari ini | kewarasan +1 | Kamu melihat dari jauh pagar itu perlahan berubah warna.
+
+[serabutan_jaga_anak]
+judul   = Menjaga anak tetangga
+ikon    = 👶
+tempat  = desa
+peluang = 5
+syarat  = bab <= 4 && lokasi == desa
+teks    = Bu Siti, tetangga sebelah, harus ke puskesmas kecamatan. Dua anaknya yang balita tidak bisa ditinggal. "Sebentar saja, ya, Nak. Nanti Ibu kasih uang jajan."
+pilih_a = Jaga anak-anaknya (Rp10.000) | energi -8, kewarasan -2, uang +10000, cinta_laras +1 | Dua jam menggendong, menyuapi, dan mengejar balita yang hobi makan pasir. Laras ikut membantu sambil sok jadi kakak.
+pilih_b = Minta maaf, tidak bisa | | Bu Siti menitipkan anaknya ke rumah sebelah.
+
+[serabutan_jemur_jaring]
+judul   = Menjemur jaring nelayan
+ikon    = 🪢
+tempat  = desa
+peluang = 6
+syarat  = bab <= 4 && lokasi == desa
+teks    = Pak Salim baru pulang melaut dan jaringnya basah kuyup penuh rumput laut. "Bantu bentangkan, Nak. Tanganku sudah gemetar."
+pilih_a = Bantu menjemur jaring (Rp12.000) | energi -10, uang +12000, keahlian_laut +1 | Kalian membentangkan jaring di sepanjang pagar bambu. Pak Salim bercerita tentang ikan hiu kecil yang ikut terjaring semalam.
+pilih_b = Lain kali, Pak | | Pak Salim mengangguk dan memanggil cucunya.

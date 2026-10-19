@@ -197,14 +197,14 @@ Indonesian boy, 11 years old, elementary school student, mischievous but not evi
 Small skinny build, tanned skin, spiky short black hair, a band-aid on his knee, a cheeky grin.
 Wearing a red-and-white Indonesian elementary school uniform, untucked shirt, red shorts.
 ```
-Raka muda (`raka.png`, seperti di foto lama Darto: ± 20 tahun lalu)
+Foto lama Raka muda (`latar/foto_raka.jpg`, gambar foto yang ditunjukkan Darto: ± 20 tahun lalu; boleh berbingkai foto tua menguning)
 ```
 Indonesian young man, 18 years old, son of a dried-fish boss in a coastal village, hopeful and a little restless.
 Slim build, tanned skin, short black hair, faint mustache, warm smile resembling his father's sharp eyes.
 Wearing a simple white t-shirt under an open checkered flannel shirt, holding a small turtledove (perkutut) on his hand.
 ```
 
-### Tokoh baru Bab 4 — `wulan` (desa) dan tokoh kota `ratmi`, `hartini`, `bram`, `rahma`, `reno`, `tiara`, `sum`, `hendra`, `tini`, `raka_dewasa`
+### Tokoh baru Bab 4 — `wulan` (desa) dan tokoh kota `ratmi`, `hartini`, `bram`, `rahma`, `reno`, `tiara`, `sum`, `hendra`, `tini`, `raka`
 Tempel blok gaya + tambahan karakter (bagian 2), lalu deskripsi di bawah. Ekspresi minimal `senyum`; yang punya adegan sedih/marah tambah ekspresinya
 (tertulis di tiap tokoh).
 
@@ -268,8 +268,8 @@ Indonesian woman, 55 years old, owner of a busy cheap food stall, loud, motherly
 Stout build, tanned skin, round cheerful face, hair tied back with a scarf.
 Wearing a red floral blouse, an oil-stained apron, a ladle in her hand.
 ```
-Bang Raka — anak Juragan Darto, kini mekanik bengkel kapal Pelabuhan (`raka_dewasa.png`) · + `sedih`, `kaget`
-(lampirkan `raka.png` dan `darto.png` sebagai referensi wajah: harus terlihat seperti Raka muda 20 tahun kemudian, mirip ayahnya)
+Bang Raka — anak Juragan Darto, kini mekanik bengkel kapal Pelabuhan (`raka.png`) · + `sedih`, `kaget`
+(lampirkan `latar/foto_raka.jpg` dan `darto.png` sebagai referensi wajah: harus terlihat seperti Raka muda 20 tahun kemudian, mirip ayahnya)
 ```
 Indonesian man, 38 years old, ship-engine mechanic at a harbor workshop, quiet, ashamed, hard-working, carrying a heavy past.
 Stocky build, sun-darkened skin, short black hair with early grey, a short beard, sharp eyes like his father, grease on his forearms.

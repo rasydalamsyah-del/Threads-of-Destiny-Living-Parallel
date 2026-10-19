@@ -667,6 +667,7 @@ class GameActivity : Activity() {
                 }
                 is Cmd.Show -> { showTour(c); return }
                 is Cmd.Return -> if (returnFromScene()) return
+                is Cmd.Call -> showCall(c.who?.let { fill(it) })
             }
         }
         // adegan yang lupa ditutup @kembali: tetap kembali ke waktu bebas
@@ -790,6 +791,7 @@ class GameActivity : Activity() {
         vignette.alpha = if (d.memory) 1f else 0f
         setClock(d.clock)
         d.music?.let { audio.playMusic(it) }
+        d.vars["_telepon"]?.let { who -> handler.post { showCall(who) } }
 
         if (d.phoneIcon) setPhoneIconVisible(true)
         d.messages.forEach { (from, text) ->
@@ -992,6 +994,41 @@ class GameActivity : Activity() {
             }
         }
         return null
+    }
+
+    // ---------------- telepon / video call (@telepon Laras · @telepon selesai) ----------------
+
+    private var callBanner: TextView? = null
+
+    private fun showCall(who: String?) {
+        val root = charLayer.parent as ViewGroup
+        val d = resources.displayMetrics.density
+        if (who == null) {
+            vars.remove("_telepon")
+            callBanner?.animate()?.alpha(0f)?.setDuration(250)?.withEndAction { callBanner?.visibility = View.GONE }?.start()
+            return
+        }
+        vars["_telepon"] = who
+        val tv = callBanner ?: TextView(this).apply {
+            textSize = 14f
+            setTextColor(0xFFF6E7C8.toInt())
+            setPadding((16 * d).toInt(), (9 * d).toInt(), (16 * d).toInt(), (9 * d).toInt())
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 22 * d
+                setColor(0xE6183A2A.toInt())
+                setStroke((1.5f * d).toInt(), 0xFF6FCF97.toInt())
+            }
+            elevation = 9 * d
+            root.addView(this, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                gravity = android.view.Gravity.TOP or android.view.Gravity.CENTER_HORIZONTAL
+                topMargin = (64 * d).toInt()
+            })
+        }.also { callBanner = it }
+        tv.text = "📞  $who  ·  sedang menelepon"
+        tv.alpha = 0f
+        tv.visibility = View.VISIBLE
+        tv.animate().alpha(1f).setDuration(250).start()
+        audio.playSound("notifikasi")
     }
 
     // ---------------- adegan waktu bebas (data/adegan.txt) ----------------
@@ -1222,7 +1259,10 @@ class GameActivity : Activity() {
 
     /** Di lokasi mana karakter berada sekarang (jadwal "lokasi" + ada_bila), atau null. */
     private fun whereIs(c: GameData.CharacterDef): String? =
-        if (presentInStory(c)) gameData.characterLocation(c, life.weekdayIndex, life.minute) else null
+        if (presentInStory(c)) gameData.characterLocation(c, life.weekdayIndex, life.minute, todayTgl()) else null
+
+    /** Tanggal hari ini sebagai bulan×100 + tanggal (0 bila tanggal belum diatur). */
+    private fun todayTgl(): Int = life.date()?.let { it.monthValue * 100 + it.dayOfMonth } ?: 0
 
     /** Orang yang ada di lokasi ini sekarang (sesuai jadwal, atau sedang janjian di sini). */
     private fun peopleAt(loc: GameData.LocationDef): List<GameData.CharacterDef> =
@@ -2166,7 +2206,7 @@ class GameActivity : Activity() {
         val people = gameData.characters.values.filter { c ->
             social.rel(c).met &&
                 ("semua" in c.places || place.lowercase() in c.places) &&
-                gameData.meetableNow(c, life.weekdayIndex, life.minute) && presentInStory(c)
+                gameData.meetableNow(c, life.weekdayIndex, life.minute, todayTgl()) && presentInStory(c)
         }
         if (people.isNotEmpty()) {
             sheetList.addView(sectionLabel("👥 Temui seseorang"))
