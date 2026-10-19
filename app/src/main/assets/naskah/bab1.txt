@@ -1,0 +1,328 @@
+# ==========================================================
+#  THREADS OF DESTINY: LIVING PARALLEL
+#  Naskah: BAB 1 (lanjutan) — LULUS SMP · Selasa 2 – Rabu 3 Juni 2026
+#  Senin ada di prolog.txt. Alur: docs/CERITA.md 6a–6b
+#  condong = kota / desa / ragu (keputusan final Jumat 26 Juni di bab2.txt)
+# ==========================================================
+
+@sembunyi semua
+@atur bab = 1
+
+
+# ----------------------------------------------------------
+#  SELASA PAGI — SARAPAN
+# ----------------------------------------------------------
+
+@kalender Selasa 06:00
+@waktu Selasa, 2 Juni 2026
+@latar kamar_pagi
+@atur _tempat = kamar_pagi
+@kedip
+* Hari kedua setelah lulus. Tidak ada seragam yang harus disetrika, tidak ada bel yang harus dikejar.
+* Rasanya aneh. Bebas, tapi juga... kosong.
+@maju 15 menit
+@jalan ruang_makan | Ibu sudah memanggil untuk sarapan
+
+@latar sarapan_keluarga
+@tampil ayah biasa
+@tampil ibu biasa
+@tampil laras biasa
+Ibu: Pagi. Ayo makan, nanti Laras telat lagi.
+Laras: Aku nggak pernah telat! Cuma... hampir.
+@jika bicara_ayah == 1 -> selasa_sudah_bicara
+
+Ayah: {nama}, Ibumu sudah cerita soal kemarin. Kemarin Ayah tidur terus, maaf.
+@tampil ayah senyum
+Ayah: Mau ke kota atau tidak, liburan ini jangan cuma tiduran. Rabu pagi ikut Ayah ke gudang Juragan Darto. Kerja dulu, tabungan tidak ada ruginya.
+@catatan Rabu pagi, Ayah akan mengajakku ke gudang ikan Juragan Darto untuk mencari kerja.
+@lompat selasa_lanjut
+
+:: selasa_sudah_bicara
+Ayah: Jangan lupa, besok pagi kita ke gudang Juragan Darto. Pakai baju yang paling rapi.
+{nama}: Baju paling rapiku seragam SMP, Yah.
+Ayah: Ya sudah, kaus yang tidak bolong saja.
+* Laras tertawa sampai nasinya hampir menyembur.
+
+:: selasa_lanjut
+@tampil ibu biasa
+Ibu: Oh iya, hari ini SKL-mu sudah bisa diambil di sekolah, kan? Surat Keterangan Lulus. Jangan sampai lupa, itu penting buat daftar SMA... atau buat apa pun nanti.
+@tampil laras kaget
+Laras: Kakak mau jadi juragan ikan?
+{nama}: Mau jadi buruhnya juragan, Ras.
+@tampil laras biasa
+Laras: Ooh. Nanti bawa pulang ikan asin yang banyak, ya! ...Eh jangan, aku nggak suka ikan asin.
+@tampil ibu senyum
+Ibu: Habiskan dulu sarapanmu, Nona Komentator.
+@maju 30 menit
+@sembunyi laras
+@latar sarapan_tanpa_laras
+* Laras berangkat dengan sepeda kecilnya. Ayah masuk kamar untuk tidur.
+@sembunyi semua
+
+
+# ----------------------------------------------------------
+#  SELASA — MENGAMBIL SKL DI SMP
+# ----------------------------------------------------------
+
+@gelap 800
+@kalender Selasa 08:30
+@waktu SMP Negeri 1 Tanjung Lentera
+@latar sekolah
+@terang 1000
+* Ruang kelas IX-B terasa lebih kecil dari biasanya. Meja-meja sudah dirapikan ke pinggir. Di papan tulis masih ada tulisan kapur yang belum dihapus: "SELAMAT JALAN, ANGKATAN 2026".
+* Bu Narti, wali kelasmu, membagikan amplop cokelat satu per satu.
+Bu Narti: {nama}. Selamat, Nak. Nilaimu bagus. Mau lanjut ke mana?
+@jika condong == kota -> skl_kota
+@jika condong == desa -> skl_desa
+{nama}: Belum tahu, Bu.
+Bu Narti: Pikirkan baik-baik. Pendaftaran di Sakala tutup tanggal dua puluh enam. Ibu bisa bantu buatkan surat rekomendasi kalau perlu.
+@lompat skl_teman
+
+:: skl_kota
+{nama}: Kalau bisa, SMA di Sakala, Bu.
+Bu Narti: Bagus. Ibu bisa buatkan surat rekomendasi. Siapkan fotokopi SKL, kartu keluarga, dan pas foto, ya.
+@lompat skl_teman
+
+:: skl_desa
+{nama}: Mungkin di desa dulu, Bu. Kerja.
+* Bu Narti diam sebentar, lalu tersenyum, walau matanya sedikit kecewa.
+Bu Narti: Belajar tidak harus di sekolah, Nak. Tapi kalau berubah pikiran, Ibu masih di sini sampai tanggal dua puluh enam.
+
+:: skl_teman
+@dokumen skl_smp
+@kenal rani
+@kenal dodi
+* Di luar kelas, Rani dan Dodi sedang ribut membandingkan isi amplop mereka.
+Rani: {nama}! Aku sama Dodi udah daftar online ke SMA Negeri 3 Sakala! Kamu ikut, kan?
+Dodi: Bareng, yuk! Biar ada teman anak desa di sana. Aku takut dikira orang hutan.
+Rani: Kamu memang orang hutan, Dod.
+@jika condong == kota -> skl_teman_kota
+{nama}: Belum tahu. Lihat nanti.
+Rani: Ih, jangan kelamaan mikir. Kursinya terbatas, lho!
+@lompat skl_sekar
+
+:: skl_teman_kota
+{nama}: Kayaknya iya. Doakan.
+Dodi: YES! Nanti kita cari kos dekatan, ya!
+
+# ----- Kenalan dengan Sekar -----
+:: skl_sekar
+@kenal sekar
+@atur adegan_b2_sekar_kenalan = 1
+@tampil sekar biasa
+* Di ujung lorong, seorang perempuan berambut hitam panjang dengan bando ungu dan kacamata bulat duduk sendirian di bangku, memeluk amplop cokelatnya dan sebuah novel tebal yang sampulnya sudah lusuh.
+* Sekar. Juara kelas tiga tahun berturut-turut. Kalian sekelas, tapi rasanya tidak pernah benar-benar bicara.
+{nama}: Sekar? Kok sendirian?
+Sekar: Oh. {nama}. Yang selalu duduk paling belakang dekat jendela, melamun lihat laut.
+{nama}: Kok tahu?
+Sekar: Juara kelas tahu segalanya.
+* Ia tersenyum kecil, nyaris tidak kelihatan. Lalu senyumnya hilang lagi saat ia menatap amplop di pangkuannya. Di bawah SKL-nya terselip selembar surat lain, berkop sebuah SMA unggulan di Sakala.
+@pilihan
+> "Itu surat beasiswa, ya? Selamat!" -> sekar_beasiswa
+> "Baca apa?" -> sekar_buku
+> "Kamu kelihatan bingung." -> sekar_bingung
+
+:: sekar_beasiswa
+@tampil sekar sedih
+Sekar: ...Bayu yang cerita, ya? Dasar ember.
+Sekar: Aku belum memutuskan. Lagian, itu bukan urusan orang lain.
+* Ia memasukkan surat itu ke dalam novelnya cepat-cepat. Sepertinya kamu menyentuh sesuatu yang sakit.
+@cinta sekar -1
+@lompat sekar_akhir
+
+:: sekar_buku
+@tampil sekar senyum
+Sekar: Ini? Novel tentang anak nelayan yang jadi dokter. Sudah kubaca empat kali.
+{nama}: Empat kali? Nggak bosan?
+Sekar: Setiap kali baca, aku jadi percaya lagi kalau itu mungkin. Makanya kubaca terus.
+@cinta sekar +4
+@info sekar hobi
+@lompat sekar_akhir
+
+:: sekar_bingung
+* Sekar menatapmu lama, seperti menimbang apakah kamu bisa dipercaya.
+Sekar: Kamu juga, kan? Kelihatan dari mukamu. Kota atau di sini.
+{nama}: ...Iya.
+@tampil sekar biasa
+Sekar: Ternyata bukan cuma aku. Lucu, ya. Dulu kita kira lulus itu artinya bebas.
+@cinta sekar +3
+@percaya sekar +3
+
+:: sekar_akhir
+* Sekar berdiri dan merapikan roknya.
+Sekar: Sore-sore aku biasanya baca di dermaga, di bawah mercusuar. Kalau mau... ya, terserah.
+@sembunyi sekar
+@catatan Mendapat SKL (Surat Keterangan Lulus). Sekar sore-sore biasa membaca di dermaga, di bawah mercusuar.
+
+
+# ----------------------------------------------------------
+#  SELASA — WAKTU BEBAS
+# ----------------------------------------------------------
+
+@gelap 800
+@latar rumah_warung
+@atur _tempat = rumah_warung
+@kalender Selasa 10:30
+@terang 800
+* Kamu pulang menyusuri jalan desa dengan amplop cokelat di tangan.
+* Hari ini milikmu. Besok pukul 06:30 Ayah mengajakmu ke gudang ikan, jadi jangan tidur terlalu malam.
+@bebas sampai Rabu 06:30
+
+
+# ----------------------------------------------------------
+#  RABU — GUDANG IKAN JURAGAN DARTO
+# ----------------------------------------------------------
+
+@gelap 1200
+@kalender Rabu 06:30
+@waktu Rabu, 3 Juni 2026 · Gudang ikan Juragan Darto
+@latar gudang_ikan
+@atur _tempat = gudang_ikan
+@terang 1200
+* Bau garam dan ikan menyengat bahkan sebelum gudang itu terlihat. Puluhan tampah bambu berjajar di bawah matahari pagi.
+* Beberapa buruh sudah membalik ikan-ikan teri. Tangan mereka bergerak cepat, tanpa bicara.
+@kenal darto
+@tampil ayah biasa
+@tampil darto biasa
+Ayah: Juragan, ini anak saya, {nama}. Baru lulus SMP. Dia mau kerja di sini.
+* Juragan Darto menurunkan gelas kopinya. Matanya menyipit, menilaimu dari ujung rambut sampai sandal jepit.
+Juragan Darto: Hm. Anak Darman. Kata orang, nilaimu bagus.
+@jika condong == kota -> w_tanya_kota
+Juragan Darto: Kenapa tidak sekolah?
+@pilihan
+> "Saya mau bantu keluarga, Juragan." -> w_jujur
+> "Sekolah tidak menjamin apa-apa, Juragan." -> w_sok
+> Diam saja, menunduk -> w_diam
+
+:: w_tanya_kota
+Juragan Darto: Saya dengar kamu mau sekolah ke Sakala. Lalu buat apa kerja di sini?
+@pilihan
+> "Cuma selama liburan, Juragan. Untuk tabungan." (jujur) -> w_sementara
+> "Saya mau kerja tetap, Juragan." -> w_tetap
+> Diam saja, menunduk -> w_diam
+
+:: w_sementara
+@atur kerja_sementara = 1
+@tambah skor_wawancara +5
+@tampil darto kesal
+Juragan Darto: Sakala. Semua anak muda ingin ke Sakala.
+* Juragan Darto menatap jalan yang menuju stasiun lama sekali, seperti melihat sesuatu yang tidak ada di sana.
+@tampil darto biasa
+Juragan Darto: ...Setidaknya kamu jujur. Saya suka orang yang tidak berbelit.
+@percaya darto +3
+@lompat w_dua
+
+:: w_tetap
+@atur kerja_sementara = 0
+@atur bilang_kerja_tetap = 1
+@tambah skor_wawancara +5
+Juragan Darto: Tetap? Kita lihat saja.
+* Ayah melirikmu, bingung. Kamu tidak berani menatapnya.
+@lompat w_dua
+
+:: w_jujur
+@tambah skor_wawancara +10
+Juragan Darto: Jawaban jujur. Saya suka orang yang tidak berbelit.
+@percaya darto +3
+@lompat w_dua
+
+:: w_sok
+@tambah skor_wawancara -10
+@tampil darto kesal
+Juragan Darto: Sekolah memang tidak menjamin apa-apa. Tapi kebodohan menjamin kamu jadi buruh selamanya.
+* Ayah melirikmu tajam. Telingamu terasa panas.
+@lompat w_dua
+
+:: w_diam
+Juragan Darto: Pemalu. Di sini memang tidak perlu banyak bicara. Yang perlu tangan.
+
+:: w_dua
+@tampil darto biasa
+Juragan Darto: Kerja di sini mulai jam tujuh sampai jam dua. Matahari, garam, bau. Tanganmu akan perih dan pecah-pecah. Tahan?
+@pilihan
+> "Tahan, Juragan." -> w2_tahan
+> "Saya akan belajar menahannya." -> w2_belajar
+> "Asal upahnya sepadan, Juragan." -> w2_upah
+
+:: w2_tahan
+@tambah skor_wawancara +5
+Juragan Darto: Semua orang bilang tahan di hari pertama.
+@lompat w_lamar
+
+:: w2_belajar
+@tambah skor_wawancara +10
+* Sudut bibir Juragan Darto bergerak sedikit. Mungkin itu senyum.
+Juragan Darto: Itu jawaban orang yang pernah susah.
+@lompat w_lamar
+
+:: w2_upah
+@tambah skor_wawancara -5
+@tampil darto senyum
+Juragan Darto: Hah! Anak zaman sekarang. Belum kerja sudah tanya upah.
+Juragan Darto: Tapi tidak salah juga. Di sini, upah sesuai keringat.
+
+:: w_lamar
+@lamar buruh_ikan -> diterima, ditolak
+
+:: diterima
+@atur kerja_desa = gudang
+@tampil darto biasa
+Juragan Darto: ...Baiklah. Karena bapakmu yang menjamin.
+Juragan Darto: Mulai besok. Jam tujuh. Senin sampai Sabtu. Upah enam puluh lima ribu, dibayar tiap selesai kerja.
+Juragan Darto: Telat lima belas menit, kerjamu dihitung buruk. Malas, kamu keluar. Paham?
+{nama}: Paham, Juragan. Terima kasih.
+@cinta ayah +5
+@catatan Diterima kerja di gudang ikan Juragan Darto. Senin–Sabtu, 07:00–14:00, Rp65.000 per hari.
+@lompat pulang_gudang
+
+:: ditolak
+@atur kerja_desa = perahu
+@tampil darto biasa
+Juragan Darto: Maaf, Darman. Tempat saya sedang penuh. Anakmu juga masih kecil untuk angkat keranjang.
+@tampil ayah sedih
+Ayah: ...Saya mengerti, Juragan. Terima kasih sudah mau menemui kami.
+* Kamu menunduk. Rasanya seperti ditolak di depan seluruh desa.
+
+:: pulang_gudang
+@sembunyi semua
+@latar rumah_warung
+@atur _tempat = rumah_warung
+* Dalam perjalanan pulang, Ayah berjalan di depan dengan tangan di saku. Lama ia tidak bicara.
+@tampil ayah biasa
+@jika kerja_desa == perahu -> pulang_ditolak
+Ayah: Juragan Darto itu keras. Tapi waktu Ayah butuh perahu baru, cuma dia yang mau meminjamkan uang.
+Ayah: Jadi kerja yang benar, ya. Jangan bikin Ayah malu di depan dia.
+@jika bilang_kerja_tetap == 1 -> pulang_tetap
+{nama}: (Meminjamkan uang...?)
+@atur benih_hutang = 1
+@lompat bab1_akhir
+
+:: pulang_tetap
+Ayah: Dan tadi... kerja tetap? Bukannya kamu mau ke kota?
+{nama}: Biar diterima, Yah.
+@tampil ayah sedih
+Ayah: Hati-hati dengan kata-kata, Nak. Juragan itu ingat semua yang orang janjikan padanya.
+@atur benih_hutang = 1
+@lompat bab1_akhir
+
+:: pulang_ditolak
+Ayah: Sudah, jangan dipikirkan. Masih ada laut.
+Ayah: Pak Karta, bapaknya Bayu, butuh orang di perahunya setiap subuh. Bagi hasil. Ayah sudah bicara dengannya kemarin.
+@kenal karta
+* Ayah menambahkan, nyaris berbisik, "Lagi pula... Ayah sudah terlalu banyak berutang budi pada Juragan."
+@catatan Ditolak di gudang ikan. Ikut perahu Pak Karta (bapak Bayu) melaut subuh, berangkat 04:30 dari dermaga.
+@atur benih_hutang = 1
+
+:: bab1_akhir
+@sembunyi semua
+* Tiga hari setelah lulus. Kamu belum tahu akan ke mana. Tapi besok, untuk pertama kalinya, kamu akan bekerja.
+@jika kerja_desa == perahu -> bab1_perahu
+* Hari pertama kerjamu besok, Kamis, pukul 07:00. Sampai saat itu, waktumu bebas.
+@bebas sampai Kamis 06:30
+@naskah bab2.txt
+
+:: bab1_perahu
+@kerja_mulai bantu_melaut
+* Besok subuh, pukul 04:30, perahu Pak Karta berangkat dari dermaga. Sampai saat itu, waktumu bebas.
+@bebas sampai Kamis 04:00
+@naskah bab2.txt

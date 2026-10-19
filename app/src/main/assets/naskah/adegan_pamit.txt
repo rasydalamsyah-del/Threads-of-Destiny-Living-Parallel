@@ -1,0 +1,399 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — BAB 3 KOTA "PAMIT" (27 Juni – 10 Juli)
+#  Pemicu & jam: data/adegan.txt (k3_*) · Alur: docs/CERITA.md 6c
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  LARAS — MINTA MAAF (bila ketahuan berbohong "nggak ke mana-mana")
+# ----------------------------------------------------------
+
+:: k3_laras_maaf
+@tampil laras kesal
+* Laras duduk di lantai, menggambar dengan krayon yang ditekan terlalu keras sampai patah.
+Laras: Ngapain. Sana, siap-siap ke kota.
+@pilihan
+> "Maaf, Ras. Kakak bohong karena takut kamu sedih." -> k3lm_jujur
+> "Waktu itu Kakak memang belum tahu." -> k3lm_alasan
+> Duduk di sebelahnya dan ikut menggambar, tanpa bicara -> k3lm_gambar
+
+:: k3lm_jujur
+@tampil laras menangis
+Laras: Tapi aku lebih sedih karena dibohongi!
+{nama}: Iya. Kakak tahu sekarang.
+* Laras menangis keras, lalu memukul lenganmu berkali-kali, makin lama makin pelan, sampai akhirnya ia bersandar di bahumu.
+Laras: ...Jangan bohong lagi. Sekali lagi bohong, aku nggak mau ngomong sama Kakak selamanya.
+@percaya laras +8
+@cinta laras +4
+@lompat k3lm_akhir
+
+:: k3lm_alasan
+@tampil laras kesal
+Laras: Bohong. Kakak udah tahu. Semua orang udah tahu kecuali aku.
+* Ia membalik kertasnya dan menggambar lagi. Kamu menunggu, tapi ia tidak menoleh.
+@percaya laras -2
+Laras: ...Ya udah. Aku maafin. Tapi setengah.
+@lompat k3lm_akhir
+
+:: k3lm_gambar
+* Kamu mengambil krayon biru dan menggambar laut di pojok kertasnya. Laras melirik, lalu menggambar perahu di atas lautmu. Kamu menggambar mercusuar. Ia menggambar dua orang kecil di bawahnya.
+Laras: Itu aku sama Kakak. Yang kecil aku.
+{nama}: Maaf, Ras.
+Laras: Iya. Udah.
+@cinta laras +5
+@percaya laras +4
+
+:: k3lm_akhir
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  LARAS — MEMBANTU BERKEMAS
+# ----------------------------------------------------------
+
+:: k3_laras_kemas
+@tampil laras biasa
+* Laras menemukanmu sedang melipat baju. Tanpa diminta, ia ikut melipat. Hasilnya lebih mirip gulungan lontong.
+Laras: Kak, kaus yang gambar ikan paus ini nggak usah dibawa, ya.
+{nama}: Kenapa?
+Laras: Buat aku. Biar kalau aku kangen, aku pakai tidur.
+@pilihan
+> Berikan kaus itu -> k3lk_beri
+> "Itu kaus favorit Kakak, Ras." -> k3lk_tolak
+
+:: k3lk_beri
+@tampil laras senyum
+* Laras langsung memakainya di atas bajunya sendiri. Kebesaran sampai lutut. Ia berputar-putar di depan cermin.
+@cinta laras +5
+@info laras kisah_2
+@lompat k3lk_akhir
+
+:: k3lk_tolak
+@tampil laras kesal
+Laras: Pelit! ...Ya udah, kaus yang bolong itu aja.
+* Ia mengambil kaus lamamu yang berlubang di ketiak, memeluknya seperti boneka.
+@cinta laras +2
+
+:: k3lk_akhir
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  AYAH — PISAU LIPAT DI DERMAGA
+# ----------------------------------------------------------
+
+:: k3_ayah_pisau
+@tampil ayah biasa
+* Ayah sedang menjahit jaring di dermaga. Melihatmu datang, ia menggeser duduknya, memberi tempat.
+* Lama kalian hanya duduk. Ayah menjahit, kamu memandangi laut.
+Ayah: Ini.
+* Ia menyodorkan pisau lipat kecil bergagang kayu, sudah aus di bagian jempol.
+Ayah: Dari kakekmu. Ayah pakai tiga puluh tahun. Potong tali, buka kaleng, bersihkan ikan. Di kota mungkin tidak ada ikan, tapi selalu ada tali yang harus dipotong.
+@atur pisau_ayah = 1
+@catatan Pisau lipat kakek, pemberian Ayah di dermaga.
+@jika tahu_hutang_perahu == 1 -> k3ap_hutang
+{nama}: Terima kasih, Yah.
+Ayah: Jaga diri. Jangan jadi orang yang lupa jalan pulang.
+@cinta ayah +5
+@lompat k3ap_akhir
+
+:: k3ap_hutang
+* Kamu menimbang pisau itu di tanganmu. Lalu memandang perahu Ayah, yang cat birunya mulai mengelupas. Perahu yang belum lunas.
+@pilihan
+> "Yah, nanti kalau aku dapat kerja, aku bantu kirim untuk cicilan." -> k3ap_kirim
+> "Yah, janji satu hal: jangan melaut kalau langit sore merah." -> k3ap_langit
+
+:: k3ap_kirim
+@atur janji_kirim_uang = 1
+@tampil ayah kesal
+Ayah: Uangmu untuk sekolahmu.
+{nama}: Sekolahku gratis, Yah. Kos dan makan yang bayar. Kalau ada lebih, sedikit saja.
+@tampil ayah sedih
+Ayah: ...Sedikit saja. Jangan sampai kamu makan mi instan tiap hari karena Ayah.
+@percaya ayah +6
+@cinta ayah +2
+@lompat k3ap_akhir
+
+:: k3ap_langit
+@atur pesan_langit_merah = 1
+@tampil ayah kaget
+Ayah: Langit merah? Kamu dengar dari mana?
+{nama}: Dari Ayah sendiri. Waktu aku kecil. "Langit merah di sore hari, nelayan tinggal di tepi." Ayah yang mengajarkan.
+* Ayah terdiam. Lalu tertawa kecil, serak.
+@tampil ayah senyum
+Ayah: Ayah lupa pernah mengajarkannya. Tapi ya. Ayah janji.
+@percaya ayah +4
+@cinta ayah +4
+@catatan Ayah berjanji tidak melaut bila langit sore merah.
+
+:: k3ap_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  IBU — BEKAL & MENANGIS DI DAPUR
+# ----------------------------------------------------------
+
+:: k3_ibu_dapur
+@tampil ibu biasa
+* Dapur penuh asap dan bau bawang. Ibu menggoreng teri dan kacang dalam wajan besar, cukup untuk sebulan.
+Ibu: Ini sambal teri. Tahan dua minggu kalau ditutup rapat. Kalau uangmu habis, nasi sama sambal ini sudah cukup.
+* Kamu memperhatikan punggung Ibu. Bahunya bergetar sedikit. Wajan diaduk terlalu lama.
+@pilihan
+> Peluk Ibu dari belakang -> k3id_peluk
+> "Bu, nangis?" -> k3id_tanya
+> Bantu mengupas bawang, tanpa bicara -> k3id_bantu
+
+:: k3id_peluk
+@tampil ibu menangis
+* Ibu kaget, sodet hampir jatuh. Lalu ia menangis, benar-benar menangis, untuk pertama kalinya di depanmu.
+Ibu: Ibu cuma... Ibu nggak bisa ikut ke sana. Nggak bisa lihat kamu makan atau nggak. Sakit atau nggak.
+{nama}: Aku telepon tiap hari, Bu.
+Ibu: Tiap hari itu janji yang berat. Dua hari sekali saja, tapi ditepati.
+@cinta ibu +6
+@lompat k3id_akhir
+
+:: k3id_tanya
+@tampil ibu senyum
+Ibu: Bawang, Nak. Bawang.
+* Tidak ada bawang yang sedang dikupas.
+@cinta ibu +3
+@lompat k3id_akhir
+
+:: k3id_bantu
+* Kamu mengupas bawang. Matamu ikut perih, dan kali ini memang karena bawang. Ibu melirikmu, lalu tertawa sambil mengusap pipinya dengan punggung tangan.
+Ibu: Nah. Sekarang kita sama-sama nangis karena bawang.
+@cinta ibu +4
+@stat kewarasan +3
+
+:: k3id_akhir
+@barang ikan_asin 1
+@sembunyi ibu
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAYU — PAMIT
+# ----------------------------------------------------------
+
+:: k3_bayu_pamit
+@tampil bayu biasa
+* Bayu duduk di atas perahu bapaknya yang tertambat, melempar kerikil ke air.
+Bayu: Nggak terasa, ya. Dulu kita bertiga main di sini. Kamu, aku, {nama_sahabat}.
+Bayu: Sekarang tinggal satu.
+@jika bareng_sekar == 1 -> k3bp_sekar
+@tampil bayu sedih
+Bayu: Jujur ya. Aku iri. Bukan sama kotanya. Sama kamu yang berani milih.
+@pilihan
+> "Kamu juga milih, Bay. Milih jaga adik-adikmu." -> k3bp_milih
+> "Mau ikut? Kita cari kerja bareng di sana." -> k3bp_ajak
+
+:: k3bp_milih
+* Bayu diam lama. Kerikil terakhirnya tidak dilempar, hanya digenggam.
+@tampil bayu senyum
+Bayu: ...Iya, ya. Aku juga milih. Kok baru sekarang aku sadar.
+@percaya bayu +6
+@cinta bayu +3
+@lompat k3bp_akhir
+
+:: k3bp_ajak
+@tampil bayu senyum
+Bayu: Hah. Terus Bapak melaut sama siapa? Adik-adikku makan apa?
+Bayu: Tapi makasih udah ngajak. Serius.
+@cinta bayu +3
+@lompat k3bp_akhir
+
+:: k3bp_sekar
+@tampil bayu malu
+Bayu: Eh. Kamu satu kereta sama Sekar, kan?
+{nama}: Iya.
+Bayu: Titip dia, ya. Dia itu... kalau di tempat baru suka diam aja. Pura-pura kuat. Kalau ada yang ganggu dia di sana, kabari aku.
+@pilihan
+> "Tenang. Aku jaga dia." -> k3bp_jaga
+> "Kenapa nggak bilang sendiri ke dia, Bay?" -> k3bp_bilang
+
+:: k3bp_jaga
+@tampil bayu senyum
+Bayu: Sip. Kamu memang teman.
+* Bayu menepuk bahumu keras-keras. Kamu tersenyum, tapi ada yang terasa berat di dadamu, entah apa.
+@percaya bayu +5
+@atur titip_sekar = 1
+@lompat k3bp_akhir
+
+:: k3bp_bilang
+@tampil bayu kaget
+Bayu: B-bilang apa? Nggak ada yang perlu dibilang! Aku cuma... teman. Tetangga. Udah.
+* Telinganya merah sampai ke leher.
+@cinta bayu +2
+
+:: k3bp_akhir
+@sembunyi bayu
+@kembali
+
+
+# ----------------------------------------------------------
+#  JURAGAN DARTO — FOTO RAKA (bila belum pernah diberikan & kepercayaan cukup)
+# ----------------------------------------------------------
+
+:: k3_darto_foto
+@tampil darto biasa
+* Juragan Darto duduk sendirian di beranda gudang yang sudah tutup, memandangi mercusuar.
+Juragan Darto: Kamu. Sudah mau berangkat?
+{nama}: Sabtu, Juragan.
+* Ia merogoh dompet kulit yang sudah retak-retak. Dari balik lipatan, ia mengeluarkan foto kecil yang warnanya sudah pudar.
+@tampil darto sedih
+Juragan Darto: Ini Raka. Anak saya. Umurnya delapan belas di foto ini. Sekarang... kalau masih hidup, hampir empat puluh.
+Juragan Darto: Dia pergi ke Sakala dua puluh tahun lalu. Bertengkar dengan saya soal gudang ini. Sejak itu tidak ada kabar.
+Juragan Darto: Saya tidak minta kamu mencarinya. Sakala itu besar. Tapi kalau... kalau kebetulan kamu lihat wajah yang mirip...
+@pilihan
+> "Saya akan coba cari, Juragan." -> k3df_cari
+> "Saya simpan fotonya, Juragan. Siapa tahu." -> k3df_simpan
+
+:: k3df_cari
+@atur foto_raka = 1
+@atur misi_raka = 1
+@tampil darto kaget
+* Juragan Darto menatapmu, seperti tidak yakin dengan yang didengarnya. Lalu ia memalingkan wajah ke laut.
+Juragan Darto: ...Jangan janji yang tidak bisa kamu tepati.
+{nama}: Bukan janji, Juragan. Usaha.
+@percaya darto +8
+@cinta darto +4
+@catatan Foto Bang Raka dari Juragan Darto. Pergi ke Sakala ±20 tahun lalu. Dicari.
+@lompat k3df_akhir
+
+:: k3df_simpan
+@atur foto_raka = 1
+Juragan Darto: Ya. Siapa tahu.
+@percaya darto +4
+@catatan Foto Bang Raka dari Juragan Darto. Pergi ke Sakala ±20 tahun lalu.
+
+:: k3df_akhir
+@sembunyi darto
+@kembali
+
+
+# ----------------------------------------------------------
+#  SEKAR — MENGURUS BERKAS BERSAMA (bila satu kereta)
+# ----------------------------------------------------------
+
+:: k3_sekar_berkas
+@tampil sekar biasa
+* Sekar duduk di teras rumahnya dengan setumpuk formulir beasiswa dan pulpen yang tutupnya sudah digigit-gigit.
+Sekar: Kamu sudah daftar ulang? Aku masih harus isi surat keterangan tidak mampu, surat kesehatan, surat pernyataan orang tua...
+Sekar: Bagian ini, "Pekerjaan orang tua". Ibu penjahit. Tapi matanya... aku harus tulis apa?
+@pilihan
+> "Tulis apa adanya. Penjahit." -> k3sb_apa_adanya
+> Bantu isi formulir bersama sampai selesai -> k3sb_bantu
+
+:: k3sb_apa_adanya
+Sekar: ...Iya. Penjahit. Ibu masih menjahit, kan. Pelan-pelan, tapi masih.
+@tampil sekar senyum
+* Ia menulis kata itu dengan huruf paling rapi.
+@percaya sekar +4
+@lompat k3sb_akhir
+
+:: k3sb_bantu
+@maju 1 jam
+* Satu jam penuh. Kamu membacakan, Sekar menulis. Dua kali salah tulis tanggal lahir, dua kali tertawa.
+@tampil sekar senyum
+Sekar: Selesai! Ternyata kalau berdua cepat, ya.
+@cinta sekar +4
+@percaya sekar +3
+
+:: k3sb_akhir
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  SEKAR — MENGHIBUR BU WATI (bila satu kereta)
+# ----------------------------------------------------------
+
+:: k3_sekar_wati
+@kenal wati
+@tampil sekar sedih
+* Di dalam rumah Sekar, Bu Wati duduk di depan mesin jahit, tapi tidak menjahit. Tangannya meraba-raba kain biru.
+Sekar: Ibu dari pagi begitu. Katanya mau jahit baju buat aku, tapi jarumnya nggak kelihatan.
+Bu Wati: Itu kamu, Nak {nama}? Suaranya mirip.
+@pilihan
+> "Saya yang masukkan benangnya, Bu." -> k3sw_benang
+> Ajak Bu Wati bercerita tentang Sekar waktu kecil -> k3sw_cerita
+
+:: k3sw_benang
+* Kamu memasukkan benang ke lubang jarum. Bu Wati mulai menjahit, pelan, mengikuti rasa di ujung jarinya. Jahitannya tidak lurus, tapi kuat.
+Bu Wati: Nah. Begini. Jahitan ibu-ibu itu tidak perlu lurus. Yang penting tidak lepas.
+@tampil sekar senyum
+@cinta sekar +4
+@lompat k3sw_akhir
+
+:: k3sw_cerita
+Bu Wati: Sekar kecil? Hah. Dia dulu takut kambing. Kambing tetangga mengembik, dia naik ke atas meja jahit.
+@tampil sekar malu
+Sekar: Ibu!
+* Bu Wati tertawa sampai terbatuk. Sekar menutup wajahnya, tapi kamu melihat ia tersenyum di balik tangannya. Untuk sebentar, rumah itu tidak sesepi tadi.
+@cinta sekar +3
+@stat kewarasan +4
+
+:: k3sw_akhir
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  SEKAR — PAMIT (Sekar tetap di desa)
+# ----------------------------------------------------------
+
+:: k3_sekar_pamit
+@tampil sekar biasa
+* Sekar sedang mengantar jahitan. Melihatmu, ia menurunkan bungkusan dan tersenyum kecil.
+Sekar: Jadi berangkat Sabtu?
+{nama}: Iya.
+Sekar: Aku buatkan sesuatu. Ibu yang mengajari, aku yang menjahit. Jahitannya jelek.
+* Kantong kecil dari kain perca biru, dengan tali serut. Di sudutnya ada sulaman miring: sebuah mercusuar.
+@pilihan
+> "Ini bagus sekali, Sekar." -> k3sp_bagus
+> "Nanti aku kirim buku dari Sakala. Buku apa saja yang kamu mau." -> k3sp_buku
+
+:: k3sp_bagus
+@tampil sekar malu
+Sekar: Nggak usah bohong. Mercusuarnya miring.
+{nama}: Mercusuar kita memang agak miring.
+* Sekar tertawa, lalu cepat-cepat mengambil bungkusannya lagi.
+@cinta sekar +5
+@lompat k3sp_akhir
+
+:: k3sp_buku
+@tampil sekar senyum
+Sekar: Beneran? Buku bekas juga nggak apa-apa. Yang penting ada tulisannya.
+@atur janji_buku_sekar = 1
+@percaya sekar +5
+@cinta sekar +2
+
+:: k3sp_akhir
+@catatan Kantong perca bersulam mercusuar, buatan Sekar.
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  PAK HAJI — DOA UNTUK YANG MERANTAU
+# ----------------------------------------------------------
+
+:: k3_haji_doa
+@kenal haji
+@tampil haji senyum
+* Pak Haji Somad sedang duduk di beranda, tasbih di tangan.
+Pak Haji: Nak {nama}. Kabarnya mau merantau ke Sakala?
+{nama}: Iya, Pak Haji. Sekolah.
+Pak Haji: Bagus. Bagus. Cucu-cucu Bapak juga di sana. Mereka pintar-pintar, tapi pulangnya setahun sekali. Itu pun buru-buru.
+* Ia mengangkat tangan dan membacakan doa pendek. Kamu menunduk.
+Pak Haji: Pesan Bapak satu saja. Di kota, orang mengukur kamu dari bajumu. Di sini, orang mengukur kamu dari salammu. Jangan lupa yang kedua.
+@uang +20000
+* Ia menyelipkan uang dua puluh ribu ke tanganmu dan menolak dikembalikan.
+@cinta haji +4
+@sembunyi haji
+@kembali

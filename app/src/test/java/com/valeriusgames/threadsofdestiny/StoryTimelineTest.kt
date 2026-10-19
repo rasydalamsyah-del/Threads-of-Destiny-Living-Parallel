@@ -12,7 +12,7 @@ import java.io.File
 import java.time.LocalDate
 
 /**
- * Menjalankan naskah ASLI (prolog → bab2 → bab3) dengan sistem waktu yang sama dengan game,
+ * Menjalankan naskah ASLI (prolog → bab1 → bab2 → bab3/bab4 kota atau desa) dengan sistem waktu yang sama dengan game,
  * lalu memeriksa hari & jam di setiap adegan cocok dengan yang tertulis di cerita.
  */
 class StoryTimelineTest {
@@ -146,12 +146,32 @@ class StoryTimelineTest {
         assertEquals(Cmd.Info("bayu", "hobi"), s.cmds[8])
     }
 
+    /** Bab 1–2 (sama untuk semua pemain): 1 Juni → keputusan Jumat 26 Juni. docs/CERITA.md 6a–6b */
+    private fun assertSharedChapters(m: List<Mark>, onBoat: Boolean = false) {
+        with(m.at("Senin, 1 Juni 2026 · malam")) { assertEquals("1/6", date); assertEquals("20:00", clock) }
+        with(m.at("Selasa, 2 Juni 2026")) { assertEquals("2/6", date); assertEquals("06:00", clock) }
+        with(m.at("Rabu, 3 Juni 2026")) { assertEquals("3/6", date); assertEquals("06:30", clock) }
+        with(m.at("Kamis, 4 Juni 2026")) { assertEquals("4/6", date); assertEquals(if (onBoat) "04:15" else "06:50", clock) }
+        with(m.at("Kamis, 18 Juni 2026")) { assertEquals("18/6", date); assertEquals("20:00", clock) }
+        with(m.at("Minggu, 21 Juni 2026")) { assertEquals("21/6", date); assertEquals("19:30", clock) }
+        with(m.at("Jumat, 26 Juni 2026")) { assertEquals("26/6", date); assertEquals("Jumat", weekday); assertEquals("06:30", clock) }
+        assertTrue(LocalDate.of(2026, 6, 1).dayOfWeek.value == 1)  // 1 Juni 2026 memang Senin
+        assertTrue(LocalDate.of(2026, 6, 26).dayOfWeek.value == 5) // 26 Juni 2026 memang Jumat
+    }
+
     @Test fun cityPathTimeline() {
-        val m = run(setOf("sma", "uang_ortu", "kos_sedang", "dimas_canda", "cerita_nadia"))
+        val m = run(setOf("putus_kota", "uang_ortu", "kos_sedang", "dimas_canda", "cerita_nadia"))
         assertConsistent(m)
-        with(m.at("Senin, 20:00")) { assertEquals("Senin", weekday); assertEquals("20:00", clock) }
-        with(m.at("Sabtu, 11 Juli 2026")) { assertEquals("11/7", date); assertEquals("06:00", clock) }
-        with(m.at("Kota Sakala")) { assertEquals("Sabtu", weekday); assertEquals("11:00", clock) }
+        assertSharedChapters(m)
+        // Bab 3 Kota "Pamit"
+        with(m.at("Sabtu, 27 Juni 2026")) { assertEquals("27/6", date); assertEquals("06:00", clock) }
+        with(m.at("Senin, 29 Juni 2026")) { assertEquals("29/6", date); assertEquals("07:30", clock) }
+        with(m.at("Sabtu, 4 Juli 2026")) { assertEquals("4/7", date); assertEquals("19:00", clock) }
+        with(m.at("Senin, 6 Juli 2026")) { assertEquals("6/7", date); assertEquals("06:00", clock) }
+        with(m.at("Jumat, 10 Juli 2026")) { assertEquals("10/7", date); assertEquals("19:30", clock) }
+        with(m.at("Sabtu, 11 Juli 2026")) { assertEquals("11/7", date); assertEquals("07:00", clock) }
+        // Bab 4 Kota
+        with(m.at("Kota Sakala")) { assertEquals("11/7", date); assertEquals("Sabtu", weekday); assertEquals("11:00", clock) }
         with(m.at("Malam pertama")) { assertEquals("Sabtu", weekday); assertEquals("20:00", clock) }
         with(m.at("Minggu, 12 Juli 2026")) { assertEquals("12/7", date); assertEquals("06:00", clock) }
         with(m.at("Senin, 13 Juli 2026")) { assertEquals("13/7", date); assertEquals("06:00", clock) }
@@ -161,35 +181,43 @@ class StoryTimelineTest {
         with(m.at("Sabtu sore")) { assertEquals("25/7", date); assertEquals("15:00", clock) }
     }
 
-    @Test fun villagePathTimeline() {
-        // jalur desa dimainkan hari demi hari: docs/CERITA.md bagian 6
-        val m = run(setOf("kerja", "diterima", "bayar_sendiri"))
+    @Test fun cityPathFromBoat() {
+        // ditolak di gudang (ikut perahu), lalu memilih kota: tetap sampai di Sakala tepat waktu
+        val m = run(setOf("putus_kota", "uang_ortu", "kos_sedang"), rejectJobs = true)
         assertConsistent(m)
-        with(m.at("Senin, 22 Juni 2026")) { assertEquals("22/6", date); assertEquals("Senin", weekday); assertEquals("06:00", clock) }
-        with(m.at("Selasa, 23 Juni 2026")) { assertEquals("23/6", date); assertEquals("06:00", clock) }
-        with(m.at("Rabu, 24 Juni 2026")) { assertEquals("24/6", date); assertEquals("06:30", clock) }
-        with(m.at("Kamis, 25 Juni 2026")) { assertEquals("25/6", date); assertEquals("06:50", clock) }
-        with(m.at("Minggu, 5 Juli 2026")) { assertEquals("5/7", date); assertEquals("20:00", clock) }
+        assertSharedChapters(m, onBoat = true)
+        with(m.at("Senin, 29 Juni 2026")) { assertEquals("07:30", clock) }
+        with(m.at("Kota Sakala")) { assertEquals("11/7", date); assertEquals("11:00", clock) }
+    }
+
+    @Test fun villagePathTimeline() {
+        // jalur desa dimainkan hari demi hari: docs/CERITA.md bagian 6c & ALUR_BAB4.md
+        val m = run(setOf("putus_desa", "bayar_sendiri"))
+        assertConsistent(m)
+        assertSharedChapters(m)
+        // Bab 3 Desa "Musim Ombak Tinggi"
+        with(m.at("Sabtu, 27 Juni 2026")) { assertEquals("27/6", date); assertEquals("06:00", clock) }
+        with(m.at("Sabtu, 4 Juli 2026")) { assertEquals("4/7", date); assertEquals("19:00", clock) }
         with(m.at("Senin, 6 Juli 2026")) { assertEquals("6/7", date); assertEquals("Senin", weekday); assertEquals("06:00", clock) }
         with(m.at("Sabtu, 11 Juli 2026")) { assertEquals("11/7", date); assertEquals("07:00", clock) }
         with(m.at("Senin, 13 Juli 2026")) { assertEquals("13/7", date); assertEquals("05:45", clock) }
         with(m.at("Dua hari kemudian")) { assertEquals("15/7", date); assertEquals("Rabu", weekday) }
         with(m.at("Minggu, 19 Juli 2026")) { assertEquals("19/7", date); assertEquals("20:00", clock) }
+        // Bab 4 Desa "Tujuh Belasan"
         with(m.at("Senin, 20 Juli 2026")) { assertEquals("20/7", date) }
         with(m.at("Senin, 3 Agustus 2026")) { assertEquals("3/8", date); assertEquals("Senin", weekday) }
         with(m.at("Jumat, 7 Agustus 2026")) { assertEquals("7/8", date); assertEquals("17:30", clock) }
         with(m.at("Sabtu, 8 Agustus 2026")) { assertEquals("8/8", date) }
         with(m.at("Minggu, 16 Agustus 2026")) { assertEquals("16/8", date); assertEquals("15:00", clock) }
         with(m.at("Senin, 17 Agustus 2026")) { assertEquals("17/8", date); assertEquals("07:00", clock) }
-        assertTrue(LocalDate.of(2026, 6, 22).dayOfWeek.value == 1) // 22 Juni 2026 memang Senin
         assertTrue(LocalDate.of(2026, 8, 17).dayOfWeek.value == 1) // 17 Agustus 2026 memang Senin
     }
 
     @Test fun villagePathOnBoatWhenRejected() {
-        // ditolak di gudang → ikut perahu Pak Karta subuh Kamis
-        val m = run(setOf("kerja", "bayar_sendiri"), rejectJobs = true)
+        // ditolak di gudang → ikut perahu Pak Karta subuh Kamis 4 Juni
+        val m = run(setOf("putus_desa", "bayar_sendiri"), rejectJobs = true)
         assertConsistent(m)
-        with(m.at("Kamis, 25 Juni 2026")) { assertEquals("04:15", clock) }
+        assertSharedChapters(m, onBoat = true)
         with(m.at("Senin, 17 Agustus 2026")) { assertEquals("17/8", date) }
     }
 }

@@ -60,7 +60,6 @@ usia_min    = 15
 cara        = lamar
 sulit       = 55
 orang_dalam = ayah
-berkas      = ijazah_smp
 tes         = tidak
 keterangan  = Milik Juragan Darto. Menjemur dan mengasinkan ikan. Bau, panas, tapi upahnya lumayan.
 teks        = Matahari menyengat. Tanganmu perih kena garam, tapi tumpukan ikan di tampah makin rapi.

@@ -1,0 +1,194 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — BAB 1 (Selasa) & BAB 2 MINGGU 4 (minggu keputusan)
+#  Pemicu & jam: data/adegan.txt · Alur: docs/CERITA.md 6a–6b
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  BAB 1 SELASA — HALAMAN PAK HAJI (kerja serabutan pertama)
+# ----------------------------------------------------------
+
+:: p_haji_halaman
+@kenal haji
+@tampil haji senyum
+* Seorang kakek berpeci putih berhenti di depan warung, bersandar pada tongkat. Pak Haji Somad, tetua desa yang rumahnya paling besar di ujung jalan.
+Pak Haji: Nak {nama}, ya? Anaknya Darman? Sudah lulus, katanya.
+Pak Haji: Halaman rumah Bapak penuh daun ketapang. Cucu-cucu Bapak di kota semua. Mau bantu menyapu? Nanti Bapak kasih uang jajan.
+@pilihan
+> "Boleh, Pak Haji." -> haji_ya
+> "Maaf, Pak, saya sedang ada urusan." -> haji_tidak
+
+:: haji_ya
+* Halaman Pak Haji luas sekali. Daun ketapang merah-cokelat menumpuk sampai mata kaki. Kamu menyapu sampai keringat membasahi kaus.
+* Pak Haji duduk di kursi rotan di beranda, memperhatikanmu sambil memutar tasbih.
+Pak Haji: Kamu tahu, Nak? Dulu, waktu Bapak seumurmu, mercusuar itu masih menyala setiap malam.
+Pak Haji: Penjaganya namanya Pak Darsono. Setiap sore ia naik seratus dua puluh anak tangga. Kapal-kapal dari jauh tahu: kalau melihat cahaya itu, berarti sudah dekat rumah.
+Pak Haji: Lalu Pak Darsono meninggal, lampunya pecah dihantam badai, dan tidak ada yang mau memperbaikinya. Desa ini lupa caranya menuntun orang pulang.
+* Kamu teringat dua anak kecil yang dulu berjanji di bawah mercusuar itu. Salah satunya bilang, suatu hari ia ingin menyalakannya lagi.
+@maju 1 jam 30 menit
+@uang +15000
+@stat energi -12
+@cinta haji +5
+@tampil haji senyum
+Pak Haji: Rajin. Kalau Bapak butuh bantuan lagi, Bapak panggil, ya.
+@lompat haji_akhir
+
+:: haji_tidak
+Pak Haji: Ya, ya. Anak muda memang sibuk.
+* Pak Haji melanjutkan langkahnya pelan-pelan. Tongkatnya mengetuk-ngetuk jalan tanah.
+
+:: haji_akhir
+@sembunyi haji
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU KEPUTUSAN — LARAS (temui Laras, 22–25 Juni)
+# ----------------------------------------------------------
+
+:: b2_laras_pergi
+@tampil laras sedih
+* Laras sedang menggambar, tapi pensilnya diam saja di atas kertas sejak tadi.
+Laras: Kak. Jumat nanti Kakak mau pilih apa?
+@jika condong == desa -> b2lp2_desa
+{nama}: Belum tahu, Ras.
+Laras: Kalau Kakak pergi... kamar Kakak buat aku, ya? Biar kamarnya nggak kesepian.
+* Ia mengatakannya sambil tertawa, tapi matanya basah.
+@pilihan
+> "Boleh. Tapi jangan dibongkar-bongkar." -> b2lp2_kamar
+> "Kakak belum tentu pergi, Ras." -> b2lp2_belum
+
+:: b2lp2_kamar
+@tampil laras senyum
+Laras: Asik! Nanti aku jaga. Kalau Kakak pulang, kamarnya masih sama persis.
+@info laras kisah_2
+@cinta laras +4
+@lompat b2lp2_akhir
+
+:: b2lp2_belum
+Laras: ...Iya. Belum tentu.
+* Laras mengulang kata itu pelan, seperti mantra.
+@percaya laras +2
+@lompat b2lp2_akhir
+
+:: b2lp2_desa
+{nama}: Kayaknya di sini, Ras.
+@tampil laras senyum
+Laras: Bagus! Soalnya kalau Kakak pergi, aku nggak punya guru matematika yang pakai roti.
+* Laras tertawa, lalu tiba-tiba memelukmu dari samping, cepat sekali, sebelum kembali menggambar seolah tidak terjadi apa-apa.
+@cinta laras +3
+
+:: b2lp2_akhir
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU KEPUTUSAN — NASIHAT AYAH (dermaga, sebelum berangkat melaut)
+# ----------------------------------------------------------
+
+:: b2_ayah_nasihat
+@tampil ayah biasa
+* Ayah duduk di tepi perahunya yang sudah siap berangkat, menggulung rokok kretek yang tidak pernah ia nyalakan sejak Ibu melarang.
+Ayah: Sudah tahu mau pilih apa?
+@jika tahu_hutang_perahu == 1 -> b2an_hutang
+{nama}: Belum, Yah.
+Ayah: Laut itu, Nak, tidak pernah bilang ke mana ikan pergi. Nelayan harus memilih sendiri arahnya. Kadang benar, kadang pulang dengan perahu kosong.
+Ayah: Tapi nelayan yang tidak pernah berangkat karena takut salah arah... itu bukan nelayan.
+@percaya ayah +3
+@lompat b2an_akhir
+
+:: b2an_hutang
+{nama}: Yah... soal perahu. Kalau aku ke kota, uang Ayah—
+@tampil ayah kesal
+Ayah: Jangan jadikan hutang Ayah alasan untuk tidak sekolah. Dan jangan jadikan sekolah alasan untuk lari dari keluarga.
+@tampil ayah sedih
+Ayah: Pilih karena kamu mau. Bukan karena kamu kasihan. Kasihan itu tidak bisa jadi bekal hidup.
+@percaya ayah +5
+@cinta ayah +2
+
+:: b2an_akhir
+* Ayah naik ke perahu. Langit barat bersih, jingga lembut.
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU KEPUTUSAN — BAYU (temui Bayu)
+# ----------------------------------------------------------
+
+:: b2_bayu_pilihan
+@tampil bayu biasa
+Bayu: Jadi... Jumat, ya?
+* Bayu tidak menatapmu. Ia sibuk mengikat kail yang sebenarnya sudah terikat.
+@jika condong == kota -> b2bpl_kota
+@jika condong == desa -> b2bpl_desa
+Bayu: Kamu masih bingung, kan? Kelihatan.
+Bayu: Aku cuma mau bilang satu hal. Apa pun pilihanmu, jangan karena orang lain. Termasuk aku.
+@percaya bayu +3
+@lompat b2bpl_akhir
+
+:: b2bpl_kota
+@tampil bayu sedih
+Bayu: Jujur ya, aku iri. Banget. Aku juga mau ke kota, lihat gedung tinggi, sekolah lagi.
+Bayu: Tapi kalau aku pergi, adik-adikku makan apa?
+@pilihan
+> "Suatu hari kamu juga bisa, Bay." -> b2bpl_bisa
+> "Aku nggak jadi pergi kalau kamu nggak mau aku pergi." -> b2bpl_korban
+
+:: b2bpl_bisa
+@tampil bayu senyum
+Bayu: Iya. Suatu hari. Nanti aku nyusul naik kapal ikan sendiri, haha.
+@cinta bayu +4
+@lompat b2bpl_akhir
+
+:: b2bpl_korban
+@tampil bayu kesal
+Bayu: Jangan bego! Masa gara-gara aku!
+* Bayu mendorong bahumu, keras tapi tidak marah.
+Bayu: Pergi sana kalau memang mau. Aku nggak mau jadi alasan kamu nyesel.
+@percaya bayu +4
+@lompat b2bpl_akhir
+
+:: b2bpl_desa
+@tampil bayu senyum
+Bayu: Kalau kamu di sini, ayo kita bikin rencana. Tahun depan kita kumpulin uang, beli perahu kecil berdua. Perahu "Kongsi Dermaga"!
+{nama}: Nama apa itu.
+Bayu: Nama keren! Nanti kamu juga suka.
+@cinta bayu +4
+
+:: b2bpl_akhir
+@sembunyi bayu
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU KEPUTUSAN — BERKAS PENDAFTARAN (temui Ibu, bila condong kota)
+# ----------------------------------------------------------
+
+:: b2_berkas
+@tampil ibu biasa
+* Ibu mengeluarkan map plastik dari lemari. Di dalamnya: kartu keluarga yang sudah lecek, akta kelahiranmu, dan pas foto lama waktu SD.
+Ibu: Pas fotonya harus yang baru, ya. Nanti Ibu antar ke toko foto. Fotokopi SKL lima lembar, kata Bu Narti.
+* Tangan Ibu berhenti di atas akta kelahiranmu. Ia mengusap tulisan namamu pelan-pelan.
+Ibu: Rasanya baru kemarin Ibu menggendong kamu ke dermaga, menunggu Ayahmu pulang. Sekarang kamu mau ngurus berkas sendiri.
+@pilihan
+> "Aku belum pasti pergi, Bu." -> b2bk_belum
+> Peluk Ibu -> b2bk_peluk
+
+:: b2bk_belum
+Ibu: Iya, Ibu tahu. Tapi disiapkan dulu. Lebih baik siap dan tidak dipakai, daripada perlu dan tidak ada.
+@percaya ibu +2
+@lompat b2bk_akhir
+
+:: b2bk_peluk
+* Ibu terkejut, lalu tertawa kecil sambil menepuk-nepuk punggungmu.
+@tampil ibu menangis
+Ibu: Ih, apa sih. Ibu jadi cengeng.
+@cinta ibu +5
+
+:: b2bk_akhir
+@atur berkas_siap = 1
+@sembunyi ibu
+@kembali

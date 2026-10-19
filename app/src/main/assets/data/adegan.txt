@@ -21,7 +21,7 @@
 #  Urutan di file = prioritas (yang di atas dicek lebih dulu).
 # ==========================================================
 
-# ---------------- BAB 1 — Senin 22 Juni (semua pemain) ----------------
+# ---------------- BAB 1 — Senin 1 Juni (semua pemain) ----------------
 
 [p_ayah_siang]
 naskah = adegan_prolog.txt
@@ -45,150 +45,244 @@ syarat = bab == 1
 
 [p_makan_malam]
 naskah = adegan_prolog.txt
-judul  = Makan malam pertama
+judul  = Makan malam pertama (Laras & kecondongan)
 lokasi = ruang_makan
 waktu  = setiap hari 17:45-18:30
-syarat = bab == 1
+syarat = bab == 1 && tgl == 601
 
 [p_ayah_dermaga]
 naskah = adegan_prolog.txt
-judul  = Ayah berangkat melaut
+judul  = Ayah berangkat melaut, cerita badai
 orang  = ayah
 lokasi = dermaga
 syarat = bab == 1
 
-# ---------------- BAB 2 DESA — Mencari Pegangan (23 Juni – 5 Juli) ----------------
+# ---------------- BAB 1 — Selasa 2 Juni ----------------
 
-[b2_sekar_kenalan]
-naskah = adegan_teman.txt
-judul  = Kenalan dengan Sekar (mengantar seragam Laras)
+[p_haji_halaman]
+naskah = adegan_bab2.txt
+judul  = Pak Haji minta halamannya disapu, cerita mercusuar
 lokasi = rumah_warung
-waktu  = setiap hari 08:00-18:00
-syarat = desa_bab == 2
+waktu  = selasa 13:00-17:30
+syarat = bab == 1 && tgl == 602
 
-[b2_bakar_ikan]
-naskah = adegan_teman.txt
-judul  = Bakar ikan malam Minggu, rahasia Bayu
-lokasi = dermaga
-waktu  = sabtu 19:15-23:00
-syarat = desa_bab == 2 && tgl == 627
-
-[b2_laras_diejek]
-naskah = adegan_keluarga.txt
-judul  = Laras diejek "bau ikan"
-lokasi = ruang_tengah
-waktu  = senin-sabtu 14:00-16:00
-syarat = desa_bab == 2 && tgl >= 625
-
-[b2_bayu_perahu]
-naskah = adegan_teman.txt
-judul  = Tawaran melaut & utang bapak Bayu
-orang  = bayu
-syarat = desa_bab == 2
-
-[b2_sekar_buku]
-naskah = adegan_teman.txt
-judul  = Sekar, buku, beasiswa, Paket C
-orang  = sekar
-syarat = desa_bab >= 2 && desa_bab <= 3 && adegan_b2_sekar_kenalan == 1
+# ---------------- BAB 2 — 4–26 Juni (semua pemain) ----------------
+# minggu 1: tgl 604–607 · minggu 2: 608–614 · minggu 3: 615–621 · minggu 4: 622–626
 
 [b2_ibu_warung]
 naskah = adegan_keluarga.txt
 judul  = Warung sepi, ide untuk Ibu
 orang  = ibu
 lokasi = rumah_warung
-syarat = desa_bab == 2
+syarat = bab == 2
+
+[b2_bayu_perahu]
+naskah = adegan_teman.txt
+judul  = Perahu Pak Karta, utang bapak Bayu, ajakan bakar ikan
+orang  = bayu
+syarat = bab == 2 && tgl <= 612
+
+[b2_bakar_ikan]
+naskah = adegan_teman.txt
+judul  = Bakar ikan malam Minggu, rahasia Bayu
+lokasi = dermaga
+waktu  = sabtu 19:15-23:00
+syarat = bab == 2 && tgl == 613
+
+[b2_laras_diejek]
+naskah = adegan_keluarga.txt
+judul  = Laras diejek "bau ikan"
+lokasi = ruang_tengah
+waktu  = senin-sabtu 14:00-16:00
+syarat = bab == 2 && tgl >= 608 && tgl <= 619
+
+[b2_sekar_buku]
+naskah = adegan_teman.txt
+judul  = Sekar, buku, beasiswa, mata ibunya, Paket C
+orang  = sekar
+syarat = bab == 2 && tgl >= 608 && adegan_b2_sekar_kenalan == 1
 
 [b2_ayah_jaring]
 naskah = adegan_keluarga.txt
 judul  = Belajar simpul jaring dari Ayah
 orang  = ayah
 lokasi = rumah_warung
-syarat = desa_bab == 2
+syarat = bab == 2 && tgl >= 608
+
+[b2_darto_perkutut]
+naskah = adegan_darto.txt
+judul  = Perkutut Juragan Darto
+orang  = darto
+syarat = bab == 2 && tgl >= 608
 
 [b2_ayah_radio]
 naskah = adegan_keluarga.txt
 judul  = Radio dangdut & cerita Ayah melamar Ibu
 orang  = ayah
 lokasi = ruang_tengah
-syarat = desa_bab == 2
+syarat = bab == 2
 
 [b2_laras_pr]
 naskah = adegan_keluarga.txt
 judul  = PR matematika Laras
 orang  = laras
 lokasi = ruang_tengah
-syarat = desa_bab >= 2 && desa_bab <= 3 && adegan_b2_laras_diejek == 1
+syarat = bab == 2 && adegan_b2_laras_diejek == 1
 
 [b2_ibu_sinetron]
 naskah = adegan_keluarga.txt
 judul  = Sinetron & kampung halaman Ibu
 orang  = ibu
 lokasi = ruang_tengah
-syarat = desa_bab == 2
+syarat = bab == 2
 
-[b2_darto_perkutut]
-naskah = adegan_darto.txt
-judul  = Perkutut Juragan Darto
-orang  = darto
-syarat = desa_bab == 2
-
-# ---------------- BAB 3 DESA — Benang Merah (6 – 19 Juli) ----------------
+# minggu 3 — rahasia keluarga
 
 [b3_darto_hutang]
 naskah = adegan_darto.txt
 judul  = Bicara soal hutang perahu Ayah
 orang  = darto
-syarat = desa_bab >= 3 && tahu_hutang_perahu == 1
-
-[b3_darto_anak]
-naskah = adegan_darto.txt
-judul  = Raka, anak Juragan yang tidak pulang
-orang  = darto
-syarat = desa_bab >= 3 && percaya_darto >= 50
+syarat = bab >= 2 && tahu_hutang_perahu == 1
 
 [b3_ayah_jujur]
 naskah = adegan_keluarga.txt
 judul  = Jujur pada Ayah soal cicilan
 orang  = ayah
-syarat = desa_bab >= 3 && adegan_b3_darto_hutang == 1
-
-[b3_sekar_pilihan]
-naskah = adegan_teman.txt
-judul  = Sekar harus memutuskan soal beasiswa
-orang  = sekar
-syarat = desa_bab == 3 && tgl <= 710 && adegan_b2_sekar_buku == 1
-
-[b3_sekar_jahitan]
-naskah = adegan_teman.txt
-judul  = Kerja antar jahitan Bu Wati
-orang  = sekar
-syarat = desa_bab >= 3 && tgl >= 713 && sekar_pergi != 1 && adegan_b2_sekar_kenalan == 1
+syarat = bab >= 2 && adegan_b3_darto_hutang == 1
 
 [b3_bayu_utang]
 naskah = adegan_teman.txt
 judul  = Bayu mungkin jadi buruh gudang
 orang  = bayu
-syarat = desa_bab == 3
+syarat = bab == 2 && tgl >= 615
 
 [b3_ibu_cerita]
 naskah = adegan_keluarga.txt
 judul  = Ibu bercerita tentang keluarga sahabat
 orang  = ibu
-syarat = desa_bab >= 3 && ibu_sakit == 1
+syarat = bab >= 2 && tgl >= 615 && jalur != sma
+
+# minggu 4 — memilih
+
+[b3_sekar_pilihan]
+naskah = adegan_teman.txt
+judul  = Sekar memutuskan soal beasiswa (batas Jumat 26 Juni)
+orang  = sekar
+syarat = bab == 2 && tgl >= 620 && tgl <= 625 && adegan_b2_sekar_buku == 1
+
+[b2_laras_pergi]
+naskah = adegan_bab2.txt
+judul  = Laras bertanya soal pilihan Kakak
+orang  = laras
+syarat = bab == 2 && tgl >= 622
+
+[b2_ayah_nasihat]
+naskah = adegan_bab2.txt
+judul  = Nasihat Ayah di dermaga
+orang  = ayah
+lokasi = dermaga
+syarat = bab == 2 && tgl >= 622
+
+[b2_bayu_pilihan]
+naskah = adegan_bab2.txt
+judul  = Bayu soal pilihan: iri / rencana perahu berdua
+orang  = bayu
+syarat = bab == 2 && tgl >= 622
+
+[b2_berkas]
+naskah = adegan_bab2.txt
+judul  = Menyiapkan berkas pendaftaran bersama Ibu
+orang  = ibu
+syarat = bab == 2 && tgl >= 622 && condong == kota
+
+[b3_darto_anak]
+naskah = adegan_darto.txt
+judul  = Raka, anak Juragan yang tidak pulang (peringatan soal kota)
+orang  = darto
+syarat = bab >= 2 && tgl >= 622 && percaya_darto >= 50
+
+# ---------------- BAB 3 KOTA — Pamit (27 Juni – 10 Juli) ----------------
+
+[k3_laras_maaf]
+naskah = adegan_pamit.txt
+judul  = Minta maaf ke Laras (ketahuan bohong soal pergi)
+orang  = laras
+syarat = bab == 3 && jalur == sma && bohong_laras_pergi == 1
+
+[k3_laras_kemas]
+naskah = adegan_pamit.txt
+judul  = Laras membantu berkemas, kaus ikan paus
+orang  = laras
+syarat = bab == 3 && jalur == sma && tgl >= 705
+
+[k3_ayah_pisau]
+naskah = adegan_pamit.txt
+judul  = Pisau lipat kakek di dermaga (janji kirim uang / langit merah)
+orang  = ayah
+syarat = bab == 3 && jalur == sma && tgl >= 705
+
+[k3_ibu_dapur]
+naskah = adegan_pamit.txt
+judul  = Ibu menyiapkan bekal, menangis di dapur
+orang  = ibu
+syarat = bab == 3 && jalur == sma && tgl >= 707
+
+[k3_bayu_pamit]
+naskah = adegan_pamit.txt
+judul  = Pamit ke Bayu (iri & berdamai / titip Sekar)
+orang  = bayu
+syarat = bab == 3 && jalur == sma && tgl >= 630
+
+[k3_darto_foto]
+naskah = adegan_pamit.txt
+judul  = Juragan Darto memberi foto Raka
+orang  = darto
+syarat = bab == 3 && jalur == sma && tgl >= 705 && foto_raka != 1 && percaya_darto >= 40
+
+[k3_sekar_berkas]
+naskah = adegan_pamit.txt
+judul  = Mengisi formulir beasiswa bersama Sekar
+orang  = sekar
+syarat = bab == 3 && jalur == sma && bareng_sekar == 1
+
+[k3_sekar_wati]
+naskah = adegan_pamit.txt
+judul  = Menghibur Bu Wati bersama Sekar
+orang  = sekar
+syarat = bab == 3 && jalur == sma && bareng_sekar == 1 && tgl >= 705
+
+[k3_sekar_pamit]
+naskah = adegan_pamit.txt
+judul  = Sekar (tinggal di desa) memberi kantong perca
+orang  = sekar
+syarat = bab == 3 && jalur == sma && bareng_sekar != 1 && adegan_b2_sekar_kenalan == 1 && tgl >= 701
+
+[k3_haji_doa]
+naskah = adegan_pamit.txt
+judul  = Doa Pak Haji untuk yang merantau
+orang  = haji
+syarat = bab == 3 && jalur == sma
+
+# ---------------- BAB 3 DESA — Musim Ombak Tinggi (27 Juni – 19 Juli) ----------------
+
+[b3_sekar_jahitan]
+naskah = adegan_teman.txt
+judul  = Kerja antar jahitan Bu Wati
+orang  = sekar
+syarat = bab == 3 && jalur == kerja && tgl >= 629 && sekar_pergi != 1 && adegan_b2_sekar_kenalan == 1
 
 [b3_laras_gelang]
 naskah = adegan_keluarga.txt
 judul  = Laras bertanya soal gelang benang merah
 orang  = laras
-syarat = desa_bab >= 3 && tgl >= 715
+syarat = bab == 3 && jalur == kerja && tgl >= 715
 
 [b3_laras_kotak]
 naskah = adegan_keluarga.txt
 judul  = Kotak sepatu "Buat Kakak"
 lokasi = ruang_tengah
 waktu  = setiap hari 18:30-20:30
-syarat = desa_bab >= 3 && adegan_b3_laras_gelang == 1
+syarat = bab >= 3 && jalur == kerja && adegan_b3_laras_gelang == 1
 
 # ---------------- BAB 4 DESA — Tujuh Belasan (20 Juli – 17 Agustus) ----------------
 

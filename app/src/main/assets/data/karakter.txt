@@ -140,8 +140,8 @@ tempat      = desa
 waktu       = siang, sore, malam
 ditemui     = ya
 lokasi      = setiap hari 06:15-07:15 ruang_makan, senin-sabtu 13:00-14:00 ruang_makan, senin-sabtu 14:00-16:00 ruang_tengah, minggu 07:15-12:00 rumah_warung, minggu 13:00-14:00 ruang_makan, minggu 14:00-16:00 lapangan, setiap hari 16:00-17:15 rumah_warung, setiap hari 17:45-18:30 ruang_makan, setiap hari 18:30-20:30 ruang_tengah
-# libur kenaikan kelas (± 27 Juni – 12 Juli): bangun siang, bantu warung, main layangan di lapangan
-libur       = 627-712
+# libur kenaikan kelas (22 Juni – 12 Juli, setelah rapor Sabtu 20 Juni): bangun siang, bantu warung, main layangan di lapangan
+libur       = 622-712
 lokasi_libur = setiap hari 07:30-08:00 ruang_makan, setiap hari 08:00-12:00 rumah_warung, setiap hari 13:00-14:00 ruang_makan, setiap hari 14:00-16:00 lapangan, setiap hari 16:00-17:15 rumah_warung, setiap hari 17:45-18:30 ruang_makan, setiap hari 18:30-20:30 ruang_tengah
 cinta_awal  = 65
 percaya_awal = 70
@@ -744,3 +744,19 @@ ditemui     = tidak
 cinta_awal  = 30
 percaya_awal = 30
 warna       = #C04A2A
+
+[narti]
+nama        = Bu Narti
+kelamin     = perempuan
+usia        = 48
+peran       = Wali kelas IX-B SMP Negeri 1 Tanjung Lentera
+sifat       = keibuan, percaya pada murid-muridnya
+pandangan   = setia
+bisa_dipacari = tidak
+tempat      = desa
+waktu       = pagi
+ditemui     = tidak
+cinta_awal  = 40
+percaya_awal = 40
+warna       = #7A5A3A
+daftar      = tidak

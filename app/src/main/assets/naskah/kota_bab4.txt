@@ -1,0 +1,229 @@
+# ==========================================================
+#  THREADS OF DESTINY: LIVING PARALLEL
+#  Naskah: BAB 4 KOTA — KOTA YANG TAK PERNAH TIDUR · Sabtu 11 Juli – Senin 17 Agustus 2026
+#  (sementara berisi cerita kota lama; diperluas sesuai docs/ALUR_BAB4.md)
+# ==========================================================
+
+@sembunyi semua
+@atur bab = 4
+@gelap 1500
+@waktu Kota Sakala
+@lokasi kota
+@kalender Sabtu siang
+@latar kota_besar
+@terang 1500
+* Kota Sakala. Gedung-gedung menjulang, klakson bersahutan, orang-orang berjalan cepat tanpa saling menyapa.
+{nama}: Jadi... ini kota yang dulu kami janjikan.
+* Hal pertama yang harus {nama} cari: tempat tinggal.
+* Ada tiga kos yang ditawarkan di papan pengumuman stasiun.
+
+@pilihan
+> Kos Bu Ratmi, Rel Utara — Rp400.000 (murah, bising) -> kos_murah
+> Kos Melati, Cendana — Rp650.000 (tenang, dekat sekolah) -> kos_sedang
+> Sakala Residence — Rp1.300.000 (mewah) -> kos_mahal
+
+:: kos_murah
+@kos kos_rel_utara
+* Kamarnya sempit dan dindingnya bergetar setiap kereta lewat. Tapi setidaknya, ini milikmu sendiri.
+@lompat malam_pertama
+
+:: kos_sedang
+@kos kos_cendana
+* Kamarnya bersih dan wangi. Ibu kos menatapmu dari atas ke bawah. "Jam malam pukul sepuluh. Tidak ada tamu lawan jenis."
+@lompat malam_pertama
+
+:: kos_mahal
+@kos kos_pusat
+* Petugas resepsionis tersenyum ramah... lalu menyebutkan harganya sekali lagi, memastikan kamu tidak salah dengar.
+
+:: malam_pertama
+@latar kos_kamar
+* {nama} meletakkan tas di lantai. Untuk pertama kalinya, tidak ada suara Ibu dari dapur. Tidak ada Laras yang merecoki.
+* Di kota ini, tidak ada yang akan memasakkan makanan untukmu. Belanjalah di minimarket, dan jaga uangmu baik-baik.
+* HP-mu kini berisi aplikasi Chat, Kontak, Kalender, Lowongan, Dompet, Catatan, dan Sosmed. Buka lewat ikon HP, atau tombol 📱 HP saat waktu bebas.
+* Waktu bebasmu sampai malam (pukul 19:30).
+@bebas sampai Sabtu 19:30
+
+@kalender Sabtu 20:00
+@latar kos_kamar
+* Malam pertama di Kota Sakala terasa panjang.
+@hp pesan Ibu | Sudah sampai, Nak? Sudah makan belum? Jangan lupa kunci pintu.
+@tunggu_hp
+* {nama} memandangi pesan Ibu lama sekali. Baru sehari pergi, rumah sudah terasa jauh.
+@maju 1
+@waktu Minggu, 12 Juli 2026
+* Hari Minggu sebelum sekolah dimulai. Waktunya mengenal kota ini, atau mencari jejak seseorang.
+* Waktu bebasmu sampai pukul 21:00.
+@bebas sampai Minggu 21:00
+
+
+# ---------- SENIN: HARI PERTAMA SEKOLAH ----------
+
+@gelap 1200
+@waktu Senin, 13 Juli 2026
+@kalender Senin pagi
+@kerja_mulai sma_sakala
+@atur kelas = 10
+@latar kelas_sma
+@terang 1200
+* SMA Negeri 3 Sakala. Kelas X-3. Tiga puluh enam wajah asing, dan satu bangku kosong di dekat jendela.
+@kenal dimas
+@tampil dimas senyum
+Dimas: Kosong, kok. Duduk aja. Aku Dimas. Kamu anak baru dari mana?
+{nama}: Dari Tanjung Lentera. Desa di pesisir.
+Dimas: Wih, jauh! Pantesan mukamu kayak orang nyasar.
+@pilihan
+> Ketawa dan balas bercanda -> dimas_canda
+> Diam saja, agak tersinggung -> dimas_diam
+
+:: dimas_canda
+{nama}: Mukamu juga kayak orang belum sarapan.
+Dimas: Hahaha! Bener banget. Kita bakal akur, nih.
+@cinta dimas +8
+@lompat nadia
+
+:: dimas_diam
+* {nama} hanya mengangguk pelan.
+Dimas: Eh, santai... aku cuma bercanda. Maaf, ya.
+@cinta dimas +2
+
+:: nadia
+@sembunyi dimas
+@kenal nadia
+@tampil nadia biasa
+Nadia: Anak baru? Aku Nadia, ketua kelas. Isi formulir ini sebelum jam istirahat.
+Nadia: ...Tanjung Lentera?
+Nadia: Dulu, waktu SMP, ada murid pindahan dari desa itu juga di sekolahku. Pendiam. Suka duduk di dekat jendela.
+{nama}: Siapa namanya?!
+Nadia: Aku lupa... Dia cuma setahun, lalu pindah lagi. Kenapa? Kamu kenal?
+@tambah petunjuk_sahabat +1
+@catatan Petunjuk #1 — Kata Nadia, dulu ada murid pindahan dari Tanjung Lentera di SMP-nya. Pendiam, suka duduk dekat jendela. Hanya setahun, lalu pindah lagi.
+* Jantung {nama} berdegup kencang. Mungkinkah...
+@sembunyi semua
+* Hari pertama sekolah berlalu dengan cepat.
+
+:: info_kerja
+@tampil dimas biasa
+Dimas: Eh, pulang sekolah mau ke mana? Aku sih langsung kerja, jadi kurir paket tiap sore.
+Dimas: Anak kos di sini macam-macam. Ada yang kerja kayak aku, ada yang tiap malam nongkrong di mal pakai uang kiriman.
+Dimas: Terserah kamu mau jadi yang mana. Tapi uang kiriman itu cepat habis, lho.
+@sembunyi dimas
+* Di kota ini, tidak ada yang mengawasimu. Kamu bebas bekerja, belajar, atau bersenang-senang. Setiap pilihan ada harganya.
+* (Lowongan kerja paruh waktu ada di "🔎 Cari kerja" saat waktu bebas, atau aplikasi Lowongan di HP.)
+
+:: minggu_pertama
+@maju 2
+* Sore pertama setelah sekolah. Hidup di Kota Sakala benar-benar dimulai.
+* Ingat: sekolah setiap Senin–Sabtu, pukul 07:00–14:00. Terlambat dan bolos tercatat; bolos 6 kali = dikeluarkan.
+* Waktu bebasmu berjalan sampai Sabtu sore. Atur sendiri: sekolah, kerja, makan, tidur, dan mencari jejak.
+@bebas sampai Sabtu 15:00
+
+@gelap 1500
+* Satu minggu pertama di Kota Sakala telah berlalu.
+* Di suatu sudut kota ini, seseorang mungkin sedang menunggu... atau sedang menghindarinya.
+# (lanjut: bagian minggu kedua di bawah)
+
+
+
+# ==========================================================
+#  JALUR KOTA  (jalur desa: desa_bab3.txt)
+# ==========================================================
+
+@waktu Minggu kedua di Kota Sakala
+@kalender Senin 07:00
+@latar kelas_sma
+@terang 1500
+* Seminggu berlalu. Rutinitas mulai terbentuk: bangun pagi, sekolah, mengatur uang... dan diam-diam mencari.
+
+@jika misterius_dibalas == 1 -> balasan_misterius
+@hp pesan Nomor Tidak Dikenal | Kamu sudah sampai di Sakala, ya. Aku melihatmu di stasiun minggu lalu.
+@lompat baca_pesan
+
+:: balasan_misterius
+@hp pesan Nomor Tidak Dikenal | Aku sudah membaca pesanmu. Maaf... aku belum bisa menjawab. Tolong, jangan cari aku dulu.
+
+:: baca_pesan
+@tunggu_hp
+{nama}: Dia ada di kota ini... dan dia melihatku.
+@catatan Nomor misterius ada di Kota Sakala. Dia melihatku di stasiun.
+
+# ---------- Album Nadia ----------
+@kenal nadia
+@tampil nadia biasa
+Nadia: {nama}, tunggu. Aku cari-cari di rumah semalam... ini album angkatan SMP-ku.
+Nadia: Anak dari Tanjung Lentera yang kuceritakan. Ini fotonya, waktu pentas seni.
+* Fotonya buram. Wajahnya tertutup bayangan lampu panggung... tapi di pergelangan tangannya, terlihat jelas seutas gelang merah.
+{nama}: Gelang benang merah...
+Nadia: Di bawah fotonya cuma tertulis inisial: "A."
+@tambah petunjuk_sahabat +1
+@catatan Petunjuk #2 — Album SMP Nadia: murid berinisial "A.", memakai gelang benang merah yang sama denganku.
+
+@pilihan
+> Ceritakan semuanya pada Nadia -> cerita_nadia
+> Simpan rahasia ini sendiri -> rahasia
+
+:: cerita_nadia
+{nama}: Dia sahabatku waktu kecil. Dia pergi tanpa pamit, tiga tahun lalu.
+@tampil nadia senyum
+Nadia: ...Aku akan bantu cari. Toko buku ayahku ada di depan Stasiun Besar. Ribuan orang lewat setiap hari.
+Nadia: Kalau aku lihat orang dengan gelang seperti itu, aku kabari kamu.
+@cinta nadia +8
+@percaya nadia +6
+@atur nadia_membantu = 1
+@tambah petunjuk_sahabat +1
+@catatan Nadia membantu mengawasi dari toko buku ayahnya di depan Stasiun Besar.
+@lompat minggu_kedua
+
+:: rahasia
+{nama}: Bukan siapa-siapa. Cuma mirip temanku.
+Nadia: ...Begitu.
+* Nadia menatapmu sedikit lebih lama, lalu memasukkan album itu kembali ke tasnya.
+@perilaku nadia menghindar
+
+:: minggu_kedua
+@sembunyi semua
+@maju 2
+* Hari-hari berjalan. Petunjuk bisa dicari lewat aktivitas "Mencari jejak sahabat lama" di waktu bebas — kalau kamu sempat di antara sekolah, kerja, dan bertahan hidup.
+@jika nadia_membantu == 1 -> pesan_nadia
+@lompat bebas_kedua
+
+:: pesan_nadia
+@hp pesan Nadia | Tadi sore ada anak pakai gelang merah lewat depan toko. Dia naik kereta jurusan Pelabuhan. Sabtu sore biasanya dia lewat lagi, kata ayahku.
+@tunggu_hp
+{nama}: Gelang merah... Sabtu sore. Aku harus ke sana.
+@catatan Petunjuk #3 — Kata Nadia: anak bergelang merah lewat Stasiun Besar, naik kereta jurusan Pelabuhan, biasanya Sabtu sore.
+
+:: bebas_kedua
+* Waktu bebasmu berjalan sampai Sabtu sore.
+@bebas sampai Sabtu 15:00
+
+# ---------- Stasiun Besar ----------
+@gelap 1500
+@waktu Sabtu sore — Stasiun Besar Sakala
+@kalender Sabtu sore
+@latar stasiun_besar
+@terang 1500
+* Stasiun Besar Sakala, Sabtu sore. Ribuan orang berdesakan, pulang dari kerja dan belanja akhir pekan.
+@jika petunjuk_sahabat >= 4 -> stasiun_dekat
+* Di tengah kerumunan, sekilas kamu melihat seutas gelang merah... lalu hilang ditelan arus manusia.
+{nama}: Tunggu...!
+* Kamu terlambat. Sosok itu sudah lenyap.
+* Kalau saja kamu tahu lebih banyak tentang ke mana dia biasa pergi...
+@lompat akhir_kota
+
+:: stasiun_dekat
+* Berkat petunjuk-petunjuk yang kamu kumpulkan, kamu tahu: setiap Sabtu sore, dia lewat peron jurusan Pelabuhan.
+* Di ujung peron, seseorang berdiri memunggungimu. Di pergelangan tangannya... gelang benang merah.
+{nama}: {nama_sahabat}...?
+* Sosok itu tersentak. Tanpa menoleh, ia melangkah masuk ke kereta yang pintunya mulai menutup.
+* Kereta melaju. Tapi kali ini kamu yakin.
+@atur melihat_sahabat = 1
+@catatan Aku melihatnya di peron jurusan Pelabuhan, Sabtu sore. Gelang benang merah itu. Itu benar-benar {nama_sahabat}.
+@hp pesan Nomor Tidak Dikenal | ...Maaf. Aku belum siap. Tapi aku senang kamu masih memakai gelang itu.
+@tunggu_hp
+
+:: akhir_kota
+@gelap 1500
+* Benang merah itu belum putus. Dia ada di kota ini.
+* Dan entah kenapa... dia sedang menghindar.
+@tamat Bab 3 — Bersambung…

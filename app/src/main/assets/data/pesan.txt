@@ -105,6 +105,51 @@ balas_hangat  = Sip! Jangan telat, nanti keretanya keburu jalan 😂
 singkat       = Lihat nanti.
 balas_singkat = Yaelah. Datang aja, kapan lagi lihat Dodi nangis 😂
 
+[bayu_stasiun_kota]
+dari          = bayu
+jenis         = cerita
+isi           = Rani & Dodi juga berangkat Sabtu, kereta yang sama! Satu desa pindah ke Sakala wkwk. Aku antar ke stasiun ya.
+hangat        = Wajib, Bay! Nanti aku traktir es teh sebelum berangkat.
+balas_hangat  = Es teh doang? Oke deh, deal 😂
+singkat       = Oke.
+balas_singkat = Oke doang? Dasar calon anak kota 😒
+
+[ibu_kereta]
+dari          = ibu
+jenis         = cerita
+isi           = Sudah sampai mana, Nak? Jangan lupa makan bekalnya.
+hangat        = Baru lewat kebun kelapa, Bu. Bekalnya enak, sambal terinya sudah aku cicip 😊
+balas_hangat  = Jangan dihabiskan sekaligus. Hati-hati, ya. Ibu doakan dari sini.
+singkat       = Masih di kereta, Bu.
+balas_singkat = Iya. Kabari kalau sudah sampai.
+
+[sekar_tinggal]
+dari          = sekar
+jenis         = cerita
+isi           = Aku sudah memutuskan. Aku tinggal di desa. Bukan karena takut. Karena aku memang mau. Terima kasih sudah mau mendengarkan.
+hangat        = Aku bangga sama kamu, Sekar. Kapan-kapan kita belajar bareng di dermaga.
+balas_hangat  = Boleh. Aku bawa buku, kamu bawa gorengan 😄
+singkat       = Oke.
+balas_singkat = Iya. Makasih.
+
+[sekar_berangkat]
+dari          = sekar
+jenis         = cerita
+isi           = Aku sudah tanda tangan. Aku berangkat ke Sakala tanggal 11 Juli. Takut sekali. Tapi aku lebih takut menyesal.
+hangat        = Kamu pasti bisa. Nanti aku antar ke stasiun.
+balas_hangat  = Makasih... Jangan bilang Bayu kalau aku nangis, ya.
+singkat       = Hati-hati.
+balas_singkat = Iya. Makasih.
+
+[sekar_bareng]
+dari          = sekar
+jenis         = cerita
+isi           = Aku sudah tanda tangan! Berangkat 11 Juli. Kamu juga, kan? ...Kita satu kereta?
+hangat        = Satu kereta! Aku jaga bekal Bu Wati biar nggak kamu habiskan sendiri 😆
+balas_hangat  = Hahaha. Deal. Aku jadi agak kurang takut sekarang.
+singkat       = Iya.
+balas_singkat = Oke. Sampai ketemu di stasiun.
+
 # ======================= AYAH =======================
 
 [ayah_makan]

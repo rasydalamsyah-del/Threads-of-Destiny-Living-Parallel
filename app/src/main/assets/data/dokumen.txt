@@ -22,7 +22,12 @@ nama       = Ijazah SMP
 biaya      = 0
 lama       = 0
 awal       = ya
-keterangan = Baru saja kamu terima saat kelulusan.
+keterangan = Ijazah asli menyusul dari sekolah; sementara diwakili Surat Keterangan Lulus (SKL).
+
+[skl_smp]
+nama       = Surat Keterangan Lulus (SKL) SMP
+ikon       = 📄
+keterangan = Pengganti ijazah sementara, dari SMP Negeri 1 Tanjung Lentera. Dipakai untuk mendaftar SMA.
 
 [cv]
 nama       = CV (daftar riwayat hidup)

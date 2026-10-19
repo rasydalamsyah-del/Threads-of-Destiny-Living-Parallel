@@ -1,7 +1,7 @@
 # ==========================================================
 #  THREADS OF DESTINY: LIVING PARALLEL
-#  Naskah: BAB 3 DESA — BENANG MERAH
-#  Senin 6 Juli – Minggu 19 Juli 2026 · Alur: docs/CERITA.md bagian 9
+#  Naskah: BAB 3 DESA — MUSIM OMBAK TINGGI
+#  Sabtu 27 Juni – Minggu 19 Juli 2026 · Alur: docs/CERITA.md 6c
 #  {nama_sahabat} = nama sahabat masa kecil (Arka / Alya, menyesuaikan pemain)
 # ==========================================================
 
@@ -11,40 +11,229 @@
 
 
 # ----------------------------------------------------------
+#  SABTU 27 JUNI — ORANG DESA SUNGGUHAN
+# ----------------------------------------------------------
+
+@kalender Sabtu 06:00
+@waktu Sabtu, 27 Juni 2026
+@latar kamar_pagi
+@atur _tempat = kamar_pagi
+@kedip
+* Pagi pertama setelah keputusan itu. Tidak ada lagi "nanti dipikirkan". Ini hidupmu sekarang: Tanjung Lentera.
+* Dari luar, suara ombak terdengar lebih keras dari biasanya. Musim angin timur sudah datang: langit cerah, tapi gelombang tinggi.
+@maju 15 menit
+@jalan ruang_makan | Sarapan
+
+@latar sarapan_keluarga
+@tampil ayah sedih
+@tampil ibu biasa
+@tampil laras biasa
+* Ayah pulang dengan keranjang setengah kosong. Matanya merah, bajunya basah sampai ke dada.
+Ayah: Ombaknya gila semalam. Tiga kali hampir terbalik. Dapat cuma tongkol kecil lima ekor.
+Ibu: Musim ombak tinggi memang begini, Pak. Sabar.
+Ayah: Sabar tidak bisa dijual di pelelangan, Bu.
+* Ayah menyesal mengatakannya begitu kalimat itu keluar. Ibu diam. Laras berhenti mengunyah.
+@tampil laras senyum
+Laras: Ayah! Aku kan libur! Hari ini aku boleh ikut Kakak ke gudang, ya? Mau lihat ikan asin dijemur!
+@jika kerja_desa == perahu -> sabtu_laras_perahu
+@pilihan
+> "Boleh, tapi jangan pegang apa-apa." -> sabtu_laras_ikut
+> "Nggak usah, Ras. Bau, panas." -> sabtu_laras_tidak
+
+:: sabtu_laras_ikut
+* Laras ikut ke gudang dan bertahan tepat dua puluh menit sebelum menutup hidung dan kabur pulang. Mbak Yati tertawa sampai keluar air mata.
+@cinta laras +2
+@lompat sabtu_akhir
+
+:: sabtu_laras_tidak
+@tampil laras kesal
+Laras: Huh. Libur kok nggak boleh ngapa-ngapain.
+@lompat sabtu_akhir
+
+:: sabtu_laras_perahu
+Ayah: Ke perahu? Tidak. Ombak lagi tinggi.
+@tampil laras kesal
+Laras: Huh. Libur kok nggak boleh ngapa-ngapain.
+
+:: sabtu_akhir
+@sembunyi semua
+@latar ruang_makan
+* Laras libur kenaikan kelas sampai 12 Juli. Ia akan sering ada di rumah, warung, dan lapangan.
+* Sabtu depan ada pasar malam di lapangan desa.
+@catatan Pasar malam di lapangan desa, Sabtu 4 Juli malam.
+@bebas sampai Minggu 06:00
+@bebas sampai Sabtu 18:30
+
+
+# ----------------------------------------------------------
+#  SABTU 4 JULI MALAM — PASAR MALAM
+# ----------------------------------------------------------
+
+@gelap 1000
+@kalender Sabtu 19:00
+@waktu Sabtu, 4 Juli 2026 · Pasar malam
+@latar lapangan
+@atur _tempat = lapangan
+@terang 1200
+* Lapangan desa berubah. Komidi putar tua berderit dengan lampu warna-warni, penjual arum manis berteriak, dan musik dangdut dari pengeras suara bercampur suara tawa anak-anak.
+@tampil laras senyum
+Laras: Kak! Komidi putar! Ayo naik! Lima ribu doang!
+@pilihan
+> Naik komidi putar bersama Laras (Rp10.000) -> pasar_komidi
+> Belikan Laras arum manis saja (Rp5.000) -> pasar_arum
+> "Kakak lagi hemat, Ras. Lihat-lihat saja." -> pasar_lihat
+
+:: pasar_komidi
+@uang -10000
+* Komidi putar itu berputar lebih cepat dari kelihatannya. Laras menjerit kegirangan, kamu menjerit ketakutan. Dari atas, seluruh desa terlihat: atap-atap seng, dermaga, dan mercusuar gelap di ujung tanjung.
+@cinta laras +5
+@stat kewarasan +8
+@lompat pasar_teman
+
+:: pasar_arum
+@uang -5000
+* Laras memegang arum manis merah muda sebesar kepalanya. Separuhnya menempel di pipi.
+@cinta laras +3
+@stat kewarasan +4
+@lompat pasar_teman
+
+:: pasar_lihat
+@tampil laras sedih
+Laras: ...Iya, nggak apa-apa.
+* Laras menatap komidi putar itu lama, lalu menggandeng tanganmu tanpa bicara.
+@stat kewarasan -2
+
+:: pasar_teman
+@sembunyi laras
+@tampil bayu senyum
+Bayu: Woy! Di sini rupanya! Ayo, lempar gelang! Hadiahnya boneka beruang!
+@jika sekar_pergi == 1 -> pasar_bayu_sendiri
+@tampil sekar senyum
+* Sekar berdiri di belakang Bayu, memeluk tas kecil. Ia ikut karena dipaksa Bayu, katanya.
+Sekar: Aku cuma mau beli kacang rebus.
+* Bayu melempar lima gelang dan meleset semua. Lemparan keenam: masuk. Ia menyerahkan boneka beruang kecil itu ke Sekar, terlalu cepat, tanpa menatapnya.
+Bayu: Nih. Buat... ibumu. Hiasan mesin jahit.
+* Sekar menerimanya. Kamu melihat ujung bibirnya terangkat.
+@jika rahasia_bayu == bantu -> pasar_bantu
+@lompat pasar_akhir
+
+:: pasar_bantu
+* Bayu melirikmu dengan wajah panik, seperti bertanya "tadi aku keren, kan?". Kamu mengacungkan jempol diam-diam.
+@cinta bayu +3
+@lompat pasar_akhir
+
+:: pasar_bayu_sendiri
+Bayu: Sekar mau berangkat seminggu lagi. Dia nggak mau datang. Katanya sibuk beres-beres.
+* Bayu melempar gelang dan meleset semua. Ia tidak mencoba lagi.
+
+:: pasar_akhir
+@sembunyi semua
+* Malam itu, untuk pertama kalinya sejak lama, desa terasa ramai dan hangat.
+@maju 2 jam
+@bebas sampai Senin 05:45
+
+
+# ----------------------------------------------------------
 #  SENIN 6 JULI — KABAR DARI TEMAN-TEMAN
 # ----------------------------------------------------------
 
+@gelap 1000
 @kalender Senin 06:00
 @waktu Senin, 6 Juli 2026
 @latar kamar_pagi
 @atur _tempat = kamar_pagi
 @kedip
-* Sudah dua minggu sejak kelulusan. Tanganmu mulai kapalan, dan kamu mulai hafal suara ayam tetangga yang selalu berkokok terlambat.
+* Sebulan sejak kelulusan. Tanganmu mulai kapalan, dan kamu mulai hafal suara ayam tetangga yang selalu berkokok terlambat.
 @hp pesan Bayu | Eh, Rani sama Dodi berangkat ke Sakala hari Sabtu, kereta jam setengah delapan. Anak-anak mau antar ke stasiun. Ikut, ya!
 @tunggu_hp
 {nama}: Sabtu ini... Stasiun desa.
 * Stasiun kecil itu. Tempat terakhir kamu melihat {nama_sahabat}, tiga tahun lalu.
 @maju 15 menit
-@jalan ruang_makan | Sarapan dulu sebelum berangkat
+@jalan ruang_makan | Sarapan dulu
 
 @latar sarapan_keluarga
 @tampil ayah biasa
 @tampil ibu biasa
 @tampil laras biasa
+@jika tahu_hutang_perahu != 1 -> senin_biasa
 * Sarapan pagi ini terasa lebih sepi. Ayah makan cepat, tidak banyak bicara. Sejak malam itu, ia jarang menatap matamu.
 @jika sikap_hutang == tanya -> senin_canggung
+
+:: senin_biasa
 Ibu: Nak, nanti sore Ibu titip beli minyak tanah, ya.
 {nama}: Iya, Bu.
-* Ayah berdeham, lalu kembali menunduk ke piringnya. Kamu ingin bertanya, tapi kata-katanya tertahan di tenggorokan.
-@lompat senin_lanjut
+@lompat senin_seragam
 
 :: senin_canggung
 @tampil ayah sedih
-Ayah: {nama}... soal yang kemarin. Jangan bilang siapa-siapa, ya. Termasuk Juragan.
+Ayah: {nama}... soal hutang itu. Jangan bilang siapa-siapa, ya. Termasuk Laras.
 {nama}: Iya, Yah.
 * Ibu menyendokkan lauk ke piring Ayah lebih banyak dari biasanya, seolah itu bisa menambal sesuatu.
 
-:: senin_lanjut
+:: senin_seragam
+@tampil laras biasa
+Laras: Bu, seragam kelas enamku sudah kekecilan. Sepatuku juga bolong. Senin depan sudah masuk...
+* Ibu dan Ayah saling pandang. Lagi-lagi, pandangan itu.
+Ibu: Nanti Ibu usahakan, ya, Ras. Minggu ini warung lagi sepi.
+@pilihan
+> "Aku yang belikan seragam dan sepatunya, Bu." (Rp75.000) -> seragam_beli
+> "Pakai seragam lamaku saja, Ras. Masih bagus." -> seragam_lama
+> Diam, biar Ibu dan Ayah yang mengurus -> seragam_diam
+
+:: seragam_beli
+@jika uang < 75000 -> seragam_kurang
+@uang -75000
+@atur beli_seragam_laras = 1
+@tampil laras kaget
+Laras: Beneran, Kak?! Sepatu yang ada lampunya?
+{nama}: Yang biasa aja, Ras. Yang lampunya mahal.
+@tampil laras senyum
+Laras: Nggak apa-apa! Yang penting baru!
+@cinta laras +6
+@cinta ibu +4
+@percaya ayah +3
+@lompat senin_paket
+
+:: seragam_kurang
+* Kamu menghitung uangmu diam-diam di bawah meja. Tidak cukup.
+{nama}: Aku tambahin separuhnya, Bu.
+@uang -35000
+@cinta ibu +2
+@cinta laras +2
+@lompat senin_paket
+
+:: seragam_lama
+@tampil laras kesal
+Laras: Itu kan seragam SMP! Kebesaran! ...Ya udah deh, nanti Ibu kecilin, ya?
+@lompat senin_paket
+
+:: seragam_diam
+* Kamu diam. Ibu akhirnya membeli seragam baru dengan uang belanja dua hari. Malam itu, lauknya cuma tempe.
+
+:: senin_paket
+@jika paket_c != 1 -> senin_laras
+@tampil ibu senyum
+Ibu: Oh iya, Nak. Kemarin Ibu dengar dari Bu RT, di kecamatan ada kelompok belajar Paket C. Setiap Sabtu siang. Gratis.
+@pilihan
+> "Aku mau daftar, Bu!" -> paket_daftar
+> "Nanti dulu, Bu. Kerjaku lagi banyak." -> paket_nanti
+
+:: paket_daftar
+@atur paket_c_daftar = 1
+@kenal wulan
+* Rabu sore, kamu naik angkot ke kecamatan. Di sebuah ruang kelas sederhana dengan kipas angin yang berderit, seorang perempuan muda berkardigan hijau menyambutmu.
+@tampil wulan senyum
+Kak Wulan: Selamat datang! Aku Wulan, tutor di sini. Paket C ini setara SMA. Ujiannya tahun depan, tapi kita mulai dari sekarang, ya.
+* Teman sekelasmu: dua ibu-ibu, tiga pemuda putus sekolah, dan seorang bapak tua yang ingin punya ijazah sebelum pensiun. Semua menatapmu ramah.
+@catatan Terdaftar di kelompok belajar Paket C, PKBM kecamatan. Setiap Sabtu siang. Tutor: Kak Wulan.
+@sembunyi wulan
+@lompat senin_laras
+
+:: paket_nanti
+@tampil ibu biasa
+Ibu: Ya sudah. Tapi jangan kelamaan, ya.
+
+:: senin_laras
 @tampil laras biasa
 Laras: Kak, Sabtu nanti aku boleh ikut ke stasiun? Mau lihat kereta!
 @pilihan

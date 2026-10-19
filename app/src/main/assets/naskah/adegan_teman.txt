@@ -10,61 +10,6 @@
 # ==========================================================
 
 # ----------------------------------------------------------
-#  KENALAN DENGAN SEKAR (depan rumah & warung)
-# ----------------------------------------------------------
-
-:: b2_sekar_kenalan
-@kenal sekar
-@tampil sekar biasa
-* Seorang perempuan berkerudung biru berdiri di depan warung, memeluk bungkusan kain dengan hati-hati, seperti memeluk sesuatu yang rapuh.
-Sekar: Permisi... Bu Ratna ada? Ini seragam Laras. Dari ibu saya, Bu Wati.
-{nama}: Ibu lagi ke dapur. Sini, aku yang terima. Kamu... Sekar, kan? Juara kelas.
-Sekar: Dan kamu {nama}. Yang selalu duduk paling belakang dekat jendela, melamun lihat laut.
-{nama}: Kok tahu?
-Sekar: Juara kelas tahu segalanya.
-* Ia tersenyum kecil, nyaris tidak kelihatan. Di tangannya, terselip sebuah novel tebal dengan sampul yang sudah lusuh.
-@pilihan
-> "Katanya kamu dapat beasiswa ke Sakala. Selamat, ya!" -> b2sk_beasiswa
-> "Baca apa?" -> b2sk_buku
-> "Juara kelas kok jadi kurir jahitan?" -> b2sk_canda
-
-:: b2sk_beasiswa
-@tampil sekar sedih
-* Senyum Sekar hilang. Ia menunduk, memainkan ujung kerudungnya.
-Sekar: ...Bayu yang cerita, ya? Dasar ember.
-Sekar: Aku belum memutuskan. Lagian, itu bukan urusan orang lain.
-* Ia menyerahkan bungkusan itu cepat-cepat dan pamit. Sepertinya kamu menyentuh sesuatu yang sakit.
-@cinta sekar -1
-@atur sekar_tahu_kamu_tahu = 1
-@lompat b2sk_akhir
-
-:: b2sk_buku
-@tampil sekar senyum
-Sekar: Ini? Novel tentang anak nelayan yang jadi dokter. Sudah kubaca empat kali.
-{nama}: Empat kali? Nggak bosan?
-Sekar: Setiap kali baca, aku jadi percaya lagi kalau itu mungkin. Makanya kubaca terus.
-* Matanya berbinar sebentar, lalu meredup.
-Sekar: Ah, aku kebanyakan bicara. Titip salam buat Bu Ratna, ya.
-@cinta sekar +4
-@info sekar hobi
-@lompat b2sk_akhir
-
-:: b2sk_canda
-@tampil sekar kesal
-Sekar: Juara kelas juga butuh makan. Ibuku menjahit sampai jam dua malam. Aku bantu mengantar. Ada masalah?
-{nama}: Eh, bukan begitu maksudku...
-@tampil sekar biasa
-Sekar: ...Iya, aku tahu. Maaf. Aku cuma lagi banyak pikiran.
-@cinta sekar +1
-@info sekar kisah_1
-
-:: b2sk_akhir
-@sembunyi sekar
-* Sore hari, Sekar biasanya membaca di ujung dermaga, di bawah mercusuar. Setidaknya begitu kata Bayu.
-@kembali
-
-
-# ----------------------------------------------------------
 #  TAWARAN MELAUT (temui Bayu)
 # ----------------------------------------------------------
 
@@ -120,7 +65,7 @@ Bayu: Udah ah, jangan dibahas. Bikin pusing.
 :: b2bp_bakar
 @tampil bayu senyum
 Bayu: Eh iya! Sabtu malam, anak-anak mau bakar ikan di dermaga. Habis Isya. Datang, ya! Aku yang bawa ikannya, kamu yang bawa... semangat aja deh.
-@catatan Sabtu malam (27 Juni) setelah Isya: bakar ikan bersama Bayu dan teman-teman di dermaga.
+@catatan Sabtu malam (13 Juni) setelah Isya: bakar ikan bersama Bayu dan teman-teman di dermaga.
 @sembunyi bayu
 @kembali
 
@@ -205,18 +150,18 @@ Sekar: Oh, kamu. Mau duduk?
 * Kamu duduk di sebelahnya. Angin laut meniup halaman-halaman novelnya.
 Sekar: {nama}. Kamu pernah merasa... harus memilih antara dirimu sendiri dan orang yang kamu sayang?
 @pilihan
-> "Pernah. Waktu memilih tetap di desa." -> b2sb_pernah
+> "Pernah. Sekarang malah." -> b2sb_pernah
 > "Ini soal beasiswa itu, ya?" -> b2sb_beasiswa
 
 :: b2sb_pernah
-@jika jalur == kerja -> b2sb_pernah_desa
-{nama}: Pernah. Tiap hari, rasanya.
+@jika condong == desa -> b2sb_pernah_desa
+{nama}: Pernah. Tiap hari, rasanya. Kota atau di sini.
 @lompat b2sb_beasiswa
 
 :: b2sb_pernah_desa
 {nama}: Pernah. Aku bisa saja minta Ayah-Ibu membiayai SMA di kota. Tapi aku tahu mereka tidak punya uang.
 Sekar: Jadi kamu memilih mereka.
-{nama}: Aku memilih... tidak membuat mereka berhutang lagi.
+{nama}: Belum memilih. Tapi kayaknya... aku tidak mau membuat mereka berhutang lagi.
 * Sekar mengangguk pelan. Matanya basah.
 
 :: b2sb_beasiswa
@@ -227,11 +172,11 @@ Sekar: Kalau aku pergi, ibuku sendirian.
 @info sekar kisah_2
 @cinta sekar +4
 @percaya sekar +5
-@jika jalur != kerja -> b2sb_akhir
+@jika condong == kota -> b2sb_akhir
 @jika ayah_restu == uang -> b2sb_akhir
 # ----- saran Paket C -----
 @tampil sekar biasa
-Sekar: Eh, tapi kamu... kamu nggak mau lanjut sekolah sama sekali?
+Sekar: Eh, tapi kamu... kalau jadi di desa, kamu nggak mau lanjut sekolah sama sekali?
 {nama}: Mau. Tapi gimana caranya?
 Sekar: Ada Paket C. Ujian kesetaraan SMA. Belajarnya bisa sendiri, ujiannya di kecamatan setahun sekali. Ijazahnya diakui.
 Sekar: Buku-buku kelas sepuluh-ku masih ada. Nanti kupinjami. Lengkap dengan catatanku.

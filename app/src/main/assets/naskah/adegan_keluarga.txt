@@ -348,8 +348,8 @@ Ayah: ...Jangan ikut campur urusan orang tua, {nama}.
 
 :: b3_ibu_cerita
 @tampil ibu biasa
-* Ibu masih terlihat pucat, tapi sudah kembali sibuk seperti biasa. Kamu memaksanya duduk sebentar.
-Ibu: Ibu nggak apa-apa, Nak. Jangan khawatir terus.
+* Ibu sedang menjahit kancing baju Laras yang lepas. Kamu duduk di sebelahnya.
+Ibu: Kenapa, Nak? Mukamu serius sekali.
 {nama}: Bu... boleh aku tanya sesuatu? Tentang keluarga {nama_sahabat}.
 * Ibu menatapmu lama. Tangannya meremas ujung sarung.
 @jika percaya_ibu >= 70 -> b3ic_cerita

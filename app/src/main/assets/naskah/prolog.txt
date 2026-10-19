@@ -46,8 +46,8 @@
 @hidup mulai
 @lokasi desa
 @kalender Senin 06:00
-@tanggal 22 Juni 2026
-@waktu Senin, 22 Juni 2026 · 06:00
+@tanggal 1 Juni 2026
+@waktu Senin, 1 Juni 2026 · 06:00
 @latar plafon
 @kedip
 
@@ -149,7 +149,7 @@ Ibu: Wah, sudah rapi. Anak Ibu memang bisa diandalkan.
 Ibu: {nama}... Ibu mau tanya, dan Ibu mau kamu jawab jujur, ya.
 Ibu: Sekarang kamu sudah lulus. Kamu mau lanjut ke mana?
 Ibu: SMA terdekat cuma ada di Kota Sakala. Kalau sekolah di sana, kamu harus ngekos. Biayanya... tidak sedikit.
-Ibu: Tapi kalau kamu mau di sini, bantu Ibu di warung atau ikut Ayah melaut, itu juga tidak apa-apa. Semalam Ayahmu juga bilang begitu.
+Ibu: Tapi kalau kamu mau di sini, bantu Ibu di warung atau kerja di desa, itu juga tidak apa-apa. Semalam Ayahmu juga bilang begitu.
 * {nama} terdiam. Ini keputusan pertama yang benar-benar menentukan hidupnya.
 
 @hp tampil
@@ -160,65 +160,43 @@ Ibu: Tapi kalau kamu mau di sini, bantu Ibu di warung atau ikut Ayah melaut, itu
 {nama}: Nomor ini... siapa? Kenapa dia tahu aku baru lulus?
 {nama}: "Aku tunggu di Kota Sakala"...?
 @catatan Pesan dari nomor tidak dikenal: "Selamat atas kelulusanmu. Aku tunggu di Kota Sakala." Siapa dia? Apakah... dia?
-Ibu: {nama}? Kok melamun? Jadi bagaimana, Nak?
+@tampil ibu senyum
+Ibu: {nama}? Kok melamun?
+Ibu: Tidak usah dijawab sekarang, Nak. Pendaftaran SMA di Sakala tutup hari Jumat, tanggal dua puluh enam. Masih ada waktu.
+Ibu: Pikirkan baik-baik. Bicarakan juga dengan Ayahmu. Tapi Ibu ingin tahu... sekarang ini, hatimu condong ke mana?
 
 
 # ----------------------------------------------------------
-#  PILIHAN BESAR PERTAMA
+#  JAWABAN SEMENTARA (keputusan final: Jumat 26 Juni, akhir Bab 2)
 # ----------------------------------------------------------
 
 @pilihan
-> Sekolah: lanjut SMA di Kota Sakala -> sma
-> Tetap di desa: bekerja & membantu keluarga -> kerja
+> "Aku ingin sekolah di kota, Bu." -> condong_kota
+> "Aku ingin di sini saja, bantu Ayah dan Ibu." -> condong_desa
+> "Aku belum tahu, Bu." -> condong_ragu
 
-:: sma
-@atur jalur = sma
-{nama}: Aku mau lanjut SMA di Kota Sakala, Bu.
+:: condong_kota
+@atur condong = kota
+{nama}: Aku ingin sekolah di kota, Bu.
 * Ibu berhenti membalik gorengan. Lama sekali Ibu tidak bicara.
 @tampil ibu sedih
-Ibu: ...Kalau itu pilihanmu, Ibu sama Ayah akan usahakan biayanya.
-Ibu: Tapi, Nak... di kota itu semuanya bayar. Kos, makan, ongkos. Kamu sendirian di sana.
-Ibu: Ayah sama Ibu cuma bisa kirim seadanya. Ibu takut kamu kekurangan, terus diam saja tidak bilang.
-* {nama} melihat tangan Ibu yang penuh bekas cipratan minyak, dan teringat wajah lelah Ayah tadi pagi. Bagaimana kamu menjawabnya?
-@pilihan
-> "Aku akan hemat. Cukup dengan kiriman Ayah dan Ibu." -> uang_ortu
-> "Iya, Bu. Aku pasti baik-baik saja." (diam-diam berencana kerja) -> kerja_rahasia
-> "Aku juga mau cari kerja paruh waktu di sana, biar tidak memberatkan." -> kerja_terbuka
-
-:: uang_ortu
-@atur rencana_kerja = tidak
-{nama}: Aku akan hemat, Bu. Cukup dengan yang Ayah sama Ibu kirim. Aku mau fokus sekolah.
-Ibu: ...Ya sudah. Tapi kalau kurang, bilang. Jangan ditahan-tahan.
-@cinta ibu +3
+Ibu: ...Ibu dan Ayah akan coba hitung biayanya.
+* Ibu tersenyum, tapi matanya menatap kaleng biskuit tempat uang warung disimpan.
 @lompat setelah_warung
 
-:: kerja_rahasia
-@atur rencana_kerja = rahasia
-{nama}: Iya, Bu. Aku pasti baik-baik saja. Ibu jangan khawatir.
-* Di dalam hati, {nama} sudah memutuskan: di kota nanti, ia akan mencari kerja sendiri. Tapi kalau Ibu tahu, Ibu pasti makin cemas.
-@bohong kerja_rahasia ibu ayah
-Ibu: Syukurlah... Anak Ibu sudah besar, ya.
+:: condong_desa
+@atur condong = desa
+{nama}: Aku ingin di sini saja, Bu. Bantu Ayah sama Ibu.
+* Bahu Ibu yang tegang sedikit mengendur. Lalu ia menatapmu lama.
+@tampil ibu biasa
+Ibu: Jangan karena kasihan sama Ibu, ya, Nak. Ibu tidak mau kamu menyesal nanti.
 @lompat setelah_warung
 
-:: kerja_terbuka
-@atur rencana_kerja = terbuka
-{nama}: Aku juga mau cari kerja paruh waktu di sana, Bu. Biar tidak semuanya Ayah sama Ibu yang tanggung.
-Ibu: Sekolah sambil kerja itu berat, {nama}. Kamu sanggup?
-{nama}: Aku sanggup, Bu. Tapi sekolah tetap nomor satu. Janji.
-Ibu: ...Anak ini memang keras kepala, persis ayahnya.
-Ibu: Nanti Ibu bicarakan sama Ayah. Kirimannya mungkin sedikit lebih kecil, sisanya ditabung untuk Laras. Tapi kalau capek, berhenti. Paham?
-@percaya ibu +6
-@percaya ayah +4
-@lompat setelah_warung
-
-:: kerja
-@atur jalur = kerja
-@atur rencana_kerja = desa
-{nama}: Aku mau tetap di desa, Bu. Kerja, bantu Ayah sama Ibu, dan pelan-pelan memperbaiki hidup kita.
-Ibu: Kamu yakin, Nak? Ibu tidak mau kamu menyesal nanti.
-{nama}: Aku yakin, Bu.
-Ibu: ...Nanti siang, waktu Ayah bangun, bilang sendiri ke Ayahmu, ya.
-{nama}: (Dan aku tidak akan berhenti mencarinya. Kalau tidak bisa ke kota, aku cari lewat internet.)
+:: condong_ragu
+@atur condong = ragu
+{nama}: Aku... belum tahu, Bu.
+@tampil ibu senyum
+Ibu: Wajar. Ibu juga dulu bingung waktu seumurmu. Masih ada waktu.
 
 
 # ----------------------------------------------------------
@@ -231,6 +209,7 @@ Ibu: ...Nanti siang, waktu Ayah bangun, bilang sendiri ke Ayahmu, ya.
 * Menjelang siang, warung mulai sepi. Ibu menyelipkan beberapa lembar uang ke tangan {nama}.
 @tampil ibu senyum
 Ibu: Ini titipan Ayah semalam. Hadiah kelulusan, katanya. Simpan baik-baik, ya.
+Ibu: Nanti siang, waktu Ayah bangun, bicara juga sama Ayahmu soal tadi.
 @sembunyi ibu
 @uang +50000
 @barang air_mineral 1
@@ -255,18 +234,25 @@ Ibu: Ini titipan Ayah semalam. Hadiah kelulusan, katanya. Simpan baik-baik, ya.
 :: malam
 @gelap 1800
 @kalender Senin 20:00
-@waktu Senin, 20:00
+@waktu Senin, 1 Juni 2026 · malam
 @latar kamar_pagi
+@atur _tempat = kamar_pagi
 @terang 1500
 * Malam itu, {nama} menatap pesan di HP-nya lama sekali.
-@jika jalur == kerja -> malam_kerja
-* Sebentar lagi, {nama} akan berangkat ke Kota Sakala. Kota yang sama dengan janji di dermaga dulu.
+@jika condong == kota -> malam_kota
+@jika condong == desa -> malam_desa
+* Kota atau desa. Pergi atau tinggal. Tiga minggu terasa lama sekaligus terlalu sebentar.
 @lompat penutup
 
-:: malam_kerja
+:: malam_kota
+* Kota Sakala. Kota yang sama dengan janji di dermaga dulu. Kalau benar dia menunggu di sana...
+* Tapi wajah Ibu yang menatap kaleng biskuit tadi siang tidak mau hilang dari kepalanya.
+@lompat penutup
+
+:: malam_desa
 * Kota Sakala terasa jauh sekali dari desa ini. Tapi pesan itu terus mengusik pikirannya.
-* Dari jendela kamar, mercusuar tua di ujung tanjung hanya terlihat sebagai bayangan hitam. Sudah bertahun-tahun lampunya padam.
 
 :: penutup
+* Dari jendela kamar, mercusuar tua di ujung tanjung hanya terlihat sebagai bayangan hitam. Sudah bertahun-tahun lampunya padam.
 * Di suatu tempat, di jalan hidup yang lain, mungkin ada dirinya yang memilih berbeda...
-@naskah bab2.txt
+@naskah bab1.txt
