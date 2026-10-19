@@ -331,6 +331,32 @@ Pak Haji Somad (`haji`) ☆ · Bu Wati (`wati`, ibu Sekar) ○. Dino (pengejek L
 **Gambar:** semua tokoh di game dibuatkan gambar (prompt di PROMPT_GAMBAR.md), termasuk Pak RT, Pak Kades, Mantri Joko, Rani, Dodi,
 Dino, Raka muda (sesuai foto).
 
+## 6d. STRUKTUR BAB (disetujui 19 Okt 2026) — mulai Bab 3 jalur DIPISAH
+
+```
+Bab 1 — Lulus SMP            (desa, semua pemain)
+Bab 2 — Mencari Pegangan     (desa, semua pemain)
+            │
+   Keputusan Jumat 26 Juni
+      ┌─────┴─────┐
+   KOTA          DESA
+Bab 3 Kota     Bab 3 Desa
+"Pamit"        "Musim Ombak Tinggi"
+Bab 4 Kota     Bab 4 Desa
+(hidup di      "Tujuh Belasan"
+ Sakala)
+```
+- Satu permainan = satu jalur. Bab 3 Kota = proses pindah (masih di desa: berkas, berhenti kerja, pamitan → kereta → tiba di Sakala,
+  survei & pilih kos). Bab 4 Kota = hidup di kota (cerita kota yang sudah ada, disesuaikan; nomor bab bergeser).
+- Bab 3 & 4 Desa = pemain tetap di desa.
+- "Desa dari jauh" BUKAN bab gabungan: di Bab 4 Kota kabar desa hanya datang lewat chat / telepon / kirim uang / pulang kampung.
+- Setiap bab 3 & 4 (desa maupun kota) harus punya arah cerita jelas, banyak adegan, banyak percabangan.
+- Tahap berikutnya: merancang isi Bab 4 Kota (menyesuaikan cerita kota lama dengan Bab 3 Kota baru), lalu dibuat di game sekaligus.
+
+**Bab 4 Desa "Tujuh Belasan" (20 Juli – 17 Agustus)** — isi seperti bagian 10 dengan penyesuaian: Darto datang 3 Agustus (cicilan dari
+Bab 2–3), Sekar memimpin mercusuar bila tinggal (Pak Kades bila pergi), hadiah Bayu untuk Sekar, malam 17 Agustus Darto menatap
+mercusuar berharap Raka melihat. Kejadian yang sama dialami pemain kota dari jauh (tabel 6c).
+
 ## 7. Bab 1 — Lulus SMP (Senin 22 Juni)
 
 Alur utama (sudah ada): kenangan → bangun → jalan ke ruang makan → sarapan → Laras berangkat → buka warung →
