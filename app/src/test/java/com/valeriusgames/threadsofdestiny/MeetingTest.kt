@@ -29,6 +29,9 @@ class MeetingTest {
         val m = chars.getValue(id)
         val slots = m["waktu"].orEmpty().split(',').map { it.trim().lowercase() }.filter { it.isNotEmpty() }.toSet()
         val minute = clock.substringBefore(':').toInt() * 60 + clock.substringAfter(':').toInt()
+        // sama seperti GameData.meetableNow: kolom "lokasi" menggantikan "jadwal"
+        if (!m["lokasi"].isNullOrBlank())
+            return (m["ditemui"] ?: "ya").trim() != "tidak" && GameData.locationAt(m["lokasi"], weekday, minute) != null
         return GameData.meetable(m["ditemui"], m["jadwal"], slots, weekday, minute)
     }
 
@@ -36,7 +39,7 @@ class MeetingTest {
     private val MINGGU = 6
 
     @Test fun morningAtHomeOnlyIbu() {
-        // Senin pagi sesudah sarapan: Ayah tidur (habis melaut), Laras sekolah, Bayu harus janjian
+        // Senin pagi sesudah sarapan: Ayah tidur (habis melaut), Laras sekolah, Bayu melaut bersama bapaknya
         assertTrue(canMeet("ibu", SENIN, "08:00"))
         assertFalse(canMeet("ayah", SENIN, "08:00"))
         assertFalse(canMeet("laras", SENIN, "08:00"))
@@ -55,10 +58,14 @@ class MeetingTest {
     @Test fun appointmentOnlyAndNeverMeetable() {
         for (h in 0 until 24) {
             val c = "%02d:00".format(h)
-            assertFalse(canMeet("bayu", SENIN, c))
             assertFalse(canMeet("dimas", SENIN, c))
             assertFalse(canMeet("sahabat", SENIN, c))
         }
+        // Bayu & Sekar: punya tempat main sendiri (lapangan / dermaga), juga bisa diajak janjian
+        assertTrue(canMeet("bayu", SENIN, "16:00"))
+        assertTrue(canMeet("sekar", SENIN, "16:00"))
+        assertFalse(canMeet("sekar", MINGGU, "16:00"))
+        assertEquals("dermaga", chars.getValue("bayu")["tempat_janji"])
     }
 
     @Test fun overnightSchedule() {

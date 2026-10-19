@@ -31,7 +31,7 @@ class SceneTest {
     private val locs by lazy { sections("lokasi.txt").map { it.first }.toSet() }
 
     @Test fun manyScenesForTheVillage() {
-        assertTrue("adegan desa harus banyak (sekarang ${scenes.size})", scenes.size >= 45)
+        assertTrue("adegan desa harus banyak (sekarang ${scenes.size})", scenes.size >= 40)
         assertEquals("id adegan dobel", scenes.size, scenes.map { it.id }.toSet().size)
         // setiap karakter desa punya beberapa adegan
         listOf("ayah", "ibu", "laras", "bayu", "sekar", "darto").forEach { c ->

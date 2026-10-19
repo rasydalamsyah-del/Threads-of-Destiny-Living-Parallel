@@ -112,7 +112,8 @@ class TimeSystemTest {
     /** Semua "mulai" di aktivitas.txt terbaca. */
     @Test fun dataStartWindowsValid() {
         File("src/main/assets/data/aktivitas.txt").readLines().map { it.trim() }.filter { it.startsWith("mulai") }.forEach { l ->
-            assertTrue("mulai tidak terbaca: $l", GameData.window(l.substringAfter('=').trim()) != null)
+            val v = l.substringAfter('=').trim()
+            assertEquals("mulai tidak terbaca: $l", v.split(',').size, GameData.windows(v).size)
         }
     }
 
