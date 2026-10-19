@@ -5,12 +5,12 @@
 # ==========================================================
 
 @sembunyi semua
+@atur bab = 3
 @gelap 1500
-@jika jalur == kerja -> desa
 
 
 # ==========================================================
-#  JALUR KOTA
+#  JALUR KOTA  (jalur desa: desa_bab3.txt)
 # ==========================================================
 
 @waktu Minggu kedua di Kota Sakala
@@ -110,86 +110,4 @@ Nadia: ...Begitu.
 @gelap 1500
 * Benang merah itu belum putus. Dia ada di kota ini.
 * Dan entah kenapa... dia sedang menghindar.
-@tamat Bab 3 — Bersambung…
-
-
-# ==========================================================
-#  JALUR DESA
-# ==========================================================
-
-:: desa
-@waktu Minggu kedua di Tanjung Lentera
-@kalender Senin pagi
-@latar rumah_warung
-@terang 1500
-* Seminggu bekerja. Tanganmu mulai kapalan, tapi kamu mulai terbiasa dengan bau garam dan panas matahari.
-@tampil laras menangis tengah
-Laras: Kak! Kak! Ibu... Ibu pingsan di warung!
-@sembunyi semua
-@latar ruang_makan
-@tampil ibu sedih
-* Ibu dibaringkan di tikar ruang tengah. Wajahnya pucat.
-Ibu: Ibu nggak apa-apa... cuma capek.
-* Kata mantri desa, Ibu kelelahan dan tekanan darahnya tinggi. Ibu butuh obat dan harus istirahat. Biayanya Rp150.000.
-
-@pilihan
-> Bayar dengan uangmu sendiri (Rp150.000) -> bayar_sendiri
-> Pinjam ke Juragan Darto -> pinjam_darto
-> Serahkan pada Ayah -> serahkan_ayah
-
-:: bayar_sendiri
-@jika uang < 150000 -> uang_kurang
-@uang -150000
-@cinta ibu +12
-@cinta ayah +6
-Ibu: Uang hasil kerjamu... Nak, Ibu jadi malu.
-{nama}: Sekarang giliranku menjaga Ibu.
-@lompat setelah_ibu
-
-:: uang_kurang
-* Kamu menghitung uangmu berkali-kali. Tidak cukup.
-{nama}: Aku... harus pinjam.
-
-:: pinjam_darto
-@kenal darto
-@sembunyi ibu
-@tampil darto kaget
-Juragan Darto: Seratus lima puluh ribu?
-@tampil darto biasa
-Juragan Darto: ...Ibumu orang baik. Saya bayarkan ke mantri langsung.
-Juragan Darto: Tapi itu hutang. Kerja yang rajin sampai lunas.
-@atur hutang_darto = 150000
-@percaya darto +5
-@cinta ibu +8
-@catatan Hutang ke Juragan Darto Rp150.000 untuk obat Ibu.
-@lompat setelah_ibu
-
-:: serahkan_ayah
-@sembunyi ibu
-@tampil ayah sedih
-Ayah: Biar Ayah yang urus. Ayah jual semua hasil tangkapan minggu ini.
-* Malam itu, Ayah melaut lebih jauh dari biasanya. Kamu tidak bisa tidur memikirkannya.
-@cinta ayah +3
-@stat kewarasan -8
-
-:: setelah_ibu
-@sembunyi semua
-* Ibu berangsur pulih. Tapi kejadian ini membuatmu sadar: hidup di desa pun tidak mudah.
-
-@latar rumah_warung
-@tampil laras biasa
-Laras: Kak, gelang benang merah di tangan Kakak itu dari siapa, sih? Udah butut, kok nggak pernah dilepas?
-{nama}: Ini... janji lama, Laras.
-Laras: Janji sama siapa? Pacar, ya?
-{nama}: Bukan. Sama sahabat Kakak waktu kecil. Dia pergi ke kota, dan Kakak masih menunggunya.
-@tambah petunjuk_sahabat +1
-@sembunyi semua
-@hp pesan Nomor Tidak Dikenal | Kamu masih di Tanjung Lentera, ya? Kalau kamu tidak datang ke Sakala... mungkin suatu hari aku yang akan pulang.
-@tunggu_hp
-@catatan Nomor misterius: "Kalau kamu tidak datang ke Sakala, mungkin suatu hari aku yang akan pulang."
-@bebas 6 hari
-
-@gelap 1500
-* Di Tanjung Lentera, mercusuar tua itu masih padam.
-* Tapi seseorang di kota sana... masih mengingat janjinya.
 @tamat Bab 3 — Bersambung…

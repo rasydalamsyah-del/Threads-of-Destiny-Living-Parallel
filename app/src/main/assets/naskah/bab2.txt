@@ -5,6 +5,7 @@
 # ==========================================================
 
 @sembunyi semua
+@atur bab = 2
 @gelap 2000
 @jika jalur == kerja -> desa
 
@@ -163,52 +164,8 @@ Dimas: Terserah kamu mau jadi yang mana. Tapi uang kiriman itu cepat habis, lho.
 
 
 # ==========================================================
-#  JALUR DESA (KERJA)
+#  JALUR DESA (KERJA) → naskah tersendiri (Bab 2–4 desa)
 # ==========================================================
 
 :: desa
-@waktu Senin, 6 Juli 2026
-@tanggal 6 Juli 2026
-@kalender Senin pagi
-@lokasi desa
-@latar gudang_ikan
-@terang 1500
-* Dua minggu setelah kelulusan. Bau garam dan ikan menyengat dari gudang di ujung desa.
-@kenal darto
-@tampil ayah biasa kiri
-@tampil darto biasa kanan
-Ayah: Juragan, ini anak saya. Dia mau kerja di sini.
-Juragan Darto: Hm. Anak seumur ini? Kerja di sini berat, bukan main-main.
-Ayah: Dia anak yang rajin, Juragan. Saya yang jamin.
-@lamar buruh_ikan -> diterima, ditolak
-
-:: diterima
-Juragan Darto: ...Baiklah. Karena bapakmu yang minta. Datang Senin sampai Sabtu, jam tujuh pagi sampai jam dua siang. Upah dibayar tiap selesai kerja.
-Juragan Darto: Tapi kalau malas, kamu keluar. Paham?
-{nama}: Paham, Juragan. Terima kasih.
-@cinta ayah +5
-@lompat hari_kerja
-
-:: ditolak
-Juragan Darto: Maaf, Darman. Tempat saya lagi penuh. Anakmu masih kecil juga.
-* Ayah menghela napas panjang dalam perjalanan pulang.
-Ayah: Tidak apa-apa. Masih ada laut. Ikut melaut saja kalau mau cari uang.
-* (Buka "🔎 Cari kerja" di waktu bebas untuk mencari pekerjaan lain.)
-
-:: hari_kerja
-@sembunyi semua
-@latar rumah_warung
-* Hari-hari {nama} sekarang diisi kerja. Uang mulai terkumpul sedikit demi sedikit.
-@hp pesan Bayu | Woy, katanya kamu kerja di gudang Juragan Darto? Mantap, {bro|cuy}! Sore-sore main ke dermaga, ya.
-@tunggu_hp
-{nama}: Dasar Bayu...
-* Teman-teman seangkatan satu per satu pergi ke kota. Desa terasa semakin sepi. Tapi di sini, setidaknya, ada keluarga.
-* Malam hari, setelah lelah bekerja, {nama} selalu membuka HP. Mengetik nama yang sama di kolom pencarian.
-* (Aplikasi 📷 Sosmed di HP: lihat kabar teman-teman, dan cari jejak sahabatmu sekali sehari. Siapa tahu suatu hari ada yang muncul.)
-* Waktu bebasmu berjalan selama 6 hari. Atur sendiri: kerja, makan, tidur, dan mencari kabar.
-@bebas 6 hari
-
-@gelap 1500
-* Satu minggu berlalu di Tanjung Lentera.
-* Pesan dari nomor misterius itu masih tersimpan di HP-nya. Belum dibalas.
-@naskah bab3.txt
+@naskah desa_bab2.txt

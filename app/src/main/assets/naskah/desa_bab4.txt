@@ -1,0 +1,710 @@
+# ==========================================================
+#  THREADS OF DESTINY: LIVING PARALLEL
+#  Naskah: BAB 4 DESA — TUJUH BELASAN
+#  Senin 20 Juli – Senin 17 Agustus 2026 · Alur: docs/CERITA.md bagian 10
+#  Empat alur waktu bebas: tim bola Bayu, layangan Laras, bazar Ibu, mercusuar
+#  (adegan di adegan_tujuhbelas.txt; pemicu di data/adegan.txt)
+# ==========================================================
+
+@sembunyi semua
+@atur bab = 4
+@atur desa_bab = 4
+
+
+# ----------------------------------------------------------
+#  SENIN 20 JULI — PENGUMUMAN PAK RT
+# ----------------------------------------------------------
+
+@kalender Senin 06:30
+@waktu Senin, 20 Juli 2026
+@latar rumah_warung
+@atur _tempat = rumah_warung
+@terang 1200
+* Pagi-pagi sekali, sebelum warung buka, Pak RT Sobari sudah berdiri di depan warung dengan segulung kertas dan lem kanji.
+Pak RT: Pagi, Bu! Pagi, {nama}! Numpang tempel, ya. Warung Ibu ini kan paling ramai, semua orang pasti baca.
+@tampil ibu senyum
+Ibu: Tempel saja, Pak. Pengumuman apa?
+Pak RT: Tujuh belasan, Bu! Tahun ini kita bikin besar-besaran.
+* Pak RT membentangkan kertas itu di tiang warung. Huruf-hurufnya ditulis tangan dengan spidol merah putih.
+* LOMBA 17 AGUSTUS DESA TANJUNG LENTERA — Sepak bola antar-RT (final Minggu 16 Agustus) · Lomba layangan anak · Panjat pinang · Bazar jajanan warga · dan malamnya: MENYALAKAN KEMBALI MERCUSUAR TUA!
+@tampil ibu kaget
+Ibu: Mercusuar? Yang di ujung tanjung itu? Sudah sepuluh tahun mati, Pak!
+Pak RT: Itu dia! Pak Kades mau menyalakannya lagi. Butuh relawan buat membersihkan, memperbaiki, cari lampu dan aki. Dana dari desa cuma sedikit, jadi kita cari sumbangan juga.
+Pak RT: {nama}, kamu anak muda. Ikut bantu, ya. Bayu sudah daftar jadi kapten tim bola RT kita. Sekar katanya mau bantu urusan mercusuar.
+@jika sekar_pergi == 1 -> rt_sekar_pergi
+@lompat rt_lanjut
+
+:: rt_sekar_pergi
+Pak RT: Eh, Sekar kan sudah ke Sakala, ya. Lupa saya. Ya sudah, nanti Pak Kades sendiri yang pegang.
+
+:: rt_lanjut
+* Pak RT berlalu sambil bersiul. Ibu menatap pengumuman itu lama, jarinya mengetuk-ngetuk dagu.
+@tampil ibu senyum
+Ibu: Bazar jajanan... Kalau warung kita ikut, mungkin bisa dapat pelanggan baru.
+@pilihan
+> "Ikut, Bu! Aku bantu." -> rt_bazar_ya
+> "Ibu kan baru sembuh. Jangan terlalu capek." -> rt_bazar_hati
+
+:: rt_bazar_ya
+@atur bazar_ikut = 1
+Ibu: Nah, gitu! Nanti kita pikirkan menunya sama-sama.
+@cinta ibu +2
+@lompat rt_akhir
+
+:: rt_bazar_hati
+@atur bazar_ikut = 1
+@tampil ibu biasa
+Ibu: Ibu tahu batas, Nak. Lagi pula ini cuma sehari. Kamu bantu Ibu, ya, biar Ibu tidak kecapekan.
+@percaya ibu +2
+
+:: rt_akhir
+@sembunyi semua
+* Desa kecil ini mendadak punya sesuatu untuk ditunggu.
+* Empat minggu menuju tujuh belasan. Temui Bayu soal tim bola, Laras soal layangan, Ibu soal bazar, dan cari tahu soal mercusuar di dermaga.
+@catatan Lomba 17 Agustus: final bola Minggu 16 Agustus (tim RT, kapten Bayu), lomba layangan anak, bazar warga, dan malamnya mercusuar tua akan dinyalakan kembali.
+@bebas 14 hari
+
+
+# ----------------------------------------------------------
+#  SENIN 3 AGUSTUS — JURAGAN DATANG KE RUMAH
+# ----------------------------------------------------------
+
+@gelap 1000
+@kalender Senin 06:30
+@waktu Senin, 3 Agustus 2026
+@latar sarapan_keluarga
+@atur _tempat = ruang_makan
+@terang 1000
+@tampil ayah biasa
+@tampil ibu biasa
+@tampil laras biasa
+* Sarapan baru dimulai ketika terdengar ketukan di pintu depan. Ketukan yang tegas, tiga kali.
+@sembunyi laras
+@tampil darto biasa
+Juragan Darto: Pagi, Darman. Maaf mengganggu sarapan.
+@tampil ayah kaget
+Ayah: J-Juragan. Silakan masuk, silakan.
+* Ibu buru-buru menyiapkan kopi. Laras diam-diam mengangkat piringnya dan menghilang ke kamar.
+Juragan Darto: Saya tidak lama. Soal perahu.
+@jika cicilan_perahu >= 400000 -> darto_lunak
+Juragan Darto: Sudah hampir empat bulan, Darman. Satu juta dua ratus. Saya juga punya cicilan ke bank di kota.
+Juragan Darto: Sabtu ini, tanggal delapan. Setidaknya separuh. Kalau tidak... perahu itu saya ambil. Saya minta maaf, tapi saya juga harus hidup.
+@tampil ayah sedih
+Ayah: ...Saya usahakan, Juragan.
+* Juragan Darto mengangguk sekali, lalu pergi. Kopinya tidak tersentuh.
+@atur tekanan_hutang = 1
+@lompat darto_pergi
+
+:: darto_lunak
+@atur tekanan_hutang = 0
+@tampil darto senyum
+Juragan Darto: Anakmu sudah mencicil sebagian, Darman. Kamu tidak tahu?
+@tampil ayah kaget
+* Ayah menoleh padamu. Matanya sulit dibaca.
+Juragan Darto: Karena itu saya beri waktu sampai akhir tahun. Anak seperti itu jarang. Jaga baik-baik.
+* Juragan Darto pergi, meninggalkan kopi yang habis setengah.
+@jika sikap_hutang == tanya -> darto_lunak_terbuka
+@jika ayah_tahu_cicilan == 1 -> darto_lunak_terbuka
+@tampil ayah kesal
+Ayah: Kamu membayar hutang Ayah... diam-diam?
+{nama}: Aku cuma mau bantu, Yah.
+Ayah: Ayah ini kepala keluarga, {nama}. Bukan anak kecil yang perlu ditolong diam-diam.
+* Ayah berdiri dan masuk kamar tanpa menghabiskan sarapannya. Ibu memegang tanganmu di bawah meja.
+@tampil ibu sedih
+Ibu: Biarkan dulu. Ayahmu bukan marah padamu. Ayahmu marah pada dirinya sendiri.
+@cinta ayah -3
+@terbongkar cicilan_rahasia
+@atur ayah_tersinggung = 1
+@lompat darto_pergi
+
+:: darto_lunak_terbuka
+@tampil ayah sedih
+Ayah: ...Ayah tahu kamu mau membantu. Tapi Ayah tidak tahu sudah sebanyak itu.
+* Ayah menunduk lama. Lalu ia meletakkan tangannya di atas kepalamu, seperti dulu waktu kamu masih kecil.
+Ayah: Terima kasih, Nak.
+@cinta ayah +6
+@percaya ayah +5
+
+:: darto_pergi
+@sembunyi semua
+@latar ruang_makan
+* Hari itu, Ayah lebih sering menatap langit daripada biasanya.
+* Waktu bebas sampai Jumat sore.
+@bebas sampai Jumat 17:30
+
+
+# ----------------------------------------------------------
+#  JUMAT 7 AGUSTUS — LANGIT MERAH TEMBAGA
+# ----------------------------------------------------------
+
+@gelap 1000
+@kalender Jumat 17:30
+@waktu Jumat, 7 Agustus 2026 · 17:30
+@latar rumah_warung
+@atur _tempat = rumah_warung
+@terang 1000
+* Sore itu, langit di barat berwarna aneh. Bukan jingga. Merah tembaga, pekat, seperti besi yang dipanaskan.
+* Angin berhenti. Burung-burung camar terbang rendah ke arah daratan. Udara terasa berat dan lengket.
+@tampil ayah biasa
+* Ayah keluar rumah membawa jeriken solar dan gulungan jaring. Wajahnya keras.
+@jika tekanan_hutang == 1 -> badai_ayah_nekat
+Ayah: Langitnya merah. Malam ini Ayah tidak berangkat.
+* Ayah meletakkan jerikennya kembali. Kamu menghela napas lega yang tidak kamu sadari tertahan sejak tadi.
+@atur ayah_berangkat_badai = 0
+@lompat badai_malam_rumah
+
+:: badai_ayah_nekat
+{nama}: Yah... langitnya merah. Ayah bilang kalau langit begini, Ayah tidak berangkat.
+@tampil ayah sedih
+Ayah: Besok hari Sabtu, {nama}. Juragan menunggu separuh hutang. Satu malam tangkapan bagus bisa menolong.
+Ayah: Ayah sudah tiga puluh tahun di laut. Ayah tahu batasnya.
+@pilihan
+> "Jangan, Yah! Perahu bisa dicari lagi. Ayah tidak!" -> badai_cegah
+> "Aku ikut Ayah." -> badai_ikut
+> Diam, membiarkan Ayah pergi -> badai_biarkan
+
+:: badai_cegah
+@jika cinta_ayah >= 75 -> badai_cegah_berhasil
+@tampil ayah kesal
+Ayah: Kamu tidak mengerti! Kalau perahu diambil, bagaimana Ayah mencari makan?!
+* Ayah berbalik dan berjalan cepat ke arah dermaga. Kamu berdiri terpaku, tanganmu dingin.
+@atur ayah_berangkat_badai = 1
+@lompat badai_malam_cemas
+
+:: badai_cegah_berhasil
+* Ayah berhenti. Ia menatapmu lama, lalu menatap langit, lalu kembali menatapmu.
+@tampil ayah sedih
+Ayah: ...Kamu bicara persis seperti Ibumu, enam belas tahun lalu.
+* Perlahan, Ayah meletakkan jeriken itu di tanah.
+Ayah: Ya sudah. Biar perahu itu diambil kalau memang harus. Ayah di rumah malam ini.
+@atur ayah_berangkat_badai = 0
+@cinta ayah +8
+@percaya ayah +8
+@lompat badai_malam_rumah
+
+:: badai_ikut
+@tampil ayah kesal
+Ayah: Tidak! Kamu di rumah. Jaga Ibumu dan Laras.
+{nama}: Kalau begitu Ayah juga di rumah!
+* Ayah mencengkeram bahumu. Untuk pertama kalinya, kamu melihat ketakutan di matanya.
+Ayah: Justru karena ini berbahaya, kamu tidak boleh ikut. ...Ayah pulang sebelum subuh. Janji.
+* Ayah pergi. Kamu berdiri di depan rumah sampai lampu perahunya hilang di balik tanjung.
+@atur ayah_berangkat_badai = 1
+@lompat badai_malam_cemas
+
+:: badai_biarkan
+* Kamu diam. Ayah menepuk bahumu sekali, lalu berjalan ke dermaga.
+* Langit makin gelap. Di kejauhan, kilat menyambar tanpa suara.
+@atur ayah_berangkat_badai = 1
+@stat kewarasan -5
+
+# ----- Ayah berangkat: malam penuh cemas -----
+:: badai_malam_cemas
+@sembunyi semua
+@gelap 1500
+@latar ruang_tengah
+@atur _tempat = ruang_tengah
+@kalender Jumat 23:00
+@terang 1000
+* Pukul sebelas malam, badai datang. Hujan menghantam atap seng seperti batu. Angin melolong di sela-sela papan rumah.
+@tampil ibu menangis
+@tampil laras menangis
+* Ibu duduk di tikar memeluk Laras. Bibirnya bergerak tanpa suara, berdoa. Lampu padam. Hanya lilin kecil yang bergoyang.
+Laras: Kak... Ayah nggak apa-apa, kan?
+@pilihan
+> "Ayah nelayan paling hebat di desa ini. Pasti pulang." -> cemas_yakin
+> Peluk Laras tanpa berkata apa-apa -> cemas_peluk
+
+:: cemas_yakin
+Laras: ...Janji?
+{nama}: Janji.
+* Kata itu terasa berat. Seperti tiga tahun lalu, di dermaga.
+@cinta laras +3
+@lompat cemas_subuh
+
+:: cemas_peluk
+* Kamu memeluk Laras dan Ibu sekaligus. Tidak ada yang tidur malam itu.
+@cinta ibu +3
+@cinta laras +3
+
+:: cemas_subuh
+@sembunyi semua
+@gelap 1500
+@kalender Sabtu 05:30
+@waktu Sabtu, 8 Agustus 2026 · 05:30
+@latar dermaga_malam
+@atur _tempat = dermaga
+@terang 1500
+* Subuh. Badai sudah reda, menyisakan laut kelabu dan dermaga yang berantakan. Perahu-perahu nelayan merapat satu per satu.
+* Perahu biru pudar itu tidak ada di antara mereka.
+@tampil bayu sedih
+Bayu: {nama}! Bapakku bilang semalam dia lihat lampu perahu bapakmu dekat bagan Pak Haji, sebelum badai. Habis itu hilang.
+* Pak Karta menyalakan mesin perahunya. Beberapa nelayan lain berdebat, belum berani ke tengah.
+@pilihan
+> Ikut perahu Pak Karta mencari Ayah -> cari_karta
+> Minta tolong Juragan Darto dengan perahu motornya -> cari_darto
+> Menunggu di dermaga bersama Ibu & Laras -> cari_tunggu
+
+:: cari_karta
+@atur cara_selamat = karta
+@jika keahlian_laut >= 3 -> cari_karta_mahir
+* Kamu melompat ke perahu Pak Karta. Ombak sisa badai masih tinggi; perutmu teraduk, tanganmu mencengkeram pinggiran perahu.
+@stat kesehatan -6
+@stat energi -20
+Pak Karta: Pegangan! Mata ke kanan, Bayu ke kiri!
+@lompat cari_temu
+
+:: cari_karta_mahir
+* Kamu melompat ke perahu Pak Karta. Hari-hari di laut tidak sia-sia: kamu tahu cara menyeimbangkan badan, tahu membaca arah arus.
+Pak Karta: Arus ke barat semalam. Kalau terbalik, dia hanyut ke arah bagan!
+{nama}: Ke bagan Pak Haji, Pak!
+@stat energi -15
+@lompat cari_temu
+
+:: cari_darto
+@atur cara_selamat = darto
+@latar gudang_ikan
+@tampil darto kaget
+* Kamu berlari ke gudang. Juragan Darto sedang menghitung kerugian tampah-tampah yang diterbangkan angin.
+{nama}: Juragan! Ayah belum pulang! Tolong, perahu motor Juragan—
+@jika percaya_darto >= 45 -> darto_mau
+@tampil darto biasa
+Juragan Darto: Perahu motor itu mahal solarnya, Nak... dan laut masih ganas.
+* Juragan Darto terdiam beberapa detik yang terasa seperti selamanya. Lalu ia meraih kunci dari dinding.
+Juragan Darto: ...Solarnya nanti kita hitung. Ayo!
+@atur hutang_darto_solar = 1
+@lompat darto_berangkat
+
+:: darto_mau
+Juragan Darto: Kenapa tidak bilang dari tadi?! Ayo!
+* Ia sudah berlari ke dermaga bahkan sebelum kamu selesai bicara.
+@percaya darto +5
+
+:: darto_berangkat
+@latar dermaga_malam
+* Perahu motor Juragan Darto membelah ombak jauh lebih cepat dari perahu-perahu nelayan.
+@lompat cari_temu
+
+:: cari_tunggu
+@atur cara_selamat = tunggu
+@tampil ibu sedih
+* Kamu tetap di dermaga bersama Ibu dan Laras. Ibu menggenggam tanganmu begitu erat sampai kukunya meninggalkan bekas.
+* Satu jam. Dua jam. Setiap perahu yang muncul di cakrawala membuat jantungmu berhenti.
+@stat kewarasan -10
+@lompat cari_temu
+
+:: cari_temu
+@sembunyi semua
+@maju 2 jam
+@latar dermaga_malam
+* Pukul setengah delapan, terdengar teriakan dari ujung dermaga.
+* Sebuah perahu merapat, dan di dalamnya, terbungkus sarung basah, menggigil, dengan pelipis berdarah... Ayah.
+@tampil ayah sedih
+Ayah: ...Perahunya terbalik dekat bagan. Ayah berpegangan di tiang bagan sampai pagi.
+* Ibu berlari menembus kerumunan dan memeluk Ayah sambil menangis keras-keras. Laras ikut menangis tanpa tahu kenapa.
+@jika cara_selamat == karta -> temu_karta
+@jika cara_selamat == darto -> temu_darto
+Ayah: Pak Karta yang menemukan Ayah. Bayu yang pertama melihat.
+@cinta bayu +3
+@lompat temu_akhir
+
+:: temu_karta
+Ayah: Kamu... kamu ikut mencari?
+{nama}: Aku yang lihat Ayah duluan, Yah.
+* Ayah menarikmu ke pelukannya yang basah dan dingin. Ia tidak mengatakan apa-apa. Ia tidak perlu.
+@cinta ayah +10
+@percaya ayah +6
+@cinta bayu +4
+@lompat temu_akhir
+
+:: temu_darto
+Ayah: Juragan... Juragan yang datang?
+* Juragan Darto hanya mengangguk, lalu pergi mengurus perahunya tanpa menunggu ucapan terima kasih.
+@cinta ayah +6
+@percaya darto +6
+
+:: temu_akhir
+@atur perahu_rusak = 1
+* Ayah selamat. Tapi perahu biru pudar itu tenggelam di dekat bagan. Yang berhasil ditarik ke pantai hanya bangkai lambungnya yang retak.
+@lompat badai_rapat
+
+# ----- Ayah tidak berangkat: badai dari dalam rumah -----
+:: badai_malam_rumah
+@sembunyi semua
+@gelap 1500
+@latar ruang_tengah
+@atur _tempat = ruang_tengah
+@kalender Jumat 23:00
+@terang 1000
+* Pukul sebelas malam, badai datang. Hujan menghantam atap seng seperti batu. Angin melolong di sela-sela papan rumah.
+@tampil ayah biasa
+@tampil laras menangis
+* Ayah duduk di dekat jendela, diam, menatap gelap. Laras meringkuk di pangkuan Ibu.
+Ayah: Kalau tadi Ayah berangkat...
+* Ayah tidak menyelesaikan kalimatnya. Ia hanya mengusap wajahnya dengan kedua tangan.
+@gelap 1500
+@kalender Sabtu 06:00
+@waktu Sabtu, 8 Agustus 2026 · pagi
+@latar dermaga_malam
+@atur _tempat = dermaga
+@terang 1500
+* Pagi harinya, dermaga berantakan. Tiga perahu terlepas dari tambatannya. Perahu biru Ayah masih di sana, tapi lambungnya retak menghantam tiang.
+@tampil ayah sedih
+Ayah: Masih bisa diperbaiki. Tapi butuh papan baru, dempul, cat... Tiga ratus ribu, paling sedikit.
+* Ayah menghela napas. Lalu, tiba-tiba, ia tertawa kecil.
+@tampil ayah senyum
+Ayah: Perahu rusak. Hutang belum lunas. Tapi Ayah masih di sini. Itu yang penting, kan?
+@atur perahu_rusak = 2
+
+# ----------------------------------------------------------
+#  SABTU 8 AGUSTUS SIANG — RAPAT KELUARGA
+# ----------------------------------------------------------
+
+:: badai_rapat
+@sembunyi semua
+@gelap 1200
+@kalender Sabtu 13:00
+@latar ruang_tengah
+@atur _tempat = ruang_tengah
+@terang 1200
+@tampil ayah sedih
+@tampil ibu biasa
+* Siang itu, Ayah, Ibu, dan kamu duduk melingkar di tikar ruang tengah. Laras disuruh main di luar, tapi kamu tahu ia menguping di balik pintu.
+@jika perahu_rusak == 2 -> rapat_ringan
+Ayah: Perahunya tidak bisa diselamatkan. Hutang masih ada. Dan Ayah tidak punya perahu untuk mencari uang.
+Ibu: Juragan Darto tadi pagi menawarkan sesuatu.
+Ayah: Hutangnya dianggap lunas... kalau Ayah ikut kerja di kapal motornya. Jadi anak buah. Digaji harian.
+* Ayah mengucapkan kata "anak buah" seperti menelan duri. Tiga puluh tahun ia menjadi nakhoda perahunya sendiri.
+@lompat rapat_pilih
+
+:: rapat_ringan
+Ayah: Perahu bisa diperbaiki. Tiga ratus ribu. Tapi hutang ke Juragan juga belum selesai.
+Ibu: Uang warung minggu ini tidak sampai segitu, Pak.
+
+:: rapat_pilih
+* Semua mata tertuju padamu. Kamu satu-satunya di rumah ini yang punya penghasilan tetap.
+@jika perahu_rusak == 2 -> rapat_pilih_ringan
+@pilihan
+> "Terima tawaran Juragan, Yah. Yang penting Ayah selamat." -> rapat_terima
+> "Aku tambah kerja. Kita beli perahu bekas pelan-pelan." -> rapat_kerja
+> "Kita minta tolong orang-orang desa." -> rapat_gotong
+
+:: rapat_terima
+@atur perahu_ayah = ikut_darto
+@tampil ayah sedih
+Ayah: ...Mungkin memang itu jalan yang paling masuk akal.
+* Ayah menatap tangannya yang kapalan. Lalu mengangguk.
+Ayah: Tidak apa-apa. Laut tetap laut. Di kapal siapa pun.
+@cinta ayah +2
+@lompat rapat_akhir
+
+:: rapat_kerja
+@atur perahu_ayah = nabung
+Ayah: Perahu bekas paling murah dua juta, {nama}. Itu setahun kerjamu.
+{nama}: Kalau begitu setahun, Yah. Sementara itu Ayah ikut kapal Juragan dulu, tapi bukan untuk selamanya.
+* Ayah menatapmu lama. Untuk pertama kalinya, ia tidak menatapmu seperti anak kecil.
+@cinta ayah +5
+@percaya ayah +5
+@catatan Tujuan: mengumpulkan uang untuk perahu bekas Ayah (± Rp2.000.000).
+@lompat rapat_akhir
+
+:: rapat_gotong
+@jika cinta_bayu >= 55 -> rapat_gotong_berhasil
+@jika percaya_darto >= 55 -> rapat_gotong_berhasil
+@tampil ayah kesal
+Ayah: Minta tolong? Semua orang di desa ini juga sedang susah, Nak. Badai semalam bukan cuma menimpa kita.
+* Ayah benar. Kamu belum cukup dekat dengan orang-orang yang bisa membantu.
+@atur perahu_ayah = ikut_darto
+Ayah: Ayah terima tawaran Juragan. Sudah, jangan dibahas lagi.
+@lompat rapat_akhir
+
+:: rapat_gotong_berhasil
+@atur perahu_ayah = gotong
+@sembunyi semua
+* Sore harinya, kabar menyebar seperti biasa di desa kecil. Bayu datang membawa Pak Karta. Pak Karta membawa dua nelayan lain. Mbak Yati membawa nasi bungkus.
+@jika percaya_darto >= 55 -> rapat_darto_bantu
+@lompat rapat_gotong_lanjut
+
+:: rapat_darto_bantu
+@tampil darto biasa
+* Menjelang magrib, Juragan Darto sendiri datang, berdiri canggung di depan rumah.
+Juragan Darto: Lambung perahu tua saya di belakang gudang masih bagus. Mesinnya saja yang rusak. Ambil. Hutangmu kita hitung ulang, Darman.
+@tampil ayah kaget
+Ayah: Juragan...
+Juragan Darto: Anakmu yang menolong saya mengerti, orang tidak bisa diperas terus sampai habis. Sudah, jangan berterima kasih. Saya jadi tidak enak.
+@sembunyi darto
+
+:: rapat_gotong_lanjut
+@tampil ayah menangis
+* Ayah, yang tidak pernah menangis di depan siapa pun, berdiri di depan rumah dengan mata basah, menyalami satu per satu.
+Ayah: Terima kasih... terima kasih...
+@cinta ayah +8
+@percaya ayah +6
+@lompat rapat_akhir
+
+:: rapat_pilih_ringan
+@pilihan
+> Bayar perbaikan Rp300.000 dari tabunganku -> ringan_bayar
+> "Aku cari lembur. Perbaikannya dicicil pelan-pelan." -> ringan_cicil
+
+:: ringan_bayar
+@jika uang < 300000 -> ringan_kurang
+@uang -300000
+@atur perahu_ayah = diperbaiki
+@tampil ayah sedih
+Ayah: ...Tabunganmu?
+{nama}: Perahu itu juga perahuku, Yah. Ayah sendiri yang bilang aku bakat nelayan.
+@tampil ayah senyum
+* Ayah tertawa, suara yang hangat dan serak.
+@cinta ayah +8
+@percaya ayah +5
+@lompat rapat_akhir
+
+:: ringan_kurang
+* Kamu menghitung tabunganmu. Tidak cukup.
+
+:: ringan_cicil
+@atur perahu_ayah = dicicil
+Ayah: Ya sudah. Ayah tambal yang paling parah dulu. Sambil jalan.
+@percaya ayah +3
+
+:: rapat_akhir
+@sembunyi semua
+* Hidup tidak berhenti karena badai. Lomba tujuh belasan tinggal seminggu lagi.
+* Waktu bebas seminggu.
+@bebas 7 hari
+
+* Sabtu, 15 Agustus. Besok final sepak bola antar-RT di lapangan desa. Lusa tujuh belasan.
+@bebas sampai Minggu 14:30
+
+
+# ----------------------------------------------------------
+#  MINGGU 16 AGUSTUS — FINAL SEPAK BOLA
+# ----------------------------------------------------------
+
+@gelap 1000
+@kalender Minggu 15:00
+@waktu Minggu, 16 Agustus 2026 · Final sepak bola antar-RT
+@latar lapangan
+@atur _tempat = lapangan
+@terang 1000
+* Lapangan desa tidak pernah seramai ini. Penonton berjejer di pinggir garis kapur yang bengkok, anak-anak memanjat pohon ketapang.
+* RT 02 lawan RT 05. Tim RT 05 diperkuat dua anak juragan kapal dari desa sebelah yang badannya sebesar pintu.
+@jika tim_bola == 1 -> final_main
+@tampil bayu sedih
+* Kamu menonton dari pinggir. Bayu memimpin timnya dengan susah payah. Tanpa satu pemain cadangan, mereka kelelahan di babak kedua.
+* RT 05 menang 3–1. Bayu duduk di tengah lapangan lama setelah peluit akhir.
+Bayu: Nggak apa-apa. Tahun depan.
+* Ia tidak menatapmu.
+@cinta bayu -2
+@lompat final_akhir
+
+:: final_main
+@tampil bayu senyum
+Bayu: Oke, dengar! Mereka besar, tapi lambat. Kita main cepat, operan pendek. {nama}, kamu di sayap kiri, kayak latihan!
+@jika latihan_bola >= 3 -> final_kuat
+@jika latihan_bola >= 2 -> final_imbang
+* Peluit berbunyi. Sejak menit pertama, kalian terdesak. Kakimu berat; latihanmu terlalu sedikit.
+* RT 05 mencetak dua gol. Bayu membalas satu dengan tendangan bebas yang indah, tapi itu saja.
+* Peluit panjang. RT 05 menang 2–1.
+@tampil bayu sedih
+Bayu: ...Kalah terhormat. Makasih udah mau main, {nama}.
+@cinta bayu +2
+@lompat final_akhir
+
+:: final_imbang
+* Pertandingan berjalan ketat. Gol dibalas gol. Skor 1–1 sampai peluit panjang. Adu penalti!
+* Penendang kelima: kamu. Kalau masuk, RT 02 juara.
+Bayu: Kiper mereka selalu loncat ke kanan duluan. Selalu!
+@pilihan
+> Tendang ke kiri, sesuai saran Bayu -> penalti_kiri
+> Tendang keras ke tengah -> penalti_tengah
+
+:: penalti_kiri
+* Kiper meloncat ke kanan, persis seperti kata Bayu. Bola meluncur pelan ke pojok kiri gawang bambu.
+* MASUK!
+@atur juara_bola = 1
+@lompat final_menang
+
+:: penalti_tengah
+* Kamu menendang sekuat tenaga ke tengah. Kiper sudah meloncat ke kanan... tapi kakinya terjulur dan bola memantul ke mistar!
+* Penonton menahan napas. Bola jatuh... di luar garis.
+@atur juara_bola = 0
+@tampil bayu sedih
+Bayu: Udah, udah. Nggak apa-apa. Tadi kita main bagus banget.
+@cinta bayu +3
+@lompat final_akhir
+
+:: final_kuat
+* Latihan-latihan sore itu terbayar. Operan-operan pendek kalian membuat pemain RT 05 yang besar itu kebingungan.
+* Menit ke-20, Bayu menggiring bola melewati dua lawan dan mengoper padamu. Kamu tinggal menyontek ke gawang kosong. GOL!
+* Babak kedua, Bayu sendiri mencetak gol kedua dari luar kotak penalti. 2–0!
+@atur juara_bola = 1
+
+:: final_menang
+@tampil bayu senyum
+* Peluit panjang. RT 02 JUARA! Penonton menyerbu lapangan. Kamu diangkat ke udara bersama Bayu.
+Bayu: KITA JUARA, {nama}! KITA JUARAAA!
+@jika sekar_pergi == 1 -> final_menang_tanpa_sekar
+* Di pinggir lapangan, Sekar bertepuk tangan, tersenyum lebar. Bayu melihatnya, lalu buru-buru pura-pura membetulkan tali sepatunya.
+@lompat final_hadiah
+
+:: final_menang_tanpa_sekar
+* Bayu langsung memotret piala plastik itu dengan HP-nya. Kamu tahu foto itu akan dikirim ke siapa.
+
+:: final_hadiah
+@uang +50000
+@cinta bayu +8
+@percaya bayu +4
+* Hadiahnya piala plastik, seekor kambing untuk RT, dan uang lima puluh ribu per pemain.
+
+:: final_akhir
+@sembunyi semua
+* Malam ini desa tidur cepat. Besok tujuh belasan.
+@bebas sampai Senin 06:30
+
+
+# ----------------------------------------------------------
+#  SENIN 17 AGUSTUS — TUJUH BELASAN
+# ----------------------------------------------------------
+
+@gelap 1000
+@kalender Senin 07:00
+@waktu Senin, 17 Agustus 2026 · Hari Kemerdekaan
+@latar lapangan
+@atur _tempat = lapangan
+@terang 1200
+* Bendera merah putih berkibar di tiang bambu di tengah lapangan. Upacara sederhana dipimpin Pak Kades, dengan suara pengeras yang sesekali berdenging.
+* Semua orang datang. Nelayan-nelayan yang biasanya tidur pagi berdiri tegak dengan baju terbaik mereka. Juragan Darto berdiri di barisan depan.
+
+# ----- Lomba layangan Laras -----
+* Selesai upacara, lomba layangan anak dimulai. Langit penuh layangan warna-warni.
+@jika layangan_tahap >= 4 -> layang_juara
+@jika layangan_tahap >= 3 -> layang_harapan
+@tampil laras sedih
+* Layangan Laras pinjaman tetangga, kertasnya sobek di tengah. Laras tetap tertawa sambil berlari, walau layangannya jatuh paling dulu.
+Laras: Nggak apa-apa! Tahun depan aku bikin sendiri sama Kakak!
+@lompat lomba_bazar
+
+:: layang_harapan
+@tampil laras senyum
+* Layangan buatan kalian terbang cukup tinggi, tapi kertasnya belum dilukis selesai. Laras dapat juara harapan: sebungkus pensil warna.
+Laras: Pensil warna! Kak, sekarang aku bisa lukis layangan yang lebih bagus!
+@cinta laras +3
+@lompat lomba_bazar
+
+:: layang_juara
+@tampil laras senyum
+* Layangan bergambar mercusuar dan dua anak kecil itu terbang paling tinggi, paling tenang, seperti burung camar yang malas mengepakkan sayap.
+* Juri mengumumkan: juara pertama, Laras!
+Laras: KAKAAAK! AKU JUARA! LAYANGAN KITA JUARA!
+* Laras berlari dan menabrakmu dengan pelukan. Ayah, di barisan penonton, bertepuk tangan paling keras.
+@cinta laras +8
+@cinta ayah +2
+
+# ----- Bazar warung Ibu -----
+:: lomba_bazar
+@sembunyi semua
+@latar rumah_warung
+@atur _tempat = rumah_warung
+* Siang hari, jalan desa berubah menjadi bazar. Meja-meja berjajar, asap gorengan dan sate mengepul.
+@jika bazar_ikut != 1 -> bazar_tidak_ikut
+@jika bazar_tahap >= 3 -> bazar_laku
+@jika bazar_tahap >= 2 -> bazar_lumayan
+@tampil ibu biasa
+* Meja warung Ibu sepi. Persiapan kalian terlalu sedikit; di sebelahnya, stan minimarket membagikan minuman dingin gratis.
+Ibu: Ya sudah. Namanya juga usaha. Sisanya kita makan sendiri saja.
+@cinta ibu +1
+@lompat lomba_malam
+
+:: bazar_lumayan
+@tampil ibu senyum
+* Gorengan Ibu habis sebelum asar. Tidak sampai antre, tapi lumayan untuk menambah modal warung.
+Ibu: Alhamdulillah. Lumayan, Nak.
+@cinta ibu +3
+@lompat lomba_malam
+
+:: bazar_laku
+@tampil ibu senyum
+@jika warung_ide == menu -> bazar_laku_menu
+* Pesanan dari grup WA desa mengalir sejak pagi. Kamu bolak-balik mengantar bungkusan sampai kakimu pegal.
+@lompat bazar_laku_akhir
+
+:: bazar_laku_menu
+* Cireng isi ikan asin buatan Ibu jadi bahan pembicaraan seluruh bazar. Antrean mengular sampai ke depan stan minimarket.
+
+:: bazar_laku_akhir
+* Menjelang sore, semuanya ludes. Ibu menghitung uang di kaleng biskuit dengan tangan gemetar.
+Ibu: Lima ratus ribu lebih... Nak, ini lima ratus ribu lebih!
+* Ibu memelukmu di tengah keramaian bazar, tidak peduli dilihat orang.
+@atur bazar_sukses = 1
+@cinta ibu +8
+@percaya ibu +4
+@lompat lomba_malam
+
+:: bazar_tidak_ikut
+* Warung Ibu tetap buka seperti biasa, tapi pembeli semua sibuk di bazar.
+
+# ----------------------------------------------------------
+#  MALAM 17 AGUSTUS — MERCUSUAR
+# ----------------------------------------------------------
+
+:: lomba_malam
+@sembunyi semua
+@gelap 1500
+@kalender Senin 19:30
+@waktu Malam tujuh belasan · Dermaga mercusuar
+@latar dermaga_malam
+@atur _tempat = dermaga
+@terang 1500
+* Malam itu, hampir seluruh desa berkumpul di dermaga. Anak-anak membawa obor bambu. Pak Kades berdiri di depan dengan pengeras suara.
+@jika mercusuar_tahap >= 3 -> mercu_nyala
+* Pak Kades meminta maaf: lampu dan aki yang dibutuhkan belum terkumpul. Mercusuar akan dicoba lagi tahun depan.
+* Kerumunan bubar pelan-pelan. Mercusuar tetap gelap, bayangan hitam di langit yang penuh bintang.
+{nama}: (Tahun depan...)
+@lompat mercu_padam_pesan
+
+:: mercu_nyala
+@jika sekar_pergi == 1 -> mercu_tanpa_sekar
+@tampil sekar senyum
+Sekar: Siap? Kamu yang tekan, {nama}. Kamu yang paling sering naik ke atas sana.
+@lompat mercu_hitung
+
+:: mercu_tanpa_sekar
+@tampil bayu senyum
+Bayu: Kamu yang tekan, {nama}. Kamu yang paling sering naik ke atas sana.
+
+:: mercu_hitung
+* Pak Kades menghitung mundur. Seluruh desa ikut berteriak.
+* Tiga... dua... satu...
+@sembunyi semua
+* Sebuah cahaya putih menyala di puncak mercusuar. Berputar pelan. Menyapu laut, menyapu dermaga, menyapu wajah-wajah yang mendongak.
+* Sorak-sorai pecah. Ibu menangis. Ayah merangkul Ibu. Laras melompat-lompat. Juragan Darto bertepuk tangan pelan, sendirian di ujung dermaga, matanya basah.
+* Cahaya itu menyapu wajahmu sekali, lalu terus berputar ke arah laut lepas, menuntun perahu-perahu pulang.
+* Persis seperti yang kalian khayalkan dulu. Kamu dan {nama_sahabat}.
+@atur mercusuar_menyala = 1
+@cinta ibu +3
+@cinta ayah +3
+@stat kewarasan +15
+* Seseorang memotret mercusuar itu dan mengunggahnya ke Sosmed malam itu juga: "Setelah sepuluh tahun, mercusuar Tanjung Lentera menyala lagi!"
+@maju 1 jam
+@hp pesan Nomor Tidak Dikenal | Aku lihat fotonya. Mercusuar kita menyala lagi. ...Kamu yang menyalakannya, kan?
+@tunggu_hp
+{nama}: "Mercusuar kita"...
+* Hanya dua orang di dunia ini yang menyebutnya begitu.
+@tambah petunjuk_sahabat +1
+@catatan Nomor misterius melihat foto mercusuar yang menyala dan menyebutnya "mercusuar kita". Hanya {nama_sahabat} yang menyebutnya begitu.
+@lompat bab4_akhir
+
+:: mercu_padam_pesan
+@maju 1 jam
+@hp pesan Nomor Tidak Dikenal | Aku dengar mercusuar itu mau dinyalakan lagi. Kalau suatu hari benar-benar menyala... mungkin itu tandanya aku boleh pulang.
+@tunggu_hp
+{nama}: Boleh pulang...?
+@catatan Nomor misterius: "Kalau suatu hari mercusuar itu benar-benar menyala... mungkin itu tandanya aku boleh pulang."
+
+:: bab4_akhir
+@gelap 2000
+* Dua bulan sejak kelulusan. Tanganmu kapalan, kulitmu legam, dan kamu sudah hafal bau setiap musim angin.
+* Kamu tidak pergi ke kota. Tapi entah bagaimana, benang merah itu justru terasa semakin dekat.
+@tamat Bab 4 Desa — Bersambung…

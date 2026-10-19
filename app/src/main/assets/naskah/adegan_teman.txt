@@ -1,0 +1,391 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — TEMAN (Bayu, Sekar) · Bab 2–3 desa
+#  Pemicu & jam: data/adegan.txt · Alur: docs/CERITA.md bagian 8–9
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ==========================================================
+#  BAB 2
+# ==========================================================
+
+# ----------------------------------------------------------
+#  KENALAN DENGAN SEKAR (depan rumah & warung)
+# ----------------------------------------------------------
+
+:: b2_sekar_kenalan
+@kenal sekar
+@tampil sekar biasa
+* Seorang perempuan berkerudung biru berdiri di depan warung, memeluk bungkusan kain dengan hati-hati, seperti memeluk sesuatu yang rapuh.
+Sekar: Permisi... Bu Ratna ada? Ini seragam Laras. Dari ibu saya, Bu Wati.
+{nama}: Ibu lagi ke dapur. Sini, aku yang terima. Kamu... Sekar, kan? Juara kelas.
+Sekar: Dan kamu {nama}. Yang selalu duduk paling belakang dekat jendela, melamun lihat laut.
+{nama}: Kok tahu?
+Sekar: Juara kelas tahu segalanya.
+* Ia tersenyum kecil, nyaris tidak kelihatan. Di tangannya, terselip sebuah novel tebal dengan sampul yang sudah lusuh.
+@pilihan
+> "Katanya kamu dapat beasiswa ke Sakala. Selamat, ya!" -> b2sk_beasiswa
+> "Baca apa?" -> b2sk_buku
+> "Juara kelas kok jadi kurir jahitan?" -> b2sk_canda
+
+:: b2sk_beasiswa
+@tampil sekar sedih
+* Senyum Sekar hilang. Ia menunduk, memainkan ujung kerudungnya.
+Sekar: ...Bayu yang cerita, ya? Dasar ember.
+Sekar: Aku belum memutuskan. Lagian, itu bukan urusan orang lain.
+* Ia menyerahkan bungkusan itu cepat-cepat dan pamit. Sepertinya kamu menyentuh sesuatu yang sakit.
+@cinta sekar -1
+@atur sekar_tahu_kamu_tahu = 1
+@lompat b2sk_akhir
+
+:: b2sk_buku
+@tampil sekar senyum
+Sekar: Ini? Novel tentang anak nelayan yang jadi dokter. Sudah kubaca empat kali.
+{nama}: Empat kali? Nggak bosan?
+Sekar: Setiap kali baca, aku jadi percaya lagi kalau itu mungkin. Makanya kubaca terus.
+* Matanya berbinar sebentar, lalu meredup.
+Sekar: Ah, aku kebanyakan bicara. Titip salam buat Bu Ratna, ya.
+@cinta sekar +4
+@info sekar hobi
+@lompat b2sk_akhir
+
+:: b2sk_canda
+@tampil sekar kesal
+Sekar: Juara kelas juga butuh makan. Ibuku menjahit sampai jam dua malam. Aku bantu mengantar. Ada masalah?
+{nama}: Eh, bukan begitu maksudku...
+@tampil sekar biasa
+Sekar: ...Iya, aku tahu. Maaf. Aku cuma lagi banyak pikiran.
+@cinta sekar +1
+@info sekar kisah_1
+
+:: b2sk_akhir
+@sembunyi sekar
+* Sore hari, Sekar biasanya membaca di ujung dermaga, di bawah mercusuar. Setidaknya begitu kata Bayu.
+@kembali
+
+
+# ----------------------------------------------------------
+#  TAWARAN MELAUT (temui Bayu)
+# ----------------------------------------------------------
+
+:: b2_bayu_perahu
+@tampil bayu senyum
+Bayu: Nah, ini dia! Jadi gimana, kerja di mana kamu sekarang?
+@jika kerja_desa == gudang -> b2bp_gudang
+@jika kerja_desa == perahu -> b2bp_perahu_sudah
+{nama}: Belum, Bay. Masih cari-cari.
+Bayu: Ikut perahu bapakku aja! Tiap subuh, jam setengah lima. Bagi hasil, lumayan buat jajan. Bapakku pasti mau, dia kan sering muji kamu.
+@catatan Bayu: perahu Pak Karta berangkat tiap subuh pukul 04:30 dari dermaga. Bisa ikut melaut (aktivitas di dermaga).
+@lompat b2bp_utang
+
+:: b2bp_gudang
+{nama}: Di gudang Juragan Darto.
+@tampil bayu kaget
+Bayu: Wih! Di tempat Juragan? Hati-hati, katanya dia suka nyatet semua kesalahan di buku kecilnya. Tiap salah, potong upah!
+{nama}: Belum pernah dipotong, sih.
+Bayu: Belum. Hehe.
+@lompat b2bp_utang
+
+:: b2bp_perahu_sudah
+{nama}: Di perahu bapakmu, kan. Kamu sendiri yang lihat tiap subuh.
+Bayu: Haha, iya ya! Bapak bilang kamu cepat belajar. Nggak kayak aku dulu, muntah tiap ombak gede.
+
+:: b2bp_utang
+@tampil bayu biasa
+* Bayu melempar batu kecil ke laut. Lama ia diam.
+Bayu: Eh... kamu tahu nggak, bapakku punya utang ke Juragan Darto? Buat beli mesin perahu.
+Bayu: Tiap bulan dipotong dari hasil tangkapan. Kadang hasilnya habis buat bayar utang doang.
+@pilihan
+> "Ayahku juga, kayaknya. Semua nelayan di sini begitu." -> b2bp_sama
+> "Kamu khawatir?" -> b2bp_khawatir
+
+:: b2bp_sama
+@jika tahu_hutang_perahu == 1 -> b2bp_sama_tahu
+Bayu: Iya, katanya hampir semua. Juragan itu kayak bank-nya desa ini. Galak, tapi kalau nggak ada dia, banyak yang nggak bisa melaut.
+@lompat b2bp_bakar
+
+:: b2bp_sama_tahu
+Bayu: Bapakmu juga? Wah... Berarti kita senasib, ya.
+* Bayu tersenyum pahit, lalu menepuk punggungmu keras-keras.
+@cinta bayu +2
+@lompat b2bp_bakar
+
+:: b2bp_khawatir
+@tampil bayu sedih
+Bayu: ...Kadang. Aku anak paling gede. Adikku empat. Kalau bapak nggak sanggup bayar, mungkin aku yang harus kerja di gudang. Selamanya.
+Bayu: Udah ah, jangan dibahas. Bikin pusing.
+@info bayu kisah_3
+@percaya bayu +4
+
+:: b2bp_bakar
+@tampil bayu senyum
+Bayu: Eh iya! Sabtu malam, anak-anak mau bakar ikan di dermaga. Habis Isya. Datang, ya! Aku yang bawa ikannya, kamu yang bawa... semangat aja deh.
+@catatan Sabtu malam (27 Juni) setelah Isya: bakar ikan bersama Bayu dan teman-teman di dermaga.
+@sembunyi bayu
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAKAR IKAN MALAM MINGGU (dermaga, Sabtu 27 Juni malam)
+# ----------------------------------------------------------
+
+:: b2_bakar_ikan
+@tampil bayu senyum
+* Api unggun kecil menyala di ujung dermaga. Asap ikan bakar bercampur bau laut. Beberapa teman sekelas duduk melingkar, bernyanyi sumbang diiringi gitar yang senarnya kurang satu.
+Bayu: Woy! Akhirnya datang! Sini, ikannya hampir matang!
+@jika adegan_b2_sekar_kenalan == 1 -> b2bi_sekar
+@kenal sekar
+@atur adegan_b2_sekar_kenalan = 1
+* Di sebelah Bayu, seorang perempuan berkerudung biru duduk memeluk lutut. Bayu buru-buru memperkenalkan.
+Bayu: Kamu ingat Sekar, kan? Juara kelas! Yang galak itu!
+@tampil sekar kesal
+Sekar: Aku nggak galak. Kalian aja yang berisik.
+* Kamu tertawa. Sekar melirikmu, lalu tersenyum kecil.
+
+:: b2bi_sekar
+@tampil sekar biasa
+* Sekar duduk di ujung lingkaran, satu-satunya yang tidak ikut bernyanyi. Di sampingnya ada sebungkus teh manis dan buku yang tidak dibuka.
+* Kamu memperhatikan sesuatu: setiap kali Sekar tertawa, Bayu berhenti bernyanyi. Setiap kali Sekar kedinginan, Bayu diam-diam menambah kayu ke api.
+* Saat Sekar pergi mengambil air, Bayu menyikutmu.
+@tampil bayu malu
+Bayu: Eh. Jangan lihat-lihat gitu, dong.
+{nama}: Lihat apa?
+Bayu: Ya... gitu. Jangan bilang siapa-siapa. Terutama Sekar.
+@pilihan
+> "Mau kubantu? Aku bisa cari tahu dia suka apa." -> b2bi_bantu
+> "Cieee. Bayu suka Sekar!" (ledek keras-keras) -> b2bi_ledek
+> "Rahasiamu aman sama aku." -> b2bi_simpan
+
+:: b2bi_bantu
+@atur rahasia_bayu = bantu
+@tampil bayu kaget
+Bayu: Serius? ...Eh, tapi jangan kentara! Pelan-pelan aja!
+{nama}: Iya, iya. Santai.
+@tampil bayu senyum
+Bayu: Kamu memang sahabat terbaik, {nama}.
+@cinta bayu +6
+@info bayu kisah_2
+@lompat b2bi_akhir
+
+:: b2bi_ledek
+@atur rahasia_bayu = ledek
+* Suaramu lebih keras dari yang kamu kira. Semua orang di lingkaran menoleh. Seseorang bersiul. Gitar berhenti.
+* Sekar kembali dengan sebotol air, bingung melihat semua orang menatapnya.
+@tampil bayu kesal
+* Bayu berdiri, wajahnya merah padam, dan berjalan pergi ke ujung dermaga tanpa bicara.
+@perilaku bayu kasar
+@tampil sekar malu
+Sekar: ...Apa sih?
+@lompat b2bi_akhir
+
+:: b2bi_simpan
+@atur rahasia_bayu = simpan
+@tampil bayu senyum
+Bayu: Makasih. Kamu memang paling bisa dipercaya.
+@percaya bayu +6
+@info bayu kisah_2
+
+:: b2bi_akhir
+@sembunyi semua
+* Malam makin larut. Bintang-bintang bertebaran di atas mercusuar yang gelap. Seseorang mulai menyanyikan lagu perpisahan sekolah, dan semua orang mendadak diam.
+* Kamu menatap ujung dermaga. Tiga tahun lalu, kamu dan {nama_sahabat} duduk di sana, menghitung kapal-kapal yang lewat.
+@maju 2 jam
+@stat kewarasan +10
+@kembali
+
+
+# ----------------------------------------------------------
+#  SEKAR & BUKU (temui Sekar di dermaga)
+# ----------------------------------------------------------
+
+:: b2_sekar_buku
+@tampil sekar biasa
+* Sekar duduk di ujung dermaga dengan kaki menjuntai di atas air. Novel lusuh itu terbuka di pangkuannya, tapi ia tidak membaca. Ia menatap laut.
+Sekar: Oh, kamu. Mau duduk?
+* Kamu duduk di sebelahnya. Angin laut meniup halaman-halaman novelnya.
+Sekar: {nama}. Kamu pernah merasa... harus memilih antara dirimu sendiri dan orang yang kamu sayang?
+@pilihan
+> "Pernah. Waktu memilih tetap di desa." -> b2sb_pernah
+> "Ini soal beasiswa itu, ya?" -> b2sb_beasiswa
+
+:: b2sb_pernah
+@jika jalur == kerja -> b2sb_pernah_desa
+{nama}: Pernah. Tiap hari, rasanya.
+@lompat b2sb_beasiswa
+
+:: b2sb_pernah_desa
+{nama}: Pernah. Aku bisa saja minta Ayah-Ibu membiayai SMA di kota. Tapi aku tahu mereka tidak punya uang.
+Sekar: Jadi kamu memilih mereka.
+{nama}: Aku memilih... tidak membuat mereka berhutang lagi.
+* Sekar mengangguk pelan. Matanya basah.
+
+:: b2sb_beasiswa
+@tampil sekar sedih
+Sekar: Beasiswa penuh ke SMA unggulan di Sakala. Asrama, makan, buku, semua gratis.
+Sekar: Tapi ibuku... sejak ayah meninggal, ibuku cuma punya aku. Siapa yang antar jahitan? Siapa yang masak kalau ibu lembur sampai pagi? Ibuku tidak pernah bilang, tapi matanya sakit. Jahitannya makin sering salah.
+Sekar: Kalau aku pergi, ibuku sendirian.
+@info sekar kisah_2
+@cinta sekar +4
+@percaya sekar +5
+@jika jalur != kerja -> b2sb_akhir
+@jika ayah_restu == uang -> b2sb_akhir
+# ----- saran Paket C -----
+@tampil sekar biasa
+Sekar: Eh, tapi kamu... kamu nggak mau lanjut sekolah sama sekali?
+{nama}: Mau. Tapi gimana caranya?
+Sekar: Ada Paket C. Ujian kesetaraan SMA. Belajarnya bisa sendiri, ujiannya di kecamatan setahun sekali. Ijazahnya diakui.
+Sekar: Buku-buku kelas sepuluh-ku masih ada. Nanti kupinjami. Lengkap dengan catatanku.
+{nama}: Kamu serius?
+@tampil sekar senyum
+Sekar: Aku nggak bisa pergi. Tapi setidaknya ada yang bisa belajar dari buku-bukuku.
+@atur paket_c = 1
+@catatan Sekar meminjamkan buku-buku SMA untuk belajar mandiri, persiapan ujian Paket C. (Meja belajar di kamar → "Belajar mandiri")
+@cinta sekar +3
+
+:: b2sb_akhir
+@sembunyi sekar
+@kembali
+
+
+# ==========================================================
+#  BAB 3
+# ==========================================================
+
+# ----------------------------------------------------------
+#  PILIHAN SEKAR (temui Sekar, sebelum batas beasiswa Jumat 10 Juli)
+# ----------------------------------------------------------
+
+:: b3_sekar_pilihan
+@tampil sekar sedih
+* Sekar menggenggam selembar surat beramplop cokelat. Ujung kertasnya sudah lecek, seperti dibuka-tutup puluhan kali.
+Sekar: Batasnya hari Jumat. Kalau sampai Jumat aku tidak tanda tangan, beasiswanya dikasih ke anak lain.
+Sekar: Ibuku bilang terserah aku. Tapi waktu bilang begitu, ibuku tidak menatap mataku.
+Sekar: Menurutmu... aku harus bagaimana?
+@pilihan
+> "Pergilah, Sekar. Kesempatan seperti ini tidak datang dua kali." -> b3sp_pergi
+> "Tinggal saja. Kita bisa cari jalan lain di sini." -> b3sp_tinggal
+> "Tanya ibumu sekali lagi. Minta dia jujur, sambil menatap matamu." -> b3sp_jujur
+
+:: b3sp_pergi
+@atur sekar_pergi = 1
+* Sekar menatapmu lama. Lalu, perlahan, ia mengangguk.
+Sekar: ...Kalau aku pergi, kamu mau sesekali mampir ke rumahku? Bawa gorengan buat ibuku? Bilang ke dia kalau aku baik-baik saja?
+{nama}: Janji.
+@tampil sekar menangis
+Sekar: Makasih. Aku... aku takut sekali. Tapi aku lebih takut menyesal seumur hidup.
+@cinta sekar +6
+@percaya sekar +5
+@catatan Sekar memutuskan menerima beasiswa ke Sakala. Berangkat Sabtu, 11 Juli, bersama Rani dan Dodi.
+@lompat b3sp_akhir
+
+:: b3sp_tinggal
+@atur sekar_pergi = 0
+@tampil sekar biasa
+Sekar: ...Iya. Mungkin memang itu yang benar.
+* Sekar melipat surat itu dan memasukkannya ke dalam novel lusuhnya, seperti pembatas buku. Kamu tidak yakin apakah wajahnya lega atau patah.
+@percaya sekar +2
+@lompat b3sp_akhir
+
+:: b3sp_jujur
+* Sekar terdiam. Lalu ia berdiri tiba-tiba.
+Sekar: Kamu benar. Aku harus dengar langsung. Bukan "terserah".
+@maju 1 jam
+* Malamnya, Sekar mengirim pesan panjang. Ibunya menangis. Lalu ibunya bilang: "Ibu mau kamu pergi. Ibu cuma takut kesepian. Tapi takut kesepian bukan alasan untuk mengurungmu."
+* Lalu satu kalimat lagi dari Sekar: "Tapi aku memutuskan tinggal. Bukan karena ibuku melarang. Karena aku mau. Tahun depan aku daftar lagi, setelah mata ibuku dioperasi. Makasih, {nama}."
+@atur sekar_pergi = 0
+@atur sekar_tegar = 1
+@cinta sekar +8
+@percaya sekar +10
+
+:: b3sp_akhir
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  UTANG BAPAK BAYU (temui Bayu)
+# ----------------------------------------------------------
+
+:: b3_bayu_utang
+@tampil bayu sedih
+* Bayu tidak membawa bola ataupun pancingan. Ia hanya duduk, memeluk lutut.
+Bayu: {nama}. Juragan Darto datang ke rumah semalam. Bapak harus bayar cicilan mesin perahu bulan ini, atau mesinnya ditahan.
+Bayu: Bapak bilang... kalau aku kerja di gudang Juragan, upahku bisa langsung dipotong buat cicilan. Jadi bapak tetap bisa melaut.
+* Bayu tertawa pendek, suara yang sama sekali tidak lucu.
+Bayu: Kapal ikan sendiri. Cita-citaku dari kecil. Sekarang malah jadi buruh juragan yang punya kapal.
+@pilihan
+> "Gudang itu tidak seburuk itu, Bay. Aku di sana juga." -> b3bu_gudang
+> "Itu sementara. Cita-citamu nggak hilang cuma karena ini." -> b3bu_cita
+> "Mau aku bicara ke Juragan? Siapa tahu bisa dicicil lebih ringan." -> b3bu_bicara
+
+:: b3bu_gudang
+@jika kerja_desa != gudang -> b3bu_cita
+@atur bayu_kerja_gudang = 1
+@tampil bayu senyum
+Bayu: Iya, ya... Kalau ada kamu, mungkin nggak terlalu membosankan. Mbak Yati juga lucu.
+Bayu: Oke. Mulai Senin aku masuk. Ajari aku membalik teri, ya. Jangan ketawain kalau tumpah.
+@cinta bayu +4
+@lompat b3bu_akhir
+
+:: b3bu_cita
+@tampil bayu biasa
+{nama}: Orang yang punya kapal juga dulu mulai dari nol. Juragan Darto sendiri dulu buruh angkut, lho.
+@tampil bayu kaget
+Bayu: Serius? Juragan dulu buruh?
+{nama}: Pak Usman yang cerita.
+@tampil bayu senyum
+Bayu: ...Hah. Kalau Juragan bisa, berarti aku juga bisa, kan? Suatu hari nanti?
+@info bayu cita_cita
+@cinta bayu +5
+@percaya bayu +3
+@lompat b3bu_akhir
+
+:: b3bu_bicara
+@jika percaya_darto >= 45 -> b3bu_bicara_bisa
+Bayu: Kamu? Bicara ke Juragan? Haha, nanti kamu malah ikut dipotong upahnya.
+* Bayu menepuk bahumu. Ia menghargainya, tapi kamu sadar kamu belum cukup dipercaya Juragan untuk itu.
+@cinta bayu +2
+@lompat b3bu_akhir
+
+:: b3bu_bicara_bisa
+* Esok harinya, kamu memberanikan diri bicara pada Juragan Darto di sela-sela kerja. Juragan mendengarkan sambil memberi makan perkututnya.
+* Lalu, tanpa banyak kata, ia mencoret sesuatu di buku kecilnya. Cicilan Pak Karta diturunkan separuh untuk tiga bulan ke depan.
+@tampil bayu kaget
+Bayu: KAMU NGAPAIN?! Bapakku sampai nangis tadi pagi!
+@tampil bayu senyum
+Bayu: Aku utang budi sama kamu, {nama}. Seumur hidup.
+@cinta bayu +10
+@percaya bayu +8
+@atur bayu_utang_budi = 1
+
+:: b3bu_akhir
+@sembunyi bayu
+@kembali
+
+
+# ----------------------------------------------------------
+#  ANTAR JAHITAN (temui Sekar, setelah ia memutuskan tinggal)
+# ----------------------------------------------------------
+
+:: b3_sekar_jahitan
+@tampil sekar biasa
+Sekar: {nama}, boleh minta tolong? Ibuku dapat banyak pesanan seragam untuk tahun ajaran baru. Aku tidak sanggup mengantar semuanya sendirian. Sebagian ke desa sebelah.
+Sekar: Ibu bisa bayar dua puluh ribu sehari. Tidak banyak, tapi... sore-sore saja, jam tiga sampai jam lima.
+@pilihan
+> "Boleh. Aku bantu." -> b3sj_ya
+> "Maaf, aku sudah terlalu capek kerja." -> b3sj_tidak
+
+:: b3sj_ya
+@kerja_mulai antar_jahitan
+@tampil sekar senyum
+Sekar: Makasih! Ibu pasti senang. Sepedanya pinjam punya almarhum ayahku, ya. Remnya agak... yah, nanti kamu tahu sendiri.
+@cinta sekar +4
+@catatan Kerja sampingan: antar jahitan Bu Wati, Senin–Sabtu 15:00–17:00, Rp20.000.
+@lompat b3sj_akhir
+
+:: b3sj_tidak
+Sekar: Iya, nggak apa-apa. Aku ngerti.
+
+:: b3sj_akhir
+@sembunyi sekar
+@kembali

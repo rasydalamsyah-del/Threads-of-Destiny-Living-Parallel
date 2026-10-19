@@ -1,0 +1,154 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — JURAGAN DARTO · Bab 2–3 desa
+#  Pemicu & jam: data/adegan.txt · Alur: docs/CERITA.md bagian 8–9
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  PERKUTUT JURAGAN (temui Darto di gudang)
+# ----------------------------------------------------------
+
+:: b2_darto_perkutut
+@tampil darto biasa
+* Di belakang gudang, Juragan Darto berdiri di depan sangkar bambu yang digantung tinggi. Seekor burung perkutut abu-abu bertengger di dalamnya.
+* Ia bersiul pelan. Burung itu menjawab: "Kuk-kuk-kurrr."
+Juragan Darto: Kamu tahu berapa harga burung ini?
+{nama}: Tidak, Juragan.
+Juragan Darto: Lebih mahal dari perahu bapakmu.
+* Ia mengatakannya tanpa nada sombong. Hanya fakta.
+@pilihan
+> "Kenapa Juragan suka perkutut?" -> b2dp_tanya
+> "Kenapa tidak dijual saja, Juragan?" -> b2dp_jual
+> Diam dan dengarkan burung itu bersiul -> b2dp_diam
+
+:: b2dp_tanya
+Juragan Darto: Perkutut itu sabar. Kamu tidak bisa memaksanya berkicau. Kamu cuma bisa merawatnya, setiap hari, bertahun-tahun... lalu suatu pagi, suaranya jadi sempurna.
+Juragan Darto: Usaha juga begitu. Anak juga begitu.
+* Kalimat terakhir itu diucapkannya pelan sekali, nyaris seperti bicara pada diri sendiri.
+@info darto hobi
+@percaya darto +3
+@lompat b2dp_akhir
+
+:: b2dp_jual
+@tampil darto kesal
+Juragan Darto: Tidak semua yang mahal harus dijual, Nak. Kamu masih muda, nanti kamu mengerti.
+@percaya darto -1
+@lompat b2dp_akhir
+
+:: b2dp_diam
+* Kalian berdiri berdua dalam diam. Burung itu berkicau lagi, panjang dan merdu. Juragan Darto tersenyum kecil, senyum pertama yang benar-benar kamu lihat darinya.
+@tampil darto senyum
+Juragan Darto: Kamu tahu cara mendengarkan. Itu jarang.
+@percaya darto +4
+@info darto hobi
+
+:: b2dp_akhir
+@sembunyi darto
+@kembali
+
+
+# ----------------------------------------------------------
+#  HUTANG PERAHU AYAH (temui Darto, setelah tahu soal hutang)
+# ----------------------------------------------------------
+
+:: b3_darto_hutang
+@tampil darto biasa
+* Kamu menunggu sampai buruh-buruh lain pulang. Juragan Darto sedang mencatat sesuatu di buku kecilnya.
+Juragan Darto: Ada apa? Mau minta naik upah?
+{nama}: Bukan, Juragan. Soal... perahu Ayah.
+* Pulpen Juragan berhenti bergerak.
+@tampil darto kaget
+Juragan Darto: Bapakmu yang menyuruhmu ke sini?
+{nama}: Tidak. Ayah tidak tahu saya di sini.
+@tampil darto biasa
+* Juragan Darto menutup bukunya pelan-pelan.
+Juragan Darto: Satu juta dua ratus ribu. Sudah empat bulan tidak dicicil. Saya bukan lintah darat, Nak, tapi saya juga punya cicilan ke bank. Kalau semua orang menunggak, saya yang tenggelam.
+@pilihan
+> "Saya bayar sebagian sekarang, Juragan." -> b3dh_bayar
+> "Boleh saya lembur, Juragan? Upah lemburnya untuk cicilan." -> b3dh_lembur
+> "Tolong beri Ayah waktu, Juragan. Hasil tangkapan sedang sepi." -> b3dh_waktu
+
+:: b3dh_bayar
+@jika uang < 200000 -> b3dh_bayar_kurang
+@uang -200000
+@tambah cicilan_perahu +200000
+@atur rencana_lunasi = bayar
+* Kamu menyerahkan lembaran-lembaran yang kamu kumpulkan sejak hari pertama kerja.
+Juragan Darto: ...Dua ratus ribu. Dari upahmu sendiri?
+{nama}: Iya, Juragan.
+@tampil darto senyum
+Juragan Darto: Saya catat atas nama bapakmu. Sisanya satu juta. Kalau mau mencicil lagi, datang saja ke sini.
+@percaya darto +6
+@lompat b3dh_akhir
+
+:: b3dh_bayar_kurang
+* Kamu meraba sakumu. Uangmu belum sampai dua ratus ribu.
+{nama}: ...Belum cukup, Juragan. Tapi saya akan mencicil.
+Juragan Darto: Mencicil boleh. Asal rutin. Datang ke sini kapan saja.
+@atur rencana_lunasi = cicil
+@percaya darto +2
+@lompat b3dh_akhir
+
+:: b3dh_lembur
+@atur rencana_lunasi = lembur
+Juragan Darto: Lembur? Sabtu sore, jam dua sampai jam lima. Gudang sepi, cuma Pak Usman. Tiga puluh ribu.
+Juragan Darto: Upahnya tetap saya berikan ke kamu. Mau dibayarkan ke cicilan atau dibelikan jajan, itu urusanmu. Saya tidak mau dibilang memeras anak kecil.
+@kerja_mulai lembur_gudang
+@percaya darto +4
+@catatan Lembur Sabtu sore di gudang (14:00–17:00, Rp30.000). Cicilan perahu bisa dibayar ke Juragan Darto di gudang.
+@lompat b3dh_akhir
+
+:: b3dh_waktu
+@atur rencana_lunasi = tunda
+@tampil darto kesal
+Juragan Darto: Waktu. Semua orang minta waktu. Waktu itu juga ada harganya, Nak.
+* Ia menghela napas panjang.
+@tampil darto biasa
+Juragan Darto: ...Saya tunggu. Tapi tidak selamanya.
+@percaya darto -2
+
+:: b3dh_akhir
+@catatan Sisa hutang perahu Ayah ke Juragan Darto bisa dicicil Rp100.000 di gudang ("Bayar cicilan perahu").
+@sembunyi darto
+@kembali
+
+
+# ----------------------------------------------------------
+#  ANAK JURAGAN (temui Darto, kepercayaan ≥ 50)
+# ----------------------------------------------------------
+
+:: b3_darto_anak
+@tampil darto biasa
+* Sore itu Juragan Darto duduk sendirian di bangku kayu depan gudang, memandangi jalan yang menuju stasiun.
+Juragan Darto: Duduk.
+* Kamu duduk. Lama ia tidak bicara.
+Juragan Darto: Kamu tahu kenapa saya keras pada anak-anak muda yang mau ke kota?
+{nama}: Tidak, Juragan.
+@tampil darto sedih
+Juragan Darto: Anak saya, Raka. Dua puluh tahun lalu dia pergi ke Sakala. Katanya mau kuliah, mau sukses, mau pulang bawa mobil.
+Juragan Darto: Surat pertama datang. Surat kedua. Lalu tidak ada lagi. Nomornya ganti. Alamatnya pindah.
+Juragan Darto: Kota itu menelan anak-anak desa, Nak. Pelan-pelan. Sampai mereka lupa jalan pulang.
+@pilihan
+> "Mungkin dia malu pulang sebelum sukses, Juragan." -> b3da_malu
+> "Juragan pernah mencarinya?" -> b3da_cari
+
+:: b3da_malu
+* Juragan Darto menatapmu tajam. Lalu tatapannya melunak.
+Juragan Darto: Malu... Mungkin. Bodoh sekali kalau begitu. Saya tidak butuh mobil. Saya cuma butuh tahu dia masih hidup.
+@lompat b3da_akhir
+
+:: b3da_cari
+Juragan Darto: Dua kali. Saya naik kereta ke Sakala, keliling seharian, bertanya ke orang-orang. Kota itu terlalu besar. Terlalu ramai. Tidak ada yang peduli.
+
+:: b3da_akhir
+* Juragan Darto merogoh dompetnya dan mengeluarkan selembar foto yang sudah menguning. Seorang pemuda kurus tersenyum di depan gudang ini, dengan perkutut di tangannya.
+Juragan Darto: Kalau suatu hari kamu ke Sakala... dan melihat wajah ini. Bilang padanya, bapaknya tidak marah. Bilang perkututnya masih hidup.
+* Kamu menatap foto itu, lalu menatap gelang benang merah di pergelanganmu. Kamu tahu persis rasanya menunggu seseorang yang tidak pulang.
+@info darto kisah_3
+@percaya darto +8
+@cinta darto +5
+@atur foto_raka = 1
+@catatan Juragan Darto punya anak bernama Raka yang pergi ke Sakala 20 tahun lalu dan tidak pernah pulang. "Kota itu menelan anak-anak desa."
+@sembunyi darto
+@kembali

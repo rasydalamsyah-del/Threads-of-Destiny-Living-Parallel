@@ -78,8 +78,40 @@ efek        = energi -40, hidrasi -20, kenyang -10, kewarasan -3, keahlian_laut 
 usia_min    = 15
 cara        = langsung
 sulit       = 10
-keterangan  = Ikut perahu nelayan sebelum subuh. Berat dan berisiko, tapi bagi hasilnya lumayan.
+keterangan  = Ikut perahu Pak Karta (bapak Bayu) sebelum subuh. Berat dan berisiko, tapi bagi hasilnya lumayan.
 teks        = Perahu terombang-ambing. Kamu menarik jaring sampai lenganmu gemetar.
+
+[antar_jahitan]
+nama        = Antar jahitan Bu Wati
+ikon        = 🧵
+jenis       = paruh_waktu
+tempat      = desa
+hari        = senin-sabtu
+waktu       = sore
+jam         = 15:00-17:00
+gaji        = 20000
+efek        = energi -10, hidrasi -8, kewarasan +1, komunikasi +1
+usia_min    = 15
+cara        = cerita
+sulit       = 0
+keterangan  = Mengantar pesanan jahitan ibu Sekar ke rumah-rumah pelanggan, sampai ke desa sebelah.
+teks        = Kamu mengayuh sepeda pinjaman dengan bungkusan kain di boncengan. Ibu-ibu pelanggan selalu menitipkan salam untuk Bu Wati.
+
+[lembur_gudang]
+nama        = Lembur Sabtu sore di gudang
+ikon        = 🐟
+jenis       = harian
+tempat      = desa
+hari        = sabtu
+waktu       = siang, sore
+jam         = 14:00-17:00
+gaji        = 30000
+efek        = energi -18, hidrasi -10, kenyang -5, kewarasan -3, keahlian_ikan +1
+usia_min    = 15
+cara        = cerita
+sulit       = 0
+keterangan  = Tambahan kerja dari Juragan Darto untuk mencicil hutang perahu Ayah.
+teks        = Gudang sudah sepi. Hanya kamu, Pak Usman, dan tumpukan ikan yang harus dibalik sebelum matahari turun.
 
 # ---------------- KOTA SAKALA ----------------
 

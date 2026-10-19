@@ -42,10 +42,12 @@
 # ----------------------------------------------------------
 
 @atur usia = 15
+@atur bab = 1
 @hidup mulai
 @lokasi desa
 @kalender Senin 06:00
-@waktu Senin, 06:00
+@tanggal 22 Juni 2026
+@waktu Senin, 22 Juni 2026 · 06:00
 @latar plafon
 @kedip
 
@@ -215,7 +217,7 @@ Ibu: Nanti Ibu bicarakan sama Ayah. Kirimannya mungkin sedikit lebih kecil, sisa
 {nama}: Aku mau tetap di desa, Bu. Kerja, bantu Ayah sama Ibu, dan pelan-pelan memperbaiki hidup kita.
 Ibu: Kamu yakin, Nak? Ibu tidak mau kamu menyesal nanti.
 {nama}: Aku yakin, Bu.
-Ibu: ...Nanti siang bilang sendiri ke Ayahmu, ya. Ayah pasti bangga.
+Ibu: ...Nanti siang, waktu Ayah bangun, bilang sendiri ke Ayahmu, ya.
 {nama}: (Dan aku tidak akan berhenti mencarinya. Kalau tidak bisa ke kota, aku cari lewat internet.)
 
 
@@ -235,13 +237,13 @@ Ibu: Ini titipan Ayah semalam. Hadiah kelulusan, katanya. Simpan baik-baik, ya.
 * Mulai sekarang, hidupmu ada di tanganmu sendiri. Jaga perutmu, minummu, tenagamu, dan pikiranmu.
 * Ketuk tombol 📊 di sisi kiri layar kapan saja untuk menarik panel status. Ketuk panelnya untuk melihat isi tas.
 @kenal bayu
-@hp pesan Bayu | Woy {nama}! Selamat lulus, {bro|cuy}! Nanti sore aku nongkrong di dermaga. Kalau mau ketemu, janjian dulu ya lewat Chat!
+@hp pesan Bayu | Woy {nama}! Selamat lulus, {bro|cuy}! Nanti sore aku main bola di lapangan, habis itu mancing di dermaga. Mampir, ya!
 * HP-mu bergetar lagi. Ada pesan dari Bayu.
 @tunggu_hp
-{nama}: Dasar Bayu, baru lulus sudah ngajak nongkrong.
+{nama}: Dasar Bayu, baru lulus sudah ngajak main.
 * Di waktu bebas, jelajahi sekitarmu: ketuk pintu untuk pindah tempat, ketuk orang untuk mengobrol, ketuk benda untuk berkegiatan. Tombol 📋 membuka daftar waktu bebas.
-* Ayah baru bangun siang dan makan di ruang makan. Laras pulang sekolah pukul 13:00. Ibu menjaga warung.
-* Teman seperti Bayu harus diajak janjian dulu lewat Chat di HP.
+* Ayah tidur sampai siang, lalu makan di ruang makan pukul 12:00. Laras pulang sekolah pukul 13:00. Ibu menjaga warung sampai sore.
+* Bayu biasanya main bola di lapangan pukul 15:00, lalu memancing di dermaga menjelang magrib. Teman juga bisa diajak janjian lewat Chat di HP.
 * Waktu bebasmu berjalan sampai pukul 20:00 malam ini. Lakukan apa saja selama tenagamu cukup.
 @bebas sampai Senin 20:00
 
@@ -263,6 +265,7 @@ Ibu: Ini titipan Ayah semalam. Hadiah kelulusan, katanya. Simpan baik-baik, ya.
 
 :: malam_kerja
 * Kota Sakala terasa jauh sekali dari desa ini. Tapi pesan itu terus mengusik pikirannya.
+* Dari jendela kamar, mercusuar tua di ujung tanjung hanya terlihat sebagai bayangan hitam. Sudah bertahun-tahun lampunya padam.
 
 :: penutup
 * Di suatu tempat, di jalan hidup yang lain, mungkin ada dirinya yang memilih berbeda...

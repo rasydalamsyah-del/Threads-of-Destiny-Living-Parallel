@@ -88,7 +88,7 @@ akrab    = 60
 percaya  = 55
 ungkap   = kisah_2
 kamu     = Yah... ada yang Ayah sembunyikan, ya? Waktu sarapan Ayah sama Ibu saling lirik.
-jawab    = * Ayah menghela napas panjang. // Perahu itu... Ayah beli dengan uang pinjaman Juragan Darto. Cicilannya belum lunas. // Jangan bilang Ibumu, ya. Ayah tidak mau Ibu tambah pikiran.
+jawab    = * Ayah menghela napas panjang. // Perahu itu... Ayah beli dengan uang pinjaman Juragan Darto. Cicilannya belum lunas. // Ibumu tahu. Tapi kami sepakat tidak bilang ke kalian. Jangan bilang Laras, ya. Ayah malu.
 tolak    = Tidak ada apa-apa. Jangan dipikirkan.
 efek     = percaya +5
 
@@ -99,8 +99,8 @@ judul    = Tanya kenapa Ayah selalu pulang sebelum badai
 akrab    = 80
 percaya  = 75
 ungkap   = kisah_3
-kamu     = Yah, kenapa Ayah selalu buru-buru pulang kalau langit mulai gelap?
-jawab    = Tahun kamu lahir, perahu Ayah terbalik dihantam badai. Ayah terapung semalaman. // Waktu itu Ayah janji pada diri sendiri: Ayah harus pulang. Selalu pulang. Untuk kalian.
+kamu     = Yah, kenapa Ayah selalu menatap langit barat lama sekali sebelum berangkat melaut?
+jawab    = Tahun kamu lahir, perahu Ayah terbalik dihantam badai. Sorenya langit merah tembaga, dan Ayah nekat berangkat. // Ayah terapung semalaman. Sejak itu Ayah janji pada diri sendiri: kalau langit merah, Ayah tidak berangkat. Ayah harus pulang. Selalu pulang. Untuk kalian.
 tolak    = Kebiasaan saja. Laut itu tidak bisa ditebak.
 efek     = cinta +5, percaya +5
 
@@ -110,7 +110,7 @@ jenis    = khusus
 judul    = Minta saran soal kerja di desa
 syarat   = jalur == kerja && kerja_aktif == 0
 kamu     = Yah, aku mau cari kerja di desa. Menurut Ayah, di mana yang bagus?
-jawab    = Gudang ikan Juragan Darto selalu butuh orang. Kerjanya berat, tapi upahnya dibayar tiap hari. // Atau ikut Ayah melaut. Tapi bangunnya jam empat subuh, ya.
+jawab    = Gudang ikan Juragan Darto selalu butuh orang. Kerjanya berat, tapi upahnya dibayar tiap hari. // Atau ikut perahu Pak Karta, bapaknya Bayu. Berangkat subuh, jam setengah lima. Ayah sendiri melaut malam, terlalu berbahaya untuk pemula.
 efek     = percaya +2
 sekali   = tidak
 
@@ -759,4 +759,169 @@ syarat   = nadia_membantu == 1
 kamu     = Nad, ada kabar soal anak bergelang merah itu?
 jawab    = Belum ada lagi. Tapi aku selalu memperhatikan peron jurusan Pelabuhan tiap sore. // Kalau ada apa-apa, kamu yang pertama kukabari.
 efek     = percaya +2
+sekali   = tidak
+
+
+# ======================= DESA: OBROLAN TAMBAHAN (docs/CERITA.md) =======================
+
+[ayah_tangkapan]
+karakter = ayah
+jenis    = santai
+judul    = Tanya hasil tangkapan semalam
+topik    = laut
+kamu     = Semalam dapat banyak, Yah?
+jawab    = Lumayan. Tongkol sepuluh kilo, cumi sedikit. // Tapi harga di pelelangan turun lagi. Ikan banyak, harganya malah jatuh. Aneh, ya, laut ini.
+efek     = cinta +2
+
+[ayah_layangan]
+karakter = ayah
+jenis    = santai
+judul    = Tanya Ayah waktu kecil
+topik    = layangan
+kamu     = Yah, waktu kecil Ayah suka main apa?
+jawab    = * Ayah tersenyum, matanya menerawang. // Layangan. Layangan Ayah paling tinggi se-Tanjung Lentera. Rahasianya di bambu: kiri dan kanan harus sama berat.
+efek     = cinta +3
+
+[ayah_darto]
+karakter = ayah
+jenis    = khusus
+judul    = Tanya soal Juragan Darto
+syarat   = desa_bab >= 2
+kamu     = Yah, Juragan Darto itu sebenarnya orang baik atau jahat?
+jawab    = * Ayah berpikir lama. // Dia keras. Perhitungan. Tapi waktu desa ini paceklik tiga tahun lalu, cuma gudangnya yang tetap membeli ikan nelayan, walau rugi. // Orang tidak bisa dinilai dari satu sisi, Nak.
+efek     = percaya +2
+sekali   = ya
+
+[ayah_hutang_bicara]
+karakter = ayah
+jenis    = khusus
+judul    = "Yah, aku sudah tahu soal hutang perahu."
+syarat   = tahu_hutang_perahu == 1 && sikap_hutang != tanya
+kamu     = Yah... aku sudah tahu soal hutang perahu ke Juragan. Aku dengar waktu Ayah dan Ibu bicara.
+jawab    = * Ayah terdiam lama. Tangannya yang sedang menyimpul jaring berhenti. // ...Maaf kamu harus tahu begitu. // Itu tanggung jawab Ayah. Kamu cukup kerja yang benar dan jaga Laras. Itu sudah membantu.
+efek     = percaya +4, ayah_tahu_kamu_tahu +1
+sekali   = ya
+
+[ibu_resep]
+karakter = ibu
+jenis    = santai
+judul    = Minta diajari resep gorengan
+topik    = masak
+kamu     = Bu, rahasia pisang goreng Ibu apa, sih? Kok renyahnya beda?
+jawab    = * Ibu melirik kiri-kanan, lalu berbisik. // Tepungnya dicampur sedikit tepung beras dan air es. Jangan bilang siapa-siapa, ya. Itu rahasia warung ini!
+efek     = cinta +3, keahlian_masak +1
+
+[ibu_obat]
+karakter = ibu
+jenis    = khusus
+judul    = Ingatkan Ibu minum obat
+syarat   = ibu_sakit == 1
+kamu     = Bu, obatnya sudah diminum? Jangan lupa, kata Pak Mantri harus teratur.
+jawab    = * Ibu tertawa kecil. // Iya, iya, Pak Dokter. Sudah tadi pagi. // Kamu ini makin mirip Ayahmu. Cerewetnya.
+efek     = cinta +3
+sekali   = tidak
+
+[ibu_laras]
+karakter = ibu
+jenis    = khusus
+judul    = Cerita soal Laras di sekolah
+syarat   = laras_diejek == adu
+kamu     = Bu, Laras masih diejek teman-temannya?
+jawab    = Sudah tidak, kata wali kelasnya. Dino sudah minta maaf. // Tapi Laras masih marah padamu, ya? Biarkan saja. Nanti juga dia mengerti kamu melakukannya karena sayang.
+efek     = percaya +2
+sekali   = ya
+
+[laras_kucing]
+karakter = laras
+jenis    = santai
+judul    = Tanya soal Si Belang
+topik    = keluarga
+kamu     = Ras, Si Belang kok gendut banget sekarang?
+jawab    = * Laras menutup mulutnya, menahan tawa. // Soalnya tiap hari aku kasih kepala ikan dari gudang Kakak! // Nanti kalau aku jadi dokter hewan, Si Belang pasien pertamaku.
+efek     = cinta +3
+
+[laras_mimpi]
+karakter = laras
+jenis    = santai
+judul    = Tanya cita-cita Laras
+topik    = masa_depan
+kamu     = Ras, nanti kalau besar mau jadi apa?
+jawab    = Dokter hewan! Biar kucing-kucing di dermaga nggak sakit-sakitan lagi. // Terus aku mau buka klinik di sebelah warung Ibu. Jadi Ibu bisa jualan, aku bisa ngobatin kucing!
+efek     = cinta +2
+
+[laras_layangan_tanya]
+karakter = laras
+jenis    = khusus
+judul    = Tanya persiapan lomba layangan
+syarat   = layangan_tahap >= 1 && desa_bab == 4
+kamu     = Gimana, Ras? Sudah siap lomba layangan?
+jawab    = Sudah! Eh, belum. Eh, sudah setengah! // Pokoknya layangan kita harus paling tinggi, Kak. Biar kelihatan dari mana-mana!
+efek     = cinta +2
+sekali   = tidak
+
+[bayu_mancing]
+karakter = bayu
+jenis    = santai
+judul    = Ngobrol sambil mancing
+topik    = laut
+kamu     = Dapat apa, Bay?
+jawab    = Baru dua, kecil-kecil. Ikannya pada pinter sekarang. // Eh, tapi nggak apa-apa. Mancing itu bukan soal dapat ikan. Soal duduk diam tanpa disuruh-suruh, haha.
+efek     = cinta +3
+
+[bayu_sekar_tanya]
+karakter = bayu
+jenis    = khusus
+judul    = Godain Bayu soal Sekar
+syarat   = rahasia_bayu == simpan
+kamu     = Bay, tadi aku lihat Sekar di dermaga. Sendirian, lho.
+jawab    = * Telinga Bayu langsung merah. // Terus kenapa?! Aku nggak nanya! // ...Dia lagi baca buku apa?
+efek     = cinta +3
+sekali   = ya
+
+[bayu_gudang]
+karakter = bayu
+jenis    = khusus
+judul    = Tanya kabar Bayu di gudang
+syarat   = bayu_kerja_gudang == 1
+kamu     = Gimana rasanya kerja di gudang, Bay?
+jawab    = Bau! Panas! Tangan perih! // Tapi Mbak Yati lucu, Pak Usman suka cerita zaman dulu. Dan ada kamu. Lumayan lah. // Bapak juga jadi bisa melaut tanpa mikirin cicilan. Itu yang penting.
+efek     = cinta +3, percaya +2
+sekali   = ya
+
+[sekar_puisi]
+karakter = sekar
+jenis    = santai
+judul    = Minta dibacakan puisinya
+topik    = masa_depan
+kamu     = Sekar, katanya kamu suka nulis puisi. Boleh dengar satu?
+jawab    = * Sekar memerah. Lama ia ragu, lalu membuka buku harian kecilnya. // "Laut tidak pernah pergi / ia hanya surut sebentar / lalu pulang membawa garam / yang kita kira air mata." // ...Jangan ketawa.
+efek     = cinta +4
+
+[sekar_ibu]
+karakter = sekar
+jenis    = khusus
+judul    = Tanya kabar ibu Sekar
+syarat   = adegan_b2_sekar_buku == 1 && sekar_pergi != 1
+kamu     = Bagaimana mata ibumu, Sekar?
+jawab    = Makin sering salah jahit. Tapi ibu tidak mau ke dokter, katanya mahal. // Aku sedang menabung dari uang les privat anak-anak SD. Pelan-pelan. Tahun depan, semoga bisa operasi.
+efek     = percaya +3
+sekali   = ya
+
+[darto_ikan_asin]
+karakter = darto
+jenis    = santai
+judul    = Tanya cara membuat ikan asin yang bagus
+topik    = laut
+kamu     = Juragan, kenapa ikan asin Juragan lebih mahal dari yang lain?
+jawab    = Garamnya. Saya pakai garam dari Madura, bukan garam murah. Dan tidak pakai obat pengawet, seperti yang di pasar itu. // Orang kota mau bayar mahal untuk yang jujur. Ingat itu kalau nanti kamu berdagang.
+efek     = cinta +2, keahlian_ikan +1
+
+[darto_raka]
+karakter = darto
+jenis    = khusus
+judul    = Tanya apakah ada kabar dari Raka
+syarat   = foto_raka == 1
+kamu     = Juragan... ada kabar dari Raka?
+jawab    = * Juragan Darto menggeleng pelan, tanpa menatapmu. // Belum. Tapi terima kasih sudah bertanya. Tidak ada orang lain di desa ini yang berani menyebut namanya di depan saya.
+efek     = percaya +3
 sekali   = tidak

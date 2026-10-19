@@ -1,0 +1,308 @@
+# ==========================================================
+#  ADEGAN CERITA SAAT WAKTU BEBAS
+#  Panduan: docs/DATA.md (bagian adegan.txt) · Alur: docs/CERITA.md
+#
+#  Adegan muncul sendiri saat pemain DATANG ke lokasi (pemicu = masuk) atau saat MENEMUI
+#  seseorang (pemicu = orang), pada hari & jam tertentu, bila syaratnya terpenuhi.
+#  Isinya ditulis di file naskah (folder naskah) mulai dari label, dan WAJIB diakhiri @kembali.
+#  Adegan yang sudah dimainkan tercatat sebagai variabel adegan_<id> = 1 (dipakai syarat adegan berikutnya).
+#
+#  [id]
+#  naskah = file naskah berisi adegannya, mis. adegan_prolog.txt
+#  label  = (opsional) label awal adegan di file itu (bawaan = id)
+#  judul  = keterangan singkat (untuk penulis)
+#  pemicu = masuk / orang   (bawaan: orang bila ada kolom "orang", selain itu masuk)
+#  lokasi = lokasi tempat adegan terjadi (wajib untuk masuk; untuk orang = hanya bila ditemui di sini)
+#  orang  = id karakter yang ditemui (pemicu orang)
+#  waktu  = (opsional) hari & jam, mis. senin-sabtu 15:00-17:30, minggu 08:00-11:00
+#  syarat = (opsional) mis. desa_bab == 2 && adegan_b2_sekar_kenalan == 1
+#           variabel tanggal: tgl = bulan*100 + tanggal (627 = 27 Juni), hari_ke, jam_menit
+#  sekali = ya (bawaan) / tidak
+#  Urutan di file = prioritas (yang di atas dicek lebih dulu).
+# ==========================================================
+
+# ---------------- BAB 1 — Senin 22 Juni (semua pemain) ----------------
+
+[p_ayah_siang]
+naskah = adegan_prolog.txt
+judul  = Bicara dengan Ayah soal pilihan
+lokasi = ruang_makan
+waktu  = setiap hari 12:00-13:00
+syarat = bab == 1
+
+[p_laras_seribu]
+naskah = adegan_prolog.txt
+judul  = Laras menagih janji seribu rupiah
+lokasi = ruang_makan
+waktu  = setiap hari 13:00-14:00
+syarat = bab == 1
+
+[p_bayu_lulus]
+naskah = adegan_prolog.txt
+judul  = Bayu di lapangan / dermaga
+orang  = bayu
+syarat = bab == 1
+
+[p_makan_malam]
+naskah = adegan_prolog.txt
+judul  = Makan malam pertama
+lokasi = ruang_makan
+waktu  = setiap hari 17:45-18:30
+syarat = bab == 1
+
+[p_ayah_dermaga]
+naskah = adegan_prolog.txt
+judul  = Ayah berangkat melaut
+orang  = ayah
+lokasi = dermaga
+syarat = bab == 1
+
+# ---------------- BAB 2 DESA — Mencari Pegangan (23 Juni – 5 Juli) ----------------
+
+[b2_sekar_kenalan]
+naskah = adegan_teman.txt
+judul  = Kenalan dengan Sekar (mengantar seragam Laras)
+lokasi = rumah_warung
+waktu  = setiap hari 08:00-18:00
+syarat = desa_bab == 2
+
+[b2_bakar_ikan]
+naskah = adegan_teman.txt
+judul  = Bakar ikan malam Minggu, rahasia Bayu
+lokasi = dermaga
+waktu  = sabtu 19:15-23:00
+syarat = desa_bab == 2 && tgl == 627
+
+[b2_laras_diejek]
+naskah = adegan_keluarga.txt
+judul  = Laras diejek "bau ikan"
+lokasi = ruang_tengah
+waktu  = senin-sabtu 14:00-16:00
+syarat = desa_bab == 2 && tgl >= 625
+
+[b2_bayu_perahu]
+naskah = adegan_teman.txt
+judul  = Tawaran melaut & utang bapak Bayu
+orang  = bayu
+syarat = desa_bab == 2
+
+[b2_sekar_buku]
+naskah = adegan_teman.txt
+judul  = Sekar, buku, beasiswa, Paket C
+orang  = sekar
+syarat = desa_bab >= 2 && desa_bab <= 3 && adegan_b2_sekar_kenalan == 1
+
+[b2_ibu_warung]
+naskah = adegan_keluarga.txt
+judul  = Warung sepi, ide untuk Ibu
+orang  = ibu
+lokasi = rumah_warung
+syarat = desa_bab == 2
+
+[b2_ayah_jaring]
+naskah = adegan_keluarga.txt
+judul  = Belajar simpul jaring dari Ayah
+orang  = ayah
+lokasi = rumah_warung
+syarat = desa_bab == 2
+
+[b2_ayah_radio]
+naskah = adegan_keluarga.txt
+judul  = Radio dangdut & cerita Ayah melamar Ibu
+orang  = ayah
+lokasi = ruang_tengah
+syarat = desa_bab == 2
+
+[b2_laras_pr]
+naskah = adegan_keluarga.txt
+judul  = PR matematika Laras
+orang  = laras
+lokasi = ruang_tengah
+syarat = desa_bab >= 2 && desa_bab <= 3 && adegan_b2_laras_diejek == 1
+
+[b2_ibu_sinetron]
+naskah = adegan_keluarga.txt
+judul  = Sinetron & kampung halaman Ibu
+orang  = ibu
+lokasi = ruang_tengah
+syarat = desa_bab == 2
+
+[b2_darto_perkutut]
+naskah = adegan_darto.txt
+judul  = Perkutut Juragan Darto
+orang  = darto
+syarat = desa_bab == 2
+
+# ---------------- BAB 3 DESA — Benang Merah (6 – 19 Juli) ----------------
+
+[b3_darto_hutang]
+naskah = adegan_darto.txt
+judul  = Bicara soal hutang perahu Ayah
+orang  = darto
+syarat = desa_bab >= 3 && tahu_hutang_perahu == 1
+
+[b3_darto_anak]
+naskah = adegan_darto.txt
+judul  = Raka, anak Juragan yang tidak pulang
+orang  = darto
+syarat = desa_bab >= 3 && percaya_darto >= 50
+
+[b3_ayah_jujur]
+naskah = adegan_keluarga.txt
+judul  = Jujur pada Ayah soal cicilan
+orang  = ayah
+syarat = desa_bab >= 3 && adegan_b3_darto_hutang == 1
+
+[b3_sekar_pilihan]
+naskah = adegan_teman.txt
+judul  = Sekar harus memutuskan soal beasiswa
+orang  = sekar
+syarat = desa_bab == 3 && tgl <= 710 && adegan_b2_sekar_buku == 1
+
+[b3_sekar_jahitan]
+naskah = adegan_teman.txt
+judul  = Kerja antar jahitan Bu Wati
+orang  = sekar
+syarat = desa_bab >= 3 && tgl >= 713 && sekar_pergi != 1 && adegan_b2_sekar_kenalan == 1
+
+[b3_bayu_utang]
+naskah = adegan_teman.txt
+judul  = Bayu mungkin jadi buruh gudang
+orang  = bayu
+syarat = desa_bab == 3
+
+[b3_ibu_cerita]
+naskah = adegan_keluarga.txt
+judul  = Ibu bercerita tentang keluarga sahabat
+orang  = ibu
+syarat = desa_bab >= 3 && ibu_sakit == 1
+
+[b3_laras_gelang]
+naskah = adegan_keluarga.txt
+judul  = Laras bertanya soal gelang benang merah
+orang  = laras
+syarat = desa_bab >= 3 && tgl >= 715
+
+[b3_laras_kotak]
+naskah = adegan_keluarga.txt
+judul  = Kotak sepatu "Buat Kakak"
+lokasi = ruang_tengah
+waktu  = setiap hari 18:30-20:30
+syarat = desa_bab >= 3 && adegan_b3_laras_gelang == 1
+
+# ---------------- BAB 4 DESA — Tujuh Belasan (20 Juli – 17 Agustus) ----------------
+
+[b4_bola_ajak]
+naskah = adegan_tujuhbelas.txt
+judul  = Bayu mengajak masuk tim bola RT
+orang  = bayu
+syarat = desa_bab == 4
+
+[b4_bola_latihan1]
+naskah = adegan_tujuhbelas.txt
+judul  = Latihan bola 1: operan
+lokasi = lapangan
+waktu  = senin-sabtu 15:00-17:00, minggu 08:00-10:30
+syarat = desa_bab == 4 && tim_bola == 1 && tgl < 816
+
+[b4_bola_latihan2]
+naskah = adegan_tujuhbelas.txt
+judul  = Latihan bola 2: kecepatan
+lokasi = lapangan
+waktu  = senin-sabtu 15:00-17:00, minggu 08:00-10:30
+syarat = desa_bab == 4 && tim_bola == 1 && tgl < 816 && adegan_b4_bola_latihan1 == 1 && hari_ke > {latihan1_hari}
+
+[b4_bola_latihan3]
+naskah = adegan_tujuhbelas.txt
+judul  = Latihan bola 3: rahasia kiper lawan
+lokasi = lapangan
+waktu  = senin-sabtu 15:00-17:00, minggu 08:00-10:30
+syarat = desa_bab == 4 && tim_bola == 1 && tgl < 816 && adegan_b4_bola_latihan2 == 1 && hari_ke > {latihan2_hari}
+
+[b4_bayu_sekar]
+naskah = adegan_tujuhbelas.txt
+judul  = Hadiah Bayu untuk Sekar
+orang  = bayu
+syarat = desa_bab == 4 && rahasia_bayu == bantu && sekar_pergi != 1 && adegan_b4_bola_ajak == 1
+
+[b4_mercu_2b]
+naskah = adegan_tujuhbelas.txt
+judul  = Aki perahu bekas para nelayan
+orang  = bayu
+syarat = desa_bab == 4 && mercusuar_dana == belum
+
+[b4_layang_1]
+naskah = adegan_tujuhbelas.txt
+judul  = Laras ingin ikut lomba layangan
+orang  = laras
+syarat = desa_bab == 4
+
+[b4_layang_1b]
+naskah = adegan_tujuhbelas.txt
+judul  = Membujuk Laras lagi soal layangan
+orang  = laras
+syarat = desa_bab == 4 && ulang_layang == 1 && layangan_tahap < 1
+
+[b4_layang_3]
+naskah = adegan_tujuhbelas.txt
+judul  = Melukis layangan bersama Laras
+orang  = laras
+syarat = desa_bab == 4 && layangan_tahap == 2 && hari_ke > {layang2_hari}
+
+[b4_layang_4]
+naskah = adegan_tujuhbelas.txt
+judul  = Uji terbang layangan
+lokasi = lapangan
+waktu  = minggu 14:00-16:00
+syarat = desa_bab == 4 && layangan_tahap == 3
+
+[b4_layang_2]
+naskah = adegan_tujuhbelas.txt
+judul  = Ayah membelah bambu untuk layangan
+orang  = ayah
+syarat = desa_bab == 4 && layangan_tahap == 1
+
+[b4_ayah_laut]
+naskah = adegan_tujuhbelas.txt
+judul  = Ayah setelah badai
+orang  = ayah
+syarat = desa_bab == 4 && perahu_rusak >= 1
+
+[b4_bazar_1]
+naskah = adegan_tujuhbelas.txt
+judul  = Bazar: memilih menu
+orang  = ibu
+syarat = desa_bab == 4 && bazar_ikut == 1
+
+[b4_bazar_2]
+naskah = adegan_tujuhbelas.txt
+judul  = Bazar: modal & belanja bahan
+orang  = ibu
+syarat = desa_bab == 4 && bazar_tahap == 1 && hari_ke > {bazar1_hari}
+
+[b4_bazar_3]
+naskah = adegan_tujuhbelas.txt
+judul  = Bazar: promosi
+orang  = ibu
+lokasi = ruang_tengah
+syarat = desa_bab == 4 && bazar_tahap == 2 && hari_ke > {bazar2_hari}
+
+[b4_mercu_1]
+naskah = adegan_tujuhbelas.txt
+judul  = Relawan mercusuar
+lokasi = dermaga
+waktu  = senin-sabtu 15:30-17:15
+syarat = desa_bab == 4
+
+[b4_mercu_2]
+naskah = adegan_tujuhbelas.txt
+judul  = Minta aki ke Juragan Darto
+orang  = darto
+syarat = desa_bab == 4 && mercusuar_tahap == 1
+
+[b4_mercu_3]
+naskah = adegan_tujuhbelas.txt
+judul  = Naik ke puncak mercusuar, ukiran janji
+lokasi = dermaga
+waktu  = senin-sabtu 15:30-17:15
+syarat = desa_bab == 4 && mercusuar_tahap == 2 && hari_ke > {mercu1_hari}

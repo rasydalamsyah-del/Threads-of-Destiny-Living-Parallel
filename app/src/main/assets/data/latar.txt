@@ -56,7 +56,8 @@ waktu = tetap
 waktu = pagi
 
 [dermaga_malam]
-waktu = tetap
+# juga dipakai sementara sebagai gambar dermaga sampai latar/dermaga.jpg dibuat (diwarnai sesuai jam)
+waktu = malam
 
 [kota_besar]
 waktu = sore
@@ -81,3 +82,10 @@ waktu = malam
 
 [taman_kota]
 waktu = sore
+
+# ---- lokasi desa baru (gambar menyusul; gambar latar+orang ikut waktu lokasinya) ----
+[dermaga]
+waktu = siang
+
+[lapangan]
+waktu = siang

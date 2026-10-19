@@ -1,0 +1,434 @@
+# ==========================================================
+#  THREADS OF DESTINY: LIVING PARALLEL
+#  Naskah: BAB 2 DESA — MENCARI PEGANGAN
+#  Selasa 23 Juni – Minggu 5 Juli 2026 · Alur: docs/CERITA.md bagian 8
+#  Adegan waktu bebas bab ini: adegan_ayah.txt, adegan_ibu.txt, adegan_laras.txt,
+#  adegan_bayu.txt, adegan_sekar.txt, adegan_darto.txt (pemicu di data/adegan.txt)
+# ==========================================================
+
+@sembunyi semua
+@atur bab = 2
+@atur desa_bab = 2
+
+
+# ----------------------------------------------------------
+#  SELASA PAGI — SARAPAN
+# ----------------------------------------------------------
+
+@kalender Selasa 06:00
+@waktu Selasa, 23 Juni 2026
+@latar kamar_pagi
+@kedip
+* Hari kedua setelah lulus. Tidak ada seragam yang harus disetrika, tidak ada bel yang harus dikejar.
+* Rasanya aneh. Bebas, tapi juga... kosong.
+@maju 15 menit
+@jalan ruang_makan | Ibu sudah memanggil untuk sarapan
+
+@latar sarapan_keluarga
+@tampil ayah biasa
+@tampil ibu biasa
+@tampil laras biasa
+Ibu: Pagi. Ayo makan, nanti Laras telat lagi.
+Laras: Aku nggak pernah telat! Cuma... hampir.
+@jika bicara_ayah == 1 -> selasa_sudah_bicara
+
+Ayah: {nama}, Ibumu sudah cerita semuanya. Kamu mau tetap di sini dan kerja.
+{nama}: Iya, Yah. Maaf baru bilang sekarang. Kemarin Ayah tidur terus.
+@tampil ayah senyum
+Ayah: Tidak apa-apa. Ayah tidak akan melarang. Tapi kerja itu harus di tempat yang jelas.
+Ayah: Besok pagi ikut Ayah ke gudang Juragan Darto. Ayah bicarakan kerja untukmu.
+@catatan Rabu pagi, Ayah akan mengajakku ke gudang ikan Juragan Darto untuk mencari kerja.
+@lompat selasa_lanjut
+
+:: selasa_sudah_bicara
+Ayah: Jangan lupa, besok pagi kita ke gudang Juragan Darto. Pakai baju yang paling rapi.
+{nama}: Baju paling rapiku seragam SMP, Yah.
+Ayah: Ya sudah, kaus yang tidak bolong saja.
+* Laras tertawa sampai nasinya hampir menyembur.
+
+:: selasa_lanjut
+@tampil laras kaget
+Laras: Kakak mau jadi juragan ikan?
+{nama}: Mau jadi buruhnya juragan, Ras.
+@tampil laras biasa
+Laras: Ooh. Nanti bawa pulang ikan asin yang banyak, ya! ...Eh jangan, aku nggak suka ikan asin.
+@tampil ibu senyum
+Ibu: Habiskan dulu sarapanmu, Nona Komentator.
+@maju 30 menit
+@sembunyi laras
+@latar sarapan_tanpa_laras
+* Laras berangkat dengan sepeda kecilnya. Ayah masuk kamar untuk tidur.
+@sembunyi ayah
+@tampil ibu biasa
+Ibu: Hari ini kamu bebas. Tapi jangan cuma tiduran, ya. Bantu Ibu di warung kalau sempat.
+Ibu: Oh iya, nanti pagi Sekar mau mengantar seragam baru Laras. Ibunya yang menjahit. Kalau Ibu lagi repot, kamu yang terima, ya.
+@sembunyi semua
+@latar ruang_makan
+* Waktu bebasmu sampai besok subuh. Besok pukul 06:30 Ayah mengajakmu ke gudang ikan, jadi jangan tidur terlalu malam.
+@bebas sampai Rabu 06:30
+
+
+# ----------------------------------------------------------
+#  RABU — GUDANG IKAN JURAGAN DARTO
+# ----------------------------------------------------------
+
+@gelap 1200
+@kalender Rabu 06:30
+@waktu Rabu, 24 Juni 2026 · Gudang ikan Juragan Darto
+@latar gudang_ikan
+@atur _tempat = gudang_ikan
+@terang 1200
+* Bau garam dan ikan menyengat bahkan sebelum gudang itu terlihat. Puluhan tampah bambu berjajar di bawah matahari pagi.
+* Beberapa buruh sudah membalik ikan-ikan teri. Tangan mereka bergerak cepat, tanpa bicara.
+@kenal darto
+@tampil ayah biasa
+@tampil darto biasa
+Ayah: Juragan, ini anak saya, {nama}. Baru lulus SMP. Dia mau kerja di sini.
+* Juragan Darto menurunkan gelas kopinya. Matanya menyipit, menilaimu dari ujung rambut sampai sandal jepit.
+Juragan Darto: Hm. Anak Darman. Kata orang, nilaimu bagus. Kenapa tidak sekolah?
+@pilihan
+> "Saya mau bantu keluarga, Juragan." -> w_jujur
+> "Sekolah tidak menjamin apa-apa, Juragan." -> w_sok
+> Diam saja, menunduk -> w_diam
+
+:: w_jujur
+@tambah skor_wawancara +10
+Juragan Darto: Jawaban jujur. Saya suka orang yang tidak berbelit.
+@percaya darto +3
+@lompat w_dua
+
+:: w_sok
+@tambah skor_wawancara -10
+@tampil darto kesal
+Juragan Darto: Sekolah memang tidak menjamin apa-apa. Tapi kebodohan menjamin kamu jadi buruh selamanya.
+* Ayah melirikmu tajam. Telingamu terasa panas.
+@lompat w_dua
+
+:: w_diam
+Juragan Darto: Pemalu. Di sini memang tidak perlu banyak bicara. Yang perlu tangan.
+
+:: w_dua
+@tampil darto biasa
+Juragan Darto: Kerja di sini mulai jam tujuh sampai jam dua. Matahari, garam, bau. Tanganmu akan perih dan pecah-pecah. Tahan?
+@pilihan
+> "Tahan, Juragan." -> w2_tahan
+> "Saya akan belajar menahannya." -> w2_belajar
+> "Asal upahnya sepadan, Juragan." -> w2_upah
+
+:: w2_tahan
+@tambah skor_wawancara +5
+Juragan Darto: Semua orang bilang tahan di hari pertama.
+@lompat w_lamar
+
+:: w2_belajar
+@tambah skor_wawancara +10
+* Sudut bibir Juragan Darto bergerak sedikit. Mungkin itu senyum.
+Juragan Darto: Itu jawaban orang yang pernah susah.
+@lompat w_lamar
+
+:: w2_upah
+@tambah skor_wawancara -5
+@tampil darto senyum
+Juragan Darto: Hah! Anak zaman sekarang. Belum kerja sudah tanya upah.
+Juragan Darto: Tapi tidak salah juga. Di sini, upah sesuai keringat.
+
+:: w_lamar
+@lamar buruh_ikan -> diterima, ditolak
+
+:: diterima
+@atur kerja_desa = gudang
+@tampil darto biasa
+Juragan Darto: ...Baiklah. Karena bapakmu yang menjamin.
+Juragan Darto: Mulai besok. Jam tujuh. Senin sampai Sabtu. Upah enam puluh lima ribu, dibayar tiap selesai kerja.
+Juragan Darto: Telat lima belas menit, kerjamu dihitung buruk. Malas, kamu keluar. Paham?
+{nama}: Paham, Juragan. Terima kasih.
+@cinta ayah +5
+@catatan Diterima kerja di gudang ikan Juragan Darto. Senin–Sabtu, 07:00–14:00, Rp65.000 per hari.
+@lompat pulang_gudang
+
+:: ditolak
+@atur kerja_desa = perahu
+@tampil darto biasa
+Juragan Darto: Maaf, Darman. Tempat saya sedang penuh. Anakmu juga masih kecil untuk angkat keranjang.
+@tampil ayah sedih
+Ayah: ...Saya mengerti, Juragan. Terima kasih sudah mau menemui kami.
+* Kamu menunduk. Rasanya seperti ditolak di depan seluruh desa.
+
+:: pulang_gudang
+@sembunyi semua
+@latar rumah_warung
+@atur _tempat = rumah_warung
+* Dalam perjalanan pulang, Ayah berjalan di depan dengan tangan di saku. Lama ia tidak bicara.
+@tampil ayah biasa
+@jika kerja_desa == perahu -> pulang_ditolak
+Ayah: Juragan Darto itu keras. Tapi waktu Ayah butuh perahu baru, cuma dia yang mau meminjamkan uang.
+Ayah: Jadi kerja yang benar, ya. Jangan bikin Ayah malu di depan dia.
+{nama}: (Meminjamkan uang...?)
+@atur benih_hutang = 1
+@lompat rabu_bebas
+
+:: pulang_ditolak
+Ayah: Sudah, jangan dipikirkan. Masih ada laut.
+Ayah: Pak Karta, bapaknya Bayu, butuh orang di perahunya setiap subuh. Bagi hasil. Nanti Ayah bicara dengannya.
+Ayah: Atau kamu tanya sendiri ke Bayu. Dia pasti senang.
+@catatan Ditolak di gudang ikan. Ayah menyarankan ikut perahu Pak Karta (bapak Bayu) melaut subuh. Bisa juga cari kerja lain lewat "🔎 Cari kerja".
+* Ayah menambahkan, nyaris berbisik, "Lagi pula... Ayah sudah terlalu banyak berutang budi padanya."
+@atur benih_hutang = 1
+
+:: rabu_bebas
+@sembunyi semua
+@jika kerja_desa == perahu -> rabu_bebas_perahu
+* Hari pertama kerjamu besok, Kamis, pukul 07:00. Sampai saat itu, waktumu bebas.
+@bebas sampai Kamis 06:30
+@lompat kamis
+
+:: rabu_bebas_perahu
+@kerja_mulai bantu_melaut
+* Ayah sudah bicara dengan Pak Karta. Besok subuh, pukul 04:30, perahunya berangkat dari dermaga. Sampai saat itu, waktumu bebas.
+@bebas sampai Kamis 04:00
+
+
+# ----------------------------------------------------------
+#  KAMIS — HARI PERTAMA KERJA
+# ----------------------------------------------------------
+
+:: kamis
+@gelap 1200
+@atur hari_kerja_pertama = 1
+@jika kerja_desa == perahu -> kamis_perahu
+
+@kalender Kamis 06:50
+@waktu Kamis, 25 Juni 2026 · Hari pertama kerja
+@latar gudang_ikan
+@atur _tempat = gudang_ikan
+@terang 1200
+* Kamu datang sepuluh menit lebih awal. Tetap saja, kamu yang paling akhir.
+* Seorang perempuan bertubuh kecil dengan caping lebar melambaikan tangan. Di sebelahnya, lelaki tua kurus menggulung celana sampai lutut.
+Mbak Yati: Kamu anaknya Pak Darman, ya? Aku Yati. Ini Pak Usman, paling senior di sini. Jangan dekat-dekat, bau rokoknya ngalahin bau ikan.
+Pak Usman: Hus. Sini, Nak. Hari ini kamu belajar membalik teri. Kelihatannya gampang. Coba dulu.
+* Pak Usman memperlihatkan caranya: tampah diangkat sedikit, digoyang, ikan-ikan kecil itu berbalik serempak seperti ombak perak.
+* Kamu mencoba. Separuh teri berhamburan ke tanah.
+Mbak Yati: Hahaha! Sama, dulu aku juga begitu. Pelan-pelan.
+@tampil darto biasa
+* Juragan Darto lewat dengan buku catatan di tangan. Ia berhenti tepat di belakangmu.
+Juragan Darto: Satu tampah teri itu dua puluh ribu. Yang di tanah tadi, siapa yang bayar?
+@pilihan
+> "Maaf, Juragan. Saya akan lebih hati-hati." -> k1_maaf
+> Kerjakan lebih cepat supaya terlihat rajin -> k1_cepat
+> "Saya baru belajar, Juragan." -> k1_alasan
+
+:: k1_maaf
+@atur gaya_kerja = teliti
+Juragan Darto: Hati-hati itu bagus. Lambat itu tidak. Cari tengahnya.
+@percaya darto +3
+@lompat k1_lanjut
+
+:: k1_cepat
+@atur gaya_kerja = cepat
+* Kamu mempercepat gerakan. Tampah kedua lancar... tampah ketiga, segenggam teri melayang lagi.
+@tampil darto kesal
+Juragan Darto: Cepat tapi berantakan itu lebih mahal daripada lambat.
+@lompat k1_lanjut
+
+:: k1_alasan
+@atur gaya_kerja = alasan
+@tampil darto kesal
+Juragan Darto: Semua orang di sini pernah baru belajar. Tidak ada yang beralasan.
+@percaya darto -2
+
+:: k1_lanjut
+@sembunyi darto
+@maju 3 jam
+* Matahari makin tinggi. Kausmu basah oleh keringat, tanganmu perih kena garam.
+Mbak Yati: Minum dulu. Jangan sampai pingsan, nanti Juragan bilang anak sekarang lembek.
+Pak Usman: Kamu tahu, Nak? Juragan itu dulu juga buruh angkut di sini. Makanya dia tahu siapa yang malas.
+@info darto kisah_1
+@maju 3 jam 30 menit
+* Pukul dua siang. Juragan Darto menghitung lembaran uang di bawah atap gudang dan memanggil nama kalian satu per satu.
+@tampil darto biasa
+Juragan Darto: {nama}. Enam puluh lima ribu.
+@jika gaya_kerja == teliti -> k1_upah_puji
+Juragan Darto: Besok jangan ada teri di tanah lagi.
+@lompat k1_upah
+
+:: k1_upah_puji
+Juragan Darto: Lumayan untuk hari pertama.
+
+:: k1_upah
+@uang +65000
+@stat energi -30
+@stat hidrasi -15
+@stat kenyang -10
+@tambah keahlian_ikan +1
+* Lembaran-lembaran itu terasa lebih berat dari kelihatannya. Uang pertama dari keringatmu sendiri.
+@sembunyi semua
+@lompat kamis_bebas
+
+:: kamis_perahu
+@kalender Kamis 04:15
+@waktu Kamis, 25 Juni 2026 · 04:15 · Dermaga
+@latar dermaga_malam
+@atur _tempat = dermaga
+@terang 1200
+* Langit masih hitam. Hanya lampu-lampu perahu yang bergoyang di atas air.
+@tampil bayu senyum
+Bayu: Woy! Bangun juga kamu! Kirain bakal ngorok sampai siang.
+Pak Karta: Sudah, naik. Ombak bagus pagi ini. Bayu, ajari temanmu pegang tali.
+* Perahu Pak Karta lebih kecil dari perahu Ayah. Mesinnya meraung, memecah sunyi subuh.
+@maju 2 jam
+* Saat matahari muncul di cakrawala, jaring mulai ditarik. Lenganmu gemetar. Bayu tertawa melihatmu.
+Bayu: Tarik pakai pinggang, bukan pakai tangan doang!
+@pilihan
+> Ikuti saran Bayu -> kp_ikut
+> Tarik sekuat tenaga dengan caramu sendiri -> kp_sendiri
+
+:: kp_ikut
+* Kamu menekuk lutut dan menarik dengan seluruh badan. Ternyata jauh lebih ringan.
+Bayu: Nah! Bakat nelayan, nih!
+@cinta bayu +3
+@lompat kp_lanjut
+
+:: kp_sendiri
+* Kamu menarik sekuat tenaga. Tanganmu lecet, punggungmu nyeri. Pak Karta hanya geleng-geleng kepala.
+@stat kesehatan -3
+
+:: kp_lanjut
+@maju 3 jam
+* Pukul sepuluh, perahu merapat. Pak Karta membagi hasil penjualan ikan di pelelangan.
+Pak Karta: Ini bagianmu. Besok kalau mau ikut lagi, jam setengah lima sudah di dermaga.
+@uang +45000
+@stat energi -40
+@stat hidrasi -20
+@tambah keahlian_laut +1
+@sembunyi semua
+
+:: kamis_bebas
+* Hari-harimu kini punya bentuk: kerja, pulang, makan, tidur. Di sela-selanya, desa kecil ini tetap hidup dengan caranya sendiri.
+* Waktu bebas sampai Minggu malam. Jangan lupa: kerja harian hanya dibayar kalau kamu datang.
+@bebas sampai Minggu 19:30
+
+
+# ----------------------------------------------------------
+#  MINGGU MALAM — UANG PERTAMA
+# ----------------------------------------------------------
+
+@gelap 1000
+@kalender Minggu 19:30
+@latar ruang_tengah
+@atur _tempat = ruang_tengah
+@terang 1000
+@tampil ibu biasa
+@tampil laras biasa
+* Malam Minggu pertama setelah kamu mulai bekerja. Sinetron di TV sedang iklan. Ibu melipat pakaian, Laras tengkurap menggambar.
+Ibu: Gimana minggu pertamamu, Nak? Capek?
+{nama}: Capek, Bu. Tapi lumayan.
+* Kamu teringat lembaran-lembaran uang yang kamu simpan di bawah bantal.
+@jika uang < 50000 -> minggu_uang_tipis
+@pilihan
+> Berikan Rp50.000 untuk belanja dapur -> minggu_beri
+> Berikan Rp20.000 saja, sisanya ditabung -> minggu_sedikit
+> Simpan semuanya untuk dirimu -> minggu_simpan
+
+:: minggu_beri
+@uang -50000
+@atur kasih_ibu_gaji = 1
+@tampil ibu sedih
+Ibu: Lho, ini... Nak, simpan saja. Itu uangmu.
+{nama}: Buat beli minyak goreng sama beras, Bu. Kemarin aku lihat sudah tinggal sedikit.
+@tampil ibu menangis
+* Ibu memalingkan wajah ke arah TV. Kamu tahu ia sedang mengusap matanya.
+Ibu: ...Anak ini.
+@cinta ibu +8
+@percaya ibu +4
+@lompat minggu_akhir
+
+:: minggu_sedikit
+@uang -20000
+@atur kasih_ibu_gaji = 1
+@tampil ibu senyum
+Ibu: Ya ampun... makasih, Nak. Ibu belikan minyak goreng, ya. Sisanya tabung baik-baik.
+@cinta ibu +4
+@lompat minggu_akhir
+
+:: minggu_simpan
+@atur kasih_ibu_gaji = 0
+* Kamu diam saja. Uang itu sudah punya rencana sendiri di kepalamu.
+Ibu: Simpan baik-baik uangmu, ya. Jangan dibelikan pulsa terus.
+@lompat minggu_akhir
+
+:: minggu_uang_tipis
+* Uangmu tinggal sedikit. Kamu hanya tersenyum, berjanji dalam hati minggu depan akan memberi Ibu sesuatu.
+
+:: minggu_akhir
+@tampil laras biasa
+Laras: Kak, Kak! Lihat! Aku gambar Kakak lagi kerja!
+* Di kertas itu ada sosok kecil berkeringat di tengah tumpukan ikan, dengan senyum lebar dan... sayap?
+{nama}: Kok Kakak ada sayapnya?
+Laras: Soalnya Kakak pahlawan.
+* Kamu tidak tahu harus tertawa atau menangis.
+@cinta laras +2
+@sembunyi semua
+* Minggu baru dimulai besok.
+@bebas sampai Minggu 19:30
+
+
+# ----------------------------------------------------------
+#  MINGGU 5 JULI MALAM — BISIK-BISIK
+# ----------------------------------------------------------
+
+@gelap 1200
+@kalender Minggu 20:00
+@waktu Minggu, 5 Juli 2026 · malam
+@latar kamar_pagi
+@atur _tempat = kamar_pagi
+@terang 1200
+* Malam itu kamu tidak bisa tidur. Dari balik dinding papan, suara Ayah dan Ibu terdengar pelan. Ayah belum berangkat melaut; angin sedang tidak bersahabat.
+Ibu: ...Sudah tiga bulan, Pak. Kalau Juragan Darto menagih lagi bagaimana?
+Ayah: Saya bilang minggu depan. Hasil tangkapan lagi sepi, Bu. Harga ikan juga jatuh.
+Ibu: Satu juta dua ratus, Pak. Dari mana kita dapat uang sebanyak itu?
+Ayah: Kalau tidak dibayar... Juragan bisa ambil perahunya.
+* Hening lama. Lalu suara Ibu, nyaris tak terdengar.
+Ibu: Jangan sampai anak-anak tahu, ya.
+* Kamu menatap langit-langit kamar. Perahu biru pudar itu... ternyata belum lunas.
+@pilihan
+> Keluar kamar dan bertanya langsung -> bisik_tanya
+> Pura-pura tidak mendengar -> bisik_diam
+> Diam-diam berjanji akan membantu melunasinya -> bisik_janji
+
+:: bisik_tanya
+@atur tahu_hutang_perahu = 1
+@atur sikap_hutang = tanya
+@latar ruang_tengah
+@tampil ayah kaget
+@tampil ibu kaget
+{nama}: Yah... Bu... perahu kita masih utang ke Juragan Darto?
+* Ayah dan Ibu saling pandang. Ibu buru-buru berdiri dan pura-pura mengambil air.
+@tampil ayah sedih
+Ayah: ...Itu urusan Ayah, Nak. Kamu tidak usah ikut pikirkan.
+{nama}: Aku sudah kerja, Yah. Aku bisa bantu.
+Ayah: Justru karena kamu sudah kerja, Ayah malu.
+* Kata-kata itu menggantung di udara, lebih berat dari seluruh hutang itu sendiri.
+@percaya ayah +3
+@cinta ayah -2
+@lompat bisik_akhir
+
+:: bisik_diam
+@atur tahu_hutang_perahu = 1
+@atur sikap_hutang = diam
+* Kamu menarik selimut sampai menutupi kepala. Tapi kata "satu juta dua ratus" terus berputar di kepalamu.
+@stat kewarasan -6
+@lompat bisik_akhir
+
+:: bisik_janji
+@atur tahu_hutang_perahu = 1
+@atur sikap_hutang = janji
+* Kamu menggenggam gelang benang merah di pergelanganmu. Seperti dulu, saat kamu dan {nama_sahabat} berjanji di dermaga.
+{nama}: (Aku akan bantu. Bagaimanapun caranya.)
+@stat kewarasan -3
+
+:: bisik_akhir
+@sembunyi semua
+@catatan Perahu Ayah masih berhutang Rp1.200.000 ke Juragan Darto, sudah menunggak tiga bulan. Kalau tidak dibayar, perahunya bisa diambil.
+@gelap 1500
+* Minggu kedua di Tanjung Lentera berakhir dengan rahasia yang terlalu besar untuk sebuah rumah sekecil ini.
+@naskah desa_bab3.txt

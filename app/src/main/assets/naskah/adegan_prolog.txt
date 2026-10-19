@@ -1,0 +1,280 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — BAB 1 (Senin 22 Juni, hari setelah lulus)
+#  Pemicu & jam: data/adegan.txt · Alur: docs/CERITA.md bagian 7
+#  Setiap adegan diakhiri @kembali (kembali ke waktu bebas).
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  BICARA DENGAN AYAH (ruang makan, 12:00–13:00)
+# ----------------------------------------------------------
+
+:: p_ayah_siang
+@atur bicara_ayah = 1
+@tampil ayah biasa
+* Ayah duduk sendirian di meja makan. Rambutnya masih basah sehabis mandi, matanya sembap kurang tidur.
+Ayah: Eh, {nama}. Sini, temani Ayah makan.
+* Kamu menarik kursi. Ayah menyendokkan sepotong ikan ke piringmu tanpa bertanya.
+@jika jalur == kerja -> p_ayah_siang_desa
+
+Ayah: Ibumu sudah cerita. Katanya kamu mau sekolah di Sakala.
+{nama}: Iya, Yah. Kalau Ayah izinkan.
+* Ayah mengunyah pelan-pelan. Lama. Sendoknya berhenti di udara.
+@tampil ayah senyum
+Ayah: Dulu Ayah berhenti sekolah kelas dua SMP. Kakekmu sakit, harus ada yang melaut.
+Ayah: Ayah tidak menyesal. Tapi Ayah tidak mau kamu cuma punya laut sebagai pilihan.
+Ayah: Sekolah yang benar. Jangan jadi seperti Ayah.
+@pilihan
+> "Aku mau jadi seperti Ayah. Pekerja keras." -> p_ayah_kota_a
+> "Aku janji, Yah. Aku tidak akan menyia-nyiakannya." -> p_ayah_kota_b
+
+:: p_ayah_kota_a
+@tampil ayah sedih
+* Ayah terdiam. Lalu tertawa kecil, suara yang jarang sekali kamu dengar.
+@tampil ayah senyum
+Ayah: Pekerja keras boleh. Tapi jangan keras kepala seperti Ayah, ya.
+@cinta ayah +4
+@lompat p_ayah_siang_akhir
+
+:: p_ayah_kota_b
+Ayah: Ayah pegang janjimu.
+* Ayah menepuk bahumu dua kali. Tangannya kasar dan hangat.
+@percaya ayah +4
+@lompat p_ayah_siang_akhir
+
+:: p_ayah_siang_desa
+Ayah: Ibumu sudah cerita. Katanya kamu mau tetap di sini. Kerja.
+{nama}: Iya, Yah. Aku mau bantu Ayah sama Ibu.
+* Ayah meletakkan sendoknya. Matanya menatap piring, bukan wajahmu.
+@tampil ayah sedih
+Ayah: Ayah dulu juga bilang begitu ke kakekmu. Umur empat belas. Berhenti sekolah, ikut melaut.
+Ayah: Ayah tidak pernah menyesal membantu keluarga. Tapi kadang... Ayah iri lihat orang yang bisa membaca surat-surat kantor tanpa mengeja.
+@pilihan
+> "Aku tetap akan belajar, Yah. Walau tidak di sekolah." -> p_ayah_belajar
+> "Uang lebih penting sekarang, Yah. Sekolah bisa nanti." -> p_ayah_uang
+> "Aku belum tahu, Yah. Aku cuma tidak mau jauh dari sini." -> p_ayah_ragu
+
+:: p_ayah_belajar
+@atur ayah_restu = belajar
+@tampil ayah senyum
+Ayah: ...Itu baru anak Ayah. Kerja boleh, tapi kepalamu jangan berhenti diisi.
+@cinta ayah +5
+@percaya ayah +3
+@lompat p_ayah_gudang
+
+:: p_ayah_uang
+@atur ayah_restu = uang
+Ayah: Uang memang penting. Tapi "nanti" itu sering tidak pernah datang, {nama}.
+* Ayah menghela napas panjang, lalu mengangguk pelan.
+@cinta ayah +2
+@lompat p_ayah_gudang
+
+:: p_ayah_ragu
+@atur ayah_restu = ragu
+Ayah: Tidak mau jauh dari siapa? Dari Ibumu? Dari Laras? ...Atau dari dermaga itu?
+* Kamu tidak menjawab. Ayah sepertinya tahu.
+@tampil ayah biasa
+Ayah: Ya sudah. Pelan-pelan saja. Kerja sambil berpikir.
+@percaya ayah +2
+
+:: p_ayah_gudang
+@tampil ayah biasa
+Ayah: Rabu pagi, ikut Ayah ke gudang Juragan Darto. Ayah bicarakan kerja untukmu.
+Ayah: Besok Ayah mau menambal lambung perahu dulu, bocor lagi.
+@catatan Rabu pagi, Ayah akan mengajakku ke gudang ikan Juragan Darto untuk mencari kerja.
+
+:: p_ayah_siang_akhir
+@info ayah kisah_1
+* Ayah kembali makan. Dari depan rumah, suara Ibu melayani pembeli terdengar samar.
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  SERIBU UNTUK LARAS (ruang makan, 13:00–14:00)
+# ----------------------------------------------------------
+
+:: p_laras_seribu
+@tampil laras biasa
+* Pintu depan berderit. Laras masuk dengan seragam putih-merah yang kusut, tasnya digendong miring.
+Laras: Aku pulaaang! Kak {nama}! Mana seribunya?
+{nama}: Seribu apa?
+@tampil laras kesal
+Laras: Ih! Tadi pagi Kakak janji! Tambahin uang jajan seribu! Aku udah bilang ke Mira kalau besok aku yang traktir es lilin!
+@pilihan
+> Beri seribu rupiah -> p_laras_beri
+> Pura-pura lupa -> p_laras_lupa
+> "Kakak ganti pakai gendong sampai lapangan, gimana?" -> p_laras_gendong
+
+:: p_laras_beri
+@atur janji_laras_seribu = ditepati
+@uang -1000
+* Kamu merogoh saku dan menyerahkan selembar seribuan yang sudah lecek.
+@tampil laras senyum
+Laras: Yeay! Kakak terbaik sedunia! Jangan bilang Ibu, ya!
+@perilaku laras menepati_janji
+@lompat p_laras_akhir
+
+:: p_laras_lupa
+@atur janji_laras_seribu = ingkar
+@tampil laras sedih
+Laras: ...Kakak jahat.
+* Laras melempar tasnya ke kursi dan makan tanpa bicara sepatah kata pun.
+@perilaku laras ingkar_janji
+@lompat p_laras_akhir
+
+:: p_laras_gendong
+@atur janji_laras_seribu = ditepati
+Laras: Nggak mau! ...Eh, gendong sampai lapangan, terus seribunya tetap!
+* Kamu tertawa dan menyerahkan seribu rupiah. Laras sudah memanjat punggungmu sebelum kamu sempat menolak.
+@uang -1000
+@cinta laras +6
+
+:: p_laras_akhir
+* Di luar, matahari siang memanggang jalan tanah. Si Belang, kucing warung, tidur melingkar di bawah meja.
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAYU DI LAPANGAN / DERMAGA (temui Bayu)
+# ----------------------------------------------------------
+
+:: p_bayu_lulus
+@tampil bayu senyum
+Bayu: Woy! Datang juga kamu. Kirain langsung tidur seharian habis lulus.
+{nama}: Kamu sendiri? Nggak ikut bapakmu?
+Bayu: Udah tadi subuh. Sekarang waktunya bebas! Hari pertama jadi pengangguran resmi, haha.
+* Bayu menimang-nimang bola plastik yang sudah kempes sebelah.
+Bayu: Eh, jadi gimana? Kamu ke Sakala juga, kayak Rani sama Dodi?
+@jika jalur == kerja -> p_bayu_desa
+
+{nama}: Iya. Aku ambil SMA di sana.
+@tampil bayu sedih
+Bayu: ...Oh. Ya, bagus sih. Kamu kan memang pinter.
+Bayu: Aku mah di sini aja. Bapak butuh orang di perahu. Lagian, siapa yang mau bayar kos-kosan?
+@pilihan
+> "Kamu juga bisa, Bay. Masih ada jalan." -> p_bayu_semangat
+> "Nanti aku sering pulang. Kita tetap main." -> p_bayu_janji
+
+:: p_bayu_semangat
+Bayu: Jalan apa? Jalan ke laut? Haha. Udah, nggak apa-apa. ...Makasih, ya.
+@cinta bayu +3
+@lompat p_bayu_sekar
+
+:: p_bayu_janji
+@tampil bayu senyum
+Bayu: Janji, ya! Awas kalau di kota jadi sombong.
+@cinta bayu +4
+@lompat p_bayu_sekar
+
+:: p_bayu_desa
+{nama}: Nggak. Aku di sini. Kerja.
+@tampil bayu kaget
+Bayu: Serius?! Kirain kamu pasti ke kota! Nilaimu kan bagus.
+{nama}: Bagus juga percuma kalau nggak ada biaya, Bay.
+@tampil bayu senyum
+Bayu: ...Ya udah! Berarti kita tetep bareng! Kalau butuh kerja, perahu bapakku selalu kurang orang.
+@cinta bayu +5
+
+:: p_bayu_sekar
+@tampil bayu biasa
+Bayu: Eh, ngomong-ngomong... Sekar katanya dapat tawaran beasiswa ke Sakala, lho. Juara kelas memang beda.
+Bayu: Tapi dia nggak mau cerita. Ditanya malah diam. Aneh.
+* Bayu memainkan bola di kakinya, tidak menatapmu. Telinganya sedikit memerah setiap kali menyebut nama Sekar.
+{nama}: (Bayu kenapa, sih?)
+@tampil bayu senyum
+Bayu: Udah ah. Main bola, yuk! Atau mancing! Terserah kamu!
+@sembunyi bayu
+@kembali
+
+
+# ----------------------------------------------------------
+#  MAKAN MALAM PERTAMA (ruang makan, 17:45–18:30)
+# ----------------------------------------------------------
+
+:: p_makan_malam
+@tampil ayah biasa
+@tampil ibu senyum
+@tampil laras biasa
+* Makan malam pertama setelah kelulusan. Ibu memasak sayur bening, dan sisa ikan goreng tadi pagi dihangatkan lagi.
+Ibu: Ayo, mumpung masih hangat.
+@jika jalur == kerja -> p_malam_desa
+
+Laras: Kak, katanya Kakak mau sekolah di Sakala? Yang jauh itu?
+{nama}: Iya, Ras. Tiga minggu lagi.
+@tampil laras sedih
+Laras: Terus... aku sama siapa? Siapa yang bantuin PR? Siapa yang beliin es lilin?
+Ibu: Laras, kan masih ada Ibu.
+Laras: Ibu nggak bisa matematika!
+* Ayah tersedak menahan tawa. Ibu memelototinya.
+@pilihan
+> "Kakak telepon tiap malam. Janji." -> p_malam_janji
+> "Nanti Kakak bawain oleh-oleh dari kota." -> p_malam_oleh
+
+:: p_malam_janji
+@atur janji_telepon_laras = 1
+Laras: Tiap malam? Beneran? ...Kalau bohong, Kakak harus beliin aku sepeda baru!
+@cinta laras +4
+@lompat p_malam_akhir
+
+:: p_malam_oleh
+@tampil laras kesal
+Laras: Aku nggak mau oleh-oleh. Aku mau Kakak.
+* Meja makan mendadak hening. Ibu mengusap kepala Laras pelan-pelan.
+@cinta laras +1
+@lompat p_malam_akhir
+
+:: p_malam_desa
+Ayah: Laras, kakakmu mulai minggu ini cari kerja. Jadi jangan diganggu terus, ya.
+@tampil laras kaget
+Laras: Kakak nggak ke kota? Beneran? Yeay! Berarti tiap hari bisa main!
+Ibu: Kakakmu mau kerja, bukan main.
+Laras: Kerja sambil main!
+* Laras mengayun-ayunkan kakinya di bawah meja. Untuk pertama kalinya hari ini, kamu ikut tertawa lepas.
+@jika ayah_restu == belajar -> p_malam_buku
+@lompat p_malam_akhir
+
+:: p_malam_buku
+Ayah: Katanya juga mau tetap belajar sendiri. Bu, buku-buku lama di lemari masih ada?
+@tampil ibu senyum
+Ibu: Wah, beneran? Ibu masih simpan buku SMA punya Om Hadi. Nanti Ibu carikan.
+@cinta ibu +3
+
+:: p_malam_akhir
+* Selesai makan, Ayah berdiri dan meraih jaket lusuhnya dari paku di dinding.
+@tampil ayah biasa
+Ayah: Ayah berangkat dulu. Jaga rumah.
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  AYAH BERANGKAT (dermaga, 18:30–19:15, temui Ayah)
+# ----------------------------------------------------------
+
+:: p_ayah_dermaga
+@tampil ayah biasa
+* Di dermaga, Ayah sedang menggulung tali tambat. Perahu kayunya yang bercat biru pudar bergoyang pelan.
+Ayah: Lho, ngapain ke sini? Mau ikut melaut?
+{nama}: Cuma mau lihat Ayah berangkat.
+* Ayah menatap langit barat lama sekali. Semburat jingga mulai berubah ungu.
+Ayah: Kamu tahu kenapa Ayah selalu melihat langit dulu sebelum berangkat?
+@pilihan
+> "Kenapa, Yah?" -> p_dermaga_cerita
+> "Biar tahu cuacanya, kan?" -> p_dermaga_cerita
+
+:: p_dermaga_cerita
+Ayah: Tahun kamu lahir, Ayah hampir tidak pulang.
+@tampil ayah sedih
+Ayah: Sore itu langitnya merah tembaga. Kata orang tua dulu, itu tanda badai. Ayah tidak percaya. Ayah tetap berangkat.
+Ayah: Perahunya terbalik. Ayah berpegangan di papan semalaman. Yang Ayah pikirkan cuma satu: Ibumu sedang mengandung kamu.
+* Ombak kecil memukul tiang dermaga. Kamu tidak tahu harus berkata apa.
+Ayah: Sejak itu, kalau langit barat merah, Ayah tidak berangkat. Dan Ayah selalu sudah merapat sebelum matahari terbit. Apa pun hasilnya.
+@tampil ayah senyum
+Ayah: Malam ini langitnya bersih. Ayah pulang pagi. Sana, pulang. Jangan begadang.
+@info ayah kisah_3
+@cinta ayah +4
+* Mesin perahu terbatuk dua kali sebelum menyala. Lampu kecil di buritan perlahan menjauh, lalu menjadi satu titik di antara bintang-bintang.
+@sembunyi ayah
+@kembali

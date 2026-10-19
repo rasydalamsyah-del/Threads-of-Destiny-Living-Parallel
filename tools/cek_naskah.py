@@ -41,6 +41,18 @@ karakter_img = {os.path.splitext(os.path.basename(p))[0] for p in glob.glob(os.p
 
 errors = 0
 
+# lokasi yang gambarnya belum ada tapi punya 'cadangan' (mis. lapangan → kota_kecil) boleh dipakai di @latar
+loc_fallback = set()
+_lk = os.path.join(data, "lokasi.txt")
+if os.path.exists(_lk):
+    _cur = None
+    for _l in open(_lk, encoding="utf-8"):
+        _l = _l.strip()
+        if _l.startswith("[") and _l.endswith("]"):
+            _cur = _l[1:-1].strip()
+        elif _cur and _l.lower().startswith("cadangan") and "=" in _l and _l.split("=", 1)[1].strip() in latar:
+            loc_fallback.add(_cur)
+
 
 def err(f, n, msg):
     global errors
@@ -80,7 +92,7 @@ for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
             if m.group(2):
                 jumps.append((m.group(2), n))
         a0 = args[0] if args else ""
-        if name in ("latar", "bg") and parts[1:] and parts[1] not in latar:
+        if name in ("latar", "bg") and parts[1:] and parts[1] not in latar and parts[1] not in loc_fallback:
             err(f, n, f"Gambar latar '{parts[1]}' tidak ada di folder latar")
         if name in ("kenal", "cinta", "percaya", "perilaku", "ungkapkan") and a0 and a0 not in chars:
             err(f, n, f"Karakter '{a0}' tidak ada di data/karakter.txt")

@@ -24,9 +24,9 @@
 [bayu_lulus]
 dari          = bayu
 jenis         = cerita
-isi           = Woy {nama}! Selamat lulus, {bro|cuy}! Nanti sore aku nongkrong di dermaga. Kalau mau ketemu, janjian dulu ya lewat Chat!
-hangat        = Makasih, Bay! Selamat juga buat kamu. Nanti aku ajak ketemu, ya.
-balas_hangat  = Sip! Pencet aja "Ajak ketemu", terus pilih jamnya. Aku di dermaga sampai magrib.
+isi           = Woy {nama}! Selamat lulus, {bro|cuy}! Nanti sore aku main bola di lapangan, habis itu mancing di dermaga. Mampir, ya!
+hangat        = Makasih, Bay! Selamat juga buat kamu. Nanti sore aku mampir!
+balas_hangat  = Sip! Jam tiga aku udah di lapangan. Jangan telat, nanti kebagian jaga gawang 😂
 singkat       = Oke.
 balas_singkat = Yaelah, singkat amat 😂 Ya udah, kabari aja kalau mau ketemu.
 
@@ -95,6 +95,15 @@ hangat        = Iya, maaf ya. Nanti kalau pulang, kita ketemu.
 balas_hangat  = Siap! Hati-hati di sana 🙂
 singkat       = Oke.
 balas_singkat = Oke.
+
+[bayu_stasiun]
+dari          = bayu
+jenis         = cerita
+isi           = Eh, Rani sama Dodi berangkat ke Sakala hari Sabtu, kereta jam setengah delapan. Anak-anak mau antar ke stasiun. Ikut, ya!
+hangat        = Ikut, Bay! Jam tujuh aku sudah di stasiun.
+balas_hangat  = Sip! Jangan telat, nanti keretanya keburu jalan 😂
+singkat       = Lihat nanti.
+balas_singkat = Yaelah. Datang aja, kapan lagi lihat Dodi nangis 😂
 
 # ======================= AYAH =======================
 
@@ -338,3 +347,66 @@ hangat        = Ingat. Aku masih sering ke sana.
 balas_hangat  = ...Aku senang.
 singkat       = Ingat.
 balas_singkat = ...Begitu, ya.
+
+
+# ======================= DESA: TAMBAHAN =======================
+
+[ayah_cuaca]
+dari          = ayah
+jenis         = acak
+syarat        = lokasi == desa
+isi           = Angin barat kencang. Jangan ke dermaga malam-malam.
+hangat        = Iya, Yah. Ayah juga hati-hati kalau melaut.
+balas_hangat  = Ayah lihat langit dulu. Selalu.
+singkat       = Iya.
+balas_singkat = Hm.
+
+[ibu_titip]
+dari          = ibu
+jenis         = acak
+syarat        = lokasi == desa
+isi           = Nak, nanti pulangnya mampir beli bawang merah seperempat, ya. Uangnya Ibu ganti.
+hangat        = Siap, Bu! Sekalian cabai juga?
+balas_hangat  = Boleh! Anak Ibu memang paling pengertian.
+singkat       = Oke.
+balas_singkat = Jangan lupa, ya.
+
+[laras_eslilin]
+dari          = laras
+jenis         = acak
+syarat        = lokasi == desa && kerja_aktif >= 1
+isi           = Kak, pulang kerja bawain es lilin kacang ijo yaaa 🙏
+hangat        = Iya, nanti Kakak beliin. Tapi PR-nya dikerjain dulu!
+balas_hangat  = Siap, Bos! Eh, siap, Kak! 😆
+singkat       = Lihat nanti.
+balas_singkat = Lihat nanti terus... 😤
+
+[bayu_latihan]
+dari          = bayu
+jenis         = acak
+syarat        = tim_bola == 1 && desa_bab == 4
+isi           = Latihan sore ini di lapangan! Jangan bolos, pemain inti! ⚽
+hangat        = Siap, Kapten! Aku datang.
+balas_hangat  = Mantap! RT 05 bakal nangis 😤
+singkat       = Kalau sempat.
+balas_singkat = Harus sempat! Final tinggal sebentar lagi!
+
+[sekar_paket]
+dari          = sekar
+jenis         = acak
+syarat        = paket_c == 1
+isi           = Bab tiga di buku Biologi itu penting. Jangan dilewati, ya!
+hangat        = Siap, Bu Guru. Makasih udah ngingetin.
+balas_hangat  = Bu Guru apanya 😅 Semangat belajarnya!
+singkat       = Oke.
+balas_singkat = Oke. Jangan cuma dibaca sampulnya.
+
+[sekar_asrama]
+dari          = sekar
+jenis         = acak
+syarat        = sekar_pergi == 1
+isi           = Asramanya ramai sekali. Aku rindu suara laut. Kalau sempat, tolong lihat ibuku, ya.
+hangat        = Pasti. Nanti aku antar gorengan Ibu ke rumahmu.
+balas_hangat  = Makasih, {nama}. Aku jadi tenang.
+singkat       = Iya.
+balas_singkat = Makasih.

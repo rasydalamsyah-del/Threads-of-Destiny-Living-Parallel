@@ -15,7 +15,7 @@
 #  tempat      = di mana bisa ditemui: desa / kota
 #  waktu       = kapan bisa ditemui: pagi, siang, sore, malam
 #  ditemui     = ya / tidak / janji (janji = hanya bisa ditemui lewat janji di Chat → "Ajak ketemu")
-#  jadwal      = kapan bisa ditemui langsung, contoh: senin-sabtu 13:00-20:00, minggu 07:00-20:00
+#  jadwal      = (untuk karakter TANPA kolom lokasi) kapan bisa ditemui langsung, contoh: senin-sabtu 13:00-20:00
 #                (tanpa jadwal: mengikuti "waktu"). "waktu" juga dipakai untuk pilihan jam saat diajak janjian
 #  cinta_awal, percaya_awal = nilai awal 0-100
 #  suka_topik, benci_topik   = id dari topik.txt
@@ -24,7 +24,9 @@
 #  respon_suka / respon_biasa / respon_benci = jawaban saat diajak ngobrol
 #  hadiah_suka / hadiah_biasa / hadiah_benci = jawaban saat diberi hadiah
 #  larangan    = kalimat saat ia dilarang bertemu oleh orang dekatnya
-#  lokasi      = di mana ia berada & kapan (mis. setiap hari 12:00-13:30 ruang_makan, ...) → menggantikan jadwal
+#  lokasi      = di mana ia berada & kapan (mis. setiap hari 12:00-13:00 ruang_makan, ...) → menggantikan jadwal:
+#                bisa ditemui tepat saat ia ada di salah satu lokasinya. Jadwal lengkap desa: docs/CERITA.md
+#  ada_bila    = (opsional) syarat karakter masih ada di tempatnya, mis. sekar_pergi != 1
 #  tempat_janji = lokasi tempat ia menunggu saat kalian janjian (untuk ditemui = janji)
 #  (pesan chat yang ia kirim & pilihan balasannya ada di data/pesan.txt)
 #  ajak_ya / ajak_tidak = jawaban saat diajak ketemu lewat chat
@@ -51,16 +53,15 @@ kegemaran   = Kopi hitam pahit dan ikan asin bakar
 keahlian    = Membaca arah angin dan ombak hanya dengan melihat langit
 cita_cita   = Dulu ingin jadi nakhoda kapal besar. Sekarang cuma satu: melihat anak-anaknya hidup lebih baik darinya.
 kisah_1     = Ayah putus sekolah di kelas 2 SMP untuk membantu kakek melaut. Itu sebabnya ia diam-diam ingin kamu sekolah setinggi mungkin.
-kisah_2     = Perahu Ayah dibeli dengan meminjam uang Juragan Darto. Cicilannya belum lunas sampai sekarang, dan Ayah tidak pernah menceritakannya pada Ibu.
-kisah_3     = Ayah pernah hampir tenggelam diterjang badai, tahun kamu lahir. Sejak itu ia selalu pulang sebelum magrib, apa pun hasil tangkapannya.
+kisah_2     = Perahu Ayah dibeli dengan meminjam uang Juragan Darto. Cicilannya belum lunas sampai sekarang. Ayah dan Ibu sepakat merahasiakannya dari anak-anak, karena Ayah malu.
+kisah_3     = Ayah pernah hampir tenggelam diterjang badai, tahun kamu lahir. Sejak itu ia tidak pernah berangkat bila langit barat merah tembaga, dan selalu sudah merapat sebelum matahari terbit, apa pun hasil tangkapannya.
 tahu_awal   = hobi, kegemaran, keahlian
 pandangan   = setia
 bisa_dipacari = tidak
 tempat      = desa
-waktu       = siang, sore, malam
+waktu       = pagi, siang, sore
 ditemui     = ya
-lokasi      = setiap hari 12:00-13:30 ruang_makan, setiap hari 13:30-18:30 rumah_warung
-jadwal      = setiap hari 12:00-18:30
+lokasi      = setiap hari 06:15-07:15 ruang_makan, setiap hari 12:00-13:00 ruang_makan, setiap hari 13:00-16:00 rumah_warung, setiap hari 16:00-17:45 ruang_tengah, setiap hari 17:45-18:30 ruang_makan, setiap hari 18:30-19:15 dermaga
 cinta_awal  = 70
 percaya_awal = 65
 suka_topik  = laut, masa_depan
@@ -77,7 +78,7 @@ hadiah_benci = Ayah tidak terlalu suka ini, tapi terima kasih sudah ingat Ayah.
 larangan    = Ayah sedang tidak ingin diganggu.
 warna       = #3F6E8C
 ajak_ya     = Boleh. Ayah tunggu.
-ajak_tidak  = Ayah lagi di laut, Nak. Lain kali.
+ajak_tidak  = Ayah mau tidur dulu, Nak. Nanti malam harus melaut.
 
 [ibu]
 nama        = Ibu
@@ -98,8 +99,7 @@ bisa_dipacari = tidak
 tempat      = desa
 waktu       = pagi, siang, sore, malam
 ditemui     = ya
-lokasi      = setiap hari 05:00-17:00 rumah_warung, setiap hari 17:00-21:00 ruang_makan
-jadwal      = setiap hari 05:00-21:00
+lokasi      = setiap hari 05:00-07:15 ruang_makan, setiap hari 07:15-17:15 rumah_warung, setiap hari 17:15-18:30 ruang_makan, setiap hari 18:30-21:00 ruang_tengah
 cinta_awal  = 75
 percaya_awal = 70
 suka_topik  = masak, sekolah, keluarga
@@ -138,8 +138,7 @@ bisa_dipacari = tidak
 tempat      = desa
 waktu       = siang, sore, malam
 ditemui     = ya
-lokasi      = senin-sabtu 13:00-16:00 ruang_makan, senin-sabtu 16:00-18:00 rumah_warung, senin-sabtu 18:00-20:00 ruang_makan, minggu 07:00-12:00 rumah_warung, minggu 12:00-20:00 ruang_makan
-jadwal      = senin-sabtu 13:00-20:00, minggu 07:00-20:00
+lokasi      = setiap hari 06:15-07:15 ruang_makan, senin-sabtu 13:00-14:00 ruang_makan, senin-sabtu 14:00-16:00 ruang_tengah, minggu 07:15-12:00 rumah_warung, minggu 13:00-14:00 ruang_makan, minggu 14:00-16:00 lapangan, setiap hari 16:00-17:15 rumah_warung, setiap hari 17:45-18:30 ruang_makan, setiap hari 18:30-20:30 ruang_tengah
 cinta_awal  = 65
 percaya_awal = 70
 suka_topik  = layangan, kota, sekolah
@@ -178,8 +177,9 @@ pandangan   = setia
 bisa_dipacari = tidak
 tempat      = desa
 waktu       = siang, sore
-ditemui     = janji
-tempat_janji= rumah_warung
+ditemui     = ya
+lokasi      = senin-sabtu 15:00-17:30 lapangan, senin-sabtu 17:30-18:30 dermaga, minggu 08:00-11:00 lapangan, minggu 16:00-18:00 dermaga
+tempat_janji= dermaga
 cinta_awal  = 45
 percaya_awal = 55
 suka_topik  = laut, sepak_bola, kota
@@ -215,9 +215,11 @@ kisah_3     = Sekar pernah melihat {nama_sahabat} menangis di stasiun sehari seb
 pandangan   = setia
 bisa_dipacari = tidak
 tempat      = desa
-waktu       = pagi, siang, sore
-ditemui     = janji
-tempat_janji= rumah_warung
+waktu       = siang, sore
+ditemui     = ya
+lokasi      = senin-sabtu 15:30-17:15 dermaga
+ada_bila    = sekar_pergi != 1
+tempat_janji= dermaga
 cinta_awal  = 35
 percaya_awal = 50
 suka_topik  = pelajaran, masa_depan, kota
@@ -257,7 +259,6 @@ tempat      = desa
 waktu       = pagi, siang
 ditemui     = ya
 lokasi      = senin-sabtu 07:00-16:00 gudang_ikan
-jadwal      = senin-sabtu 07:00-16:00
 cinta_awal  = 25
 percaya_awal = 35
 suka_topik  = laut, masa_depan
@@ -336,7 +337,6 @@ tempat      = kota
 waktu       = siang, sore
 ditemui     = ya
 lokasi      = setiap hari 14:00-20:00 toko_buku
-jadwal      = setiap hari 14:00-20:00
 cinta_awal  = 25
 percaya_awal = 40
 suka_topik  = pelajaran, masa_depan, keluarga

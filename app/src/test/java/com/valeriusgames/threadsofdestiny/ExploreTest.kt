@@ -34,29 +34,54 @@ class ExploreTest {
     }
 
     @Test fun familyIsWhereTheStorySays() {
+        // jadwal lengkap: docs/CERITA.md bagian 3
+        assertEquals("sarapan bersama", "ruang_makan", at("ayah", SENIN, "06:30"))
         assertNull("Ayah tidur pagi", at("ayah", SENIN, "09:00"))
         assertEquals("ruang_makan", at("ayah", SENIN, "12:30"))
-        assertEquals("rumah_warung", at("ayah", SENIN, "15:00"))
+        assertEquals("jaring di depan rumah", "rumah_warung", at("ayah", SENIN, "15:00"))
+        assertEquals("radio sore", "ruang_tengah", at("ayah", SENIN, "16:30"))
+        assertEquals("berangkat melaut", "dermaga", at("ayah", SENIN, "18:45"))
+        assertNull("Ayah di laut", at("ayah", SENIN, "23:00"))
+        assertEquals("Ibu memasak sarapan", "ruang_makan", at("ibu", SENIN, "05:30"))
         assertEquals("rumah_warung", at("ibu", SENIN, "11:00"))
-        assertEquals("ruang_makan", at("ibu", SENIN, "19:00"))
+        assertEquals("sinetron", "ruang_tengah", at("ibu", SENIN, "19:30"))
+        assertNull("Ibu tidur", at("ibu", SENIN, "22:00"))
         assertNull("Laras sekolah", at("laras", SENIN, "10:00"))
-        assertEquals("ruang_makan", at("laras", SENIN, "14:00"))
+        assertEquals("makan siang", "ruang_makan", at("laras", SENIN, "13:30"))
+        assertEquals("PR", "ruang_tengah", at("laras", SENIN, "15:00"))
         assertEquals("rumah_warung", at("laras", MINGGU, "09:00"))
+        assertEquals("layangan Minggu", "lapangan", at("laras", MINGGU, "15:00"))
+        assertEquals("lapangan", at("bayu", SENIN, "16:00"))
+        assertEquals("dermaga", at("bayu", SENIN, "18:00"))
+        assertNull("Bayu melaut subuh", at("bayu", SENIN, "06:00"))
+        assertEquals("dermaga", at("sekar", SENIN, "16:00"))
         assertEquals("gudang_ikan", at("darto", SENIN, "08:00"))
         assertNull("gudang tutup Minggu", at("darto", MINGGU, "08:00"))
         assertEquals("toko_buku", at("nadia", SENIN, "15:00"))
     }
 
-    @Test fun locationMatchesPresenceSchedule() {
-        // "lokasi" dan "jadwal" (kapan bisa ditemui) harus sama persis tiap 15 menit sepanjang minggu
+    @Test fun scheduleHasNoGapsOrDoubles() {
+        // satu orang tidak boleh berada di dua tempat sekaligus; "lokasi" menggantikan "jadwal"
         chars.filter { it.value["lokasi"] != null }.forEach { (id, m) ->
-            val slots = m["waktu"].orEmpty().split(',').map { it.trim() }.toSet()
+            assertNull("$id: hapus kolom jadwal (sudah diwakili lokasi)", m["jadwal"])
+            val parts = m["lokasi"]!!.split(',').map { it.trim() }
             for (wd in 0..6) for (min in 0 until 1440 step 15) {
-                val here = GameData.locationAt(m["lokasi"], wd, min) != null
-                val meet = GameData.meetable(m["ditemui"], m["jadwal"], slots, wd, min)
-                assertEquals("$id hari $wd menit $min", meet, here)
+                val hits = parts.count { GameData.locationAt(it, wd, min) != null }
+                assertTrue("$id hari $wd menit $min ada di $hits tempat", hits <= 1)
             }
         }
+    }
+
+    @Test fun presenceImagesHaveFixedSpots() {
+        // setiap orang yang punya jadwal di sebuah lokasi punya titik berdiri di lokasi itu (untuk area sentuh)
+        chars.forEach { (id, m) ->
+            m["lokasi"].orEmpty().split(',').mapNotNull { it.trim().split(Regex("\\s+")).lastOrNull() }.filter { it.isNotEmpty() }.forEach { p ->
+                assertTrue("$id di $p", locs.getValue(p).people.any { it.charId == id })
+            }
+        }
+        // lokasi baru desa punya gambar pengganti sampai gambarnya dibuat
+        assertEquals("kota_kecil", locs.getValue("lapangan").fallback)
+        assertEquals("dermaga_malam", locs.getValue("dermaga").fallback)
     }
 
     @Test fun everyPersonHasAPlaceToStand() {
@@ -90,8 +115,10 @@ class ExploreTest {
             (l.doors + l.objects).forEach { s -> assertTrue("${l.id}: ${s.label} terpotong (x ${s.x})", s.x in 0.1f..0.9f && s.y in 0f..1f) }
             l.doors.forEach { assertTrue("${l.id}: menit", it.minutes in 0..60) }
         }
-        // di dalam rumah tidak memakan waktu, ke gudang ikan 15 menit
+        // di dalam rumah tidak memakan waktu, ke gudang ikan 15 menit, ke lapangan & dermaga 5 menit
         assertEquals(0, locs.getValue("ruang_tengah").doors.first { it.target == "kamar_pagi" }.minutes)
+        assertEquals(5, locs.getValue("rumah_warung").doors.first { it.target == "lapangan" }.minutes)
+        assertEquals(5, locs.getValue("rumah_warung").doors.first { it.target == "dermaga" }.minutes)
         assertTrue("ruang tengah tersambung ke ruang makan", locs.getValue("ruang_tengah").doors.any { it.target == "ruang_makan" })
         assertEquals(15, locs.getValue("rumah_warung").doors.first { it.target == "gudang_ikan" }.minutes)
     }

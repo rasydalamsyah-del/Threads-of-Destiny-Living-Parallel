@@ -1,0 +1,551 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — BAB 4 DESA: MENUJU TUJUH BELASAN
+#  Empat alur bertahap: ⚽ tim bola Bayu · 🪁 layangan Laras · 🍳 bazar Ibu · 🗼 mercusuar
+#  Pemicu & jam: data/adegan.txt · Alur: docs/CERITA.md bagian 10
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ==========================================================
+#  ⚽ TIM BOLA BAYU
+# ==========================================================
+
+:: b4_bola_ajak
+@tampil bayu senyum
+Bayu: {nama}! Kamu udah baca pengumuman, kan? Aku kapten tim RT kita! Tapi pemainnya kurang satu.
+Bayu: Ikut, ya? Final tanggal enam belas. Lawan terberat RT 05, ada dua anak juragan kapal dari desa sebelah. Badannya segede pintu!
+@pilihan
+> "Ikut! Kapan latihan?" -> b4ba_ikut
+> "Aku capek kerja, Bay. Maaf." -> b4ba_tolak
+
+:: b4ba_ikut
+@atur tim_bola = 1
+@atur latihan_bola = 0
+Bayu: YES! Latihan tiap sore di lapangan, jam tiga sampai setengah enam. Minggu pagi juga. Datang sebanyak-banyaknya!
+Bayu: Minimal tiga kali latihan bareng, biar kita kompak. Oke?
+@cinta bayu +4
+@catatan Tim bola RT: latihan di lapangan sore (15:00–17:30) atau Minggu pagi. Minimal 3 kali latihan sebelum final Minggu 16 Agustus.
+@lompat b4ba_akhir
+
+:: b4ba_tolak
+@atur tim_bola = 0
+@tampil bayu sedih
+Bayu: ...Oh. Iya, nggak apa-apa. Kerja memang lebih penting.
+* Bayu tersenyum, tapi bahunya turun sedikit.
+@cinta bayu -2
+
+:: b4ba_akhir
+@sembunyi bayu
+@kembali
+
+
+:: b4_bola_latihan1
+@atur latihan1_hari = {hari_ke}
+@tampil bayu senyum
+* Delapan anak muda berlari di lapangan berdebu. Gawang bambunya miring, garis kapurnya sudah hilang separuh.
+Bayu: Oke! Hari ini latihan operan. Operan pendek, cepat, jangan dipegang lama-lama!
+* Kamu berkali-kali salah oper. Bola melenceng ke semak, ke parit, sekali ke kepala Pak RT yang kebetulan lewat.
+Bayu: Hahaha! Nggak apa-apa! Besok lebih baik!
+@maju 1 jam 30 menit
+@stat energi -18
+@stat hidrasi -15
+@tambah latihan_bola +1
+@cinta bayu +2
+@sembunyi bayu
+@kembali
+
+
+:: b4_bola_latihan2
+@atur latihan2_hari = {hari_ke}
+@tampil bayu biasa
+* Latihan kedua. Kali ini Bayu membawa kerucut-kerucut dari botol bekas.
+Bayu: Lari zig-zag! Musuh kita besar dan lambat. Kita harus lebih cepat dari mereka!
+* Napasmu terengah. Tapi operanmu mulai sampai ke kaki teman, bukan ke parit.
+@tampil bayu senyum
+Bayu: Tuh kan! Kemarin kayak kambing, sekarang udah kayak... kambing yang bisa main bola!
+{nama}: Makasih banyak, Kapten.
+@maju 1 jam 30 menit
+@stat energi -18
+@stat hidrasi -15
+@tambah latihan_bola +1
+@cinta bayu +2
+@sembunyi bayu
+@kembali
+
+
+:: b4_bola_latihan3
+@tampil bayu biasa
+* Latihan terakhir sebelum final. Setelah semua pulang, Bayu memanggilmu ke pinggir lapangan.
+Bayu: Aku perhatiin, kiper RT 05 selalu loncat ke kanan duluan. Selalu. Kayak kebiasaan.
+Bayu: Kalau nanti ada penalti, tendang ke kiri. Pelan aja, yang penting arahnya.
+@jika sekar_pergi == 1 -> b4bl3_kirim
+@jika rahasia_bayu != bantu -> b4bl3_akhir
+@tampil bayu malu
+Bayu: Terus... eh. Sekar bakal nonton nggak, ya, menurutmu?
+{nama}: Kayaknya nonton. Dia nanya jadwalnya kemarin.
+@tampil bayu senyum
+* Bayu langsung berlari satu putaran lapangan tanpa disuruh.
+@lompat b4bl3_akhir
+
+:: b4bl3_kirim
+@tampil bayu biasa
+Bayu: Kalau kita menang, aku mau foto pialanya. Kirim ke... ya, kamu tahu lah.
+
+:: b4bl3_akhir
+@maju 1 jam 30 menit
+@stat energi -18
+@stat hidrasi -15
+@tambah latihan_bola +1
+@cinta bayu +3
+@sembunyi bayu
+@kembali
+
+
+# ==========================================================
+#  🪁 LAYANGAN LARAS
+# ==========================================================
+
+:: b4_layang_1
+@tampil laras biasa
+Laras: Kak! Kak! Aku mau ikut lomba layangan! Tapi layanganku yang kemarin nyangkut di pohon kelapa Pak Haji!
+Laras: Bikinin yang baru, ya? Yang paling bagus! Yang paling tinggi!
+@pilihan
+> "Kita bikin sendiri. Dari nol." -> b4l1_bikin
+> "Beli aja di warung Pak Haji, Ras." -> b4l1_beli
+
+:: b4l1_bikin
+@atur layangan_tahap = 1
+@tampil laras kaget
+Laras: Bikin sendiri? Emang bisa?
+{nama}: Bisa. Tapi kita butuh bambu yang bagus. Dan yang paling jago membelah bambu di rumah ini...
+Laras: AYAH!
+@cinta laras +3
+@catatan Layangan Laras: minta tolong Ayah membelah bambu untuk rangka (temui Ayah siang–sore).
+@lompat b4l1_akhir
+
+:: b4l1_beli
+@atur layangan_tahap = 0
+@tampil laras kesal
+Laras: Itu sih semua orang juga punya! Aku mau yang beda!
+* Laras pergi sambil menghentak-hentakkan kaki. Mungkin kamu bisa mengajaknya bicara lagi nanti.
+@atur ulang_layang = 1
+
+:: b4l1_akhir
+@sembunyi laras
+@kembali
+
+
+:: b4_layang_1b
+@tampil laras biasa
+Laras: Kak... masih mau bikinin layangan? Yang beda?
+{nama}: Iya, Ras. Kita bikin sendiri. Mulai dari bambunya, minta tolong Ayah.
+@atur layangan_tahap = 1
+@tampil laras senyum
+Laras: Yeay!
+@cinta laras +3
+@catatan Layangan Laras: minta tolong Ayah membelah bambu untuk rangka (temui Ayah siang–sore).
+@sembunyi laras
+@kembali
+
+
+:: b4_layang_2
+@atur layang2_hari = {hari_ke}
+@tampil ayah biasa
+{nama}: Yah, Laras mau ikut lomba layangan. Bisa bantu bikin rangkanya?
+@tampil ayah senyum
+* Mata Ayah berbinar seperti anak kecil. Ia langsung bangkit dan mengambil golok dari bawah bale-bale.
+Ayah: Layangan? Waktu Ayah kecil, layangan Ayah paling tinggi se-Tanjung Lentera. Sampai bisa lihat mercusuar dari atas, kata orang-orang.
+* Ayah membelah sebatang bambu tali menjadi bilah-bilah tipis, lalu meraut dan menimbangnya di ujung jari.
+Ayah: Rahasianya di sini. Kiri dan kanan harus sama berat. Kalau tidak, layangannya miring terus. Kayak orang yang hatinya berat sebelah.
+* Kamu dan Ayah menghabiskan sore mengikat rangka dengan benang. Laras mengintip dari jendela, melompat-lompat tidak sabar.
+@maju 1 jam
+@atur layangan_tahap = 2
+@cinta ayah +4
+@tambah keahlian_laut +1
+@catatan Layangan Laras: rangka sudah jadi. Tinggal ditempel kertas dan dilukis bersama Laras.
+@sembunyi ayah
+@kembali
+
+
+:: b4_layang_3
+@tampil laras senyum
+* Laras sudah menyiapkan semuanya di tikar: kertas minyak merah dan putih, lem kanji di tutup kaleng, dan pensil warna yang tinggal setengah.
+Laras: Aku yang lukis, ya! Kakak yang tempel!
+@pilihan
+> "Lukis apa saja yang kamu suka." -> b4l3_bebas
+> "Bagaimana kalau gambar mercusuar?" -> b4l3_mercu
+
+:: b4l3_bebas
+* Laras menggambar ikan besar tersenyum dengan topi koki. Kamu tidak berani bertanya kenapa.
+@lompat b4l3_akhir
+
+:: b4l3_mercu
+* Laras menggambar mercusuar dengan sinar kuning. Lalu, di bawahnya, dua anak kecil bergandengan tangan.
+{nama}: Ini siapa?
+Laras: Ini Kakak. Ini... sahabat Kakak. Yang gelangnya sama. Biar kalau layangannya terbang tinggi, dia bisa lihat dari kota.
+* Kamu tidak bisa berkata apa-apa. Kamu hanya mengusap kepala Laras.
+@cinta laras +4
+@stat kewarasan +5
+
+:: b4l3_akhir
+@maju 1 jam
+@atur layangan_tahap = 3
+@cinta laras +3
+@catatan Layangan Laras sudah jadi! Uji terbang di lapangan hari Minggu siang (14:00–16:00), saat Laras biasa main di sana.
+@sembunyi laras
+@kembali
+
+
+:: b4_layang_4
+@tampil laras senyum
+* Minggu siang. Angin bertiup kencang dari arah laut. Laras memegang layangan buatan kalian dengan kedua tangan, seperti memegang harta karun.
+Laras: Kak! Pegang benangnya! Aku lari!
+* Laras berlari. Layangan itu tersentak, oleng ke kiri... lalu menangkap angin dan melesat naik. Tinggi. Lebih tinggi. Tenang, tidak miring sedikit pun.
+@tampil laras kaget
+Laras: KAK! LIHAT! TINGGI BANGET! PALING TINGGI!
+* Anak-anak lain di lapangan berhenti bermain dan menengadah. Kamu teringat kata-kata Ayah: kiri dan kanan harus sama berat.
+@maju 1 jam
+@atur layangan_tahap = 4
+@cinta laras +5
+@stat kewarasan +8
+@sembunyi laras
+@kembali
+
+
+# ==========================================================
+#  🍳 BAZAR WARUNG IBU
+# ==========================================================
+
+:: b4_bazar_1
+@atur bazar1_hari = {hari_ke}
+@tampil ibu biasa
+Ibu: Nak, soal bazar. Ibu bingung mau jual apa. Kalau cuma gorengan biasa, kalah sama stan minimarket. Katanya mereka mau bagi-bagi minuman gratis.
+@jika warung_ide == menu -> b4b1_menu
+@jika warung_ide == antar -> b4b1_antar
+@pilihan
+> "Bikin menu baru, Bu. Cireng isi ikan asin!" -> b4b1_baru_menu
+> "Terima pesanan lewat grup WA desa dulu, biar sudah laku sebelum bazar." -> b4b1_baru_antar
+> "Gorengan biasa saja, Bu. Yang penting enak." -> b4b1_biasa
+
+:: b4b1_menu
+@tampil ibu senyum
+Ibu: Cireng isi ikan asin yang kamu usulkan dulu itu... sudah ada tiga langganan yang tanya tiap hari! Ibu mau jadikan menu utama di bazar.
+@atur bazar_tahap = 1
+@lompat b4b1_akhir
+
+:: b4b1_antar
+@tampil ibu senyum
+Ibu: Grup WA yang kamu ajarkan itu... sekarang tiap pagi ada saja yang pesan. Ibu mau buka pesanan untuk bazar juga, biar sudah pasti laku.
+@atur bazar_tahap = 1
+@lompat b4b1_akhir
+
+:: b4b1_baru_menu
+@atur warung_ide = menu
+@tampil ibu kaget
+Ibu: Cireng... isi ikan asin? Aneh. Tapi... coba Ibu bikin dulu.
+@atur bazar_tahap = 1
+@lompat b4b1_akhir
+
+:: b4b1_baru_antar
+@atur warung_ide = antar
+Ibu: Lewat HP? Ajari Ibu, ya. Pelan-pelan.
+@atur bazar_tahap = 1
+@lompat b4b1_akhir
+
+:: b4b1_biasa
+@atur bazar_tahap = 0
+Ibu: Iya, mungkin begitu saja. Gorengan Ibu kan sudah terkenal.
+* Ibu terdengar tidak terlalu yakin.
+
+:: b4b1_akhir
+@jika bazar_tahap < 1 -> b4b1_selesai
+@catatan Bazar warung Ibu: rencana sudah ada. Tinggal belanja bahan (temui Ibu di warung lagi).
+@cinta ibu +2
+
+:: b4b1_selesai
+@sembunyi ibu
+@kembali
+
+
+:: b4_bazar_2
+@atur bazar2_hari = {hari_ke}
+@tampil ibu biasa
+Ibu: Ibu sudah hitung bahan untuk bazar. Tepung, minyak, ikan asin, cabai... Kalau mau banyak, modalnya seratus ribu.
+Ibu: Uang warung cuma cukup setengahnya.
+@pilihan
+> Tambahkan Rp50.000 dari uangmu -> b4b2_bantu
+> "Belanja setengah dulu saja, Bu. Biar tidak rugi." -> b4b2_setengah
+
+:: b4b2_bantu
+@jika uang < 50000 -> b4b2_kurang
+@uang -50000
+@atur bazar_tahap = 2
+@atur bazar_modal = penuh
+@tampil ibu senyum
+Ibu: Aduh, Nak... Ya sudah, Ibu terima. Nanti kalau laku, Ibu kembalikan dua kali lipat!
+@cinta ibu +3
+@lompat b4b2_akhir
+
+:: b4b2_kurang
+* Kamu memeriksa uangmu. Tidak cukup.
+
+:: b4b2_setengah
+@atur bazar_tahap = 2
+@atur bazar_modal = setengah
+Ibu: Iya, hati-hati memang lebih baik.
+
+:: b4b2_akhir
+@catatan Bazar warung Ibu: bahan sudah dibeli. Tinggal promosi (temui Ibu malam di ruang tengah).
+@sembunyi ibu
+@kembali
+
+
+:: b4_bazar_3
+@tampil ibu biasa
+* Ibu melipat pakaian di depan TV, tapi pikirannya jelas di tempat lain.
+Ibu: Nak, bagaimana caranya biar orang-orang mampir ke meja kita, bukan ke stan minimarket?
+@pilihan
+> Bikin poster di HP, kirim ke semua grup -> b4b3_poster
+> "Kasih cicip gratis, Bu. Sekali coba, pasti beli." -> b4b3_cicip
+
+:: b4b3_poster
+* Kamu memotret cireng dan gorengan Ibu dengan cahaya lampu petromaks, lalu menulis besar-besar: "JAJANAN BU RATNA — RASA TANJUNG LENTERA ASLI". Ibu tertawa melihat fotonya sendiri.
+@tambah komunikasi +1
+@lompat b4b3_akhir
+
+:: b4b3_cicip
+Ibu: Gratis? Nanti rugi...
+{nama}: Satu baskom kecil saja, Bu. Potong kecil-kecil.
+Ibu: ...Ya sudah. Kamu yang pegang nampannya, ya. Senyum yang lebar.
+
+:: b4b3_akhir
+@atur bazar_tahap = 3
+@cinta ibu +3
+@tampil ibu senyum
+Ibu: Rasanya seperti mau ujian, ya. Padahal cuma jualan gorengan.
+@catatan Bazar warung Ibu siap untuk 17 Agustus!
+@sembunyi ibu
+@kembali
+
+
+# ==========================================================
+#  🗼 MERCUSUAR
+# ==========================================================
+
+:: b4_mercu_1
+@atur mercu1_hari = {hari_ke}
+@jika sekar_pergi == 1 -> b4m1_kades
+@tampil sekar senyum
+* Sekar duduk di ujung dermaga dengan buku catatan penuh coretan dan sketsa. Di halaman atasnya tertulis: "PROYEK MERCUSUAR".
+Sekar: {nama}! Pas sekali. Pak Kades menyerahkan urusan data ke aku. Aku sudah naik ke atas kemarin.
+Sekar: Kacanya kotor, tangganya berkarat, lampunya pecah. Kita butuh lampu baru dan aki besar. Dan relawan buat bersih-bersih.
+Sekar: Kamu mau ikut?
+@pilihan
+> "Ikut! Dari dulu aku ingin melihatnya menyala." -> b4m1_ikut
+> "Aku sibuk, Sekar. Maaf." -> b4m1_tolak
+
+:: b4m1_kades
+* Di kaki mercusuar, Pak Kades sedang berdiri bertolak pinggang, menatap ke atas dengan wajah putus asa.
+Pak Kades: Oh, {nama}. Anak Pak Darman, ya? Lihat ini. Kacanya kotor, tangganya karatan, lampunya pecah. Butuh lampu baru, aki besar, dan tenaga.
+Pak Kades: Kamu mau jadi relawan?
+@pilihan
+> "Mau, Pak! Dari dulu aku ingin melihatnya menyala." -> b4m1_ikut
+> "Maaf, Pak, saya sibuk." -> b4m1_tolak
+
+:: b4m1_ikut
+@atur mercusuar_ikut = 1
+@atur mercusuar_tahap = 1
+* Kamu menatap puncak mercusuar. Di sana, dulu, kamu dan {nama_sahabat} berjanji akan menyalakannya kalau sudah besar. Janji anak kecil yang mustahil.
+* Sekarang, mungkin tidak terlalu mustahil.
+@jika sekar_pergi == 1 -> b4m1_ikut_kades
+@tampil sekar senyum
+Sekar: Masalah terbesarnya aki. Harganya mahal. Dana desa tidak cukup. Mungkin... Juragan Darto mau menyumbang? Dia satu-satunya yang punya genset dan aki besar di desa ini.
+@cinta sekar +3
+@lompat b4m1_catat
+
+:: b4m1_ikut_kades
+Pak Kades: Masalah terbesarnya aki. Dana desa tidak cukup. Coba kamu bicara dengan Juragan Darto. Dia yang punya aki dan genset besar di desa ini. Saya sudah coba, dia menolak.
+
+:: b4m1_catat
+@catatan Mercusuar: butuh aki besar. Coba minta sumbangan Juragan Darto (temui di gudang).
+@lompat b4m1_akhir
+
+:: b4m1_tolak
+@atur mercusuar_ikut = 0
+* Kamu berjalan pergi. Di belakangmu, mercusuar itu berdiri bisu, seperti selama sepuluh tahun terakhir.
+
+:: b4m1_akhir
+@sembunyi semua
+@kembali
+
+
+:: b4_mercu_2
+@atur mercu2_hari = {hari_ke}
+@tampil darto biasa
+{nama}: Juragan, soal mercusuar...
+Juragan Darto: Pak Kades sudah ke sini. Saya bilang tidak. Aki itu untuk gudang kalau listrik padam. Ikan bisa busuk.
+@jika percaya_darto >= 55 -> b4m2_luluh
+@jika foto_raka == 1 -> b4m2_raka
+@pilihan
+> Tawarkan membayar sebagian (Rp150.000) -> b4m2_bayar
+> "Tidak apa-apa, Juragan. Kami cari jalan lain." -> b4m2_lain
+
+:: b4m2_raka
+{nama}: Juragan... mercusuar itu menuntun orang pulang. Kalau menyala, mungkin orang-orang yang pergi ingat jalan ke sini.
+* Juragan Darto terdiam. Tangannya meraba saku, tempat foto Raka disimpan.
+
+:: b4m2_luluh
+* Juragan Darto menatapmu lama. Lalu ia menghela napas panjang.
+@tampil darto senyum
+Juragan Darto: ...Ambil aki yang di gudang belakang. Yang besar. Bilang ke Pak Kades, itu sumbangan dari gudang ikan Darto.
+Juragan Darto: Dan bilang ke dia, kalau mercusuar itu menyala, saya mau berdiri paling depan.
+@atur mercusuar_tahap = 2
+@atur mercusuar_dana = darto
+@percaya darto +5
+@lompat b4m2_akhir
+
+:: b4m2_bayar
+@jika uang < 150000 -> b4m2_kurang
+@uang -150000
+@tampil darto kaget
+Juragan Darto: Kamu mau bayar? Untuk mercusuar? Uang upahmu sendiri?
+* Juragan Darto menggeleng-geleng tidak percaya. Lalu ia menyodorkan kembali separuh uangmu.
+Juragan Darto: Setengah saja. Setengahnya lagi anggap sumbangan saya. Saya malu kalau kalah dermawan dari buruh saya sendiri.
+@uang +75000
+@atur mercusuar_tahap = 2
+@atur mercusuar_dana = berdua
+@percaya darto +6
+@lompat b4m2_akhir
+
+:: b4m2_kurang
+* Kamu meraba sakumu. Uangmu tidak cukup.
+
+:: b4m2_lain
+@atur mercusuar_dana = belum
+Juragan Darto: Silakan. Desa ini memang pintar mencari jalan lain.
+* Nada suaranya tidak jelas, sindiran atau pujian.
+@catatan Mercusuar: Juragan Darto menolak menyumbang aki. Perlu cara lain (mungkin lewat Bayu & para nelayan).
+
+:: b4m2_akhir
+@sembunyi darto
+@kembali
+
+
+:: b4_mercu_2b
+@tampil bayu biasa
+Bayu: Eh, kata Pak Kades mercusuarnya kurang aki, ya? Juragan nggak mau ngasih?
+@jika cinta_bayu >= 55 -> b4m2b_bantu
+Bayu: Yah... susah juga. Aki kan mahal.
+@sembunyi bayu
+@kembali
+
+:: b4m2b_bantu
+@tampil bayu senyum
+Bayu: Tenang! Bapakku sama nelayan-nelayan lain punya aki perahu bekas. Kalau dirangkai, kata Bapak bisa. Nggak sekuat aki Juragan, tapi cukup buat satu malam!
+Bayu: Buat kamu, apa sih yang nggak.
+@atur mercusuar_tahap = 2
+@atur mercusuar_dana = nelayan
+@cinta bayu +3
+@sembunyi bayu
+@kembali
+
+
+:: b4_mercu_3
+@jika sekar_pergi == 1 -> b4m3_bayu
+@tampil sekar senyum
+Sekar: Siap naik? Seratus dua puluh anak tangga. Aku sudah hitung.
+@lompat b4m3_naik
+
+:: b4m3_bayu
+@tampil bayu senyum
+Bayu: Siap naik? Kata Pak Kades seratus dua puluh anak tangga. Jangan pingsan di tengah, ya!
+
+:: b4m3_naik
+@sembunyi semua
+* Tangga besi melingkar itu berderit di setiap pijakan. Karat menempel di telapak tanganmu. Di puncak, angin laut menerjang dari segala arah.
+* Kalian membersihkan kaca-kaca besar yang tertutup debu dan kotoran burung, memasang aki, menyambung kabel-kabel baru dengan arahan Pak Kades lewat HP.
+* Saat membersihkan kusen jendela paling timur, jarimu meraba sesuatu. Ukiran di kayu, samar, tertutup cat yang mengelupas.
+* Dua inisial, diukir dengan paku oleh tangan-tangan kecil, bertahun-tahun lalu. Huruf pertama namamu... dan huruf "A". Di bawahnya: JANJI.
+{nama}: ...Kita pernah naik ke sini?
+* Ingatan itu datang perlahan, seperti kabut yang tersibak. Sore yang panas. Pintu mercusuar yang tidak terkunci. Dua anak yang dimarahi habis-habisan setelahnya.
+* Kalian berjanji di sini, bukan hanya di dermaga. Di tempat paling tinggi di desa ini.
+@atur mercusuar_tahap = 3
+@atur ukiran_janji = 1
+@tambah petunjuk_sahabat +1
+@catatan Di puncak mercusuar ada ukiran inisialku dan "A." dengan tulisan JANJI. Kami pernah naik ke sini waktu kecil.
+@maju 2 jam
+@stat energi -20
+@stat kewarasan +10
+@kembali
+
+
+# ==========================================================
+#  LAIN-LAIN
+# ==========================================================
+
+# ----- Ayah setelah badai (temui Ayah) -----
+:: b4_ayah_laut
+@tampil ayah biasa
+* Ayah duduk memandangi laut, jauh lebih lama dari biasanya.
+@jika perahu_ayah == ikut_darto -> b4al_darto
+@jika perahu_ayah == gotong -> b4al_gotong
+@jika perahu_ayah == diperbaiki -> b4al_baik
+Ayah: Laut itu tidak jahat, {nama}. Kita saja yang kadang lupa dia lebih besar dari kita.
+Ayah: Malam itu Ayah lupa. Karena uang. Karena malu.
+@tampil ayah sedih
+Ayah: Jangan pernah biarkan rasa malu membuatmu melakukan hal bodoh, ya. Ayah hampir tidak pulang karena itu.
+@cinta ayah +3
+@lompat b4al_akhir
+
+:: b4al_darto
+Ayah: Kapal motor Juragan cepat sekali. Tidak perlu mendayung kalau mesin mati. Ada lampu sorot. Ada radio.
+@tampil ayah senyum
+Ayah: Ternyata jadi anak buah tidak seburuk itu. Ayah cuma... rindu memegang kemudi sendiri.
+@cinta ayah +2
+@lompat b4al_akhir
+
+:: b4al_gotong
+@tampil ayah senyum
+Ayah: Lambung perahu dari Juragan, mesin dari bengkel Pak Haji, cat dari Pak RT. Tangan-tangan Bayu dan teman-temanmu yang mengamplas.
+Ayah: Tiga puluh tahun Ayah kira Ayah sendirian di laut. Ternyata tidak.
+@cinta ayah +4
+@lompat b4al_akhir
+
+:: b4al_baik
+@tampil ayah senyum
+Ayah: Perahu kita sudah seperti baru. Ayah cat ulang birunya. Lebih biru dari yang dulu.
+Ayah: Ayah kasih nama. Mau tahu namanya?
+{nama}: Apa, Yah?
+Ayah: Tulisannya di lambung. Lihat sendiri nanti.
+* Belakangan kamu melihatnya: di lambung perahu itu, dengan cat putih yang belum rapi, tertulis namamu.
+@cinta ayah +5
+
+:: b4al_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----- Hadiah Bayu untuk Sekar (temui Bayu) -----
+:: b4_bayu_sekar
+@tampil bayu malu
+Bayu: {nama}... kamu udah tahu Sekar suka apa? Kamu kan janji cari tahu.
+@jika cinta_sekar >= 45 -> b4bs_tahu
+{nama}: Belum, Bay. Dia jarang cerita.
+Bayu: Yah... ya udah. Mungkin tahun depan aja.
+@lompat b4bs_akhir
+
+:: b4bs_tahu
+{nama}: Dia suka novel. Yang tentang anak nelayan jadi dokter, sudah dibaca empat kali sampai sampulnya lepas.
+@tampil bayu kaget
+Bayu: Novel? Aku nggak pernah baca novel seumur hidup!
+{nama}: Belikan yang baru. Sampulnya yang bagus. Tulis sesuatu di halaman depan.
+@tampil bayu senyum
+Bayu: Tulis apa? "Dari Bayu, yang nggak pernah baca novel"?
+{nama}: Itu juga boleh.
+* Bayu tertawa keras-keras, lalu tiba-tiba diam dan mengangguk serius, seperti baru diberi tugas negara.
+@atur hadiah_sekar = 1
+@cinta bayu +4
+
+:: b4bs_akhir
+@sembunyi bayu
+@kembali

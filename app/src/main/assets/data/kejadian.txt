@@ -197,3 +197,65 @@ sekali  = ya
 teks    = "Gudang paket tempatku kerja lagi cari orang. Kalau mau, aku bilangin ke bos," kata Dimas sambil mengunyah gorengan.
 pilih_a = "Boleh, tolong bilangin ya." | cinta_dimas +3, percaya_dimas +4 | "Sip! Lamar aja lewat Lowongan, sebut namaku." (Dimas jadi orang dalammu untuk Kurir paket.)
 pilih_b = "Nanti dulu, deh." | cinta_dimas -1 | "Oke, kabarin aja kalau berubah pikiran."
+
+# ---------------- DESA TANJUNG LENTERA (docs/CERITA.md) ----------------
+
+[warung_ramai]
+judul   = Rombongan pemancing mampir
+ikon    = 🎣
+tempat  = desa
+peluang = 4
+syarat  = kenal_ibu == 1
+teks    = Serombongan pemancing dari kota turun dari mobil bak terbuka dan menyerbu warung Ibu. Ibu kewalahan menggoreng sendirian.
+pilih_a = Bantu Ibu menggoreng | energi -12, uang +20000, cinta_ibu +3 | Dua jam penuh asap dan minyak panas. Semua gorengan ludes. Ibu menyelipkan dua lembar sepuluh ribuan ke sakumu sambil tertawa lelah.
+pilih_b = Biarkan saja, Ibu pasti bisa | kewarasan +2 | Kamu melanjutkan urusanmu. Sore harinya Ibu memijat-mijat bahunya sendiri sambil menghitung uang.
+
+[laras_demam]
+judul   = Laras demam
+ikon    = 🤒
+tempat  = desa
+peluang = 3
+syarat  = kenal_laras == 1
+teks    = Laras pulang sekolah dengan pipi merah dan badan panas. Ia meringkuk di tikar ruang tengah, merengek minta ditemani.
+pilih_a = Belikan obat penurun panas (Rp8.000) | uang -8000, cinta_laras +5 | Laras meminum obatnya sambil mengernyit. Malamnya panasnya turun, dan ia tidur memeluk lenganmu.
+pilih_b = Kompres dan temani sampai tidur | energi -8, cinta_laras +4, kewarasan -2 | Kamu mengganti kompres setiap setengah jam. Laras bercerita soal mimpinya jadi dokter hewan sampai tertidur.
+
+[tangkapan_besar]
+judul   = Tangkapan besar Ayah
+ikon    = 🐟
+tempat  = desa
+peluang = 3
+syarat  = kenal_ayah == 1 && perahu_rusak != 1
+teks    = Subuh-subuh, Ayah pulang dengan perahu penuh ikan tongkol. Seisi rumah terbangun oleh suaranya yang jarang sekali sekeras itu.
+efek    = kewarasan +6, kenyang +20, cinta_ayah +2
+pilih_a = Bantu Ayah menjual di pelelangan | energi -10, uang +15000, cinta_ayah +3 | Kamu menawar seperti Juragan Darto. Ayah tertawa sepanjang jalan pulang.
+pilih_b = Biarkan Ayah istirahat, bantu Ibu membersihkan ikan | cinta_ibu +3 | Tanganmu bau amis seharian, tapi malamnya ada ikan bakar untuk semua tetangga.
+
+[perahu_mogok]
+judul   = Perahu Pak Karta mogok
+ikon    = 🚣
+tempat  = desa
+peluang = 2
+syarat  = kenal_bayu == 1
+teks    = Bayu berlari ke rumahmu. Perahu bapaknya mogok di muara, terseret arus pelan ke arah karang.
+pilih_a = Ikut membantu mendorong perahu | energi -15, cinta_bayu +6, percaya_bayu +4 | Kalian bertiga mendorong perahu dari air setinggi dada. Pak Karta menepuk punggungmu keras-keras: "Anak Darman memang nelayan sejati."
+pilih_b = Panggil nelayan lain untuk membantu | cinta_bayu +2 | Kamu berlari ke dermaga memanggil bantuan. Perahu selamat, walau Bayu sempat kesal kamu tidak langsung ikut.
+
+[listrik_padam]
+judul   = Listrik padam
+ikon    = 🕯️
+tempat  = desa
+peluang = 4
+teks    = Listrik desa padam sejak magrib. Seisi rumah duduk di ruang tengah diterangi lampu minyak. Tidak ada TV, tidak ada sinyal.
+pilih_a = Minta Ayah atau Ibu bercerita | kewarasan +6, cinta_ayah +2, cinta_ibu +2 | Ayah bercerita tentang hantu laut yang katanya pernah menumpang di perahunya. Laras menjerit, Ibu tertawa sampai menangis.
+pilih_b = Tidur lebih awal | energi +10 | Kamu tidur sebelum jam delapan. Rasanya seperti kembali jadi anak kecil.
+
+[belang_hilang]
+judul   = Si Belang hilang
+ikon    = 🐈
+tempat  = desa
+peluang = 2
+syarat  = kenal_laras == 1
+teks    = Laras menangis tersedu-sedu. Si Belang, kucing warung, tidak pulang sejak semalam.
+pilih_a = Cari keliling desa bersama Laras | energi -10, cinta_laras +6 | Kalian menemukan Si Belang di gudang perahu Pak Haji, bersama empat anak kucing yang baru lahir. Laras berteriak kegirangan: "BELANG JADI IBU!"
+pilih_b = "Nanti juga pulang sendiri, Ras." | cinta_laras -2 | Dua hari kemudian Si Belang pulang sendiri. Tapi Laras masih cemberut padamu.

@@ -14,9 +14,11 @@
 #  x, y = posisi di gambar (0 = kiri/atas, 1 = kanan/bawah). Layar HP memotong ±10% kiri & kanan,
 #  jadi taruh tanda di antara x 0.12 – 0.88.
 #
-#  Gambar adegan (karakter yang benar-benar sedang beraktivitas, mis. Ayah duduk makan):
-#  assets/adegan/<lokasi>__<karakter>.webp — ukuran sama dengan latar, transparan selain karakternya.
-#  Bila ada, dipakai menggantikan gambar berdiri. Bisa diketuk tepat di badan karakternya.
+#  orang = titik kaki orang itu di gambar latar (x, y) dan tingginya (bagian dari tinggi gambar).
+#  Gambar latar + orang dibuat pemilik game: latar/<lokasi>__<id orang urut abjad>.jpg, mis. ruang_makan__ayah_ibu_laras.jpg.
+#  Game memilih gambar itu otomatis sesuai siapa yang sedang ada (lihat docs/CERITA.md bagian 4).
+#  Posisi orang harus sama di semua gambar lokasi itu. Bila gambarnya belum ada: latar kosong + tanda nama.
+#  cadangan        = gambar pengganti selama latar/<id>.jpg belum ada
 # ==========================================================
 
 # ---------------- RUMAH (DESA) ----------------
@@ -25,33 +27,54 @@
 nama   = Kamarmu
 tempat = desa
 pintu  = ruang_tengah | 🚪 Ke ruang tengah | 0.80, 0.42 | 0
-benda  = istirahat | 🛏️ Kasur | 0.30, 0.86 ; belajar | 📚 Meja belajar | 0.56, 0.56
+benda  = istirahat | 🛏️ Kasur | 0.30, 0.86 ; belajar | 📚 Meja belajar | 0.56, 0.52 ; belajar_paket | 📖 Meja belajar | 0.56, 0.52 ; buku_harian | ✍️ Buku harian | 0.62, 0.62 ; kotak_kenangan | 🧶 Gelang & foto lama | 0.16, 0.52
 tidur  = ya
 
 [ruang_tengah]
 nama   = Ruang tengah
 tempat = desa
-pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.87, 0.46 | 0 ; ruang_makan | ➡ Ke ruang makan | 0.59, 0.40 | 0 ; rumah_warung | 🚪 Keluar rumah | 0.13, 0.44 | 0
+pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.87, 0.46 | 0 ; ruang_makan | ➡ Ke ruang makan | 0.57, 0.38 | 0 ; rumah_warung | 🚪 Keluar rumah | 0.13, 0.44 | 0
+benda  = nonton_tv | 📺 TV | 0.80, 0.46 ; lipat_pakaian | 👕 Lipat pakaian | 0.30, 0.52 ; pr_laras | ✏️ PR Laras | 0.47, 0.60 ; radio_ayah | 📻 Radio Ayah | 0.30, 0.44
+orang  = ayah 0.27, 0.62, 0.34 ; ibu 0.36, 0.62, 0.34 ; laras 0.55, 0.70, 0.22
 
 [ruang_makan]
 nama   = Ruang makan
 tempat = desa
 pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.13, 0.46 | 0
-benda  = makan_keluarga | 🍲 Makan | 0.52, 0.55
-orang  = ayah 0.30, 0.74, 0.40 ; laras 0.70, 0.72, 0.30 ; ibu 0.80, 0.64, 0.40
+benda  = makan_keluarga | 🍲 Makan bersama | 0.52, 0.52 ; makan_sisa | 🍚 Makan sisa lauk | 0.40, 0.66 ; bantu_masak | 🍳 Bantu masak | 0.78, 0.40 ; cuci_piring | 🧽 Cuci piring | 0.86, 0.50
+orang  = ayah 0.26, 0.74, 0.40 ; laras 0.66, 0.72, 0.30 ; ibu 0.80, 0.68, 0.40
 
 [rumah_warung]
 nama   = Depan rumah & warung
 tempat = desa
-pintu  = ruang_tengah | 🚪 Masuk rumah | 0.14, 0.32 | 0 ; gudang_ikan | ➡ Ke gudang ikan | 0.66, 0.50 | 15
-benda  = bantu_warung | 🍳 Warung | 0.22, 0.52 ; melaut | 🚣 Laut | 0.42, 0.45 ; dermaga | 🌅 Dermaga | 0.58, 0.42 ; main_laras | 🪁 Lapangan | 0.78, 0.66
-orang  = ibu 0.30, 0.66, 0.40 ; ayah 0.74, 0.72, 0.40 ; laras 0.56, 0.74, 0.30 ; bayu 0.64, 0.70, 0.38 ; sekar 0.46, 0.70, 0.38
+pintu  = ruang_tengah | 🚪 Masuk rumah | 0.14, 0.32 | 0 ; dermaga | 🌅 Ke dermaga | 0.58, 0.44 | 5 ; gudang_ikan | ➡ Ke gudang ikan | 0.72, 0.54 | 15 ; lapangan | ⚽ Ke lapangan | 0.84, 0.66 | 5
+benda  = bantu_warung | 🍳 Warung | 0.22, 0.52 ; jaring_ayah | 🪢 Jaring Ayah | 0.62, 0.78 ; sapu_halaman | 🧹 Sapu halaman | 0.46, 0.88 ; kucing_warung | 🐈 Kucing warung | 0.30, 0.86 ; layangan_laras | 🪁 Ajak Laras main layangan | 0.48, 0.72
+orang  = ibu 0.30, 0.66, 0.40 ; ayah 0.70, 0.76, 0.40 ; laras 0.48, 0.80, 0.28
 
 [gudang_ikan]
 nama   = Gudang ikan Juragan Darto
 tempat = desa
 pintu  = rumah_warung | ⬅ Pulang ke rumah | 0.40, 0.88 | 15
+benda  = bayar_cicilan | 💵 Bayar cicilan perahu | 0.24, 0.52
 orang  = darto 0.36, 0.64, 0.42
+
+# ---------------- DESA: LUAR RUMAH ----------------
+
+[lapangan]
+nama     = Lapangan desa
+tempat   = desa
+cadangan = kota_kecil
+pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.30, 0.88 | 5 ; dermaga | 🌅 Ke dermaga | 0.78, 0.40 | 5
+benda    = main_bola | ⚽ Main bola bersama Bayu | 0.62, 0.70 ; lari_sore | 🏃 Lari keliling lapangan | 0.40, 0.62 ; duduk_ketapang | 🌳 Pohon ketapang | 0.20, 0.56
+orang    = bayu 0.68, 0.80, 0.40 ; laras 0.30, 0.80, 0.30
+
+[dermaga]
+nama     = Dermaga mercusuar
+tempat   = desa
+cadangan = dermaga_malam
+pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.70, 0.88 | 5 ; lapangan | ⚽ Ke lapangan | 0.84, 0.56 | 5
+benda    = dermaga | 🌅 Duduk di dermaga | 0.60, 0.74 ; memancing | 🎣 Memancing | 0.42, 0.64 ; melaut | 🚣 Perahu Pak Karta | 0.18, 0.58 ; siapkan_perahu | ⛵ Perahu Ayah | 0.30, 0.50
+orang    = sekar 0.30, 0.86, 0.36 ; bayu 0.70, 0.82, 0.38 ; ayah 0.48, 0.68, 0.36
 
 # ---------------- KOTA SAKALA ----------------
 

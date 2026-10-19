@@ -695,8 +695,9 @@ class GameActivity : Activity() {
     private fun check(c: Cmd.JumpIf): Boolean {
         val left = vars[c.variable] ?: ""
         val right = fill(c.value)
-        val ln = left.toDoubleOrNull()
         val rn = right.toDoubleOrNull()
+        // variabel yang belum pernah diisi dianggap 0 bila dibandingkan dengan angka
+        val ln = left.toDoubleOrNull() ?: if (left.isEmpty() && rn != null) 0.0 else null
         if (ln != null && rn != null) {
             return when (c.op) {
                 "==" -> ln == rn
@@ -1215,11 +1216,19 @@ class GameActivity : Activity() {
         return (ox + x * bgImgW * sc) to (oy + y * bgImgH * sc)
     }
 
+    /** Karakter masih ada di cerita (kolom ada_bila, mis. sekar_pergi != 1 → Sekar sudah pindah ke kota). */
+    private fun presentInStory(c: GameData.CharacterDef): Boolean =
+        c.text["ada_bila"]?.takeIf { it.isNotBlank() }?.let { checkCondition(it) } ?: true
+
+    /** Di lokasi mana karakter berada sekarang (jadwal "lokasi" + ada_bila), atau null. */
+    private fun whereIs(c: GameData.CharacterDef): String? =
+        if (presentInStory(c)) gameData.characterLocation(c, life.weekdayIndex, life.minute) else null
+
     /** Orang yang ada di lokasi ini sekarang (sesuai jadwal, atau sedang janjian di sini). */
     private fun peopleAt(loc: GameData.LocationDef): List<GameData.CharacterDef> =
         gameData.characters.values.filter { c ->
             if (!social.rel(c).met) return@filter false
-            val byPlan = gameData.characterLocation(c, life.weekdayIndex, life.minute) == loc.id
+            val byPlan = whereIs(c) == loc.id
             val byAppt = phoneData.appts.any { it.charId == c.id && it.day == life.day && it.slot == life.slot.name } &&
                 c.text["tempat_janji"]?.let { resolveLoc(it) } == loc.id
             byPlan || byAppt
@@ -1250,6 +1259,8 @@ class GameActivity : Activity() {
         if (!walking) loc.objects.forEach { o ->
             val a = gameData.activities.firstOrNull { it.id == o.target } ?: return@forEach
             if (a.condition != null && !checkCondition(a.condition)) return@forEach
+            // kegiatan bersama seseorang (mis. melipat pakaian bersama Ibu) hanya terlihat saat orangnya ada
+            if (a.with != null && peopleAt(loc).none { it.id == a.with }) return@forEach
             val block = activityBlock(a)
             val needEnergy = -(a.effects["energi"] ?: 0L)
             val tired = needEnergy > 0 && life[LifeState.Stat.ENERGI] < needEnergy
@@ -1384,7 +1395,7 @@ class GameActivity : Activity() {
         for (t in listOf("pagi", "siang", "sore", "malam")) {
             if (f.endsWith("_$t")) {
                 val b = f.removeSuffix("_$t")
-                if (b in latarFiles || gameData.locations[b] != null) return b
+                if (b in latarFiles) return b
             }
         }
         return f
@@ -2155,14 +2166,14 @@ class GameActivity : Activity() {
         val people = gameData.characters.values.filter { c ->
             social.rel(c).met &&
                 ("semua" in c.places || place.lowercase() in c.places) &&
-                gameData.meetableNow(c, life.weekdayIndex, life.minute)
+                gameData.meetableNow(c, life.weekdayIndex, life.minute) && presentInStory(c)
         }
         if (people.isNotEmpty()) {
             sheetList.addView(sectionLabel("👥 Temui seseorang"))
             people.forEach { c ->
                 val r = social.rel(c)
                 val loveText = loveText(c)
-                val where = gameData.characterLocation(c, life.weekdayIndex, life.minute)?.let { gameData.locations[it] }
+                val where = whereIs(c)?.let { gameData.locations[it] }
                 if (here != null && where != null) {
                     // hanya keterangan: datangi tempatnya, lalu ketuk orangnya di layar
                     sheetList.addView(card(
@@ -2229,7 +2240,7 @@ class GameActivity : Activity() {
             val c = gameData.characters[id]
             val here = currentLocation()
             if (c == null || !social.rel(c).met) return "Belum kenal"
-            if (here == null || gameData.characterLocation(c, life.weekdayIndex, life.minute) != here.id)
+            if (here == null || whereIs(c) != here.id)
                 return "Hanya bisa saat ${c.name} ada di sini"
         }
         val (_, used, last) = activityUse(a.id)

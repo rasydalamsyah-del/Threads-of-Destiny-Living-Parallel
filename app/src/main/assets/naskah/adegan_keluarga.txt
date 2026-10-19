@@ -1,0 +1,435 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — KELUARGA (Ayah, Ibu, Laras) · Bab 2–3 desa
+#  Pemicu & jam: data/adegan.txt · Alur: docs/CERITA.md bagian 8–9
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ==========================================================
+#  BAB 2
+# ==========================================================
+
+# ----------------------------------------------------------
+#  WARUNG SEPI (temui Ibu di warung)
+# ----------------------------------------------------------
+
+:: b2_ibu_warung
+@tampil ibu biasa
+* Warung sedang sepi. Ibu duduk di bangku plastik, menghitung uang receh di kaleng biskuit. Dua kali. Tiga kali.
+{nama}: Bu? Kenapa dihitung terus?
+@tampil ibu sedih
+Ibu: Eh, kamu. Nggak apa-apa... Cuma, dulu jam segini Ibu sudah habis dua baskom pisang. Sekarang satu baskom saja masih sisa.
+Ibu: Orang-orang lebih suka ke minimarket. Ada AC-nya, ada roti bungkus warna-warni.
+* Ibu tertawa kecil, tapi tawanya kering.
+@pilihan
+> "Bagaimana kalau kita bikin menu baru, Bu? Yang tidak ada di minimarket." -> b2iw_menu
+> "Ibu bisa terima pesanan lewat HP. Grup WA desa kan ramai." -> b2iw_antar
+> "Nanti juga ramai lagi, Bu. Sabar saja." -> b2iw_sabar
+
+:: b2iw_menu
+@atur warung_ide = menu
+Ibu: Menu baru? Apa, ya... Gorengan kan sudah semua Ibu buat.
+{nama}: Cireng isi ikan asin, Bu! Ikan asin Juragan Darto kan enak. Murah juga.
+@tampil ibu kaget
+Ibu: Cireng... isi ikan asin? Hm. Hmm! Aneh, tapi... Ibu belum pernah lihat yang jual.
+@tampil ibu senyum
+Ibu: Besok Ibu coba bikin. Kamu yang jadi tukang cicip pertama, ya!
+@cinta ibu +4
+@tambah ide_warung +1
+@lompat b2iw_akhir
+
+:: b2iw_antar
+@atur warung_ide = antar
+Ibu: Lewat HP? Ibu cuma bisa telepon sama kirim stiker bunga-bunga.
+{nama}: Nanti aku ajari, Bu. Ibu tinggal foto gorengannya, kirim ke grup. Yang mau pesan, aku antar.
+@tampil ibu senyum
+Ibu: Wah, kamu jadi kurir? Pagi kerja, sore antar gorengan? Nanti kamu kurus.
+{nama}: Biar, Bu. Daripada gorengan Ibu dingin di baskom.
+@cinta ibu +4
+@tambah ide_warung +1
+@lompat b2iw_akhir
+
+:: b2iw_sabar
+@atur warung_ide = tidak
+@tampil ibu biasa
+Ibu: Iya... semoga.
+* Ibu kembali menghitung receh. Kamu merasa ada yang seharusnya kamu katakan, tapi tidak tahu apa.
+
+:: b2iw_akhir
+@sembunyi ibu
+@kembali
+
+
+# ----------------------------------------------------------
+#  SIMPUL JARING (temui Ayah di depan rumah, 13:00–16:00)
+# ----------------------------------------------------------
+
+:: b2_ayah_jaring
+@tampil ayah biasa
+* Ayah duduk bersila di bale-bale bambu, jaring hijau terhampar di pangkuannya seperti selimut raksasa. Jarum bambunya keluar-masuk lubang yang robek.
+Ayah: Sini. Pegang ujungnya. Tarik pelan-pelan.
+* Kamu duduk di sebelahnya. Jari-jari Ayah bergerak cepat dan pasti, membuat simpul yang rapi dalam hitungan detik.
+Ayah: Simpul nelayan itu harus kuat kalau ditarik, tapi gampang dibuka kalau perlu. Coba.
+* Kamu mencoba. Simpulmu lepas saat ditarik.
+@pilihan
+> Coba lagi dengan sabar -> b2aj_sabar
+> "Susah, Yah. Nanti saja." -> b2aj_nyerah
+
+:: b2aj_sabar
+* Percobaan kelima. Ketujuh. Kesepuluh. Akhirnya simpulmu bertahan saat ditarik Ayah.
+@tampil ayah senyum
+Ayah: Nah. Lihat? Tidak ada yang bisa langsung. Semua karena diulang-ulang.
+@tambah keahlian_laut +1
+@cinta ayah +3
+@lompat b2aj_cerita
+
+:: b2aj_nyerah
+@tampil ayah biasa
+Ayah: Nanti itu kapan? Laut tidak menunggu "nanti".
+* Ayah mengambil kembali ujung jaring, tidak marah, tapi kamu merasa sedikit malu.
+
+:: b2aj_cerita
+@tampil ayah biasa
+Ayah: Dulu kakekmu mengajari Ayah di bale-bale ini juga. Umur Ayah sepuluh. Tiap salah, jari Ayah dipukul pakai jarum bambu.
+{nama}: Sakit dong, Yah?
+Ayah: Sakit. Tapi Ayah jadi cepat bisa.
+* Ayah tersenyum tipis, matanya menerawang ke arah laut.
+@jika kerja_desa == perahu -> b2aj_perahu
+Ayah: Bagaimana di gudang? Juragan galak?
+@pilihan
+> "Galak, tapi adil, Yah." -> b2aj_adil
+> "Galak banget. Aku dimarahi terus." -> b2aj_galak
+
+:: b2aj_adil
+Ayah: Memang begitu dia. Dari dulu. Kalau kamu rajin, dia tidak akan menyusahkanmu.
+@lompat b2aj_akhir
+
+:: b2aj_galak
+Ayah: Hm. Dimarahi itu tandanya diperhatikan. Yang tidak dimarahi, biasanya sudah mau dipecat.
+@lompat b2aj_akhir
+
+:: b2aj_perahu
+Ayah: Pak Karta itu orang baik. Ikuti kata-katanya di laut. Laut tidak memaafkan orang sok tahu.
+@percaya ayah +2
+
+:: b2aj_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  RADIO AYAH (temui Ayah di ruang tengah, 16:00–17:45)
+# ----------------------------------------------------------
+
+:: b2_ayah_radio
+@tampil ayah senyum
+* Radio tua di atas lemari memutar lagu dangdut lawas. Ayah duduk di sofa dengan segelas kopi hitam, kakinya diselonjorkan.
+Ayah: Dengar. Ini lagu waktu Ayah melamar Ibumu.
+{nama}: Ayah melamar Ibu pakai lagu dangdut?
+Ayah: Ayah menyanyikannya di depan rumah kakek-nenekmu. Suara Ayah fals. Anjing tetangga ikut melolong.
+* Kamu tertawa. Ayah ikut tertawa, sampai kopinya hampir tumpah.
+@tampil ayah biasa
+Ayah: Keluarga Ibumu tidak setuju. Nelayan miskin dari desa di ujung tanjung. Tapi Ibumu keras kepala.
+Ayah: ...Kamu juga keras kepala. Turunan dari dua-duanya.
+@pilihan
+> "Ayah menyesal tidak jadi nakhoda kapal besar?" -> b2ar_nakhoda
+> "Ayah bahagia sekarang?" -> b2ar_bahagia
+
+:: b2ar_nakhoda
+* Ayah terdiam lama. Radio berganti lagu.
+Ayah: Dulu iya. Tiap kapal tanker lewat dekat mercusuar, Ayah iri.
+Ayah: Sekarang... Ayah cuma ingin melihat kalian hidup lebih baik dari Ayah. Itu kapal besar Ayah sekarang.
+@info ayah cita_cita
+@cinta ayah +3
+@lompat b2ar_akhir
+
+:: b2ar_bahagia
+@tampil ayah senyum
+Ayah: Bahagia itu... pulang subuh, ada yang masak, ada yang menunggu. Laras berisik. Kamu sudah besar.
+Ayah: Ya. Ayah bahagia. Cuma kadang capek.
+@cinta ayah +3
+
+:: b2ar_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  LARAS DIEJEK (ruang tengah, sepulang sekolah)
+# ----------------------------------------------------------
+
+:: b2_laras_diejek
+@tampil laras menangis
+* Laras tidak mengerjakan PR seperti biasa. Ia meringkuk di sudut tikar, membelakangi pintu, bahunya bergetar.
+{nama}: Ras? Kenapa?
+Laras: Nggak apa-apa! Pergi sana!
+* Di dekatnya, sebuah buku gambar tergeletak. Halaman terakhirnya dicoret-coret spidol hitam. Ada tulisan besar: "LARAS BAU IKAN".
+{nama}: Siapa yang nulis ini?
+Laras: ...Dino sama teman-temannya. Mereka bilang bajuku bau ikan. Bau warung. Tiap aku lewat, mereka tutup hidung.
+@tampil laras sedih
+Laras: Jangan bilang Ibu. Nanti Ibu sedih. Ibu kan capek-capek jualan.
+@pilihan
+> Hibur Laras dan ajari cara menjawab mereka -> b2ld_hibur
+> "Ibu harus tahu, Ras. Ini bukan hal kecil." -> b2ld_adu
+> "Besok Kakak yang datangi mereka." -> b2ld_datangi
+
+:: b2ld_hibur
+@atur laras_diejek = hibur
+* Kamu duduk di sampingnya dan mengambil buku gambar itu.
+{nama}: Ras, tahu nggak? Ikan yang mereka bilang bau itu yang bikin mereka bisa makan. Bapaknya Dino juga nelayan, kan?
+Laras: ...Iya.
+{nama}: Besok kalau mereka tutup hidung lagi, bilang begini: "Iya, aku bau ikan. Bau orang yang kerja. Kalian bau apa? Bau malas?"
+@tampil laras kaget
+Laras: Hahaha! Kakak jahat banget!
+* Laras tertawa sambil masih sesenggukan. Kamu merobek halaman yang dicoret itu dan melipatnya jadi perahu kertas.
+{nama}: Nih. Halaman jelek jadi perahu. Besok kita layarkan di parit.
+@cinta laras +6
+@percaya laras +4
+@lompat b2ld_akhir
+
+:: b2ld_adu
+@atur laras_diejek = adu
+@tampil laras kesal
+Laras: Kakak janji nggak bilang!
+{nama}: Kakak nggak janji apa-apa, Ras.
+* Malam itu kamu bercerita pada Ibu. Ibu terdiam lama, lalu memeluk Laras sambil meminta maaf berkali-kali, padahal bukan salahnya.
+* Besoknya Ibu datang ke sekolah menemui wali kelas. Dino dan teman-temannya dihukum.
+* Tapi tiga hari Laras tidak mau bicara denganmu.
+@percaya laras -6
+@cinta ibu +3
+@percaya ibu +3
+@lompat b2ld_akhir
+
+:: b2ld_datangi
+@atur laras_diejek = datangi
+@tampil laras kaget
+Laras: Jangan! Nanti aku makin diejek, "kakaknya galak"!
+{nama}: Kakak cuma bicara baik-baik. Janji.
+* Esok siangnya, kamu menunggu di gerbang SD. Saat Dino lewat, kamu berjongkok supaya sejajar dengannya.
+* Kamu tidak marah. Kamu hanya bertanya, apakah bapaknya pernah pulang melaut tanpa bau ikan. Dino menunduk dan menggeleng.
+* Laras melihat semuanya dari kejauhan, menggigit bibir.
+@cinta laras +4
+@tambah komunikasi +1
+
+:: b2ld_akhir
+@sembunyi laras
+@info laras kisah_1
+@kembali
+
+
+# ----------------------------------------------------------
+#  PR MATEMATIKA (temui Laras di ruang tengah)
+# ----------------------------------------------------------
+
+:: b2_laras_pr
+@tampil laras kesal
+* Laras menggigit ujung pensil sampai penyok. Buku matematikanya penuh bekas hapusan.
+Laras: Kak, ini kenapa tiga per empat lebih besar dari dua per tiga? Empat kan lebih besar dari tiga, tapi kenapa malah... aaah!
+@pilihan
+> Kerjakan saja jawabannya biar cepat -> b2lp_jawab
+> Ajari pelan-pelan pakai gambar -> b2lp_ajari
+
+:: b2lp_jawab
+@tampil laras senyum
+* Kamu menulis semua jawabannya dalam lima menit. Laras bersorak dan langsung kabur ke depan rumah main dengan kucing.
+* Seminggu kemudian, ulangan matematika Laras dapat nilai empat.
+@cinta laras +2
+@lompat b2lp_akhir
+
+:: b2lp_ajari
+* Kamu menggambar dua roti di pinggir buku. Satu dipotong empat, satu dipotong tiga.
+{nama}: Kalau kamu dapat tiga potong dari roti yang dipotong empat, sama dua potong dari roti yang dipotong tiga, mana yang lebih banyak rotinya?
+* Laras memandangi gambar itu lama sekali. Lalu matanya membulat.
+@tampil laras kaget
+Laras: OH! Yang tiga per empat! Soalnya potongannya cuma kurang satu!
+@tampil laras senyum
+Laras: Kak! Kenapa guruku nggak ngajarin pakai roti?!
+* Seminggu kemudian, Laras pulang sambil berlari, mengacungkan kertas ulangan. Nilainya delapan.
+@cinta laras +5
+@percaya laras +3
+@tambah akademik +1
+@info laras pelajaran
+
+:: b2lp_akhir
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  SINETRON IBU (temui Ibu di ruang tengah, malam)
+# ----------------------------------------------------------
+
+:: b2_ibu_sinetron
+@tampil ibu senyum
+* Di TV, seorang ibu mertua sedang menampar menantunya dengan musik dramatis. Ibu melipat kaus sambil menggeleng-geleng.
+Ibu: Ya ampun, mertua kok jahat begitu. Untung nenekmu tidak seperti itu.
+{nama}: Nenek yang mana, Bu? Yang di seberang teluk?
+@tampil ibu biasa
+* Tangan Ibu berhenti melipat.
+Ibu: ...Nenekmu dari pihak Ibu, ya. Kamu belum pernah ketemu.
+@pilihan
+> "Kenapa kita tidak pernah ke sana, Bu?" -> b2is_tanya
+> Diam dan bantu melipat -> b2is_diam
+
+:: b2is_tanya
+@jika percaya_ibu >= 72 -> b2is_cerita
+Ibu: Jauh, Nak. Ongkosnya mahal. Nanti saja kalau ada rezeki.
+* Ibu tersenyum, tapi kamu tahu itu bukan jawaban yang sebenarnya.
+@lompat b2is_akhir
+
+:: b2is_cerita
+* Ibu meletakkan kaus yang sedang dilipatnya.
+@tampil ibu sedih
+Ibu: Keluarga Ibu tidak setuju Ibu menikah dengan Ayahmu. Kata kakekmu, nelayan itu hidupnya tidak pasti. Hari ini ada, besok tidak.
+Ibu: Ibu tetap pergi. Naik perahu menyeberang teluk, cuma bawa satu tas. Sejak itu... kakekmu tidak pernah mau bicara lagi.
+Ibu: Ibu tidak menyesal. Tapi kadang, kalau lihat sinetron begini, Ibu jadi ingat rumah.
+@info ibu kisah_1
+@cinta ibu +4
+@percaya ibu +3
+@lompat b2is_akhir
+
+:: b2is_diam
+* Kamu duduk dan ikut melipat. Ibu melirikmu, tersenyum, lalu kembali mengomentari sinetron dengan semangat baru.
+@cinta ibu +3
+
+:: b2is_akhir
+@sembunyi ibu
+@kembali
+
+
+# ==========================================================
+#  BAB 3
+# ==========================================================
+
+# ----------------------------------------------------------
+#  MEMBICARAKAN HUTANG DENGAN AYAH (temui Ayah, setelah bicara dengan Juragan)
+# ----------------------------------------------------------
+
+:: b3_ayah_jujur
+@tampil ayah biasa
+* Ayah sedang sendirian. Ini kesempatanmu.
+{nama}: Yah... aku sudah bicara dengan Juragan Darto. Soal perahu.
+@tampil ayah kaget
+Ayah: Kamu apa?!
+@pilihan
+> Ceritakan semuanya dengan jujur -> b3aj_jujur
+> "Cuma tanya-tanya saja, Yah. Tidak apa-apa." -> b3aj_tutup
+
+:: b3aj_jujur
+@atur ayah_tahu_cicilan = 1
+{nama}: Aku tahu sisa hutangnya. Aku mau ikut mencicil, Yah. Dari upahku.
+@tampil ayah kesal
+Ayah: Itu hutang Ayah! Bukan hutangmu!
+{nama}: Perahu itu yang memberi kita makan, Yah. Berarti perahu itu juga perahuku.
+* Ayah membuka mulut, lalu menutupnya lagi. Ia memalingkan wajah ke jendela.
+@tampil ayah sedih
+Ayah: ...Waktu Ayah seumurmu, Ayah juga bilang begitu ke kakekmu.
+Ayah: Ya sudah. Tapi jangan sampai kamu kelaparan gara-gara ini. Janji?
+{nama}: Janji, Yah.
+@percaya ayah +8
+@cinta ayah +3
+@perilaku ayah jujur
+@lompat b3aj_akhir
+
+:: b3aj_tutup
+@atur ayah_tahu_cicilan = 0
+Ayah: ...Jangan ikut campur urusan orang tua, {nama}.
+* Ayah kembali pada kesibukannya. Rahasiamu sekarang ada dua: rahasia Ayah, dan rahasiamu sendiri.
+@bohong cicilan_rahasia ayah
+
+:: b3aj_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  CERITA IBU TENTANG KELUARGA SAHABAT (temui Ibu, setelah sakit)
+# ----------------------------------------------------------
+
+:: b3_ibu_cerita
+@tampil ibu biasa
+* Ibu masih terlihat pucat, tapi sudah kembali sibuk seperti biasa. Kamu memaksanya duduk sebentar.
+Ibu: Ibu nggak apa-apa, Nak. Jangan khawatir terus.
+{nama}: Bu... boleh aku tanya sesuatu? Tentang keluarga {nama_sahabat}.
+* Ibu menatapmu lama. Tangannya meremas ujung sarung.
+@jika percaya_ibu >= 70 -> b3ic_cerita
+@tampil ibu sedih
+Ibu: Itu sudah lama sekali. Jangan diungkit-ungkit lagi, ya.
+* Ibu berdiri dan pergi ke dapur. Kamu yakin Ibu tahu sesuatu.
+@lompat b3ic_akhir
+
+:: b3ic_cerita
+@tampil ibu sedih
+Ibu: Ibunya {nama_sahabat} itu sahabat Ibu. Kami sering menjahit bareng di teras.
+Ibu: Ayahnya ditipu orang kota. Katanya diajak usaha kapal besar. Rumah dan perahunya dijaminkan... lalu orang itu hilang.
+Ibu: Rumahnya disita. Mereka pergi malam-malam, naik kereta pertama. Malu, Nak. Malu pada seisi desa.
+Ibu: Ibunya sempat titip pesan ke Ibu: "Jangan bilang anak-anak. Biar mereka ingat yang baik-baik saja."
+* Kamu terpaku. Selama ini kamu mengira {nama_sahabat} pergi karena tidak peduli. Ternyata keluarganya lari dari rasa malu.
+@tampil ibu menangis
+Ibu: Maaf, Nak. Ibu menyimpannya terlalu lama.
+@info ibu kisah_3
+@tambah petunjuk_sahabat +1
+@catatan Petunjuk — Kata Ibu: ayah {nama_sahabat} ditipu orang kota, rumah dan perahunya disita. Mereka pergi malam-malam naik kereta pertama karena malu.
+@cinta ibu +3
+
+:: b3ic_akhir
+@sembunyi ibu
+@kembali
+
+
+# ----------------------------------------------------------
+#  GELANG BENANG MERAH (temui Laras)
+# ----------------------------------------------------------
+
+:: b3_laras_gelang
+@tampil laras biasa
+Laras: Kak, gelang benang merah di tangan Kakak itu dari siapa, sih? Udah butut, kok nggak pernah dilepas?
+@pilihan
+> Ceritakan dengan jujur -> b3lg_jujur
+> "Nemu di jalan." -> b3lg_bohong
+
+:: b3lg_jujur
+{nama}: Ini... janji lama, Ras. Sama sahabat Kakak waktu kecil. {nama_sahabat}. Kamu masih kecil sekali waktu itu.
+Laras: Yang suka gendong aku ke dermaga? Yang rambutnya jabrik?
+{nama}: Kamu ingat?
+@tampil laras sedih
+Laras: Sedikit. Dia pergi, ya? Kayak Kakak hampir pergi?
+{nama}: Iya. Dia pergi ke kota. Dan Kakak masih menunggunya.
+* Laras memandangi gelang itu lama. Lalu ia meraih tanganmu dan mengikat seutas benang kuning dari kotak pensilnya di sebelah gelang merah itu.
+Laras: Ini dari aku. Biar Kakak nggak cuma punya janji sama dia. Sama aku juga.
+@cinta laras +6
+@percaya laras +5
+@tambah petunjuk_sahabat +1
+@lompat b3lg_akhir
+
+:: b3lg_bohong
+@tampil laras kesal
+Laras: Bohong! Kakak pakai itu dari aku masih TK!
+* Laras cemberut dan pergi. Kamu menatap gelang itu, merasa sedikit bersalah.
+@percaya laras -3
+
+:: b3lg_akhir
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  KOTAK SEPATU "BUAT KAKAK" (ruang tengah, malam)
+# ----------------------------------------------------------
+
+:: b3_laras_kotak
+@tampil laras biasa
+* Laras menyeret sebuah kotak sepatu lusuh dari bawah lemari. Di tutupnya tertulis dengan krayon: "BUAT KAKAK KALAU SUDAH PULANG".
+{nama}: Apa ini, Ras?
+Laras: Dulu waktu teman-teman Kakak mulai ngomongin sekolah di kota, aku takut Kakak ikut pergi. Jadi aku mulai ngumpulin gambar. Biar kalau Kakak pergi, pas pulang ada hadiahnya.
+* Di dalamnya ada puluhan gambar. Kamu di warung. Kamu di dermaga. Kamu dengan sayap. Kamu dan Laras di bawah mercusuar yang menyala, dengan sinar kuning dicoret-coret krayon.
+{nama}: Mercusuarnya nyala?
+Laras: Iya! Soalnya kalau nyala, orang yang pergi bisa lihat jalan pulang. Kata Ayah begitu.
+@tampil laras senyum
+Laras: Karena Kakak nggak jadi pergi, kotaknya buat Kakak sekarang saja!
+* Kamu memeluk kotak itu. Sesuatu di dadamu terasa hangat dan sakit sekaligus.
+@info laras kisah_3
+@cinta laras +6
+@stat kewarasan +8
+@sembunyi laras
+@kembali

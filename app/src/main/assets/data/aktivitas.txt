@@ -10,6 +10,7 @@
 #           (Pagi 04:00–10:59 · Siang 11:00–14:59 · Sore 15:00–17:59 · Malam 18:00–03:59)
 #  durasi = lama kegiatan: 45 menit / 2 jam / 1,5 jam (bawaan 1 jam)
 #  mulai  = (opsional) jam boleh MULAI, contoh 04:00-06:00 (melaut subuh) atau 19:00-02:00 (lewat tengah malam).
+#           Boleh beberapa jendela: 05:00-06:15, 17:15-17:45
 #           Di luar jam itu aktivitas tetap tampil REDUP dengan keterangan, mis. "Sudah terlalu siang untuk
 #           melaut bersama Ayah (paling lambat 06:00)". Tanpa "mulai", yang dipakai "waktu".
 #  Aktivitas hanya tampil di "tempat"-nya: aktivitas desa tidak muncul saat pemain di kota, dan sebaliknya.
@@ -22,71 +23,30 @@
 #  batas  = (opsional) paling banyak berapa kali per hari, contoh 1
 #  jeda   = (opsional) jarak minimal sebelum boleh diulang, contoh 4 jam (makan) — dihitung dari jam mulai
 #  teks_ulang = (opsional) narasi bila dilakukan lagi di hari yang sama (mis. Ibu menegur)
+#  bersama = (opsional) id karakter: hanya bisa saat ia ada di lokasi yang sama (mis. bersama = ibu).
+#           Tandanya di layar baru muncul saat orangnya ada.
+#  efek hubungan: cinta_ayah +2, percaya_laras +1 (ikut tercatat di halaman Karakter)
 #  Yang sudah mencapai batas/jeda tampil REDUP: "Sudah dilakukan hari ini — besok lagi" /
 #  "Baru saja dilakukan — bisa lagi pukul 18:45".
 # ==========================================================
 
 # ---------------- DESA TANJUNG LENTERA ----------------
+# Jadwal & tempat: docs/CERITA.md (bagian 5)
 
-[makan_keluarga]
-lokasi = ruang_makan
-nama   = Makan bersama keluarga
-ikon   = 🍲
-tempat = desa
-waktu  = pagi, siang, malam
-durasi = 45 menit
-efek   = kenyang +50, hidrasi +30, kewarasan +5
-teks   = Ibu memasak sayur asem dan ikan bakar. Laras tak berhenti bercerita, Ayah hanya tersenyum mendengarkan.
-batas  = 3
-jeda   = 4 jam
-teks_ulang = Kamu duduk lagi di meja makan. Ibu tertawa kecil: "Lapar lagi? Ya sudah, habiskan sisa lauk tadi."
+# ----- Kamarmu -----
 
-[bantu_warung]
-lokasi = rumah_warung
-nama   = Bantu Ibu di warung
-ikon   = 🍳
+[istirahat]
+lokasi = kamar_pagi
+nama   = Istirahat sebentar di kamar
+ikon   = 🛏️
 tempat = desa
-waktu  = pagi, siang, sore
-durasi = 3 jam
-mulai  = 05:30-17:00
-efek   = energi -20, uang +15000, kenyang -5, hidrasi -5, kewarasan -2
-teks   = Kamu menggoreng pisang dan melayani pembeli seharian. Ibu menyelipkan selembar uang ke tanganmu.
-batas  = 1
-
-[melaut]
-lokasi = rumah_warung
-nama   = Melaut bersama Ayah
-ikon   = 🚣
-tempat = desa
-waktu  = pagi
-durasi = 5 jam
-mulai  = 04:00-06:00
-efek   = energi -40, uang +40000, hidrasi -20, kenyang -10, kewarasan -3
-teks   = Ombak sedang tinggi. Tanganmu lecet menarik jaring, tapi hasil tangkapan hari ini lumayan.
-batas  = 1
-
-[dermaga]
-lokasi = rumah_warung
-nama   = Duduk di dermaga mercusuar
-ikon   = 🌅
-tempat = desa
-waktu  = sore, malam
-durasi = 1,5 jam
-efek   = kewarasan +12, energi -5
-teks   = Angin laut menyentuh wajahmu. Mercusuar tua itu masih berdiri, sama seperti dulu... hanya saja kali ini kamu duduk sendirian.
-batas  = 1
-
-[main_laras]
-lokasi = rumah_warung
-nama   = Menemani Laras bermain
-ikon   = 🪁
-tempat = desa
-waktu  = siang, sore
+waktu  = semua
 durasi = 1 jam
-mulai  = 13:00-20:00
-efek   = kewarasan +8, energi -8
-teks   = Laras memaksamu menerbangkan layang-layang. Kalian tertawa sampai lupa waktu.
-batas  = 1
+efek   = energi +25, kewarasan +3
+batas  = 2
+jeda   = 3 jam
+teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristirahat.
+teks_ulang = Baru saja memejamkan mata, Ibu melongok dari pintu: "Tidur lagi? Anak muda kok tidur terus. Bantu Ibu sebentar, dong!" Kamu tetap berbaring... tapi rasanya tidak setenang tadi.
 
 [belajar]
 lokasi = kamar_pagi, kos
@@ -101,18 +61,291 @@ teks   = Kamu membuka buku-buku lama. Soal-soal matematika itu tetap saja membua
 batas  = 2
 jeda   = 2 jam
 
-[istirahat]
+[belajar_paket]
 lokasi = kamar_pagi
-nama   = Istirahat sebentar di kamar
-ikon   = 🛏️
+nama   = Belajar mandiri (persiapan Paket C)
+ikon   = 📖
+tempat = desa
+waktu  = siang, sore, malam
+durasi = 2 jam
+syarat = jalur == kerja && paket_c == 1
+efek   = energi -14, kewarasan -2, akademik +2, paket_c_belajar +1
+teks   = Kamu membuka buku pinjaman Sekar. Catatan kecil di pinggir halamannya — "ini pasti keluar!" — membuatmu tersenyum sendiri.
+batas  = 1
+
+[buku_harian]
+lokasi = kamar_pagi
+nama   = Menulis buku harian
+ikon   = ✍️
+tempat = desa
+waktu  = malam
+durasi = 30 menit
+efek   = kewarasan +6
+teks   = Kamu menulis tentang hari ini. Tentang bau ikan, tawa Laras, dan nama yang masih kamu tulis di sudut halaman setiap malam.
+batas  = 1
+
+[kotak_kenangan]
+lokasi = kamar_pagi
+nama   = Melihat gelang & foto lama
+ikon   = 🧶
 tempat = desa
 waktu  = semua
+durasi = 20 menit
+efek   = kewarasan +3, rindu_sahabat +1
+teks   = Di dalam kaleng biskuit tua: foto dua anak di dermaga, gelang benang merah cadangan, dan secarik kertas bertuliskan "JANJI" dengan huruf besar-besar. Kamu memandanginya lama.
+batas  = 1
+
+# ----- Ruang tengah -----
+
+[nonton_tv]
+lokasi = ruang_tengah
+nama   = Menonton TV
+ikon   = 📺
+tempat = desa
+waktu  = siang, sore, malam
 durasi = 1 jam
-efek   = energi +25, kewarasan +3
+efek   = kewarasan +6, energi -2
+teks   = TV tabung itu berdesis sebelum gambarnya jelas. Berita tentang harga solar, lalu iklan minimarket yang terang benderang. Kamu memindah saluran sampai menemukan film lama.
+batas  = 2
+jeda   = 2 jam
+teks_ulang = Kamu menonton lagi. Antena di atap sepertinya miring; gambarnya bersemut, tapi lumayan untuk mengusir bosan.
+
+[lipat_pakaian]
+lokasi  = ruang_tengah
+nama    = Membantu Ibu melipat pakaian
+ikon    = 👕
+tempat  = desa
+waktu   = malam
+durasi  = 45 menit
+bersama = ibu
+efek    = kewarasan +4, energi -3, cinta_ibu +2
+teks    = Sinetron di TV sedang tegang. Ibu melipat sambil berkomentar ke tokoh-tokohnya seolah mereka bisa mendengar. Kamu tertawa sampai lupa sedang melipat kaus Laras yang sama tiga kali.
+batas   = 1
+
+[pr_laras]
+lokasi  = ruang_tengah
+nama    = Membantu PR Laras
+ikon    = ✏️
+tempat  = desa
+waktu   = siang, sore
+durasi  = 1 jam
+bersama = laras
+efek    = energi -6, kewarasan +2, cinta_laras +3, akademik +1
+teks    = Pecahan, lagi. Laras cemberut sampai kamu menggambar pizza di pinggir bukunya. "Oh... jadi seperempat itu segini?" Matanya membulat.
+batas   = 1
+
+[radio_ayah]
+lokasi  = ruang_tengah
+nama    = Menemani Ayah mendengarkan radio
+ikon    = 📻
+tempat  = desa
+waktu   = sore
+durasi  = 1 jam
+bersama = ayah
+efek    = kewarasan +5, cinta_ayah +2
+teks    = Radio Ayah memutar lagu dangdut lama. Ayah mengetuk-ngetukkan jari di gelas kopinya, sesekali ikut bersenandung pelan. Kalian tidak banyak bicara, tapi rasanya hangat.
+batas   = 1
+
+# ----- Ruang makan -----
+
+[makan_keluarga]
+lokasi  = ruang_makan
+nama    = Makan bersama keluarga
+ikon    = 🍲
+tempat  = desa
+waktu   = pagi, siang, malam
+durasi  = 45 menit
+mulai   = 06:15-07:00, 12:00-13:45, 17:45-18:15
+bersama = ibu
+efek    = kenyang +50, hidrasi +30, kewarasan +5
+teks    = Ibu memasak sayur asem dan ikan bakar. Laras tak berhenti bercerita, Ayah hanya tersenyum mendengarkan.
+batas   = 3
+jeda    = 4 jam
+teks_ulang = Kamu duduk lagi di meja makan. Ibu tertawa kecil: "Lapar lagi? Ya sudah, habiskan sisa lauk tadi."
+
+[makan_sisa]
+lokasi = ruang_makan
+nama   = Makan sisa lauk di tudung saji
+ikon   = 🍚
+tempat = desa
+waktu  = semua
+durasi = 20 menit
+efek   = kenyang +30, hidrasi +10
+teks   = Di bawah tudung saji masih ada nasi, sambal, dan sepotong ikan goreng. Dingin, tapi tetap enak.
 batas  = 2
 jeda   = 3 jam
-teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristirahat.
-teks_ulang = Baru saja memejamkan mata, Ibu melongok dari pintu: "Tidur lagi? Anak muda kok tidur terus. Bantu Ibu sebentar, dong!" Kamu tetap berbaring... tapi rasanya tidak setenang tadi.
+
+[bantu_masak]
+lokasi  = ruang_makan
+nama    = Membantu Ibu memasak
+ikon    = 🍳
+tempat  = desa
+waktu   = pagi, sore
+durasi  = 45 menit
+mulai   = 05:00-05:45, 17:15-17:30
+bersama = ibu
+efek    = energi -6, kewarasan +3, cinta_ibu +2, keahlian_masak +1
+teks    = Ibu menyuruhmu mengulek sambal. "Jangan terlalu halus, Ayahmu suka yang masih ada bijinya." Matamu pedih kena uap cabai, tapi Ibu kelihatan senang.
+batas   = 1
+
+[cuci_piring]
+lokasi = ruang_makan
+nama   = Mencuci piring
+ikon   = 🧽
+tempat = desa
+waktu  = pagi, siang, malam
+durasi = 30 menit
+mulai  = 07:00-08:30, 13:00-15:00, 18:15-21:00
+efek   = energi -4, cinta_ibu +1
+teks   = Piring seng beradu di bak cuci. Ibu pura-pura tidak melihat, tapi kamu dengar ia bersenandung lebih keras dari biasanya.
+batas  = 2
+
+# ----- Depan rumah & warung -----
+
+[bantu_warung]
+lokasi  = rumah_warung
+nama    = Bantu Ibu di warung
+ikon    = 🍳
+tempat  = desa
+waktu   = pagi, siang, sore
+durasi  = 3 jam
+mulai   = 07:15-14:00
+bersama = ibu
+efek    = energi -20, uang +15000, kenyang -5, hidrasi -5, kewarasan -2, cinta_ibu +1
+teks    = Kamu menggoreng pisang dan melayani pembeli seharian. Ibu menyelipkan selembar uang ke tanganmu.
+batas   = 1
+
+[jaring_ayah]
+lokasi  = rumah_warung
+nama    = Membantu Ayah memperbaiki jaring
+ikon    = 🪢
+tempat  = desa
+waktu   = siang, sore
+durasi  = 1,5 jam
+bersama = ayah
+efek    = energi -8, kewarasan +2, cinta_ayah +3, keahlian_laut +1
+teks    = Jari-jarimu kaku menyimpul benang nilon. Ayah memperlihatkan caranya sekali lagi, lebih pelan. "Simpul nelayan itu harus kuat ditarik, tapi gampang dibuka. Kayak janji."
+batas   = 1
+
+[sapu_halaman]
+lokasi = rumah_warung
+nama   = Menyapu halaman
+ikon   = 🧹
+tempat = desa
+waktu  = pagi, sore
+durasi = 30 menit
+efek   = energi -4, kewarasan +2, cinta_ibu +1
+teks   = Daun ketapang kering berserakan di depan warung. Tetangga yang lewat menyapa: "Rajin bener, nih!"
+batas  = 1
+
+[kucing_warung]
+lokasi = rumah_warung
+nama   = Memberi makan kucing warung
+ikon   = 🐈
+tempat = desa
+waktu  = semua
+durasi = 15 menit
+efek   = kewarasan +3
+teks   = Si Belang, kucing yang dinamai Laras, menyundul-nyundul kakimu. Kamu memberinya kepala ikan sisa. Ia makan sambil mendengkur keras.
+batas  = 1
+
+[layangan_laras]
+lokasi  = rumah_warung
+nama    = Mengajak Laras main layangan di lapangan
+ikon    = 🪁
+tempat  = desa
+waktu   = sore
+durasi  = 1 jam
+bersama = laras
+efek    = kewarasan +8, energi -8, cinta_laras +3
+teks    = Kalian berlari ke lapangan. Laras memaksamu memegang gulungan benang sementara ia berlari menarik layangannya. Kalian tertawa sampai lupa waktu.
+batas   = 1
+
+# ----- Lapangan -----
+
+[main_bola]
+lokasi  = lapangan
+nama    = Main bola bersama Bayu
+ikon    = ⚽
+tempat  = desa
+waktu   = pagi, siang, sore
+durasi  = 1,5 jam
+bersama = bayu
+efek    = energi -18, hidrasi -15, kewarasan +10, kesehatan +1, cinta_bayu +2, latihan_bola_bebas +1
+teks    = Debu lapangan beterbangan. Bayu menggiring bola melewati tiga anak kecil sekaligus, lalu sengaja mengopernya padamu. "Tendang, {nama}!"
+batas   = 1
+
+[lari_sore]
+lokasi = lapangan
+nama   = Lari keliling lapangan
+ikon   = 🏃
+tempat = desa
+waktu  = pagi, sore
+durasi = 45 menit
+efek   = energi -10, hidrasi -12, kesehatan +3, kewarasan +5
+teks   = Lima putaran. Napasmu terengah, tapi angin laut dari arah dermaga terasa sejuk di wajah.
+batas  = 1
+
+[duduk_ketapang]
+lokasi = lapangan
+nama   = Duduk di bawah pohon ketapang
+ikon   = 🌳
+tempat = desa
+waktu  = siang, sore
+durasi = 45 menit
+efek   = kewarasan +5
+teks   = Daun-daun ketapang yang memerah berguguran pelan. Dari sini kamu bisa melihat anak-anak bermain, dan mercusuar tua di kejauhan.
+batas  = 1
+
+# ----- Dermaga -----
+
+[dermaga]
+lokasi = dermaga
+nama   = Duduk di dermaga mercusuar
+ikon   = 🌅
+tempat = desa
+waktu  = sore, malam
+durasi = 1,5 jam
+efek   = kewarasan +12, energi -5
+teks   = Angin laut menyentuh wajahmu. Mercusuar tua itu masih berdiri, sama seperti dulu... hanya saja kali ini kamu duduk sendirian.
+batas  = 1
+
+[memancing]
+lokasi = dermaga
+nama   = Memancing di ujung dermaga
+ikon   = 🎣
+tempat = desa
+waktu  = pagi, sore
+durasi = 1,5 jam
+efek   = energi -6, kewarasan +7, keahlian_laut +1
+teks   = Pelampung kecilmu terayun-ayun. Setelah lama menunggu, seekor ikan kakap kecil menyambar umpan. Malam ini lauk tambahan untuk Ibu.
+batas  = 1
+
+[siapkan_perahu]
+lokasi  = dermaga
+nama    = Membantu Ayah menyiapkan perahu
+ikon    = ⛵
+tempat  = desa
+waktu   = malam
+durasi  = 30 menit
+bersama = ayah
+efek    = energi -6, cinta_ayah +3, keahlian_laut +1
+teks    = Kamu menggulung tali dan mengisi jeriken solar. Ayah memeriksa langit barat lama sekali sebelum mengangguk. "Aman malam ini." Perahunya perlahan menjauh, lampunya mengecil di tengah laut.
+batas   = 1
+
+[melaut]
+lokasi = dermaga
+nama   = Ikut perahu Pak Karta melaut subuh
+ikon   = 🚣
+tempat = desa
+waktu  = pagi
+durasi = 5 jam
+mulai  = 04:00-05:00
+syarat = kenal_bayu == 1
+efek   = energi -40, uang +40000, hidrasi -20, kenyang -10, kewarasan -3, keahlian_laut +1, cinta_bayu +1
+teks   = Pak Karta, bapak Bayu, menyalakan mesin perahu sebelum subuh. Ombak sedang tinggi. Tanganmu lecet menarik jaring, tapi bagi hasil hari ini lumayan.
+batas  = 1
+
 [istirahat_kos]
 lokasi = kos
 nama   = Istirahat sebentar di kos
@@ -125,6 +358,21 @@ batas  = 2
 jeda   = 3 jam
 teks   = Kamu berbaring di kasur tipis kamar kos, memandangi langit-langit sampai matamu terpejam.
 teks_ulang = Kamu berbaring lagi. Kamar kos sepi sekali. Badanmu memang butuh istirahat, tapi rasanya hari ini terbuang begitu saja.
+
+# ----- Gudang ikan -----
+
+[bayar_cicilan]
+lokasi  = gudang_ikan
+nama    = Bayar cicilan perahu Ayah (Rp100.000)
+ikon    = 💵
+tempat  = desa
+waktu   = pagi, siang
+durasi  = 15 menit
+bersama = darto
+syarat  = adegan_b3_darto_hutang == 1 && uang >= 100000 && cicilan_perahu < 1200000
+efek    = uang -100000, cicilan_perahu +100000, percaya_darto +2
+teks    = Juragan Darto menghitung lembaran uangmu, lalu mencatatnya di buku kecil. "Atas nama Darman. Sudah saya catat." Di bawah namamu, angka hutang itu berkurang sedikit demi sedikit.
+batas   = 1
 
 # ---------------- KOTA SAKALA ----------------
 
