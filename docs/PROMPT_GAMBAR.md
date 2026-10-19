@@ -204,6 +204,78 @@ Slim build, tanned skin, short black hair, faint mustache, warm smile resembling
 Wearing a simple white t-shirt under an open checkered flannel shirt, holding a small turtledove (perkutut) on his hand.
 ```
 
+### Tokoh baru Bab 4 — `wulan` (desa) dan tokoh kota `ratmi`, `hartini`, `bram`, `rahma`, `reno`, `tiara`, `sum`, `hendra`, `tini`, `raka_dewasa`
+Tempel blok gaya + tambahan karakter (bagian 2), lalu deskripsi di bawah. Ekspresi minimal `senyum`; yang punya adegan sedih/marah tambah ekspresinya
+(tertulis di tiap tokoh).
+
+Kak Wulan — tutor Paket C di PKBM kecamatan (`wulan.png`) · + `senyum`
+```
+Indonesian young woman, 24 years old, volunteer tutor at a community learning center, patient, warm and encouraging.
+Slim build, light tan skin, shoulder-length straight black hair tucked behind one ear, round friendly face, small silver earrings.
+Wearing a white blouse under a light green cardigan, a lanyard with a name card, holding a stack of worn textbooks.
+```
+Bu Ratmi — ibu kos Kampung Rel Utara (`ratmi.png`) · + `senyum`, `kesal`
+```
+Indonesian woman, 58 years old, landlady of a cheap boarding house beside the railway, chatty and bossy but kind-hearted, retired railway clerk's widow.
+Short plump build, tanned skin, permed short greying hair, reading glasses hanging on a beaded chain, a faint laugh line.
+Wearing a colorful batik daster (house dress), plastic sandals, a bunch of keys clipped at her waist.
+```
+Bu Hartini — ibu kos Melati, kawasan Cendana (`hartini.png`) · + `senyum`, `kesal`
+```
+Indonesian woman, 52 years old, strict landlady of a clean student boarding house, disciplined and proper, rarely smiles but fair.
+Tall thin build, light skin, neat hair in a tight bun, thin eyebrows, sharp eyes.
+Wearing a pressed light purple long-sleeve blouse, a long dark skirt, a small notebook of house rules in her hand.
+```
+Mas Bram — resepsionis Sakala Residence (`bram.png`) · + `senyum`
+```
+Indonesian young man, 27 years old, receptionist of an upscale boarding residence, polite, smooth-talking and calculating.
+Average build, light brown skin, neatly styled short hair with pomade, clean-shaven, professional smile.
+Wearing a fitted navy blazer over a white shirt, a name badge "BRAM", holding a tablet.
+```
+Bu Rahma — wali kelas X-3, guru Bahasa Indonesia (`rahma.png`) · + `senyum`, `kesal`, `sedih`
+```
+Indonesian female teacher, 45 years old, homeroom teacher, firm but caring, observant.
+Medium build, light tan skin, kind but serious face, thin rectangular glasses.
+Wearing a dark green hijab and an Indonesian civil-servant teacher uniform (khaki long-sleeve shirt with name tag), holding a register book.
+```
+Reno — teman sekelas, anak orang kaya (`reno.png`) · + `senyum`, `kesal`, `malu`
+```
+Indonesian teenage boy, 15 years old, rich classmate, show-off and loud but not cruel, secretly insecure.
+Tall, light skin, trendy undercut hairstyle, smirk, an expensive smartwatch on his wrist.
+Wearing an Indonesian public high school uniform (white short-sleeve shirt, grey trousers) with branded sneakers and a designer backpack strap.
+```
+Kak Tiara — ketua OSIS, pemandu MPLS (`tiara.png`) · + `senyum`, `kesal`
+```
+Indonesian teenage girl, 17 years old, student council president, energetic, bossy during orientation but kind.
+Medium height, light tan skin, high ponytail, confident eyes, a whistle on a lanyard.
+Wearing an Indonesian high school uniform (white short-sleeve shirt, grey skirt) with a dark blue student council armband, holding a clipboard.
+```
+Bu Sum — ibu Dimas, penjual nasi uduk (`sum.png`) · + `senyum`, `sedih`
+```
+Indonesian woman, 44 years old, single mother selling coconut rice (nasi uduk) by the railway, tired but warm and proud of her son.
+Thin build, tanned skin, faint wrinkles, gentle smile.
+Wearing a simple maroon headscarf, a faded floral blouse, an apron, holding a wooden rice paddle.
+```
+Pak Hendra — ayah Nadia, pemilik toko buku (`hendra.png`) · + `senyum`, `sedih`
+```
+Indonesian man, 50 years old, owner of an old bookshop in front of the central station, quiet, gentle, a little lonely.
+Slim build, light skin, greying hair parted to the side, thick-rimmed glasses, a pencil behind his ear.
+Wearing a brown knitted vest over a white long-sleeve shirt, sleeves rolled, holding an old hardcover book.
+```
+Bu Tini — pemilik warung makan (`tini.png`) · + `senyum`
+```
+Indonesian woman, 55 years old, owner of a busy cheap food stall, loud, motherly and generous to poor students.
+Stout build, tanned skin, round cheerful face, hair tied back with a scarf.
+Wearing a red floral blouse, an oil-stained apron, a ladle in her hand.
+```
+Bang Raka — anak Juragan Darto, kini mekanik bengkel kapal Pelabuhan (`raka_dewasa.png`) · + `sedih`, `kaget`
+(lampirkan `raka.png` dan `darto.png` sebagai referensi wajah: harus terlihat seperti Raka muda 20 tahun kemudian, mirip ayahnya)
+```
+Indonesian man, 38 years old, ship-engine mechanic at a harbor workshop, quiet, ashamed, hard-working, carrying a heavy past.
+Stocky build, sun-darkened skin, short black hair with early grey, a short beard, sharp eyes like his father, grease on his forearms.
+Wearing a stained dark blue mechanic's coverall with the top half tied around his waist, a grey t-shirt, a small turtledove tattoo on his forearm.
+```
+
 ### Juragan Darto — `darto`
 (juragan pengolahan ikan asin, 52 tahun)
 ```
@@ -557,6 +629,28 @@ BACK WALL RIGHT, fully inside the frame (around 70–80% of the image width): an
 BACK WALL LEFT: a wooden window with morning sunlight, village roofs and the sea faintly visible outside. A wall calendar and a framed family photo on the wall.
 Leave open floor space around the table for characters. Warm, cozy family breakfast mood.
 ```
+
+### Latar baru Bab 1–4 (desa & kota)
+Tempel blok gaya + tambahan background (bagian 2) di depan setiap prompt. Simpan di `app/src/main/assets/latar/`.
+
+| File | Prompt |
+|---|---|
+| `smp_desa.jpg` | `A small modest junior high school in an Indonesian fishing village, one-story buildings with green doors, a red-and-white flag pole in a sandy schoolyard, an announcement board with a paper list, coconut trees, morning light.` (mengambil SKL, Bab 1) |
+| `rumah_haji.jpg` | `The front yard of an old village elder's house in an Indonesian fishing village, a wide swept sandy yard full of fallen ketapang leaves, a bamboo rake leaning on a mango tree, a wooden boat shed on the side, a veranda with rattan chairs, afternoon.` (kerja serabutan) |
+| `rumah_sekar.jpg` | `A tiny wooden house interior used as a tailor's workshop, an old foot-pedal sewing machine by the window, piles of fabric and school uniforms on a table, a measuring tape and scissors, a hanging lamp, warm late-afternoon light.` |
+| `pasar_malam.jpg` | `A small night market on a village dirt field in Indonesia, a colorful old Ferris wheel and merry-go-round with string lights, food stalls with smoke, families walking, night sky with stars.` (Bab 3) |
+| `pkbm.jpg` | `A simple community learning center classroom in an Indonesian sub-district town, plastic chairs, a whiteboard with handwritten math, posters about equivalency exams (Paket C), a ceiling fan, afternoon light.` |
+| `stasiun_desa_pamit.jpg` (CG) | `A small rural Indonesian train station platform in the morning, a train arriving, a crowd of families saying goodbye to teenagers with big bags, emotional atmosphere, seen from a distance, no clear faces.` |
+| `kereta_dalam.jpg` | `Inside an Indonesian economy-class train carriage, blue seats facing each other, a window showing rice fields and coastline passing by, bags on the luggage rack, warm afternoon light.` |
+| `pasar_lama.jpg` | `A crowded traditional market in a big Indonesian city, narrow aisles with vegetable and fish stalls, hanging lamps, plastic tarps, motorbikes squeezing through, busy morning.` |
+| `pelabuhan.jpg` | `A busy city harbor in Indonesia at late afternoon, cargo ships and rusty fishing boats, cranes, stacked containers, a ship-engine repair workshop with an open garage on the left, workers in coveralls.` |
+| `bengkel_kapal.jpg` | `Inside a small ship-engine repair workshop at a harbor, a big disassembled boat engine on the floor, tools on the wall, an empty bamboo birdcage hanging near the door, oil stains, late afternoon light through the doorway.` |
+| `kolong_jembatan.jpg` | `Under a concrete highway bridge near a city harbor at dusk, a large fresh mural on the pillar showing a white lighthouse and two small children sitting on a wooden pier, a tiny signature "A." in the corner, graffiti around, puddles reflecting the mural.` |
+| `sma_lapangan.jpg` | `The courtyard of an Indonesian public high school, a flag pole with the red-and-white flag, students' classrooms around on two floors, a big banyan tree, morning sun.` (MPLS, upacara 17 Agustus) |
+| `atap_kos.jpg` | `The rooftop of a cramped boarding house beside a railway in a big Indonesian city at night, laundry lines, water tanks, a plastic chair, city lights and fireworks in the sky, a train passing below.` |
+| `asrama_sekar.jpg` | `A neat dormitory room of an elite high school, two beds, two study desks with lamps, a window with city lights, very tidy, slightly cold atmosphere, evening.` (opsional) |
+| `warung_bu_tini.jpg` | `A busy cheap food stall (warung makan) in a city alley, a glass display of dishes, wooden benches, a sink full of dirty plates in the back, steam and warm light, evening.` |
+| `rumah_dimas.jpg` | `A small house squeezed beside a railway track in a dense city kampung, a nasi uduk stall in front, the red spray-painted word "BONGKAR" on the wall, laundry, a train passing close, afternoon.` |
 
 ### Gambar latar + orang untuk menjelajah (desa)
 Saat waktu bebas, latar berganti otomatis sesuai siapa yang sedang ada di lokasi itu. Satu gambar = latar + semua orang
