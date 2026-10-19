@@ -178,7 +178,7 @@ disita → Darto diam-diam merasa bersalah. Menghubungkan Darto, Raka, dan sahab
 
 ---
 
-## 5b. Solusi yang DISETUJUI pemilik (19 Okt 2026) — ✅ semua diterapkan di build 49
+## 5b. Solusi yang DISETUJUI pemilik (19 Okt 2026) — ✅ semua diterapkan di build 56
 
 Semua usulan diterima (termasuk usul pengikat Darto–keluarga sahabat & pengurangan kiriman). Solusi tiap masalah:
 1. **Jadwal libur Laras** (± 27 Juni – 12 Juli): bangun siang, bantu warung pagi, lapangan siang, sore–malam seperti biasa; otomatis di tanggal libur;
