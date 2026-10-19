@@ -124,6 +124,40 @@ Long straight black hair with a simple dark purple headband, thin round glasses,
 Wearing a lavender cardigan over a white t-shirt, holding a book against her chest.
 ```
 
+### Tokoh tambahan desa (rancangan Bab 1–2 baru) — `karta`, `usman`, `yati`, `haji`, `wati`
+Ekspresi: cukup `senyum` (Pak Karta & Bu Wati + `sedih`). Prioritas: karta ★, usman ★, yati ★, haji ☆, wati ○.
+
+Pak Karta — bapak Bayu (`karta.png`)
+```
+Indonesian fisherman, 46 years old, father of five, hardworking and kind but tired, gentle smile.
+Lean wiry build, deeply sun-tanned skin, short black hair with some grey, light stubble, rough hands.
+Wearing a faded orange long-sleeve fishing shirt with sleeves rolled up, a checkered towel around his neck.
+```
+Pak Usman — buruh senior gudang (`usman.png`)
+```
+Indonesian old laborer, 62 years old, senior worker at a dried-fish warehouse, wise and humorous.
+Thin and bony, dark tanned wrinkled skin, short white hair, white stubble, a few missing teeth when smiling, a clove cigarette tucked behind his ear.
+Wearing a worn white singlet under an open faded blue short-sleeve shirt, trousers rolled up to the knees.
+```
+Mbak Yati — buruh gudang (`yati.png`)
+```
+Indonesian woman, 30 years old, cheerful dried-fish warehouse worker, talkative and playful.
+Small slim build, tanned skin, black hair tied in a low bun, bright lively eyes, a wide woven bamboo farmer's hat (caping) hanging on her back.
+Wearing a long-sleeve pink floral blouse, an apron stained with salt, rubber gloves tucked in the apron pocket.
+```
+Pak Haji Somad — tetua desa (`haji.png`)
+```
+Indonesian elderly man, 68 years old, respected village elder, calm and talkative storyteller.
+Slightly plump, light brown skin, short neat white beard, kind wrinkled eyes behind old reading glasses.
+Wearing a white peci (skullcap), a light grey koko shirt, a checkered sarong, prayer beads in one hand.
+```
+Bu Wati — ibu Sekar (`wati.png`)
+```
+Indonesian woman, 43 years old, widowed seamstress, gentle, tired and proud of her daughter.
+Thin build, light tan skin, kind face with faint dark circles, squinting slightly because her eyesight is weakening.
+Wearing a simple dusty-blue headscarf (kerudung), a long-sleeve brown blouse, a measuring tape around her neck.
+```
+
 ### Juragan Darto — `darto`
 (juragan pengolahan ikan asin, 52 tahun)
 ```
@@ -507,7 +541,7 @@ Use the FIRST attached image as the exact background and keep it pixel-identical
 | `gudang_ikan__darto.jpg` (gudang_ikan + darto) | `The fish boss stands near the drying racks on the LEFT, hands on his hips, supervising, a small notebook in his shirt pocket.` |
 | `lapangan__bayu.jpg` (lapangan + bayu) | `The teenage boy dribbles a worn plastic football on the RIGHT side of the dirt field, barefoot, grinning.` |
 | `lapangan__laras.jpg` (lapangan + laras) | `The little girl (11 years old) runs on the LEFT side of the field holding a kite string, a colorful kite high in the sky.` |
-| `dermaga__sekar.jpg` (dermaga + sekar) | `The girl in a blue hijab sits at the edge of the wooden pier on the LEFT, legs dangling over the water, reading a worn novel.` |
+| `dermaga__sekar.jpg` (dermaga + sekar) | `The teenage girl with long black hair, a dark purple headband and round glasses sits at the edge of the pier on the LEFT, legs dangling over the water, reading a worn novel.` |
 | `dermaga__bayu.jpg` (dermaga + bayu) | `The teenage boy sits at the edge of the pier on the RIGHT, holding a bamboo fishing rod, a small bucket beside him.` |
 | `dermaga__ayah.jpg` (dermaga + ayah) | `Dusk. The father stands in the MIDDLE beside his small faded-blue wooden fishing boat, coiling a mooring rope, looking at the western sky.` |
 

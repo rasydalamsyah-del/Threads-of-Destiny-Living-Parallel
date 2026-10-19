@@ -247,6 +247,47 @@ yang sudah ada). Jalur desa: Sabtu 11 Juli mengantar teman-teman di stasiun (mom
   jaga anak tetangga, jemur jaring nelayan lain — kadang dengan cerita kecil.
 - Bab 1 fokus membangun hubungan + 1–2 cerita sampingan kecil; cerita besar (Laras diejek, hutang Ayah) tetap di Bab 2.
 
+## 6b. RANCANGAN BARU lanjutan (disetujui 19 Okt 2026, BELUM dibuat) — timeline mulai 1 Juni, Bab 2 tiga minggu
+
+**Timeline baru** (menggantikan tanggal di 6a): cerita dimajukan supaya pemain jalur kota juga lama di desa (± 6 minggu).
+| Bagian | Tanggal |
+|---|---|
+| Bab 1 — Lulus SMP (isi sama seperti 6a; Ibu menyebut batas pendaftaran **Jumat 26 Juni**) | Senin 1 – Rabu 3 Juni |
+| Bab 2 — Mencari Pegangan (semua pemain) | Kamis 4 – Jumat 26 Juni |
+| **Keputusan final kota/desa** | Jumat 26 Juni |
+| Jalur kota: persiapan & pamitan | 27 Juni – Sabtu 11 Juli (berangkat) |
+| Jalur desa: Bab 3 & 4 (dirancang ulang) | 27 Juni – 17 Agustus |
+
+**Bab 2 per minggu**
+- **Minggu 1 (4–7 Juni) — beradaptasi:** hari pertama kerja 🔀 teliti/cepat/beralasan · warung sepi 🔀 ide untuk Ibu ·
+  kerja serabutan pertama (halaman Pak Haji → cerita mercusuar) · Minggu malam gaji pertama 🔀 untuk Ibu.
+- **Minggu 2 (8–14 Juni) — mengenal lebih dalam:** Laras diejek 🔀 hibur/adukan/datangi · simpul jaring & Ayah putus sekolah ·
+  Sekar: beasiswa & mata ibunya · perkutut Darto · Sabtu malam bakar ikan 🔀 rahasia Bayu (bantu/ledek/simpan).
+- **Minggu 3 (15–21 Juni) — rahasia keluarga:** bisik-bisik hutang perahu 🔀 tanya/pura-pura/janji · bicara dengan Darto 🔀
+  bayar sebagian/lembur/minta waktu · utang bapak Bayu · Ibu & kampung halamannya (+ alasan keluarga sahabat pergi bila percaya tinggi) ·
+  Si Belang hilang.
+- **Minggu 4 (22–26 Juni) — memilih:** tiap orang membicarakan pilihan pemain (Laras merengek, Ayah di dermaga, Bayu, Darto & kisah Raka
+  sebagai peringatan) · berkas pendaftaran (bila condong kota) · Sekar memutuskan 🔀 pergi/tinggal/tanya ibumu ·
+  **Jumat 26 Juni: keputusan final** 🔀 kota (+ hemat / kerja diam-diam / terus terang) / desa.
+- Prinsip: tiap karakter desa minimal 2–4 adegan di Bab 2 (ada yang sore/malam supaya pemain yang bekerja bisa menemui);
+  kebiasaan keluarga malam hari memunculkan obrolan kecil.
+- Isi Bab 3 desa lama (hutang, Sekar, utang Bayu, cerita Ibu) pindah ke Bab 2 → **Bab 3 & 4 desa dirancang ulang**.
+
+**Desa tetap hidup walau pemain di kota** (pemain kota mengalaminya dari jauh):
+Ibu sakit (telepon Laras; kirim uang / pulang dengan risiko bolos) · Darto menagih (chat Ibu; kirim uang) · malam badai 7 Agustus
+(telepon tengah malam, menunggu kabar) · lomba layangan Laras (video call; janji layangan sebelum berangkat) · mercusuar menyala
+(foto di Sosmed + pesan misterius) · libur semester & Lebaran: pulang kampung dengan adegan khusus.
+
+**Romansa Sekar–Bayu:** di desa (15 th) hanya persahabatan; Bayu bisa cemburu biasa bila pemain akrab dengan Sekar.
+Setelah 18+: pemain boleh mendekati Sekar diam-diam, tapi **tidak dijamin aman** — bisa ketahuan (dilihat Bayu, gosip, chat, Sekar mengaku).
+Ending: *Rahasia yang Terjaga* / *Persahabatan yang Retak*; atau jujur ke Bayu sejak awal / membantu Bayu.
+
+**Perbaikan yang harus ikut dibuat:** Sekar di naskah ditulis "berkerudung biru" — SALAH. Sekar: rambut hitam panjang, bando ungu,
+kacamata bulat, kardigan lavender. Perbaiki naskah & prompt `dermaga__sekar.jpg`.
+
+**Tokoh tambahan bergambar (prompt di PROMPT_GAMBAR.md):** Pak Karta (`karta`, bapak Bayu) ★ · Pak Usman (`usman`) ★ · Mbak Yati (`yati`) ★ ·
+Pak Haji Somad (`haji`) ☆ · Bu Wati (`wati`, ibu Sekar) ○. Dino (pengejek Laras) tanpa gambar.
+
 ## 7. Bab 1 — Lulus SMP (Senin 22 Juni)
 
 Alur utama (sudah ada): kenangan → bangun → jalan ke ruang makan → sarapan → Laras berangkat → buka warung →
