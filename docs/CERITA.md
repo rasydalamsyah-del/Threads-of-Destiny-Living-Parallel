@@ -217,6 +217,36 @@ Jalur kota tetap: prolog → Sabtu 11 Juli berangkat ke Sakala.
 
 ---
 
+## 6a. RANCANGAN BARU (disetujui 19 Okt 2026, BELUM dibuat di game) — Bab 1 jadi 3 hari, keputusan kota/desa mundur
+
+> Dibuat bersama Bab 2 setelah Bab 2 selesai dibahas, karena saling menyambung.
+
+**Inti:** pertanyaan Ibu tetap di hari pertama, tapi **keputusan final dimundurkan ke Jumat 3 Juli** (batas pendaftaran SMA Sakala).
+Semua pemain menjalani desa dulu. Jalur kota: seminggu persiapan & pamitan, berangkat **Sabtu 11 Juli** (sama dengan cerita kota
+yang sudah ada). Jalur desa: Sabtu 11 Juli mengantar teman-teman di stasiun (momen paralel).
+
+**Bab 1 — Lulus SMP (Senin 22 – Rabu 24 Juni)**
+- **Senin:** kenangan → bangun → sarapan → buka warung → Ibu bertanya. 🔀 Jawaban **sementara**: *kota / desa / belum tahu*
+  (`condong`); Ibu: "Pendaftaran tutup Jumat 3 Juli, pikirkan dulu." Pesan misterius. Waktu bebas: bicara dengan Ayah
+  (tanggapan sesuai `condong`; cabang kota menangkap Ayah menyembunyikan sesuatu = benih hutang; cabang desa membuka Paket C;
+  semua cabang: Rabu ke gudang Darto), 🔀 seribu untuk Laras, Bayu (sesuai `condong`, menyebut beasiswa Sekar),
+  makan malam (🔀 "Kakak belum memutuskan" / "Kakak nggak ke mana-mana" → bisa jadi kebohongan ke Laras), Ayah di dermaga
+  (🔀 "Menurut Ayah aku harus bagaimana?" / "Ayah mau aku di sini, kan?").
+- **Selasa:** mengenal desa — kenal Sekar (juga bimbang soal beasiswa), Bayu di lapangan/dermaga, cerita sampingan kecil
+  (mis. Si Belang hilang dicari bersama Laras; Pak Haji minta halamannya dibersihkan lalu bercerita soal mercusuar).
+- **Rabu:** gudang Juragan Darto. 🔀 Wawancara (jujur / sok tahu / diam) → diterima (gudang) / ditolak (perahu Pak Karta).
+  Pemain condong kota bisa bilang "kerja sementara selama liburan". Bab 1 selesai.
+- Percabangan Bab 1: jawaban ke Ibu, janji seribu ke Laras, wawancara Darto (+ pilihan kecil di adegan waktu bebas).
+
+**Keputusan lain yang sudah disetujui**
+- Pilihan uang jalur kota (hemat / kerja diam-diam / terus terang) pindah ke keputusan final 3 Juli.
+- Sekar: bila pemain & Sekar sama-sama memilih kota → **berangkat bersama** Sabtu 11 Juli. Tidak ada versi Sekar duluan/belakangan.
+- Kerja di gudang lalu ke kota: adegan pamit ke Darto (kecewa karena Raka / menitip foto Raka; bila dulu bilang "kerja tetap" →
+  merasa dibohongi, Kepercayaan turun).
+- **Kerja serabutan** sesekali (Rp10.000–25.000): bersihkan halaman Pak Haji, angkat karung kios beras, cat pagar balai desa,
+  jaga anak tetangga, jemur jaring nelayan lain — kadang dengan cerita kecil.
+- Bab 1 fokus membangun hubungan + 1–2 cerita sampingan kecil; cerita besar (Laras diejek, hutang Ayah) tetap di Bab 2.
+
 ## 7. Bab 1 — Lulus SMP (Senin 22 Juni)
 
 Alur utama (sudah ada): kenangan → bangun → jalan ke ruang makan → sarapan → Laras berangkat → buka warung →
