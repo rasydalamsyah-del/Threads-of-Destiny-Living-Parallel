@@ -284,6 +284,150 @@ lokasi = ruang_tengah
 waktu  = setiap hari 18:30-20:30
 syarat = bab >= 3 && jalur == kerja && adegan_b3_laras_gelang == 1
 
+# ---------------- BAB 4 KOTA — Kota yang Tak Pernah Tidur (11 Juli – 17 Agustus) ----------------
+#  Kamar kos: Rel Utara = kos_kamar · Melati = kos_cendana · Residence = kos_pusat
+
+[k4_harga]
+naskah = adegan_kota.txt
+judul  = Pasar Lama: kaget harga, belanja perlengkapan kos
+lokasi = pasar_lama
+syarat = kota_bab == 4
+
+[k4_ratmi]
+naskah = adegan_kota.txt
+judul  = Bu Ratmi & foto masinis
+lokasi = kos_kamar
+waktu  = setiap hari 15:00-21:00
+syarat = kota_bab == 4 && kos_pilih == rel_utara
+
+[k4_hartini]
+naskah = adegan_kota.txt
+judul  = Sarapan dari Bu Hartini
+lokasi = kos_cendana
+waktu  = setiap hari 06:00-09:00
+syarat = kota_bab == 4 && kos_pilih == cendana
+
+[k4_bram]
+naskah = adegan_kota.txt
+judul  = Nasihat Mas Bram
+lokasi = kos_pusat
+syarat = kota_bab == 4 && kos_pilih == residence
+
+[k4_mpls_ttd]
+naskah = adegan_kota.txt
+judul  = MPLS: tanda tangan kakak kelas
+lokasi = kelas_sma
+waktu  = senin-sabtu 07:00-14:00
+syarat = kota_bab == 4 && tgl >= 714 && tgl <= 715
+
+[k4_reno_ejek]
+naskah = adegan_kota.txt
+judul  = Reno: "anak ikan asin"
+lokasi = kelas_sma
+waktu  = senin-sabtu 07:00-14:00
+syarat = kota_bab == 4 && tgl >= 714 && tgl <= 718
+
+[k4_rahma_bolos]
+naskah = adegan_kota.txt
+judul  = Bu Rahma memanggil soal bolos MPLS
+lokasi = kelas_sma
+waktu  = senin-sabtu 07:00-14:00
+syarat = kota_bab == 4 && bolos_mpls == 1 && tgl >= 716
+
+[k4_ketua_kelas]
+naskah = adegan_kota.txt
+judul  = Pemilihan ketua kelas: Nadia vs Reno
+lokasi = kelas_sma
+waktu  = senin-sabtu 07:00-14:00
+syarat = kota_bab == 4 && tgl >= 716 && tgl <= 718
+
+[k4_dimas_kerja]
+naskah = adegan_kota.txt
+judul  = Dimas mengajak melihat kerjanya (kurir / cuci piring / fokus sekolah)
+orang  = dimas
+syarat = kota_bab == 4 && tgl >= 716
+
+[k4_sekar_taman]
+naskah = adegan_kota.txt
+judul  = Sekar di Taman Kota (novel dari Bayu)
+lokasi = taman_kota
+waktu  = sabtu-minggu 10:00-18:00
+syarat = kota_bab == 4 && bareng_sekar == 1 && tgl >= 718 && tgl <= 726
+
+[k4_dimas_malam]
+naskah = adegan_kota.txt
+judul  = Dimas masih mengayuh sepeda paket malam-malam
+lokasi = kota_besar
+waktu  = setiap hari 20:00-22:30
+syarat = kota_bab == 4 && tgl >= 720 && tgl <= 726
+
+[k4_reno_mal]
+naskah = adegan_kota.txt
+judul  = Ajakan Reno ke mal
+lokasi = kota_besar
+waktu  = sabtu 11:00-18:00
+syarat = kota_bab == 4 && tgl >= 720 && reno_sikap != jauh
+
+[k4_dimas_gusur]
+naskah = adegan_kota.txt
+judul  = Rumah Dimas akan digusur
+lokasi = kelas_sma
+waktu  = senin-sabtu 07:00-14:00
+syarat = kota_bab == 4 && tgl >= 728 && tgl <= 801
+
+[k4_nadia_ibu]
+naskah = adegan_kota.txt
+judul  = Nadia & panggilan video ibunya
+lokasi = toko_buku
+syarat = kota_bab == 4 && tgl >= 727
+
+[k4_kos_ratmi_sakit]
+naskah = adegan_kota.txt
+judul  = Bu Ratmi sakit
+lokasi = kos_kamar
+syarat = kota_bab == 4 && kos_pilih == rel_utara && tgl >= 727
+
+[k4_kos_hartini_pagar]
+naskah = adegan_kota.txt
+judul  = Pulang lewat jam malam: pagar digembok
+lokasi = kos_cendana
+waktu  = setiap hari 22:00-23:59
+syarat = kota_bab == 4 && kos_pilih == cendana
+sekali = tidak
+
+[k4_kos_residence_tawaran]
+naskah = adegan_kota.txt
+judul  = Tawaran "kerja gampang" tetangga kamar
+lokasi = kos_pusat
+syarat = kota_bab == 4 && kos_pilih == residence && tgl >= 727
+
+[k4_sekar_peringkat]
+naskah = adegan_kota.txt
+judul  = Sekar kewalahan di kelas unggulan
+lokasi = taman_kota
+waktu  = sabtu-minggu 10:00-18:00
+syarat = kota_bab == 4 && bareng_sekar == 1 && tgl >= 727
+
+[k4_raka_bengkel]
+naskah = adegan_kota.txt
+judul  = Misi Raka: bengkel kapal Pelabuhan
+lokasi = pelabuhan
+waktu  = senin-sabtu 08:00-17:00
+syarat = kota_bab == 4 && foto_raka == 1 && tgl >= 725
+
+[k4_mural]
+naskah = adegan_kota.txt
+judul  = Mural mercusuar "A." di kolong jembatan
+lokasi = pelabuhan
+syarat = kota_bab == 4 && tgl >= 803
+
+[k4_lomba]
+naskah = adegan_kota.txt
+judul  = Persiapan lomba tujuh belasan kelas
+lokasi = kelas_sma
+waktu  = senin-sabtu 07:00-14:00
+syarat = kota_bab == 4 && tgl >= 810 && tgl <= 815
+
 # ---------------- BAB 4 DESA — Tujuh Belasan (20 Juli – 17 Agustus) ----------------
 
 [b4_bola_ajak]

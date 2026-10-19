@@ -179,6 +179,32 @@ class StoryTimelineTest {
         with(m.at("Satu minggu pertama")) { assertEquals("18/7", date); assertEquals("Sabtu", weekday); assertEquals("15:00", clock) }
         with(m.at("Minggu kedua di Kota Sakala")) { assertEquals("20/7", date); assertEquals("Senin", weekday) }
         with(m.at("Sabtu sore")) { assertEquals("25/7", date); assertEquals("15:00", clock) }
+        with(m.at("Minggu, 19 Juli 2026")) { assertEquals("19/7", date); assertEquals("20:00", clock) }
+        with(m.at("Senin, 3 Agustus 2026")) { assertEquals("3/8", date); assertEquals("20:00", clock) }
+        with(m.at("Jumat, 7 Agustus 2026")) { assertEquals("7/8", date); assertEquals("23:00", clock) }
+        with(m.at("Sabtu, 8 Agustus 2026")) { assertEquals("8/8", date) }
+        with(m.at("Jumat, 14 Agustus 2026")) { assertEquals("14/8", date); assertEquals("20:00", clock) }
+        with(m.at("Senin, 17 Agustus 2026")) { assertEquals("17/8", date); assertEquals("07:00", clock) }
+    }
+
+    @Test fun cityPathGoesHomeForStormAndFinal() {
+        // uang cukup: pulang saat badai (tiba Sabtu 08:00) dan pulang untuk final Bayu & tujuh belasan desa
+        val m = run(setOf("putus_kota", "uang_ortu", "kos_sedang", "tagih_kiriman", "badai_pulang", "final_pulang"),
+            startVars = mapOf("uang" to "5000000"))
+        assertConsistent(m)
+        with(m.at("Sabtu, 8 Agustus 2026")) { assertEquals("8/8", date); assertEquals("08:00", clock) }
+        with(m.at("Minggu, 16 Agustus 2026")) { assertEquals("16/8", date); assertEquals("15:00", clock) }
+        with(m.at("Senin, 17 Agustus 2026")) { assertEquals("17/8", date); assertEquals("19:30", clock) }
+    }
+
+    @Test fun cityPathStaysForIndependenceDay() {
+        // tetap di kota saat final Bayu: upacara 17 Agustus di sekolah, malam di kota
+        val m = run(setOf("putus_kota", "uang_ortu", "kos_murah", "tagih_kiriman", "final_kota", "badai_tunggu"))
+        assertConsistent(m)
+        with(m.at("Jumat, 7 Agustus 2026")) { assertEquals("23:00", clock) }
+        with(m.at("Sabtu, 8 Agustus 2026")) { assertEquals("06:00", clock) }
+        with(m.at("Senin, 17 Agustus 2026")) { assertEquals("17/8", date); assertEquals("07:00", clock) }
+        with(m.at("Malam tujuh belasan")) { assertEquals("17/8", date); assertEquals("19:30", clock) }
     }
 
     @Test fun cityPathFromBoat() {

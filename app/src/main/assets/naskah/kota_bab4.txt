@@ -1,44 +1,154 @@
 # ==========================================================
 #  THREADS OF DESTINY: LIVING PARALLEL
 #  Naskah: BAB 4 KOTA — KOTA YANG TAK PERNAH TIDUR · Sabtu 11 Juli – Senin 17 Agustus 2026
-#  (sementara berisi cerita kota lama; diperluas sesuai docs/ALUR_BAB4.md)
+#  Alur: docs/ALUR_BAB4.md · Adegan waktu bebas: adegan_kota.txt (data/adegan.txt, k4_*)
+#  {nama_sahabat} = nama sahabat masa kecil (Arka / Alya, menyesuaikan pemain)
 # ==========================================================
 
 @sembunyi semua
 @atur bab = 4
+@atur kota_bab = 4
+
+
+# ==========================================================
+#  MINGGU 0 — TIBA (Sabtu 11 – Minggu 12 Juli)
+# ==========================================================
+
 @gelap 1500
 @waktu Kota Sakala
 @lokasi kota
 @kalender Sabtu siang
-@latar kota_besar
+@latar stasiun_besar
 @terang 1500
+* Stasiun Besar Sakala. Bising. Ribuan orang, pengumuman bersahutan, roda koper bergemuruh di lantai keramik.
+* Di Tanjung Lentera, kamu kenal hampir semua orang. Di sini, tidak ada satu pun wajah yang menoleh padamu.
+@jika bareng_sekar == 1 -> tiba_sekar
+@lompat tiba_kota
+
+:: tiba_sekar
+@tampil sekar sedih
+* Seorang guru berseragam batik mengangkat papan bertuliskan "ASRAMA SMA UNGGULAN SAKALA". Sekar menggenggam tali tasnya erat-erat.
+Sekar: Itu jemputanku. ...Jadi kita pisah di sini, ya.
+@pilihan
+> "Tiap Minggu kita ketemu di Taman Kota. Janji." -> sekar_janji_minggu
+> "Kabari aku kalau sempat, ya." -> sekar_kabari
+
+:: sekar_janji_minggu
+@atur janji_sekar_minggu = 1
+@tampil sekar senyum
+Sekar: Tiap Minggu. Jam empat sore. Kalau aku telat, berarti asramanya galak.
+@cinta sekar +4
+@catatan Janji dengan Sekar: setiap Minggu sore di Taman Kota.
+@lompat sekar_pisah
+
+:: sekar_kabari
+Sekar: ...Iya. Kalau sempat.
+* Ia tersenyum, tapi kamu melihat sesuatu yang padam di matanya.
+
+:: sekar_pisah
+* Sekar melambai sekali, lalu hilang di antara rombongan siswa berseragam. Sendirian lagi.
+@sembunyi sekar
+
+:: tiba_kota
+@latar kota_besar
 * Kota Sakala. Gedung-gedung menjulang, klakson bersahutan, orang-orang berjalan cepat tanpa saling menyapa.
 {nama}: Jadi... ini kota yang dulu kami janjikan.
-* Hal pertama yang harus {nama} cari: tempat tinggal.
-* Ada tiga kos yang ditawarkan di papan pengumuman stasiun.
+* Hal pertama yang harus kamu cari: tempat tinggal. Tiga kos dari info panitia. Foto di HP tidak selalu sama dengan aslinya.
 
+
+# ---------- Survei kos 1: Bu Ratmi, Rel Utara ----------
+
+@maju 30 menit
+@latar kos_kamar
+@kenal ratmi
+@tampil ratmi biasa
+* Kampung Rel Utara. Gang sempit di samping rel kereta. Di mulut gang, seorang ibu berjualan nasi uduk dari gerobak; asapnya wangi daun salam.
+* Kos Bu Ratmi: kamar 2×3 meter, kipas angin, kasur tipis. Saat kamu masuk, dinding bergetar: kereta lewat.
+Bu Ratmi: Tiap jam begitu. Nanti juga biasa. Saya dulu kerja di PJKA tiga puluh tahun, sekarang tidak bisa tidur kalau tidak ada suara kereta.
+Bu Ratmi: Empat ratus ribu sebulan. Minum teh dulu, Nak. Muka kamu pucat.
 @pilihan
-> Kos Bu Ratmi, Rel Utara — Rp400.000 (murah, bising) -> kos_murah
+> "Bu, kalau saya bantu sapu halaman tiap pagi, bisa kurang?" -> ratmi_tawar
+> "Terima kasih, Bu. Saya lihat-lihat dulu." -> ratmi_lihat
+
+:: ratmi_tawar
+* Bu Ratmi menatapmu dari atas ke bawah, lalu tertawa sampai batuk.
+Bu Ratmi: Anak desa memang beda! Ya sudah. Bulan ini tiga ratus tujuh puluh lima. Bulan depan lihat dulu sapumu.
+@atur ratmi_tawar = 1
+@cinta ratmi +3
+
+:: ratmi_lihat
+@sembunyi ratmi
+
+
+# ---------- Survei kos 2: Kos Melati, Cendana ----------
+
+@maju 45 menit
+@latar kos_cendana
+@kenal hartini
+@tampil hartini biasa
+* Kawasan Cendana: jalan bersih, pohon rindang, sepuluh menit jalan kaki ke SMA Negeri 3. Kos Melati bercat putih dengan pagar besi.
+* Bu Hartini membuka pintu dan langsung membacakan selembar kertas yang ditempel di dinding.
+Bu Hartini: Aturan nomor satu: jam malam pukul sepuluh. Nomor dua: tamu lawan jenis dilarang masuk. Nomor tiga: listrik dimatikan kalau keluar kamar...
+* Ia membacakan dua belas aturan tanpa berhenti bernapas.
+Bu Hartini: Enam ratus lima puluh. Tidak bisa ditawar. Tapi termasuk teh dan roti tiap pagi.
+@sembunyi hartini
+
+
+# ---------- Survei kos 3: Sakala Residence ----------
+
+@maju 45 menit
+@latar kos_pusat
+@kenal bram
+@tampil bram senyum
+* Sakala Residence. Lobi ber-AC, lantai mengilap, aroma pengharum ruangan. Kamu tiba-tiba sadar sandalmu berdebu.
+Mas Bram: Selamat datang! Kamar dengan AC, kamar mandi dalam, Wi-Fi kencang. Satu juta tiga ratus per bulan.
+Mas Bram: Oh, dan deposit satu bulan, ya. Jadi pembayaran awal dua juta enam ratus.
+* Ia tersenyum ramah. Senyum orang yang sudah tahu jawabanmu.
+@sembunyi bram
+
+
+# ---------- Memilih kos ----------
+
+@latar kota_besar
+* Matahari mulai condong. Kakimu pegal. Waktunya memutuskan.
+@jika uang < 2600000 -> pilih_kos_biasa
+@pilihan
+> Kos Bu Ratmi, Rel Utara (murah, bising) -> kos_murah
 > Kos Melati, Cendana — Rp650.000 (tenang, dekat sekolah) -> kos_sedang
-> Sakala Residence — Rp1.300.000 (mewah) -> kos_mahal
+> Sakala Residence — Rp1.300.000 + deposit (mewah) -> kos_mahal
+
+:: pilih_kos_biasa
+* Sakala Residence jelas di luar jangkauan. Tinggal dua pilihan.
+@pilihan
+> Kos Bu Ratmi, Rel Utara (murah, bising) -> kos_murah
+> Kos Melati, Cendana — Rp650.000 (tenang, dekat sekolah) -> kos_sedang
 
 :: kos_murah
 @kos kos_rel_utara
-* Kamarnya sempit dan dindingnya bergetar setiap kereta lewat. Tapi setidaknya, ini milikmu sendiri.
+@jika ratmi_tawar != 1 -> kos_murah_akhir
+@uang +25000
+* Bu Ratmi mengembalikan selembar dua puluh ribu dan lima ribu. "Potongan. Besok pagi sapunya di belakang pintu."
+
+:: kos_murah_akhir
+@atur kos_pilih = rel_utara
+* Bu Ratmi memberimu kunci yang diikat tali rafia merah. "Kalau lapar, warung Bu Sum di mulut gang. Nasi uduknya paling enak se-Rel Utara."
 @lompat malam_pertama
 
 :: kos_sedang
 @kos kos_cendana
-* Kamarnya bersih dan wangi. Ibu kos menatapmu dari atas ke bawah. "Jam malam pukul sepuluh. Tidak ada tamu lawan jenis."
+@atur kos_pilih = cendana
+* Bu Hartini memberimu kunci dan salinan dua belas aturan. "Ditempel di pintu. Dibaca setiap hari."
 @lompat malam_pertama
 
 :: kos_mahal
 @kos kos_pusat
-* Petugas resepsionis tersenyum ramah... lalu menyebutkan harganya sekali lagi, memastikan kamu tidak salah dengar.
+@uang -1300000
+@atur kos_pilih = residence
+* Mas Bram menghitung uangmu dua kali, lalu menyerahkan kartu akses. Kamarmu wangi dan dingin. Tabunganmu tinggal sedikit.
 
 :: malam_pertama
 @latar kos_kamar
-* {nama} meletakkan tas di lantai. Untuk pertama kalinya, tidak ada suara Ibu dari dapur. Tidak ada Laras yang merecoki.
+* Kamu meletakkan tas di lantai. Untuk pertama kalinya, tidak ada suara Ibu dari dapur. Tidak ada Laras yang merecoki.
 * Di kota ini, tidak ada yang akan memasakkan makanan untukmu. Belanjalah di minimarket, dan jaga uangmu baik-baik.
 * HP-mu kini berisi aplikasi Chat, Kontak, Kalender, Lowongan, Dompet, Catatan, dan Sosmed. Buka lewat ikon HP, atau tombol 📱 HP saat waktu bebas.
 * Waktu bebasmu sampai malam (pukul 19:30).
@@ -46,18 +156,83 @@
 
 @kalender Sabtu 20:00
 @latar kos_kamar
-* Malam pertama di Kota Sakala terasa panjang.
+* Malam pertama di Kota Sakala terasa panjang. Suara kota tidak pernah berhenti: motor, televisi tetangga, pedagang nasi goreng memukul wajan.
+* Kotak sepatu dari Laras. "Jangan dibuka sebelum sampai." Sekarang kamu sudah sampai.
+* Isinya: gambar krayon keluarga kalian berempat di depan rumah, dengan mercusuar yang terlalu besar di belakang. Dua koin seribu rupiah. Dan secarik kertas: "KAKAK JANGAN LUPA MAKAN. JANGAN LUPA AKU."
+@jika janji_laras_seribu == 1 -> kotak_seribu
+@lompat kotak_akhir
+
+:: kotak_seribu
+* Dua koin seribu itu. Janji seribu rupiah di hari kelulusan. Laras mengembalikannya, ditambah satu.
+
+:: kotak_akhir
 @hp pesan Ibu | Sudah sampai, Nak? Sudah makan belum? Jangan lupa kunci pintu.
 @tunggu_hp
-* {nama} memandangi pesan Ibu lama sekali. Baru sehari pergi, rumah sudah terasa jauh.
+* Kamu memandangi pesan Ibu lama sekali. Baru sehari pergi, rumah sudah terasa jauh.
+@pilihan
+> Telepon rumah -> malam_telepon
+> Buka Sosmed, cari jejak sahabat -> malam_sosmed
+> Jalan malam melihat lampu kota -> malam_jalan
+
+:: malam_telepon
+@telepon Ibu
+Ibu: Halo? Nak? Sudah sampai? Kos-nya bagaimana? Bersih? Ada nyamuk?
+* Ibu bertanya sepuluh hal sekaligus. Lalu suara Laras merebut telepon.
+Laras: Kakak udah buka kotaknya?! Udah?! ...Kakak, pulang aja. Rumah sepi.
+* Laras menangis. Ibu mengambil telepon lagi, suaranya juga bergetar.
+Ibu: Sudah, sudah. Kakakmu baru sampai. Tidur, Nak. Besok cari makan yang benar.
+@telepon selesai
+@uang -5000
+@cinta ibu +3
+@cinta laras +3
+@lompat malam_akhir
+
+:: malam_sosmed
+* Kamu mengetik nama {nama_sahabat} di kolom pencarian. Ratusan akun. Tidak ada yang wajahnya kamu kenal. Satu akun terkunci dengan foto profil laut biru dan nama "A." saja.
+* Kamu menatap foto profil itu sampai matamu perih.
+@stat kewarasan -2
+@lompat malam_akhir
+
+:: malam_jalan
+@latar kota_besar
+* Lampu kota menyala sejauh mata memandang. Tidak ada satu pun bintang terlihat. Di desa, langit malam penuh bintang, tapi gelap. Di sini terang, tapi kosong.
+* Penjual martabak menawarimu sepotong. Kamu membelinya. Rasanya enak, dan kamu hampir menangis karena tidak ada yang bisa diajak berbagi.
+@uang -10000
+@stat kewarasan +4
+
+:: malam_akhir
+@latar kos_kamar
 @maju 1
 @waktu Minggu, 12 Juli 2026
-* Hari Minggu sebelum sekolah dimulai. Waktunya mengenal kota ini, atau mencari jejak seseorang.
+* Hari Minggu sebelum sekolah dimulai. Waktunya mengenal kota ini: Pasar Lama, Pelabuhan, toko buku, taman. Atau mencari jejak seseorang.
+* Besok MPLS. Kata panitia: bawa topi kerucut dari karton, papan nama dari kardus, dan kaus kaki beda warna.
 * Waktu bebasmu sampai pukul 21:00.
 @bebas sampai Minggu 21:00
 
+@kalender Minggu 21:00
+@latar kos_kamar
+* Atribut MPLS belum ada satu pun.
+@pilihan
+> Bikin sendiri semalaman dari kardus bekas -> mpls_bikin
+> Beli jadi di fotokopian depan gang (Rp25.000) -> mpls_beli
 
-# ---------- SENIN: HARI PERTAMA SEKOLAH ----------
+:: mpls_bikin
+* Topi kerucutmu miring, papan namamu dari kardus mi instan. Kamu baru tidur pukul satu.
+@stat energi -15
+@atur mpls_buatan_sendiri = 1
+@lompat mpls_akhir
+
+:: mpls_beli
+@uang -25000
+* Abang fotokopian sudah menyiapkan puluhan paket. "Anak baru, ya? Semua beli di sini," katanya.
+
+:: mpls_akhir
+@maju 1
+
+
+# ==========================================================
+#  MINGGU 1 — MPLS & KABAR BURUK DARI DESA (13–19 Juli)
+# ==========================================================
 
 @gelap 1200
 @waktu Senin, 13 Juli 2026
@@ -66,7 +241,21 @@
 @atur kelas = 10
 @latar kelas_sma
 @terang 1200
-* SMA Negeri 3 Sakala. Kelas X-3. Tiga puluh enam wajah asing, dan satu bangku kosong di dekat jendela.
+* SMA Negeri 3 Sakala. Upacara pembukaan MPLS di lapangan. Ratusan siswa baru dengan topi kerucut, berdiri di bawah matahari.
+@kenal tiara
+@tampil tiara senyum
+Kak Tiara: Selamat datang, adik-adik! Aku Tiara, ketua OSIS. Tiga hari ke depan kalian milik kami. Jangan takut, kami tidak galak... kecuali yang terlambat.
+@jika mpls_buatan_sendiri == 1 -> mpls_topi
+@lompat mpls_kelas
+
+:: mpls_topi
+Kak Tiara: Eh, topimu buatan sendiri, ya? Miring, tapi kreatif! Kardus mi instan, lagi!
+* Beberapa anak tertawa. Kak Tiara mengacungkan jempol.
+@cinta tiara +3
+
+:: mpls_kelas
+@sembunyi tiara
+* Kelas X-3. Tiga puluh enam wajah asing, dan satu bangku kosong di dekat jendela.
 @kenal dimas
 @tampil dimas senyum
 Dimas: Kosong, kok. Duduk aja. Aku Dimas. Kamu anak baru dari mana?
@@ -83,7 +272,7 @@ Dimas: Hahaha! Bener banget. Kita bakal akur, nih.
 @lompat nadia
 
 :: dimas_diam
-* {nama} hanya mengangguk pelan.
+* Kamu hanya mengangguk pelan.
 Dimas: Eh, santai... aku cuma bercanda. Maaf, ya.
 @cinta dimas +2
 
@@ -91,14 +280,14 @@ Dimas: Eh, santai... aku cuma bercanda. Maaf, ya.
 @sembunyi dimas
 @kenal nadia
 @tampil nadia biasa
-Nadia: Anak baru? Aku Nadia, ketua kelas. Isi formulir ini sebelum jam istirahat.
+Nadia: Anak baru? Aku Nadia. Isi formulir ini sebelum jam istirahat.
 Nadia: ...Tanjung Lentera?
 Nadia: Dulu, waktu SMP, ada murid pindahan dari desa itu juga di sekolahku. Pendiam. Suka duduk di dekat jendela.
 {nama}: Siapa namanya?!
 Nadia: Aku lupa... Dia cuma setahun, lalu pindah lagi. Kenapa? Kamu kenal?
 @tambah petunjuk_sahabat +1
 @catatan Petunjuk #1 — Kata Nadia, dulu ada murid pindahan dari Tanjung Lentera di SMP-nya. Pendiam, suka duduk dekat jendela. Hanya setahun, lalu pindah lagi.
-* Jantung {nama} berdegup kencang. Mungkinkah...
+* Jantungmu berdegup kencang. Mungkinkah...
 @sembunyi semua
 * Hari pertama sekolah berlalu dengan cepat.
 
@@ -115,26 +304,103 @@ Dimas: Terserah kamu mau jadi yang mana. Tapi uang kiriman itu cepat habis, lho.
 @maju 2
 * Sore pertama setelah sekolah. Hidup di Kota Sakala benar-benar dimulai.
 * Ingat: sekolah setiap Senin–Sabtu, pukul 07:00–14:00. Terlambat dan bolos tercatat; bolos 6 kali = dikeluarkan.
-* Waktu bebasmu berjalan sampai Sabtu sore. Atur sendiri: sekolah, kerja, makan, tidur, dan mencari jejak.
+* Waktu bebasmu sampai malam.
+@bebas sampai Senin 19:45
+
+
+# ---------- Senin 13 Juli malam — Ibu jatuh (telepon Laras) ----------
+
+@kalender Senin 20:00
+@latar kos_kamar
+* HP-mu berdering. Nomor rumah. Jam segini, Ibu biasanya sudah tidur.
+@telepon Laras
+@tampil laras menangis
+Laras: Kak... Kak, Ibu jatuh di dapur. Tadi sore. Ibu nggak bisa bangun sendiri...
+Laras: Ayah lagi melaut. Aku panggil Bu RT. Mantri Joko udah datang. Katanya Ibu kecapekan, tekanan darahnya tinggi. Obatnya seratus lima puluh ribu...
+Laras: Ibu bilang jangan kasih tahu Kakak. Tapi aku takut, Kak.
+@pilihan
+> "Kakak kirim uangnya sekarang, Ras." (Rp150.000) -> ibu_kirim
+> "Kakak pulang besok pagi." (bolos MPLS dua hari) -> ibu_pulang
+> "Ayah bisa urus, kan? Kakak baru mulai sekolah..." -> ibu_ayah
+
+:: ibu_kirim
+@uang -150000
+@atur ibu_sakit_kota = kirim
+Laras: Beneran, Kak? ...Makasih. Nanti aku bilang Ibu.
+* Kamu mentransfer lewat Dompet. Angka tabunganmu turun, dan sewa bulan depan tiba-tiba terasa dekat.
+@cinta ibu +6
+@cinta laras +3
+@percaya ayah +3
+@telepon selesai
+@jika rencana_kerja == rahasia -> ibu_kirim_tanya
+@lompat ibu_akhir
+
+:: ibu_kirim_tanya
+@hp pesan Ibu | Nak, uang dari mana? Kamu kan baru sampai. Jangan sampai kamu nggak makan gara-gara Ibu.
+@tunggu_hp
+@pilihan
+> Jujur: "Aku memang berencana kerja, Bu. Maaf dulu nggak bilang." -> ibu_jujur_kerja
+> "Uang tabungan, Bu. Tenang saja." -> ibu_bohong_lagi
+
+:: ibu_jujur_kerja
+@terbongkar kerja_rahasia
+@atur rencana_kerja = terbuka
+* Lama tidak ada balasan. Lalu: "Ibu sudah curiga. Anak Ibu memang keras kepala. Tapi sekolah nomor satu. Janji, ya."
+@percaya ibu -2
+@cinta ibu +2
+@lompat ibu_akhir
+
+:: ibu_bohong_lagi
+* "Ya sudah. Terima kasih, Nak." Ibu mempercayaimu. Itu yang membuatnya terasa lebih berat.
+@stat kewarasan -3
+@lompat ibu_akhir
+
+:: ibu_pulang
+@atur ibu_sakit_kota = pulang
+@atur bolos_mpls = 1
+@telepon selesai
+* Kereta pertama pukul empat pagi. Empat jam kemudian kamu sudah berlari dari stasiun desa ke rumah, tas masih di punggung.
+* Ibu terbaring di kasur ruang tengah. Melihatmu, ia menangis dan marah sekaligus. "Kamu ngapain pulang?! Sekolahmu!"
+* Tapi tangannya tidak mau melepaskan tanganmu.
+* Kamu membelikan obat, memasak bubur, menjaga warung bersama Laras. Rabu sore kamu naik kereta kembali ke Sakala.
+@uang -150000
+@uang -60000
+@cinta ibu +8
+@cinta laras +6
+@percaya ayah +2
+@stat energi -20
+@catatan Pulang menjenguk Ibu (14–15 Juli). Bolos MPLS dua hari.
+@kalender Rabu 20:00
+@latar kos_kamar
+* Kos terasa lebih sepi dari sebelumnya. Besok, Bu Rahma pasti menanyakan dua hari yang hilang.
+@lompat ibu_akhir
+
+:: ibu_ayah
+@atur ibu_sakit_kota = ayah
+@tampil laras sedih
+Laras: ...Iya. Ayah bisa.
+* Laras menutup telepon tanpa pamit. Esok paginya, Ibu mengirim pesan: Ayah menjual tangkapan sehari untuk obat. "Ibu sudah baikan. Fokus sekolah, Nak."
+@telepon selesai
+@cinta laras -4
+@stat kewarasan -5
+
+:: ibu_akhir
+@sembunyi semua
+* Minggu pertama berjalan: MPLS, kelas, dan kota yang terus bergerak. Atur sendiri: sekolah, kerja, makan, tidur, dan mencari jejak.
 @bebas sampai Sabtu 15:00
 
 @gelap 1500
 * Satu minggu pertama di Kota Sakala telah berlalu.
-* Di suatu sudut kota ini, seseorang mungkin sedang menunggu... atau sedang menghindarinya.
-# (lanjut: bagian minggu kedua di bawah)
+* Di suatu sudut kota ini, seseorang mungkin sedang menunggu... atau sedang menghindarimu.
+@terang 1200
+@bebas sampai Minggu 19:30
 
 
+# ---------- Minggu 19 Juli malam — pesan misterius & video call keluarga ----------
 
-# ==========================================================
-#  JALUR KOTA  (jalur desa: desa_bab3.txt)
-# ==========================================================
-
-@waktu Minggu kedua di Kota Sakala
-@kalender Senin 07:00
-@latar kelas_sma
-@terang 1500
-* Seminggu berlalu. Rutinitas mulai terbentuk: bangun pagi, sekolah, mengatur uang... dan diam-diam mencari.
-
+@kalender Minggu 20:00
+@waktu Minggu, 19 Juli 2026 · malam
+@latar kos_kamar
 @jika misterius_dibalas == 1 -> balasan_misterius
 @hp pesan Nomor Tidak Dikenal | Kamu sudah sampai di Sakala, ya. Aku melihatmu di stasiun minggu lalu.
 @lompat baca_pesan
@@ -146,9 +412,47 @@ Dimas: Terserah kamu mau jadi yang mana. Tapi uang kiriman itu cepat habis, lho.
 @tunggu_hp
 {nama}: Dia ada di kota ini... dan dia melihatku.
 @catatan Nomor misterius ada di Kota Sakala. Dia melihatku di stasiun.
+* Belum sempat kamu mencerna pesan itu, HP-mu berdering lagi. Panggilan video dari HP Ibu.
+@telepon Ibu
+@tampil ibu senyum
+* Ibu sudah bisa duduk, bersandar di bantal. Wajahnya masih pucat, tapi matanya bersinar.
+Ibu: Lihat, Ibu sudah sehat. Jangan dengar Laras, dia memang suka berlebihan.
+@tampil laras biasa
+* Laras merebut HP dan memutar badan di depan kamera.
+@jika beli_seragam_laras == 1 -> vc_seragam
+Laras: Kak! Seragam kelas enam! Dikecilin Ibu dari seragam lama, tapi masih bagus, kan?
+@lompat vc_ayah
+
+:: vc_seragam
+Laras: Kak! Seragam kelas enam! Baru!
+
+:: vc_ayah
+* Di ujung layar, Ayah muncul sebentar. Ia hanya mengangguk, mengangkat tangan, lalu menghilang lagi. Ayah memang tidak pernah pandai di depan kamera.
+@jika janji_telepon == 1 -> vc_janji
+@lompat vc_akhir
+
+:: vc_janji
+Laras: Kakak udah nelepon aku berapa kali minggu ini? Hayo! Kalau kurang, hutang cerita!
+
+:: vc_akhir
+@telepon selesai
+@sembunyi semua
+@cinta ibu +2
+@cinta laras +2
+@maju 1
+
+
+# ==========================================================
+#  MINGGU 2 — KOTA MULAI MENEKAN (20–26 Juli)
+# ==========================================================
+
+@waktu Minggu kedua di Kota Sakala
+@kalender Senin 07:00
+@latar kelas_sma
+@terang 1500
+* Seminggu berlalu. Rutinitas mulai terbentuk: bangun pagi, sekolah, mengatur uang... dan diam-diam mencari.
 
 # ---------- Album Nadia ----------
-@kenal nadia
 @tampil nadia biasa
 Nadia: {nama}, tunggu. Aku cari-cari di rumah semalam... ini album angkatan SMP-ku.
 Nadia: Anak dari Tanjung Lentera yang kuceritakan. Ini fotonya, waktu pentas seni.
@@ -165,13 +469,15 @@ Nadia: Di bawah fotonya cuma tertulis inisial: "A."
 :: cerita_nadia
 {nama}: Dia sahabatku waktu kecil. Dia pergi tanpa pamit, tiga tahun lalu.
 @tampil nadia senyum
-Nadia: ...Aku akan bantu cari. Toko buku ayahku ada di depan Stasiun Besar. Ribuan orang lewat setiap hari.
+Nadia: ...Kami pernah sebangku. Aku masih menyimpan surat yang tidak sempat kuberikan padanya.
+Nadia: Aku akan bantu cari. Toko buku ayahku ada di depan Stasiun Besar. Ribuan orang lewat setiap hari.
 Nadia: Kalau aku lihat orang dengan gelang seperti itu, aku kabari kamu.
 @cinta nadia +8
 @percaya nadia +6
 @atur nadia_membantu = 1
+@info nadia kisah_3
 @tambah petunjuk_sahabat +1
-@catatan Nadia membantu mengawasi dari toko buku ayahnya di depan Stasiun Besar.
+@catatan Nadia membantu mengawasi dari toko buku ayahnya di depan Stasiun Besar. Ia pernah sebangku dengan "A."
 @lompat minggu_kedua
 
 :: rahasia
@@ -183,8 +489,13 @@ Nadia: ...Begitu.
 :: minggu_kedua
 @sembunyi semua
 @maju 2
-* Hari-hari berjalan. Petunjuk bisa dicari lewat aktivitas "Mencari jejak sahabat lama" di waktu bebas — kalau kamu sempat di antara sekolah, kerja, dan bertahan hidup.
+* Hari-hari berjalan. Petunjuk bisa dicari lewat aktivitas "Mencari jejak sahabat lama" di waktu bebas, kalau kamu sempat di antara sekolah, kerja, dan bertahan hidup.
+@bebas sampai Kamis 19:45
+
+@kalender Kamis 20:00
+@latar kos_kamar
 @jika nadia_membantu == 1 -> pesan_nadia
+* Kamis malam. Tugas menumpuk, dan uang di dompet makin tipis. Kota ini tidak menunggu siapa pun.
 @lompat bebas_kedua
 
 :: pesan_nadia
@@ -209,7 +520,7 @@ Nadia: ...Begitu.
 {nama}: Tunggu...!
 * Kamu terlambat. Sosok itu sudah lenyap.
 * Kalau saja kamu tahu lebih banyak tentang ke mana dia biasa pergi...
-@lompat akhir_kota
+@lompat stasiun_raka
 
 :: stasiun_dekat
 * Berkat petunjuk-petunjuk yang kamu kumpulkan, kamu tahu: setiap Sabtu sore, dia lewat peron jurusan Pelabuhan.
@@ -222,8 +533,468 @@ Nadia: ...Begitu.
 @hp pesan Nomor Tidak Dikenal | ...Maaf. Aku belum siap. Tapi aku senang kamu masih memakai gelang itu.
 @tunggu_hp
 
-:: akhir_kota
-@gelap 1500
-* Benang merah itu belum putus. Dia ada di kota ini.
-* Dan entah kenapa... dia sedang menghindar.
-@tamat Bab 3 — Bersambung…
+:: stasiun_raka
+@jika foto_raka != 1 -> stasiun_akhir
+@maju 30 menit
+* Lelah, kamu duduk di warung kopi kecil di samping stasiun. Pemiliknya, kakek berkaus oblong, melirik foto pudar yang kamu keluarkan dari dompet.
+Pemilik warung: Itu siapa? ...Raka? Kok mirip Bang Raka, ya. Yang di bengkel kapal Pelabuhan.
+Pemilik warung: Tapi jangan tanya-tanya soal kampung ke dia. Dia nggak suka. Pernah ada yang tanya, dia diam seharian.
+@atur raka_petunjuk = 1
+@percaya darto +3
+@catatan Misi Raka — Kata pemilik warung kopi Stasiun Besar: ada "Bang Raka" di bengkel kapal Pelabuhan Sakala. Tidak suka ditanya soal kampung.
+@hp pesan Ayah | Juragan Darto titip tanya, katanya kamu bawa foto anaknya. Ada kabar?
+@tunggu_hp
+
+:: stasiun_akhir
+@sembunyi semua
+* Benang merah itu belum putus. Dia ada di kota ini. Dan entah kenapa, dia sedang menghindar.
+@bebas 7 hari
+@bebas sampai Senin 19:30
+
+
+# ==========================================================
+#  MINGGU 4 — MALAM BADAI DARI JAUH (3–9 Agustus)
+#  (Minggu 3, 27 Juli – 2 Agustus: adegan waktu bebas k4_* — Dimas, Nadia, kos, Sekar)
+# ==========================================================
+
+@kalender Senin 20:00
+@waktu Senin, 3 Agustus 2026 · malam
+@latar kos_kamar
+@hp pesan Ibu | Nak, tadi Juragan Darto datang. Cicilan perahu bulan ini kurang. Katanya kalau Sabtu belum ada, perahunya ditahan. Ibu cuma cerita, jangan dipikirkan.
+@tunggu_hp
+* "Jangan dipikirkan." Seperti itu mungkin.
+@jika tahu_hutang_perahu == 1 -> tagih_tahu
+* Perahu? Cicilan? Kamu tidak pernah tahu Ayah berhutang pada Juragan Darto.
+@atur tahu_hutang_perahu = 1
+@lompat tagih_pilih
+
+:: tagih_tahu
+* Satu juta dua ratus ribu. Kamu sudah tahu sejak bisik-bisik malam itu. Sekarang tenggatnya hanya lima hari.
+
+:: tagih_pilih
+@pilihan
+> Kirim Rp200.000 untuk cicilan -> tagih_kirim_besar
+> Kirim Rp100.000, semampunya -> tagih_kirim
+> "Aku belum bisa, Bu. Maaf." -> tagih_belum
+
+:: tagih_kirim_besar
+@jika uang < 200000 -> tagih_kirim
+@uang -200000
+@tambah cicilan_kota +200000
+@atur bantu_cicilan = 1
+* "Ya Allah, Nak... Ibu sampaikan ke Ayah. Ayah pasti malu, tapi Ibu tahu dia bangga."
+@percaya ayah +6
+@cinta ibu +3
+@percaya darto +4
+@lompat tagih_langit
+
+:: tagih_kirim
+@jika uang < 100000 -> tagih_belum
+@uang -100000
+@tambah cicilan_kota +100000
+@atur bantu_cicilan = 1
+* "Terima kasih, Nak. Sedikit pun berarti. Ibu catat, ya, biar Juragan tahu."
+@percaya ayah +4
+@percaya darto +2
+@lompat tagih_langit
+
+:: tagih_belum
+* "Iya, Nak. Ibu tahu. Ibu cuma butuh cerita ke seseorang."
+@stat kewarasan -4
+
+:: tagih_langit
+@jika pesan_langit_merah == 1 -> tagih_kiriman
+@pilihan
+> Kirim pesan untuk Ayah: "Jangan melaut kalau langit merah, Yah." -> tagih_pesan_langit
+> Tidak usah -> tagih_kiriman
+
+:: tagih_pesan_langit
+@atur pesan_langit_merah = 1
+* Kamu mengetiknya pelan-pelan. Ibu membalas: "Ibu sampaikan. Ayah ketawa, katanya kamu sok nelayan. Tapi dia simpan kata-katamu."
+@percaya ayah +2
+
+:: tagih_kiriman
+@hp pesan Ayah | Nak, mulai bulan ini kiriman Ayah kurangi seratus lima puluh ribu dulu, ya. Perahu lagi berat. Maaf.
+@tunggu_hp
+@jika rencana_kerja == terbuka -> kiriman_kerja
+@kiriman 450000
+@lompat kiriman_akhir
+
+:: kiriman_kerja
+@kiriman 300000
+
+:: kiriman_akhir
+@catatan Kiriman bulanan dari Ayah dikurangi Rp150.000 mulai Agustus (perahu).
+@hp pesan Bayu | Woy! Desa mau nyalain mercusuar lagi buat tujuh belasan! Patungan beli aki & lampu. Mau ikut nyumbang? Seikhlasnya!
+@tunggu_hp
+@pilihan
+> Kirim Rp50.000 untuk mercusuar -> sumbang_mercu
+> "Lagi bokek, Bay. Doa aja, ya." -> sumbang_tidak
+
+:: sumbang_mercu
+@jika uang < 50000 -> sumbang_tidak
+@uang -50000
+@atur sumbang_mercusuar = 1
+* Bayu membalas dengan dua puluh stiker api. "Nama kamu aku tulis di daftar penyumbang! Paling atas!"
+@cinta bayu +3
+@lompat sumbang_akhir
+
+:: sumbang_tidak
+* "Santai! Doa juga sumbangan," balas Bayu.
+
+:: sumbang_akhir
+@bebas sampai Jumat 22:45
+
+
+# ---------- Jumat 7 Agustus malam — badai ----------
+
+@gelap 1000
+@kalender Jumat 23:00
+@waktu Jumat, 7 Agustus 2026 · 23:00
+@latar kos_kamar
+@terang 800
+* Hujan deras di Sakala sejak sore. Angin menggetarkan jendela. Kamu tidak bisa tidur.
+* Kalau di sini saja sebesar ini... di laut?
+@jika pesan_langit_merah == 1 -> badai_aman
+@telepon Laras
+@tampil laras menangis
+Laras: Kak... Ayah melaut. Tadi sore langitnya merah, tapi Ayah tetap berangkat, katanya cicilan... Sekarang badai, Kak. Ayah belum pulang. Perahu-perahu lain udah balik semua...
+Laras: Ibu di dermaga dari tadi. Aku sendirian di rumah. Kak, aku takut.
+@telepon selesai
+@pilihan
+> Naik kereta pertama pukul 04:00 (bolos Sabtu) -> badai_pulang
+> Menunggu kabar di kos, menelepon tiap jam -> badai_tunggu
+> Minta Dimas atau Nadia menemani -> badai_teman
+
+:: badai_pulang
+@atur badai_pulang = 1
+* Kamu duduk di peron Stasiun Besar sejak pukul tiga pagi, basah kuyup, memeluk lutut. Kereta pertama berangkat pukul empat. Empat jam terpanjang dalam hidupmu.
+@uang -120000
+@kalender Sabtu 08:00
+@waktu Sabtu, 8 Agustus 2026 · 08:00 · Dermaga Tanjung Lentera
+@latar dermaga
+* Dermaga penuh orang. Lalu, di tengah kerumunan, Ayah: basah, berselimut sarung, duduk di atas peti ikan. Semalaman ia berpegangan di tiang bagan sampai Pak Karta menemukannya subuh tadi.
+* Ayah melihatmu. Ia berdiri, terhuyung, lalu memelukmu begitu erat sampai kamu tidak bisa bernapas.
+@tampil ayah sedih
+Ayah: Ngapain kamu pulang... ngapain...
+* Tapi ia tidak melepaskanmu. Di belakangnya, laut sudah tenang, seolah tidak terjadi apa-apa. Perahu biru Ayah tidak ada di tambatannya. Tenggelam.
+@atur perahu_rusak = 2
+@cinta ayah +10
+@cinta ibu +5
+@cinta laras +5
+@stat energi -25
+@sembunyi ayah
+@lompat rapat_keluarga
+
+:: badai_tunggu
+* Kamu menelepon setiap jam. Pukul dua belas: belum ada kabar. Pukul satu: belum. Pukul tiga, Laras tertidur dan tidak mengangkat. Kamu menatap langit-langit kos sampai subuh.
+@stat kewarasan -15
+@stat energi -15
+@lompat badai_pagi
+
+:: badai_teman
+@jika cinta_dimas >= cinta_nadia -> badai_dimas
+@tampil nadia sedih
+* Dua puluh menit kemudian, Nadia berdiri di depan kos dengan payung dan kantong plastik berisi roti dan teh kotak. Ayahnya menunggu di mobil.
+Nadia: Aku nggak tahu harus bilang apa. Jadi aku bawa roti.
+* Kalian duduk di teras kos sampai subuh. Nadia bercerita tentang ibunya yang bekerja di luar negeri, tentang telepon yang selalu terputus. Kamu bercerita tentang laut.
+@cinta nadia +8
+@percaya nadia +8
+@lompat badai_teman_akhir
+
+:: badai_dimas
+@tampil dimas sedih
+* Dua puluh menit kemudian, Dimas berdiri di depan kos, basah kuyup, membawa sekantong gorengan dari warung ibunya.
+Dimas: Kamu nggak boleh sendirian malam ini. Aku tahu rasanya nunggu orang yang nggak pulang-pulang.
+* Kalian duduk di teras sampai subuh. Dimas tidak banyak bicara. Ia hanya ada. Dan ternyata, itu sudah cukup.
+@cinta dimas +8
+@percaya dimas +8
+
+:: badai_teman_akhir
+@sembunyi semua
+@stat kewarasan -5
+@atur badai_ditemani = 1
+
+:: badai_pagi
+@sembunyi semua
+@kalender Sabtu 06:00
+@waktu Sabtu, 8 Agustus 2026 · pagi
+@hp pesan Ibu | Ayah selamat, Nak. Semalaman berpegangan di tiang bagan. Ditemukan Pak Karta subuh tadi. Tapi perahu kita tenggelam.
+@tunggu_hp
+* Ayah selamat. Kamu membaca kalimat itu lima kali. Baru di kali keenam kamu menangis.
+@atur perahu_rusak = 2
+@lompat rapat_keluarga
+
+:: badai_aman
+@hp pesan Ayah | Langitnya merah tadi sore. Ayah ingat pesanmu. Ayah di rumah. Tidur, Nak.
+@tunggu_hp
+* Kamu membaca pesan itu berkali-kali. Di luar, badai menghantam jendela kos. Di Tanjung Lentera, Ayah ada di rumah.
+@stat kewarasan +5
+@percaya ayah +5
+@kalender Sabtu 06:00
+@waktu Sabtu, 8 Agustus 2026 · pagi
+@hp pesan Ibu | Semalam badai besar, Nak. Tiga perahu hilang, untung semua orang selamat. Perahu kita cuma retak di tambatan. Ayahmu bilang terima kasih.
+@tunggu_hp
+@atur perahu_rusak = 1
+@cinta ayah +5
+@lompat badai_akhir
+
+
+# ---------- Sabtu 8 Agustus — rapat keluarga ----------
+
+:: rapat_keluarga
+@jika badai_pulang == 1 -> rapat_langsung
+@telepon Ibu
+@lompat rapat_isi
+
+:: rapat_langsung
+* Siang itu, di ruang tengah rumah, kalian berempat duduk melingkar. Ayah dengan perban di tangan.
+
+:: rapat_isi
+@tampil ayah sedih
+Ayah: Perahunya sudah tidak ada. Hutangnya masih ada.
+Ayah: Juragan Darto menawari Ayah ikut kapalnya. Jadi anak buah lagi, seperti dua puluh tahun lalu.
+@pilihan
+> "Ikut kapal Juragan dulu, Yah. Yang penting Ayah melaut dengan aman." -> rapat_darto
+> "Aku menabung dari kerjaku. Kita cicil perahu bekas pelan-pelan." -> rapat_tabung
+> "Minta tolong orang desa, Yah. Pak Karta, Bayu..." -> rapat_desa
+
+:: rapat_darto
+@atur ayah_kapal_darto = 1
+Ayah: ...Iya. Harga diri tidak bisa dimakan.
+@percaya ayah +3
+@lompat rapat_akhir
+
+:: rapat_tabung
+@atur tabung_perahu = 1
+@tampil ayah kaget
+Ayah: Kamu kerja? Sekolahmu bagaimana?
+{nama}: Sekolah tetap nomor satu, Yah. Tapi aku bisa sisihkan sedikit.
+@percaya ayah +5
+@cinta ayah +3
+@catatan Janji menabung untuk perahu bekas Ayah.
+@lompat rapat_akhir
+
+:: rapat_desa
+@jika cinta_bayu >= 50 -> rapat_desa_ya
+Ayah: Semua orang juga sedang susah, Nak. Tiga perahu hilang.
+* Ayah akhirnya ikut kapal Juragan Darto.
+@atur ayah_kapal_darto = 1
+@lompat rapat_akhir
+
+:: rapat_desa_ya
+* Dua hari kemudian, Bayu mengirim foto: Pak Karta, Bayu, dan lima nelayan lain menarik bangkai perahu Ayah ke darat. "Bisa diperbaiki! Kita gotong royong. Bilang Ayahmu jangan malu."
+@atur perahu_gotong_royong = 1
+@cinta bayu +5
+@percaya ayah +4
+
+:: rapat_akhir
+@jika badai_pulang == 1 -> rapat_kembali
+@telepon selesai
+@lompat badai_akhir
+
+:: rapat_kembali
+* Minggu sore kamu kembali ke Sakala, membawa sekantong ikan asin dari Ibu dan bau laut di bajumu.
+@sembunyi semua
+
+:: badai_akhir
+@sembunyi semua
+* Kota Sakala tetap berjalan seolah tidak terjadi apa-apa. Tapi kamu tahu sekarang: separuh hatimu tidak pernah benar-benar ikut pindah.
+@bebas sampai Jumat 19:30
+
+
+# ==========================================================
+#  MINGGU 5 — TUJUH BELASAN DI KOTA (10–17 Agustus)
+# ==========================================================
+
+@kalender Jumat 20:00
+@waktu Jumat, 14 Agustus 2026 · malam
+@latar kos_kamar
+@hp pesan Bayu | Pulang, nggak? Final bola antar-RT Minggu sore! Kami kurang satu pemain, Dino keseleo. Senin ada tujuh belasan, mercusuar mau dinyalain!
+@tunggu_hp
+@jika janji_layangan == 1 -> final_layangan
+@lompat final_pilih
+
+:: final_layangan
+* Dan Laras. Lomba layangan. Kelingking yang mengait di malam terakhir itu.
+
+:: final_pilih
+@pilihan
+> Pulang Sabtu sore (ongkos kereta pulang-pergi Rp120.000) -> final_pulang
+> Tetap di kota -> final_kota
+
+:: final_pulang
+@jika uang < 120000 -> final_tak_cukup
+@uang -120000
+@atur pulang_17an = 1
+@lompat final_pulang_isi
+
+:: final_tak_cukup
+* Kamu membuka Dompet. Tidak cukup untuk pulang-pergi. Kamu menatap angka itu lama.
+@lompat final_kota
+
+:: final_pulang_isi
+@gelap 1200
+@kalender Minggu 15:00
+@waktu Minggu, 16 Agustus 2026 · Lapangan desa
+@latar lapangan
+@terang 1200
+@tampil bayu senyum
+Bayu: DATANG JUGA! Cepat ganti baju, kamu bek kiri!
+* Lapangan desa penuh. Kamu berlari, terjatuh, berlari lagi. Kakimu sudah lupa rasanya rumput lapangan ini, tapi cepat sekali ingat.
+* Menit terakhir, Bayu menyundul bola dari umpanmu. GOL. Seluruh RT 03 menyerbu lapangan.
+@cinta bayu +8
+@stat kewarasan +10
+@sembunyi bayu
+@jika janji_layangan == 1 -> final_layangan_pulang
+@lompat tujuhbelas_desa
+
+:: final_layangan_pulang
+@tampil laras senyum
+* Senin pagi, sebelum upacara, Laras sudah menunggu di depan rumah dengan layangan buatan Ayah. Ekornya panjang, dari kantong plastik warna-warni.
+Laras: Kakak NEPATIN JANJI!
+* Layangan kalian terbang paling tinggi di lapangan. Tidak juara. Tapi Laras tertawa sampai tersedak.
+@cinta laras +10
+@percaya laras +6
+@sembunyi laras
+
+:: tujuhbelas_desa
+@gelap 1000
+@kalender Senin 19:30
+@waktu Senin, 17 Agustus 2026 · Dermaga mercusuar
+@latar dermaga_malam
+@terang 1500
+* Malam tujuh belasan. Seluruh desa berkumpul di dermaga. Lampu-lampu kecil digantung di tiang-tiang perahu.
+@jika sumbang_mercusuar == 1 -> mercu_nyala
+@jika cinta_bayu >= 60 -> mercu_nyala
+@jika percaya_darto >= 60 -> mercu_nyala
+* Mercusuar tetap gelap. Akinya kurang, kata Pak Kades. Tahun depan, mungkin.
+* Tapi Laras menggenggam tanganmu, dan Ayah berdiri di sebelahmu, dan untuk malam ini, itu cukup terang.
+@lompat akhir_desa_kembali
+
+:: mercu_nyala
+* Pukul delapan tepat, Pak Kades memberi aba-aba. Lalu, setelah dua puluh tahun gelap...
+* Mercusuar Tanjung Lentera menyala.
+* Cahayanya berputar perlahan di atas laut. Orang-orang bersorak. Juragan Darto, di ujung dermaga, menatap cahaya itu tanpa berkedip, seperti berharap seseorang di kejauhan juga melihatnya.
+@atur mercusuar_nyala = 1
+@stat kewarasan +10
+
+:: akhir_desa_kembali
+* Kereta malam membawamu kembali ke Sakala. Dari jendela, kamu menoleh ke arah tanjung sampai semuanya hilang dalam gelap.
+@lompat akhir_bab
+
+
+:: final_kota
+@atur pulang_17an = 0
+* Kamu membalas: "Maaf, Bay. Nggak bisa pulang." Bayu membalas dengan stiker sedih, lalu: "Santai. Nanti aku kirim videonya. Doain menang!"
+@cinta bayu -2
+@bebas sampai Senin 06:30
+
+@gelap 1000
+@kalender Senin 07:00
+@waktu Senin, 17 Agustus 2026 · Hari Kemerdekaan
+@latar kelas_sma
+@terang 1200
+* Upacara bendera di lapangan sekolah. Paskibra kelas XII mengibarkan bendera, dan seluruh sekolah menyanyikan Indonesia Raya.
+* Kamu teringat upacara di lapangan desa: tiang bambu, pengeras suara yang mendenging, Pak Kades yang pidatonya selalu terlalu panjang.
+@hp pesan Bayu | MENANG!!! 2-1! Gol terakhir sundulanku! Nanti videonya aku kirim!
+@tunggu_hp
+@jika janji_layangan == 1 -> kota_layangan
+@lompat kota_lomba
+
+:: kota_layangan
+@telepon Laras
+@tampil laras sedih
+Laras: Kakak nggak pulang.
+* Lalu ia memutar HP: di layar, sebuah layangan buatan Ayah terbang di atas lapangan desa. Di ekornya, dengan spidol, tertulis namamu.
+Laras: Ini layangan Kakak. Aku yang nerbangin. Tahun depan Kakak HARUS pulang.
+@telepon selesai
+@cinta laras +3
+@percaya laras -3
+
+:: kota_lomba
+@tampil dimas senyum
+Dimas: Ayo! Tarik tambang antarkelas! X-3 lawan X-1!
+@jika cinta_dimas >= 40 -> lomba_menang
+* Tim kelasmu kalah tipis. Dimas dan Reno saling menyalahkan sampai Bu Rahma memisahkan mereka.
+@lompat lomba_akhir
+
+:: lomba_menang
+* Dimas di depan, Reno di belakang, kamu di tengah. Untuk pertama kalinya, mereka menarik ke arah yang sama. X-3 menang!
+@cinta dimas +4
+
+:: lomba_akhir
+@sembunyi dimas
+@maju 1
+
+
+# ---------- Malam tujuh belasan di kota ----------
+
+@gelap 1000
+@kalender Senin 19:30
+@waktu Malam tujuh belasan · Kota Sakala
+@latar kota_besar
+@terang 1500
+@jika kos_pilih == rel_utara -> malam_atap
+* Kamu duduk di bangku Taman Kota. Kembang api meletus di atas gedung-gedung, warna-warni, berisik, indah.
+@jika bareng_sekar == 1 -> malam_sekar
+@jika nadia_membantu == 1 -> malam_nadia
+@lompat malam_17_foto
+
+:: malam_atap
+* Atap kos Rel Utara. Dimas memanjat lebih dulu dan mengulurkan tangannya. Dari sini, seluruh kota terlihat: lampu-lampu, gedung, dan kembang api yang meletus di atas pusat kota.
+@tampil dimas senyum
+Dimas: Tempat paling bagus se-Sakala. Gratis. Rahasia anak Rel Utara.
+@cinta dimas +4
+@sembunyi dimas
+@lompat malam_17_foto
+
+:: malam_sekar
+@tampil sekar senyum
+* Sekar datang dengan izin asrama dua jam. Ia duduk di sebelahmu, menengadah ke langit.
+Sekar: Kembang apinya bagus. Tapi aku kangen gelapnya langit desa.
+@cinta sekar +4
+@sembunyi sekar
+@lompat malam_17_foto
+
+:: malam_nadia
+@tampil nadia senyum
+* Nadia datang membawa dua kopi susu. "Toko tutup cepat malam ini. Ayah yang suruh aku keluar."
+@cinta nadia +3
+@sembunyi nadia
+
+:: malam_17_foto
+@jika sumbang_mercusuar == 1 -> foto_mercu
+@jika cinta_bayu >= 60 -> foto_mercu
+@jika percaya_darto >= 60 -> foto_mercu
+* HP-mu bergetar. Bayu mengirim foto dermaga: lampu-lampu kecil, orang-orang berkumpul. Mercusuar masih gelap. "Akinya kurang. Tahun depan pasti nyala!"
+@lompat akhir_bab
+
+:: foto_mercu
+@atur mercusuar_nyala = 1
+* HP-mu bergetar. Bayu mengirim foto: Mercusuar Tanjung Lentera, menyala. Cahayanya membelah langit malam di atas laut. Fotonya beredar di Sosmed, dibagikan ratusan kali.
+* Kamu menatap foto itu lama sekali. Di sana, ada namamu di daftar penyumbang. Di sini, kamu hanya bisa melihatnya lewat layar.
+
+
+# ==========================================================
+#  AKHIR BAB 4 KOTA — PESAN SAHABAT
+# ==========================================================
+
+:: akhir_bab
+@jika mercusuar_nyala == 1 -> akhir_nyala
+@hp pesan Nomor Tidak Dikenal | Aku dengar mercusuar itu mau dinyalakan lagi. Kalau suatu hari benar-benar menyala... mungkin itu tandanya aku boleh pulang.
+@tunggu_hp
+@lompat akhir_tutup
+
+:: akhir_nyala
+@hp pesan Nomor Tidak Dikenal | Aku lihat fotonya. Mercusuar kita menyala lagi. ...Kamu di Sakala juga malam ini, kan? Lihat ke arah pelabuhan.
+@tunggu_hp
+@jika pulang_17an == 1 -> akhir_tutup
+* Kamu berdiri, menoleh ke arah pelabuhan. Gelap. Lalu, jauh di sana, sebuah lampu senter berkedip. Satu. Dua. Tiga.
+* Tiga kedipan. Kode lama kalian di dermaga, waktu kecil: "Aku di sini."
+@atur senter_tiga = 1
+
+:: akhir_tutup
+@gelap 2000
+* Benang merah itu masih terikat. Ia ada di kota yang sama. Dan suatu hari, ia harus memilih: terus bersembunyi, atau pulang.
+@tamat Bab 4 Kota — Bersambung…

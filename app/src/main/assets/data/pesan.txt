@@ -123,6 +123,107 @@ balas_hangat  = Jangan dihabiskan sekaligus. Hati-hati, ya. Ibu doakan dari sini
 singkat       = Masih di kereta, Bu.
 balas_singkat = Iya. Kabari kalau sudah sampai.
 
+# ---------------- BAB 4 KOTA ----------------
+
+[ayah_darto_terima_kasih]
+dari          = ayah
+jenis         = cerita
+isi           = Juragan Darto datang ke rumah tadi malam, tanya soal anaknya. Ayah ceritakan apa yang kamu kabarkan. Dia diam lama sekali, terus bilang "terima kasih". Ayah belum pernah dengar dia bilang itu.
+hangat        = Syukurlah, Yah. Semoga Bang Raka mau pulang suatu hari.
+balas_hangat  = Amin. Kamu jaga diri. Pelabuhan itu keras.
+singkat       = Iya, Yah.
+balas_singkat = Hm. Hati-hati.
+
+[ibu_uang_dari_mana]
+dari          = ibu
+jenis         = cerita
+isi           = Nak, uang dari mana? Kamu kan baru sampai. Jangan sampai kamu nggak makan gara-gara Ibu.
+hangat        = Aku masih makan, Bu. Ibu yang penting cepat sembuh 😊
+balas_hangat  = Iya, iya. Ibu minum obatnya. Terima kasih, Nak.
+singkat       = Nggak apa-apa, Bu.
+balas_singkat = Ya sudah. Jaga diri.
+
+[ayah_tanya_raka]
+dari          = ayah
+jenis         = cerita
+isi           = Juragan Darto titip tanya, katanya kamu bawa foto anaknya. Ada kabar?
+hangat        = Ada sedikit, Yah. Katanya ada Bang Raka di bengkel kapal Pelabuhan. Aku coba cari.
+balas_hangat  = Ayah sampaikan. Jangan memaksa, ya. Hati-hati.
+singkat       = Belum, Yah.
+balas_singkat = Ya sudah. Pelan-pelan.
+
+[ibu_darto_tagih]
+dari          = ibu
+jenis         = cerita
+isi           = Nak, tadi Juragan Darto datang. Cicilan perahu bulan ini kurang. Katanya kalau Sabtu belum ada, perahunya ditahan. Ibu cuma cerita, jangan dipikirkan.
+hangat        = Makasih sudah cerita, Bu. Kita pikirkan sama-sama, ya.
+balas_hangat  = Anak Ibu sudah besar. Ibu jadi lebih tenang.
+singkat       = Iya, Bu.
+balas_singkat = Jangan lupa makan.
+
+[ayah_kiriman_kurang]
+dari          = ayah
+jenis         = cerita
+isi           = Nak, mulai bulan ini kiriman Ayah kurangi seratus lima puluh ribu dulu, ya. Perahu lagi berat. Maaf.
+hangat        = Nggak apa-apa, Yah. Aku bisa atur. Ayah jangan minta maaf.
+balas_hangat  = ...Terima kasih, Nak. Ayah malu, tapi Ayah bangga.
+singkat       = Iya, Yah.
+balas_singkat = Cukup-cukupkan, ya.
+
+[bayu_mercusuar]
+dari          = bayu
+jenis         = cerita
+isi           = Woy! Desa mau nyalain mercusuar lagi buat tujuh belasan! Patungan beli aki & lampu. Mau ikut nyumbang? Seikhlasnya!
+hangat        = Serius?! Mercusuar kita nyala lagi? Keren banget, Bay!
+balas_hangat  = Iya! Pak Kades yang ngurus, anak-anak muda yang kerja. Kamu harus lihat!
+singkat       = Nanti aku kabari.
+balas_singkat = Oke, santai aja.
+
+[ibu_ayah_selamat]
+dari          = ibu
+jenis         = cerita
+isi           = Ayah selamat, Nak. Semalaman berpegangan di tiang bagan. Ditemukan Pak Karta subuh tadi. Tapi perahu kita tenggelam.
+hangat        = Alhamdulillah, Bu. Yang penting Ayah selamat. Perahu bisa dicari lagi.
+balas_hangat  = Iya, Nak. Ibu juga bilang begitu ke Ayah. Dia menangis, baru kali ini Ibu lihat.
+singkat       = Alhamdulillah.
+balas_singkat = Iya. Doakan Ayah.
+
+[ayah_langit_merah]
+dari          = ayah
+jenis         = cerita
+isi           = Langitnya merah tadi sore. Ayah ingat pesanmu. Ayah di rumah. Tidur, Nak.
+hangat        = Makasih, Yah. Aku lega sekali 😭
+balas_hangat  = Ayah yang terima kasih. Sudah, tidur.
+singkat       = Syukurlah, Yah.
+balas_singkat = Tidur sana.
+
+[ibu_badai_aman]
+dari          = ibu
+jenis         = cerita
+isi           = Semalam badai besar, Nak. Tiga perahu hilang, untung semua orang selamat. Perahu kita cuma retak di tambatan. Ayahmu bilang terima kasih.
+hangat        = Alhamdulillah, Bu. Peluk Ayah dari aku, ya.
+balas_hangat  = Sudah Ibu peluk. Ayahmu pura-pura nggak mau, padahal senang.
+singkat       = Syukurlah, Bu.
+balas_singkat = Iya. Kamu sehat-sehat di sana.
+
+[bayu_final]
+dari          = bayu
+jenis         = cerita
+isi           = Pulang, nggak? Final bola antar-RT Minggu sore! Kami kurang satu pemain, Dino keseleo. Senin ada tujuh belasan, mercusuar mau dinyalain!
+hangat        = Aku usahakan, Bay! Jangan kalah sebelum aku datang!
+balas_hangat  = Siap! Kostum nomor 7 aku simpan buat kamu!
+singkat       = Lihat nanti, ya.
+balas_singkat = Yaelah. Kabari secepatnya!
+
+[bayu_menang]
+dari          = bayu
+jenis         = cerita
+isi           = MENANG!!! 2-1! Gol terakhir sundulanku! Nanti videonya aku kirim!
+hangat        = GILAAA! Selamat, Bay! Kapten kebanggaan RT 03!
+balas_hangat  = Hahaha! Tahun depan kamu wajib main!
+singkat       = Selamat, Bay.
+balas_singkat = Makasih! Kirim video nanti.
+
 [sekar_tinggal]
 dari          = sekar
 jenis         = cerita

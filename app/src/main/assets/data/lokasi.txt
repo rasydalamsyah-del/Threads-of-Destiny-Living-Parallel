@@ -102,7 +102,7 @@ tidur  = ya
 [kota_besar]
 nama   = Pusat Kota Sakala
 tempat = kota
-pintu  = kos | 🏠 Pulang ke kos | 0.30, 0.82 | 10 ; kelas_sma | 🏫 Sekolah | 0.20, 0.46 | 10 ; toko_buku | 📚 Toko buku | 0.48, 0.56 | 15 ; taman_kota | 🌳 Taman kota | 0.78, 0.62 | 15 ; stasiun_besar | 🚉 Stasiun Besar | 0.70, 0.36 | 15
+pintu  = kos | 🏠 Pulang ke kos | 0.30, 0.82 | 10 ; kelas_sma | 🏫 Sekolah | 0.20, 0.46 | 10 ; toko_buku | 📚 Toko buku | 0.48, 0.56 | 15 ; taman_kota | 🌳 Taman kota | 0.78, 0.62 | 15 ; stasiun_besar | 🚉 Stasiun Besar | 0.70, 0.36 | 15 ; pasar_lama | 🧺 Pasar Lama | 0.14, 0.66 | 20
 benda  = jelajah_kota | 🧭 Jelajah | 0.62, 0.74 ; nongkrong_mal | 🛍️ Mal | 0.40, 0.66 ; kafe_kekinian | 🧋 Kafe | 0.58, 0.46 ; begadang_game | 🎮 Warnet | 0.82, 0.80 ; perpustakaan | 🏛️ Perpustakaan | 0.30, 0.38
 
 [kelas_sma]
@@ -126,5 +126,19 @@ orang  = nadia 0.36, 0.62, 0.40
 [stasiun_besar]
 nama   = Stasiun Besar
 tempat = kota
-pintu  = kota_besar | ⬅ Keluar stasiun | 0.30, 0.86 | 15
+pintu  = kota_besar | ⬅ Keluar stasiun | 0.30, 0.86 | 15 ; pelabuhan | ⚓ Angkot ke Pelabuhan | 0.82, 0.70 | 30
 benda  = cari_jejak | 🔍 Tanya orang di peron | 0.60, 0.62
+
+[pasar_lama]
+nama     = Pasar Lama Sakala
+tempat   = kota
+cadangan = kota_kecil
+pintu    = kota_besar | ⬅ Kembali ke pusat kota | 0.50, 0.88 | 20
+benda    = jelajah_kota | 🧺 Lihat-lihat lapak | 0.40, 0.66
+
+[pelabuhan]
+nama     = Pelabuhan Sakala
+tempat   = kota
+cadangan = stasiun_besar
+pintu    = stasiun_besar | ⬅ Angkot ke Stasiun Besar | 0.24, 0.86 | 30
+benda    = cari_jejak | 🔍 Tanya orang di dermaga | 0.62, 0.66

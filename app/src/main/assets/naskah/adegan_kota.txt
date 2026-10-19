@@ -1,0 +1,725 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — BAB 4 KOTA "KOTA YANG TAK PERNAH TIDUR" (11 Juli – 17 Agustus)
+#  Pemicu & jam: data/adegan.txt (k4_*) · Alur: docs/ALUR_BAB4.md
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  MINGGU 0 — PASAR LAMA: KAGET HARGA
+# ----------------------------------------------------------
+
+:: k4_harga
+* Pasar Lama Sakala. Lorong sempit, atap terpal, pedagang berteriak menawarkan apa saja: ember, panci, kaus kaki tiga pasang sepuluh ribu.
+* Kamu lapar. Nasi bungkus di lapak pertama: lima belas ribu. Di desa, tujuh ribu sudah dapat lauk ikan.
+{nama}: Lima belas ribu...?
+Pedagang: Ini kota, Dik. Mau yang tujuh ribu? Nasi sama kerupuk.
+* Kamu juga butuh perlengkapan kos: ember, gantungan baju, sabun, kasur lipat.
+@pilihan
+> Beli lengkap, termasuk kasur lipat (Rp95.000) -> k4h_lengkap
+> Beli seadanya, tidur pakai sarung di lantai (Rp30.000) -> k4h_seadanya
+
+:: k4h_lengkap
+@uang -95000
+* Kamu menenteng ember berisi gantungan, sabun, dan gayung, kasur lipat dikepit di ketiak. Kamu terlihat persis seperti anak rantau baru. Pedagang-pedagang tersenyum maklum.
+@atur perlengkapan_kos = lengkap
+@stat kewarasan +3
+@lompat k4h_akhir
+
+:: k4h_seadanya
+@uang -30000
+* Ember dan sabun saja. Kasurnya nanti, kalau ada rezeki. Malam ini, sarung Ayah jadi alas tidur.
+@atur perlengkapan_kos = seadanya
+@stat energi -5
+
+:: k4h_akhir
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 0 — IBU KOS (sesuai kos)
+# ----------------------------------------------------------
+
+:: k4_ratmi
+@kenal ratmi
+@tampil ratmi senyum
+* Bu Ratmi duduk di depan kamarnya dengan radio kecil yang memutar keroncong. Di dinding: foto hitam-putih seorang lelaki berseragam masinis.
+Bu Ratmi: Almarhum suami saya. Masinis kereta jurusan Pelabuhan. Tiga puluh tahun. Makanya saya tidak bisa pindah dari rel ini. Tiap kereta lewat, rasanya dia masih menyetir.
+Bu Ratmi: Kamu dari pesisir, ya? Bau lautnya masih nempel. Bagus. Jangan cepat-cepat hilang.
+@pilihan
+> Dengarkan cerita Bu Ratmi sampai habis -> k4r_dengar
+> "Bu, warung Bu Sum di mulut gang itu buka jam berapa?" -> k4r_sum
+
+:: k4r_dengar
+@maju 45 menit
+* Bu Ratmi bercerita tentang kereta uap, tentang banjir besar tahun sembilan puluhan, tentang anak-anak kos yang datang dan pergi. Ia menyuguhkan teh manis dua kali.
+@cinta ratmi +5
+@stat kewarasan +4
+@lompat k4r_akhir
+
+:: k4r_sum
+Bu Ratmi: Subuh sampai jam sembilan. Bu Sum itu janda, anaknya satu, sekolah di SMA Negeri 3 juga. Namanya... Dimas, kalau tidak salah.
+@cinta ratmi +2
+
+:: k4r_akhir
+@sembunyi ratmi
+@kembali
+
+
+:: k4_hartini
+@kenal hartini
+@tampil hartini biasa
+* Bu Hartini mengetuk pintumu tepat pukul tujuh. Di tangannya: nampan berisi teh dan dua potong roti tawar dengan selai srikaya.
+Bu Hartini: Sarapan. Termasuk sewa. Gelasnya dikembalikan sebelum jam delapan.
+* Ia melirik kamarmu, memeriksa. Lalu, untuk pertama kalinya, sudut bibirnya bergerak sedikit.
+Bu Hartini: Rapi. Anak sebelumnya, kamar ini kayak kapal pecah. Saya tegas karena orang tua kalian menitipkan anaknya ke saya. Paham?
+@pilihan
+> "Paham, Bu. Terima kasih sudah menjaga." -> k4hr_paham
+> "Bu, jam malamnya bisa sedikit dilonggarkan kalau ada kerja?" -> k4hr_tawar
+
+:: k4hr_paham
+@cinta hartini +4
+@percaya hartini +3
+@lompat k4hr_akhir
+
+:: k4hr_tawar
+Bu Hartini: Kerja? Anak SMA kerja sampai malam? ...Bilang dulu ke saya kalau memang kerja. Sekali-sekali saya tunggu. Tapi jangan dibiasakan.
+@atur hartini_izin_kerja = 1
+@percaya hartini +2
+
+:: k4hr_akhir
+@sembunyi hartini
+@kembali
+
+
+:: k4_bram
+@kenal bram
+@tampil bram senyum
+* Mas Bram menyapamu di lobi sambil menata brosur. Musik pelan mengalun dari pengeras suara.
+Mas Bram: Gimana, betah? Penghuni di sini kebanyakan mahasiswa dan anak pengusaha. Kamu... beda.
+Mas Bram: Bukan jelek, ya. Cuma beda. Saran saya: jangan ikut gaya mereka. Saya sudah lihat banyak anak bangkrut di bulan ketiga.
+@cinta bram +3
+@percaya bram +2
+@sembunyi bram
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 1 — MPLS: TANDA TANGAN KAKAK KELAS
+# ----------------------------------------------------------
+
+:: k4_mpls_ttd
+@kenal dimas
+@tampil dimas senyum
+Dimas: Tugas MPLS! Dua puluh tanda tangan kakak kelas sebelum jam dua belas! Ayo, kita bagi wilayah!
+* Kalian berlari dari kelas ke kelas. Kakak kelas XII menatap kalian seperti kucing menatap tikus.
+* Seorang kakak kelas bertubuh besar menyilangkan tangan: "Tanda tangan? Nyanyi dulu."
+@pilihan
+> Nyanyi lagu daerah dari desa -> k4mt_nyanyi
+> Tarik Dimas dan kabur -> k4mt_kabur
+
+:: k4mt_nyanyi
+* Kamu menyanyikan lagu nelayan yang dulu dinyanyikan Ibu sambil menjahit jaring. Suaramu gemetar di bait pertama, lalu makin mantap.
+* Kakak-kakak kelas yang tadinya tertawa mengejek, perlahan diam. Di akhir lagu, mereka bertepuk tangan.
+Kakak kelas: ...Bagus. Lagu apa itu? Sini, tanda tangan semua.
+@tampil dimas kaget
+Dimas: Gila. Kamu dapat delapan tanda tangan sekaligus.
+@cinta dimas +3
+@stat kewarasan +4
+@lompat k4mt_akhir
+
+:: k4mt_kabur
+* Kalian kabur sambil tertawa, menabrak tong sampah, dan tertangkap Kak Tiara di tangga.
+@kenal tiara
+@tampil tiara kesal
+Kak Tiara: Dua orang ini. Push-up dua puluh kali. Sekarang.
+* Kalian push-up berdampingan di lantai koridor. Dimas tertawa sampai jatuh di hitungan ke-12.
+@cinta dimas +6
+@stat energi -8
+
+:: k4mt_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 1 — RENO: "ANAK IKAN ASIN"
+# ----------------------------------------------------------
+
+:: k4_reno_ejek
+@kenal reno
+@tampil reno senyum
+* Seorang anak dengan jam tangan mengilap dan sepatu putih bersih berdiri di depan mejamu, mengendus-endus berlebihan.
+Reno: Kok bau amis, ya? Oh, anak dari desa nelayan. Anak ikan asin!
+* Beberapa anak tertawa. Dimas berdiri, tapi kamu menahan lengannya.
+@pilihan
+> "Ikan asin itu yang bikin kamu bisa makan enak, lho." -> k4re_canda
+> Diam saja -> k4re_diam
+> Laporkan ke Kak Tiara -> k4re_lapor
+
+:: k4re_canda
+* Kelas hening sebentar. Lalu Reno tertawa paling keras.
+Reno: Hahaha! Oke, oke. Kamu lucu juga. Aku Reno. Mulai sekarang kamu kupanggil "Si Ikan Asin". Itu pujian, ya.
+@atur reno_sikap = teman
+@cinta reno +5
+@lompat k4re_akhir
+
+:: k4re_diam
+* Reno mengangkat bahu, kecewa tidak mendapat reaksi, lalu pergi. Tapi minggu itu, tiga kali lagi ia menyebutmu "anak ikan asin".
+@atur reno_sikap = ejek
+@stat kewarasan -4
+@lompat k4re_akhir
+
+:: k4re_lapor
+* Kak Tiara memanggil Reno ke ruang OSIS. Reno kembali dengan wajah merah, dan tidak pernah mengganggumu lagi. Tapi ia juga tidak pernah menyapamu.
+@atur reno_sikap = jauh
+@percaya tiara +3
+
+:: k4re_akhir
+@sembunyi reno
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 1 — BU RAHMA MEMANGGIL (bila bolos MPLS)
+# ----------------------------------------------------------
+
+:: k4_rahma_bolos
+@kenal rahma
+@tampil rahma biasa
+* Bu Rahma, wali kelas X-3, memanggilmu ke ruang guru. Kacamatanya diturunkan ke ujung hidung.
+Bu Rahma: Dua hari tidak ikut MPLS. Tanpa surat. Hari pertama sekolah sudah begini?
+{nama}: Ibu saya jatuh sakit, Bu. Di desa. Saya pulang.
+* Bu Rahma terdiam. Lalu ia melepas kacamatanya.
+Bu Rahma: Lain kali, kabari saya. Satu pesan saja. Saya bukan musuhmu. Saya wali kelasmu.
+Bu Rahma: Bolosmu saya catat sebagai izin. Sekali ini.
+@cinta rahma +3
+@percaya rahma +4
+@sembunyi rahma
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 1 — PEMILIHAN KETUA KELAS
+# ----------------------------------------------------------
+
+:: k4_ketua_kelas
+@kenal rahma
+@tampil rahma biasa
+Bu Rahma: Hari ini kita pilih ketua kelas. Calonnya dua: Nadia dan Reno. Tulis satu nama di kertas, lipat, masukkan ke kotak.
+* Nadia berpidato soal jadwal piket dan kas kelas yang transparan. Reno berjanji mentraktir es teh sekelas kalau menang.
+@pilihan
+> Tulis "Nadia" -> k4kk_nadia
+> Tulis "Reno" -> k4kk_reno
+> Biarkan kertasnya kosong -> k4kk_kosong
+
+:: k4kk_nadia
+* Penghitungan suara: Nadia 18, Reno 17. Selisih satu. Nadia menoleh ke arahmu, lalu cepat-cepat menunduk sambil tersenyum.
+@atur ketua_kelas = nadia
+@percaya nadia +6
+@cinta nadia +2
+@lompat k4kk_akhir
+
+:: k4kk_reno
+* Penghitungan suara: Reno 18, Nadia 17. Reno bersorak dan menepati janjinya: es teh untuk semua. Nadia menjadi wakil. Ia tersenyum, tapi menggigit bibirnya.
+@atur ketua_kelas = reno
+@cinta reno +5
+@percaya nadia -2
+@lompat k4kk_akhir
+
+:: k4kk_kosong
+* Penghitungan suara: Reno 18, Nadia 17. Satu kertas kosong. Kamu tidak tahu apakah Nadia menghitung kertas mana yang milikmu.
+@atur ketua_kelas = reno
+
+:: k4kk_akhir
+@sembunyi rahma
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 1 — DIMAS MENGAJAK MELIHAT KERJANYA
+# ----------------------------------------------------------
+
+:: k4_dimas_kerja
+@tampil dimas biasa
+Dimas: Mau lihat kerjaku? Ayo, ikut sebentar.
+* Gudang paket di belakang ruko: ratusan kardus, timbangan, dan anak-anak muda yang memuat sepeda motor dan sepeda. Dimas menyapa semua orang.
+Dimas: Kurir sepeda. Upahnya per paket. Capek, tapi bebas jam-nya. Kalau mau, aku kenalin ke mandor.
+Dimas: Atau cuci piring di Warung Bu Tini. Dapat makan. Atau jaga warnet malam, tapi kamu bakal tidur di kelas.
+@pilihan
+> "Aku mau jadi kurir, Dim." -> k4dk_kurir
+> "Cuci piring di Bu Tini saja. Biar dapat makan." -> k4dk_tini
+> "Aku fokus sekolah dulu." -> k4dk_sekolah
+
+:: k4dk_kurir
+@kerja_mulai kurir_paket
+@atur kerja_kota = kurir
+Dimas: Sip! Besok sore aku jemput. Siapin betis, ya.
+@cinta dimas +4
+@catatan Mulai kerja jadi kurir paket sepeda (dikenalkan Dimas).
+@lompat k4dk_akhir
+
+:: k4dk_tini
+@kenal tini
+@kerja_mulai cuci_piring
+@atur kerja_kota = cuci_piring
+* Bu Tini, perempuan bertubuh besar dengan celemek bermotif bunga, menatap tanganmu. "Pernah cuci piring?" "Di rumah, Bu." "Bagus. Mulai besok."
+@catatan Mulai kerja cuci piring di Warung Makan Bu Tini (dapat makan).
+@lompat k4dk_akhir
+
+:: k4dk_sekolah
+@atur kerja_kota = tidak
+Dimas: Bagus juga. Ada yang harus jadi juara kelas biar bisa nyontek, hahaha.
+@percaya dimas +2
+
+:: k4dk_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 1–2 — SEKAR DI TAMAN KOTA (bila satu kereta)
+# ----------------------------------------------------------
+
+:: k4_sekar_taman
+@tampil sekar biasa
+* Sekar duduk di bangku taman, memeluk novel baru. Seragam asramanya disetrika sangat rapi.
+Sekar: Asramanya ketat sekali. Teman sekamarku anak pejabat. Seminggu belum pernah menyapa.
+@jika adegan_k3_bayu_pamit != 1 -> k4st_novel
+@jika titip_sekar != 1 -> k4st_novel
+* Di halaman depan novelnya ada tulisan tangan yang kamu kenal. Huruf besar-besar, miring: "BIAR NGGAK BOSAN DI KOTA. — B."
+Sekar: Bayu yang kasih. Dititipkan ke Bu RT sebelum berangkat. ...Bayu itu kenapa, sih? Kadang baik banget, kadang kabur kalau ketemu aku.
+@pilihan
+> Ceritakan perasaan Bayu -> k4st_bocor
+> "Tanya dia sendiri, Sekar." -> k4st_tanya
+> Pura-pura tidak tahu -> k4st_pura
+
+:: k4st_bocor
+@atur bocor_perasaan_bayu = 1
+{nama}: Dia suka kamu, Sekar. Dari dulu.
+@tampil sekar kaget
+* Sekar terdiam lama sekali. Novel di pangkuannya ditutup pelan.
+Sekar: ...Kenapa kamu yang bilang? Bukan dia?
+@percaya sekar -2
+@percaya bayu -6
+@lompat k4st_akhir
+
+:: k4st_tanya
+@tampil sekar malu
+Sekar: Ih. Ya sudah, nanti aku tanya. ...Mungkin.
+@percaya sekar +3
+@percaya bayu +3
+@lompat k4st_akhir
+
+:: k4st_pura
+Sekar: Masa kamu nggak tahu. Kalian kan sahabatan.
+* Ia menatapmu curiga, lalu tertawa kecil.
+@lompat k4st_akhir
+
+:: k4st_novel
+@tampil sekar senyum
+Sekar: Tapi perpustakaannya besar sekali. Tiga lantai. Aku bisa pinjam lima buku sekaligus. Itu satu-satunya alasan aku belum menangis minta pulang.
+@cinta sekar +3
+
+:: k4st_akhir
+@stat kewarasan +4
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 2 — DIMAS MASIH MENGAYUH SEPEDA JAM SEMBILAN MALAM
+# ----------------------------------------------------------
+
+:: k4_dimas_malam
+* Malam di pusat kota. Di antara motor-motor, seseorang mengayuh sepeda dengan kardus besar terikat di boncengan. Seragam SMA masih melekat di badannya.
+@tampil dimas sedih
+* Dimas. Siang tadi Bu Rahma menegurnya karena tertidur di kelas.
+@pilihan
+> Panggil dia dan tanya -> k4dm_tanya
+> Pura-pura tidak lihat -> k4dm_pura
+
+:: k4dm_tanya
+* Dimas berhenti, kaget, lalu tertawa canggung. Kalian duduk di trotoar, berbagi air mineral.
+Dimas: Ayahku pergi waktu aku kelas lima. Ibu jualan nasi uduk subuh sampai siang, terus cuci baju orang sampai malam. Kalau aku kerja, Ibu nggak usah cuci baju orang lagi.
+Dimas: Jangan bilang siapa-siapa, ya. Apalagi Bu Rahma.
+@info dimas kisah_2
+@percaya dimas +8
+@cinta dimas +3
+@lompat k4dm_akhir
+
+:: k4dm_pura
+* Kamu menunduk dan berbelok ke gang lain. Dari kejauhan, kamu mendengar bel sepeda Dimas, makin jauh, makin pelan.
+
+:: k4dm_akhir
+@sembunyi dimas
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 2 — AJAKAN RENO KE MAL (Sabtu)
+# ----------------------------------------------------------
+
+:: k4_reno_mal
+@kenal reno
+@tampil reno senyum
+Reno: Woy! Ikut, yuk! Kami mau ke mal, nonton, terus nongkrong di kafe. Aku yang traktir tiketnya!
+* Di belakang Reno, tiga temannya memegang gelas kopi kekinian yang harganya sama dengan dua hari makanmu.
+@pilihan
+> Ikut (nonton, makan, kafe: ±Rp120.000) -> k4rm_ikut
+> "Nggak, deh. Aku ada urusan." -> k4rm_tolak
+> Ikut, tapi pesan air putih saja -> k4rm_air
+
+:: k4rm_ikut
+@uang -120000
+@tambah foya +1
+* Bioskop dingin, kursinya empuk. Kafe dengan lampu kuning dan musik pelan. Untuk beberapa jam, kamu lupa sedang jadi anak rantau. Lalu kamu melihat struk di tanganmu.
+@cinta reno +5
+@stat kewarasan +6
+@lompat k4rm_akhir
+
+:: k4rm_tolak
+Reno: Yaelah. Kampungan amat.
+* Teman-temannya tertawa. Kamu pulang dengan dompet utuh dan dada sedikit panas.
+@stat kewarasan -2
+@lompat k4rm_akhir
+
+:: k4rm_air
+* Di kafe, kamu memesan air putih. Pelayan menatapmu. Reno tertawa sampai tersedak kopinya.
+Reno: Air putih! Di kafe! Kamu memang beda, Ikan Asin!
+* Tapi ia tidak mengejek. Malah, di akhir, ia membelikanmu kentang goreng "karena kasihan". Senin pagi, Dimas mendengar ceritanya dan menepuk punggungmu bangga.
+@cinta reno +3
+@cinta dimas +2
+
+:: k4rm_akhir
+@sembunyi reno
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 3 — RUMAH DIMAS AKAN DIGUSUR
+# ----------------------------------------------------------
+
+:: k4_dimas_gusur
+* Bangku Dimas kosong. Hari kedua. Tidak ada surat izin.
+* Sepulang sekolah, kamu mencari rumahnya di Rel Utara. Di dinding rumah papan dekat rel, tulisan cat merah besar: "BONGKAR".
+@kenal sum
+@tampil sum sedih
+* Seorang ibu berkerudung lusuh menyambutmu. Bu Sum, ibu Dimas. Ia langsung menyuguhkan sepiring nasi uduk.
+Bu Sum: Temannya Dimas, ya? Dia lagi ke kelurahan, urus surat. Rumah-rumah di sepanjang rel mau dibongkar akhir tahun. Katanya tanah PJKA.
+Bu Sum: Dimas malu. Makanya tidak masuk.
+@tampil dimas sedih
+* Dimas pulang dan melihatmu. Wajahnya memerah.
+Dimas: Kamu ngapain di sini...
+@pilihan
+> "Gimana kalau Nadia menulis soal warga Rel Utara di blognya?" -> k4dg_nadia
+> "Aku nggak akan bilang siapa-siapa." -> k4dg_rahasia
+> "Kita bilang ke Bu Rahma. Sekolah mungkin bisa bantu." -> k4dg_rahma
+
+:: k4dg_nadia
+@atur alur_dimas_nadia = 1
+Dimas: Nadia? Ketua... eh, cewek yang pinter itu? Dia mau nulis soal kami?
+* Dua hari kemudian, Nadia datang ke Rel Utara membawa buku catatan dan HP-nya. Ia mewawancarai Bu Sum, Bu Ratmi, dan pedagang-pedagang di sepanjang rel. Dimas mengantarnya ke setiap rumah, canggung tapi bangga.
+@percaya dimas +4
+@cinta nadia +3
+@catatan Nadia menulis tentang warga Rel Utara di blognya, dibantu Dimas.
+@lompat k4dg_akhir
+
+:: k4dg_rahasia
+@atur rahasia_dimas = 1
+Dimas: ...Makasih.
+* Ia duduk di sebelahmu dan makan nasi uduk ibunya dalam diam.
+@percaya dimas +10
+@cinta dimas +3
+@lompat k4dg_akhir
+
+:: k4dg_rahma
+@tampil dimas kesal
+Dimas: Jangan! Nanti semua orang tahu!
+* Tapi kamu tetap bicara pada Bu Rahma. Seminggu kemudian, sekolah membebaskan iuran Dimas sampai akhir semester. Dimas menerima suratnya tanpa menatapmu.
+@percaya dimas -4
+@percaya rahma +4
+
+:: k4dg_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 3 — NADIA & IBUNYA (toko buku)
+# ----------------------------------------------------------
+
+:: k4_nadia_ibu
+@kenal hendra
+* Toko buku sepi. Pak Hendra, ayah Nadia, membaca koran di balik meja kasir dan hanya mengangguk padamu.
+* Dari balik rak buku pelajaran, kamu mendengar suara Nadia: "Ma? Ma, kedengaran? Ma..." Lalu sunyi. Sinyal panggilan video dari luar negeri terputus.
+@tampil nadia menangis
+* Nadia duduk di lantai di antara rak, HP di pangkuan, menangis tanpa suara.
+@pilihan
+> Duduk di sebelahnya, diam saja -> k4ni_temani
+> "Ayo keluar, beli kopi susu. Aku traktir." -> k4ni_kopi
+> "Telepon lagi saja, nanti pasti nyambung." -> k4ni_telepon
+
+:: k4ni_temani
+* Kamu duduk di lantai, di sebelahnya. Tidak ada yang bicara. Lima menit kemudian, kepala Nadia bersandar di bahumu.
+Nadia: Mama kerja di Taiwan. Tiga tahun. Teleponnya selalu putus di bagian yang penting.
+@info nadia kisah_2
+@cinta nadia +6
+@percaya nadia +4
+@lompat k4ni_akhir
+
+:: k4ni_kopi
+@uang -16000
+@tampil nadia senyum
+* Kopi susu dari gerobak di depan stasiun. Nadia memegang gelasnya dengan dua tangan, matanya masih merah.
+Nadia: Makasih. Kamu orang pertama di sekolah yang tahu Mama di luar negeri.
+@info nadia kisah_2
+@cinta nadia +5
+@lompat k4ni_akhir
+
+:: k4ni_telepon
+@tampil nadia kesal
+Nadia: Iya. Pasti. Makasih.
+* Suaranya datar. Ia berdiri, merapikan buku-buku yang tidak berantakan, dan menghilang ke gudang belakang.
+@cinta nadia -2
+
+:: k4ni_akhir
+@sembunyi nadia
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 3 — KEJADIAN KOS
+# ----------------------------------------------------------
+
+:: k4_kos_ratmi_sakit
+@kenal ratmi
+@tampil ratmi sedih
+* Pintu kamar Bu Ratmi terbuka. Ia terbaring berselimut, batuk-batuk. Radio keroncongnya mati.
+Bu Ratmi: Masuk angin, Nak. Biasa. Orang tua.
+@pilihan
+> Belikan obat dan bubur (Rp25.000) -> k4ks_obat
+> "Cepat sembuh, Bu." -> k4ks_doa
+
+:: k4ks_obat
+@uang -25000
+* Kamu membelikan obat dan bubur ayam. Bu Ratmi memakannya pelan-pelan, lalu menatapmu dengan mata berkaca-kaca.
+Bu Ratmi: Anak saya di Batam. Setahun sekali pulang. Kamu lebih rajin dari anak sendiri.
+@cinta ratmi +8
+@percaya ratmi +5
+@lompat k4ks_akhir
+
+:: k4ks_doa
+Bu Ratmi: Iya. Terima kasih.
+@cinta ratmi +1
+
+:: k4ks_akhir
+@sembunyi ratmi
+@kembali
+
+
+:: k4_kos_hartini_pagar
+@kenal hartini
+@tampil hartini kesal
+* Pagar Kos Melati sudah digembok. Lampu teras masih menyala. Bu Hartini berdiri di baliknya, bersedekap.
+Bu Hartini: Jam berapa ini?
+@jika hartini_izin_kerja == 1 -> k4kh_izin
+@pilihan
+> "Maaf, Bu. Saya pulang kerja. Tidak akan terulang." -> k4kh_maaf
+> Pergi, lalu panjat pagar samping diam-diam -> k4kh_panjat
+
+:: k4kh_izin
+Bu Hartini: ...Kerja, ya. Kamu sudah bilang. Masuk. Jangan berisik.
+* Ia membuka gembok. Di meja teras, ada teh hangat yang sudah dingin. Ia menunggumu.
+@cinta hartini +4
+@lompat k4kh_akhir
+
+:: k4kh_maaf
+Bu Hartini: Sekali. Ini sekali. Yang kedua, saya tidak buka.
+* Ia membuka gembok dengan bunyi keras.
+@percaya hartini -2
+@lompat k4kh_akhir
+
+:: k4kh_panjat
+@tambah peringatan_kos +1
+* Celanamu tersangkut di ujung pagar besi. Lampu kamar Bu Hartini menyala. Besok paginya, surat peringatan tertempel di pintumu: "PERINGATAN PERTAMA."
+@percaya hartini -8
+@stat kewarasan -4
+
+:: k4kh_akhir
+@sembunyi hartini
+@kembali
+
+
+:: k4_kos_residence_tawaran
+* Tetangga kamar sebelah, mahasiswa berkaus mahal, mengetuk pintumu. Di tangannya: kardus berisi HP-HP bekas tanpa dus.
+Tetangga: Mau kerja gampang? Titip jual ke teman-teman sekolahmu. Tanpa nota, tanpa ribet. Sepuluh persen buat kamu.
+@pilihan
+> "Nggak, Mas. Makasih." -> k4kr_tolak
+> Terima kardusnya -> k4kr_terima
+
+:: k4kr_tolak
+* Ia mengangkat bahu dan mengetuk pintu kamar lain. Kamu menatap pintu yang tertutup itu lama, lega dan sedikit takut.
+@stat kewarasan +2
+@lompat k4kr_akhir
+
+:: k4kr_terima
+@atur jual_gelap = 1
+@uang +150000
+* Seminggu kemudian, empat HP terjual ke teman-teman kelas. Seratus lima puluh ribu masuk dompetmu. Kamu tidak bertanya dari mana HP-HP itu berasal. Kamu takut jawabannya.
+@stat kewarasan -6
+
+:: k4kr_akhir
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 3 — SEKAR KEWALAHAN (bila satu kereta)
+# ----------------------------------------------------------
+
+:: k4_sekar_peringkat
+@tampil sekar menangis
+* Sekar sudah duduk di bangku taman sebelum kamu datang. Kertas hasil ujian diremas di tangannya.
+Sekar: Peringkat dua puluh tiga. Dari tiga puluh. Di desa aku selalu nomor satu. Di sini... aku cuma anak desa yang nggak bisa bahasa Inggris.
+Sekar: Aku mau pulang. Ibu juga nggak bisa sendirian.
+@pilihan
+> "Kamu juara bukan karena peringkatnya, Sekar." -> k4sp_juara
+> "Kalau berat, pulang saja. Nggak apa-apa." -> k4sp_pulang
+> "Ayo belajar bareng di perpustakaan kota. Tiap Minggu." -> k4sp_belajar
+
+:: k4sp_juara
+@tampil sekar sedih
+Sekar: Terus karena apa?
+{nama}: Karena kamu berani datang ke sini. Anak-anak itu nggak perlu berani. Kamu perlu.
+* Sekar menatap kertasnya, lalu melipatnya rapi dan memasukkannya ke tas.
+@percaya sekar +6
+@cinta sekar +3
+@lompat k4sp_akhir
+
+:: k4sp_pulang
+@atur sekar_ingin_pulang = 1
+Sekar: ...Kamu juga mikir aku nggak sanggup?
+* Ia tidak menunggu jawabanmu. Ia pergi lebih cepat dari biasanya.
+@percaya sekar -4
+@lompat k4sp_akhir
+
+:: k4sp_belajar
+@atur belajar_bareng_sekar = 1
+@tampil sekar senyum
+Sekar: Tiap Minggu? Kamu juga mau belajar? Bahasa Inggrisku jelek, matematikamu jelek. Kita saling bantu?
+{nama}: Deal.
+@cinta sekar +5
+@tambah akademik +2
+
+:: k4sp_akhir
+@sembunyi sekar
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 4 — MISI RAKA: BENGKEL KAPAL PELABUHAN
+# ----------------------------------------------------------
+
+:: k4_raka_bengkel
+* Pelabuhan Sakala. Bau solar, karat, dan garam. Di ujung deretan gudang, sebuah bengkel kapal dengan pintu besi setengah terbuka.
+* Seorang lelaki berlengan oli membungkuk di atas mesin perahu. Usianya hampir empat puluh. Di dinding bengkel tergantung sangkar burung perkutut. Kosong.
+@kenal raka
+@tampil raka biasa
+Bang Raka: Cari siapa?
+* Kamu mengeluarkan foto pudar dari dompet. Lelaki itu meliriknya, lalu kembali ke mesinnya.
+Bang Raka: Salah orang.
+* Tapi tangannya berhenti. Obeng di tangannya tidak bergerak lama.
+@pilihan
+> "Juragan Darto bilang: Bapak tidak marah. Perkututnya masih hidup." -> k4rb_pesan
+> Tinggalkan foto di mejanya dan pergi -> k4rb_foto
+> Pergi diam-diam -> k4rb_pergi
+
+:: k4rb_pesan
+@atur raka_pesan = 1
+* Bang Raka berdiri. Ia menatapmu lama, rahangnya mengeras.
+Bang Raka: Perkututnya... masih hidup?
+{nama}: Masih, Bang. Juragan memberinya makan tiap pagi.
+* Bang Raka berbalik, menghadap dinding, ke sangkar kosong itu. Bahunya naik turun sekali.
+Bang Raka: Pulang sana. Ini bukan urusanmu.
+* Tapi saat kamu keluar, ia memanggil: "Hei. Dia... sehat?"
+@percaya darto +10
+@lompat k4rb_akhir
+
+:: k4rb_foto
+@atur raka_foto_ditinggal = 1
+* Kamu meletakkan foto itu di atas meja kerjanya, di antara mur dan baut. Kamu tidak menoleh. Kalau menoleh, kamu takut ia mengembalikannya.
+@percaya darto +6
+@lompat k4rb_akhir
+
+:: k4rb_pergi
+* Kamu mundur pelan-pelan dan pergi. Mungkin belum waktunya. Mungkin memang salah orang.
+@percaya darto +2
+
+:: k4rb_akhir
+@sembunyi raka
+@hp pesan Ayah | Juragan Darto datang ke rumah tadi malam, tanya soal anaknya. Ayah ceritakan apa yang kamu kabarkan. Dia diam lama sekali, terus bilang "terima kasih". Ayah belum pernah dengar dia bilang itu.
+@tunggu_hp
+@catatan Misi Raka — Bertemu Bang Raka di bengkel kapal Pelabuhan Sakala. Sangkar perkutut kosong di dindingnya.
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 4 — MURAL DI KOLONG JEMBATAN PELABUHAN
+# ----------------------------------------------------------
+
+:: k4_mural
+* Di kolong jembatan dekat pelabuhan, dinding beton penuh coretan. Lalu satu mural menghentikan langkahmu.
+* Sebuah mercusuar. Di bawahnya, dua anak kecil duduk di ujung dermaga, kaki menjuntai ke laut. Salah satunya memakai gelang merah.
+* Di sudut bawah, tanda tangan kecil: "A." Catnya masih baru. Kamu menyentuhnya. Masih sedikit lengket.
+@tambah petunjuk_sahabat +1
+@catatan Petunjuk — Mural mercusuar dan dua anak di kolong jembatan Pelabuhan, bertanda tangan "A." Catnya masih baru.
+@stat kewarasan +5
+@kembali
+
+
+# ----------------------------------------------------------
+#  MINGGU 5 — PERSIAPAN LOMBA TUJUH BELASAN
+# ----------------------------------------------------------
+
+:: k4_lomba
+@kenal rahma
+@tampil rahma senyum
+Bu Rahma: Kelas kita ikut tiga lomba: mading, tarik tambang, dan kebersihan kelas. Masing-masing pilih satu.
+@pilihan
+> Mading bersama Nadia -> k4lb_mading
+> Tarik tambang bersama Dimas & Reno -> k4lb_tambang
+> Kebersihan kelas -> k4lb_bersih
+
+:: k4lb_mading
+@atur lomba_17 = mading
+@sembunyi rahma
+@tampil nadia senyum
+Nadia: Temanya "Merdeka". Aku mau nulis yang beda. Gimana kalau tentang... pulang? Merdeka itu mungkin artinya bisa memilih ke mana pulang.
+* Kalian menulis sampai sore: tentang mercusuar, tentang Rel Utara, tentang ibu-ibu yang menunggu telepon dari jauh. Madingnya juara dua.
+@cinta nadia +5
+@tambah komunikasi +2
+@lompat k4lb_akhir
+
+:: k4lb_tambang
+@atur lomba_17 = tambang
+@sembunyi rahma
+@tampil dimas senyum
+Dimas: Masalahnya cuma satu. Reno nggak mau di belakangku.
+@jika reno_sikap == teman -> k4lb_tambang_akur
+* Latihan pertama berantakan. Dimas dan Reno saling tarik ke arah yang berbeda.
+@lompat k4lb_akhir
+
+:: k4lb_tambang_akur
+* Kamu menyeret Reno ke latihan. "Ikan Asin yang minta," kata Reno sambil memutar mata, tapi ia berdiri di belakang Dimas. Untuk pertama kalinya, mereka saling tertawa.
+@cinta dimas +3
+@cinta reno +3
+@lompat k4lb_akhir
+
+:: k4lb_bersih
+@atur lomba_17 = bersih
+* Kamu menyapu, mengepel, mengelap kaca jendela sampai berkilau. Bu Rahma lewat dan berhenti. "Ini kelas X-3? Saya hampir tidak kenal."
+@percaya rahma +4
+
+:: k4lb_akhir
+@sembunyi semua
+@kembali

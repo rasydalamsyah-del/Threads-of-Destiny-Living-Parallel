@@ -479,12 +479,14 @@ Sekar: Aku juga pura-pura nggak lihat.
 :: pesan_siapa
 * Centang dua. Tidak dibaca. Sampai baterai HP-mu berkedip merah, tidak ada balasan.
 @atur pesan_misterius = tanya
+@atur misterius_dibalas = 1
 @lompat pesan_akhir
 
 :: pesan_nama
 * Centang dua. Lalu, beberapa detik kemudian... dibaca. Tulisan "sedang mengetik..." muncul. Hilang. Muncul lagi. Hilang.
 * Tidak ada balasan.
 @atur pesan_misterius = nama
+@atur misterius_dibalas = 1
 @stat kewarasan +4
 @lompat pesan_akhir
 

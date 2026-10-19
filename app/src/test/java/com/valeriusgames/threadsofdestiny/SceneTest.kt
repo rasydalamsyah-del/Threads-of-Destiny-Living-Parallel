@@ -101,5 +101,6 @@ class SceneTest {
         assertTrue(ids.count { it.startsWith("b3_") } >= 9)
         assertTrue(ids.count { it.startsWith("b4_") } >= 18)
         assertTrue(ids.count { it.startsWith("k3_") } >= 10)
+        assertTrue(ids.count { it.startsWith("k4_") } >= 20)
     }
 }
