@@ -158,6 +158,52 @@ Thin build, light tan skin, kind face with faint dark circles, squinting slightl
 Wearing a simple dusty-blue headscarf (kerudung), a long-sleeve brown blouse, a measuring tape around her neck.
 ```
 
+### Tokoh tambahan lain — `rt`, `kades`, `mantri`, `rani`, `dodi`, `dino`, `raka`
+Ekspresi: cukup gambar biasa (+ `senyum` bila sering muncul).
+
+Pak RT Sobari (`rt.png`)
+```
+Indonesian man, 50 years old, village neighborhood head (RT), cheerful, busy and a bit talkative.
+Medium build with a small belly, light brown skin, short black hair, thick mustache, friendly wide smile.
+Wearing a light khaki government-style short-sleeve shirt with a pen in the pocket, a black peci, holding a rolled paper announcement.
+```
+Pak Kades (`kades.png`)
+```
+Indonesian man, 56 years old, village head of a coastal fishing village, dignified, idealistic, a little tired.
+Tall and slim, tanned skin, neatly combed grey hair, thin glasses, calm determined eyes.
+Wearing a neat light brown batik long-sleeve shirt, dark trousers, a small village emblem pin on his chest.
+```
+Mantri Joko (`mantri.png`)
+```
+Indonesian village health worker (mantri), 40 years old, calm, kind and serious.
+Average build, light brown skin, short neat black hair, clean-shaven, gentle eyes.
+Wearing a white short-sleeve shirt with a name tag, a stethoscope around his neck, carrying a worn brown leather medical bag.
+```
+Rani (`rani.png`)
+```
+Indonesian teenage girl, 15 years old, cheerful and confident classmate who is moving to the city for high school.
+Shoulder-length wavy black hair with a small hair clip, bright smile, light tan skin.
+Wearing a pastel yellow blouse and a denim jacket, a backpack strap on one shoulder.
+```
+Dodi (`dodi.png`)
+```
+Indonesian teenage boy, 15 years old, clumsy and emotional classmate who is moving to the city for high school.
+Chubby round face, short buzz-cut black hair, light brown skin, slightly teary eyes but smiling.
+Wearing a red polo shirt and carrying a big travel bag.
+```
+Dino (`dino.png`)
+```
+Indonesian boy, 11 years old, elementary school student, mischievous but not evil, a fisherman's son.
+Small skinny build, tanned skin, spiky short black hair, a band-aid on his knee, a cheeky grin.
+Wearing a red-and-white Indonesian elementary school uniform, untucked shirt, red shorts.
+```
+Raka muda (`raka.png`, seperti di foto lama Darto: ± 20 tahun lalu)
+```
+Indonesian young man, 18 years old, son of a dried-fish boss in a coastal village, hopeful and a little restless.
+Slim build, tanned skin, short black hair, faint mustache, warm smile resembling his father's sharp eyes.
+Wearing a simple white t-shirt under an open checkered flannel shirt, holding a small turtledove (perkutut) on his hand.
+```
+
 ### Juragan Darto — `darto`
 (juragan pengolahan ikan asin, 52 tahun)
 ```

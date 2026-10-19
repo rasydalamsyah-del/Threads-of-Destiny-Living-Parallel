@@ -288,6 +288,49 @@ kacamata bulat, kardigan lavender. Perbaiki naskah & prompt `dermaga__sekar.jpg`
 **Tokoh tambahan bergambar (prompt di PROMPT_GAMBAR.md):** Pak Karta (`karta`, bapak Bayu) ★ · Pak Usman (`usman`) ★ · Mbak Yati (`yati`) ★ ·
 Pak Haji Somad (`haji`) ☆ · Bu Wati (`wati`, ibu Sekar) ○. Dino (pengejek Laras) tanpa gambar.
 
+## 6c. RANCANGAN BARU — Bab 3 (disetujui 19 Okt 2026, BELUM dibuat)
+
+**Bab 3 Kota — "Pamit" (Sabtu 27 Juni – Sabtu 11 Juli)**
+- Minggu 1, urusan berangkat: daftar ulang & berkas di kecamatan bersama Ibu · info 3 kos lewat HP (pilihan kos tetap saat tiba,
+  tidak dobel) · berhenti kerja & pamit ke Darto (hasil sesuai "kerja sementara"/"kerja tetap") · bekal: kerja serabutan terakhir,
+  🔀 terima/tolak celengan bambu Ibu.
+- Bila Sekar ikut: adegan berdua (urus berkas bersama, menghibur Bu Wati).
+- **Sabtu 4 Juli: pasar malam di lapangan desa** (adegan ringan untuk kedua jalur: komidi putar, Laras, Bayu & Sekar).
+- Minggu 2, pamitan dalam: Laras (kotak sepatu "Buat Kakak"; 🔀 janji layangan 17 Agustus / janji telepon tiap malam) ·
+  Ayah di dermaga (pisau lipat nelayan; bila tahu hutang 🔀 "aku kirim uang" / "jangan melaut kalau langit merah" → kunci malam badai) ·
+  Ibu (bekal, menangis di dapur) · Bayu (titip untuk Sekar / mengaku iri lalu berdamai) · Darto (foto Raka, bila percaya cukup) ·
+  malam terakhir di dermaga, pesan misterius "Aku dengar kamu akan datang."
+- Sabtu 11 Juli berangkat (sendiri / bersama Sekar). **Tiba di Sakala: menjelajah kota & survei 3 kos langsung** (kondisi asli
+  baru ketahuan), 🔀 menawar, memilih sebelum malam. Sekar ke asrama beasiswa, menemani berkeliling dulu.
+
+**Bab 3 Desa — "Musim Ombak Tinggi" (27 Juni – 19 Juli)** (bukan "angin barat": Juli = musim angin timur, kemarau, ombak tinggi)
+- Tangkapan sepi → penghasilan Ayah turun → tekanan hutang naik (benih badai Bab 4).
+- Tahun ajaran baru Laras (kelas 6) 🔀 bantu beli seragam & buku / serahkan ke orang tua.
+- Daftar Paket C di kecamatan (bila benih ada), teman belajar baru.
+- Bayu masuk gudang (bila utang bapaknya) → cerita kecil sebagai rekan kerja.
+- Sekar tinggal: tawaran kerja antar jahitan Bu Wati & teman belajar Paket C.
+- Darto: lembur Sabtu bersama, mulai melihat pemain seperti anaknya sendiri.
+- Sabtu 4 Juli pasar malam · Sabtu 11 Juli stasiun (mengantar teman/Sekar) + mimpi "hidup paralel" (hari yang sama pemain kota berangkat).
+- Senin 13 Juli Ibu jatuh sakit 🔀 bayar sendiri / pinjam Darto / serahkan Ayah, lalu 🔀 siapa menjaga warung.
+- Sahabat: Laras & gelang 🔀 jujur/mengelak · akun lama "A." di Sosmed · Minggu 19 Juli pesan misterius.
+
+**Desa dari jauh (pemain di kota)** — berlaku Bab 3 dst.
+| Cara | Kegunaan |
+|---|---|
+| 💬 Chat (ada) | kabar sehari-hari Ibu, Laras, Bayu |
+| 📞 Telepon / video call (fitur baru) | momen penting: Ibu sakit, malam badai, lomba layangan |
+| 💸 Kirim uang lewat Dompet (fitur baru) | obat Ibu, cicilan perahu, sekolah Laras |
+| 🚆 Pulang kampung (4 jam kereta) | akhir pekan (risiko lelah/bolos), libur semester, Lebaran — adegan khusus |
+| 📷 Sosmed (ada) | foto desa: mercusuar, piala Bayu |
+- Ayah: telepon singkat; percaya naik bila ikut mencicil / mengingatkan soal langit merah. Ibu: chat & kiriman. Laras: video call,
+  janji ditagih. Bayu: chat, curhat Sekar, bisa berkunjung ke Sakala. Sekar: langsung (kota) / chat (desa).
+- **Darto: misi mencari Raka di Sakala** — petunjuk dikirim lewat Ayah menaikkan Kepercayaan; Raka bisa ditemukan (cerita besar).
+- Ibu sakit 13 Juli untuk pemain kota: telepon Laras menangis 🔀 kirim uang / izin pulang di minggu pertama sekolah.
+- **Hubungan bisa merenggang** bila lama tidak dihubungi; telepon di momen penting / pulang kampung memulihkan.
+
+**Gambar:** semua tokoh di game dibuatkan gambar (prompt di PROMPT_GAMBAR.md), termasuk Pak RT, Pak Kades, Mantri Joko, Rani, Dodi,
+Dino, Raka muda (sesuai foto).
+
 ## 7. Bab 1 — Lulus SMP (Senin 22 Juni)
 
 Alur utama (sudah ada): kenangan → bangun → jalan ke ruang makan → sarapan → Laras berangkat → buka warung →
