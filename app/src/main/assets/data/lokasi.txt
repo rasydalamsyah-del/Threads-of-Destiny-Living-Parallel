@@ -64,16 +64,16 @@ orang  = darto 0.36, 0.64, 0.42
 nama     = Lapangan desa
 tempat   = desa
 cadangan = kota_kecil
-pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.30, 0.88 | 5 ; dermaga | 🌅 Ke dermaga | 0.78, 0.40 | 5
-benda    = main_bola | ⚽ Main bola bersama Bayu | 0.62, 0.70 ; lari_sore | 🏃 Lari keliling lapangan | 0.40, 0.62 ; duduk_ketapang | 🌳 Pohon ketapang | 0.20, 0.56
-orang    = bayu 0.68, 0.80, 0.40 ; laras 0.30, 0.80, 0.30
+pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.30, 0.88 | 5 ; dermaga | 🌅 Ke dermaga | 0.80, 0.46 | 5
+benda    = main_bola | ⚽ Main bola bersama Bayu | 0.42, 0.52 ; lari_sore | 🏃 Lari keliling lapangan | 0.58, 0.62 ; duduk_ketapang | 🌳 Pohon ketapang | 0.16, 0.48
+orang    = bayu 0.66, 0.72, 0.40 ; laras 0.32, 0.76, 0.30
 
 [dermaga]
 nama     = Dermaga mercusuar
 tempat   = desa
 cadangan = dermaga_malam
 pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.70, 0.88 | 5 ; lapangan | ⚽ Ke lapangan | 0.84, 0.56 | 5
-benda    = dermaga | 🌅 Duduk di dermaga | 0.60, 0.74 ; memancing | 🎣 Memancing | 0.42, 0.64 ; melaut | 🚣 Perahu Pak Karta | 0.18, 0.58 ; siapkan_perahu | ⛵ Perahu Ayah | 0.30, 0.50
+benda    = dermaga | 🌅 Duduk di dermaga | 0.60, 0.74 ; memancing | 🎣 Memancing | 0.42, 0.64 ; melaut | 🚣 Perahu Pak Karta | 0.24, 0.60 ; siapkan_perahu | ⛵ Perahu Ayah | 0.50, 0.52
 orang    = sekar 0.30, 0.86, 0.36 ; bayu 0.70, 0.82, 0.38 ; ayah 0.48, 0.68, 0.36
 
 # ---------------- KOTA SAKALA ----------------
@@ -140,5 +140,5 @@ benda    = jelajah_kota | 🧺 Lihat-lihat lapak | 0.40, 0.66
 nama     = Pelabuhan Sakala
 tempat   = kota
 cadangan = stasiun_besar
-pintu    = stasiun_besar | ⬅ Angkot ke Stasiun Besar | 0.24, 0.86 | 30
+pintu    = stasiun_besar | ⬅ Angkot ke Stasiun Besar | 0.42, 0.88 | 30
 benda    = cari_jejak | 🔍 Tanya orang di dermaga | 0.62, 0.66

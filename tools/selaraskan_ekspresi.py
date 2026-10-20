@@ -14,7 +14,9 @@ def load(p):
 report = {}
 for f in sorted(os.listdir(src_dir)):
     cid = f.rsplit('_', 1)[0]
-    _, gb, mb = load(os.path.join(K, cid + '.png'))
+    base = os.path.join(K, cid + '.png')
+    if not os.path.exists(base): base = os.path.join(K, cid + '.webp')  # gambar biasa boleh .png atau .webp
+    _, gb, mb = load(base)
     im, ge, me = load(os.path.join(src_dir, f))
     kb, db = sift.detectAndCompute(gb, mb); ke, de = sift.detectAndCompute(ge, me)
     good = [a for a, b in cv2.BFMatcher().knnMatch(de, db, k=2) if a.distance < 0.75 * b.distance]
