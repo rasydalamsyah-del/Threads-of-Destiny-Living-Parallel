@@ -92,7 +92,7 @@ syarat = bab == 2 && tgl == 613
 [b2_laras_diejek]
 naskah = adegan_keluarga.txt
 judul  = Laras diejek "bau ikan"
-lokasi = ruang_tengah
+lokasi = kamar_laras
 waktu  = senin-sabtu 14:00-16:00
 syarat = bab == 2 && tgl >= 608 && tgl <= 619
 
@@ -126,7 +126,7 @@ syarat = bab == 2
 naskah = adegan_keluarga.txt
 judul  = PR matematika Laras
 orang  = laras
-lokasi = ruang_tengah
+lokasi = kamar_laras
 syarat = bab == 2 && adegan_b2_laras_diejek == 1
 
 [b2_ibu_sinetron]
@@ -280,8 +280,8 @@ syarat = bab == 3 && jalur == kerja && tgl >= 715
 [b3_laras_kotak]
 naskah = adegan_keluarga.txt
 judul  = Kotak sepatu "Buat Kakak"
-lokasi = ruang_tengah
-waktu  = setiap hari 18:30-20:30
+lokasi = kamar_laras
+waktu  = setiap hari 20:30-21:00
 syarat = bab >= 3 && jalur == kerja && adegan_b3_laras_gelang == 1
 
 [b3_darto_lembur]

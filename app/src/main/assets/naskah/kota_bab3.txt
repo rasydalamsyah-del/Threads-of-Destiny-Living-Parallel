@@ -199,10 +199,10 @@ Ibu: Sudah lewat jam makan. Ayo, Ibu traktir bakso. Sekali-sekali.
 @gelap 1000
 @kalender Senin 20:00
 @waktu Senin, 29 Juni 2026 · malam
-@latar ruang_tengah
-@atur _tempat = ruang_tengah
+@latar kamar_ayah_ibu
+@atur _tempat = kamar_ayah_ibu
 @terang 1000
-* Laras sudah tidur. Ayah berangkat melaut. Ibu memanggilmu ke ruang tengah dengan suara pelan.
+* Laras sudah tidur di kamarnya. Ayah berangkat melaut. Ibu memanggilmu ke kamarnya dengan suara pelan.
 @tampil ibu biasa
 * Di tangannya: celengan bambu kusam dari bawah lemari. Yang tidak pernah disentuh, bahkan ketika warung sepi berhari-hari.
 Ibu: Ini tabungan Ibu sejak kamu masuk SD. Tiap ada lebih seribu, dua ribu, masuk sini.

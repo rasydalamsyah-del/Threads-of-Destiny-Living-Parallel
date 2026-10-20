@@ -155,12 +155,12 @@ Ayah: Ya. Ayah bahagia. Cuma kadang capek.
 
 
 # ----------------------------------------------------------
-#  LARAS DIEJEK (ruang tengah, sepulang sekolah)
+#  LARAS DIEJEK (kamar Laras, sepulang sekolah)
 # ----------------------------------------------------------
 
 :: b2_laras_diejek
 @tampil laras menangis
-* Laras tidak mengerjakan PR seperti biasa. Ia meringkuk di sudut tikar, membelakangi pintu, bahunya bergetar.
+* Pintu kamar Laras setengah terbuka. Ia tidak mengerjakan PR seperti biasa. Ia meringkuk di ujung kasurnya, membelakangi pintu, bahunya bergetar.
 {nama}: Ras? Kenapa?
 Laras: Nggak apa-apa! Pergi sana!
 * Di dekatnya, sebuah buku gambar tergeletak. Halaman terakhirnya dicoret-coret spidol hitam. Ada tulisan besar: "LARAS BAU IKAN".
@@ -218,7 +218,7 @@ Laras: Jangan! Nanti aku makin diejek, "kakaknya galak"!
 
 
 # ----------------------------------------------------------
-#  PR MATEMATIKA (temui Laras di ruang tengah)
+#  PR MATEMATIKA (temui Laras di kamarnya)
 # ----------------------------------------------------------
 
 :: b2_laras_pr
@@ -414,12 +414,12 @@ Laras: Bohong! Kakak pakai itu dari aku masih TK!
 
 
 # ----------------------------------------------------------
-#  KOTAK SEPATU "BUAT KAKAK" (ruang tengah, malam)
+#  KOTAK SEPATU "BUAT KAKAK" (kamar Laras, malam sebelum tidur)
 # ----------------------------------------------------------
 
 :: b3_laras_kotak
 @tampil laras biasa
-* Laras menyeret sebuah kotak sepatu lusuh dari bawah lemari. Di tutupnya tertulis dengan krayon: "BUAT KAKAK KALAU SUDAH PULANG".
+* Laras sudah memakai piyama. Ia berjongkok, lalu menyeret sebuah kotak sepatu lusuh dari bawah meja belajarnya. Di tutupnya tertulis dengan krayon: "BUAT KAKAK KALAU SUDAH PULANG".
 {nama}: Apa ini, Ras?
 Laras: Dulu waktu teman-teman Kakak mulai ngomongin sekolah di kota, aku takut Kakak ikut pergi. Jadi aku mulai ngumpulin gambar. Biar kalau Kakak pergi, pas pulang ada hadiahnya.
 * Di dalamnya ada puluhan gambar. Kamu di warung. Kamu di dermaga. Kamu dengan sayap. Kamu dan Laras di bawah mercusuar yang menyala, dengan sinar kuning dicoret-coret krayon.

@@ -23,7 +23,8 @@ waktu = pagi
 waktu = tetap
 
 [ruang_tengah]
-waktu = pagi
+# gambar dasar = suasana sore; versi lain: ruang_tengah_pagi / _siang / _malam
+waktu = sore
 
 [ruang_makan]
 waktu = pagi
@@ -100,4 +101,20 @@ waktu = sore
 waktu = pagi
 
 [pelabuhan]
+waktu = sore
+
+# ---- rumah: ruang tengah dengan orang & kamar baru ----
+[ruang_tengah__ayah]
+waktu = sore
+
+[ruang_tengah__ibu_laras]
+waktu = malam
+
+[ruang_tengah__ibu]
+waktu = malam
+
+[kamar_ayah_ibu]
+waktu = sore
+
+[kamar_laras]
 waktu = sore

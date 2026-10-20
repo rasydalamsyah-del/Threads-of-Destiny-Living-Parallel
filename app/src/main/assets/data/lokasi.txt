@@ -33,9 +33,21 @@ tidur  = ya
 [ruang_tengah]
 nama   = Ruang tengah
 tempat = desa
-pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.87, 0.46 | 0 ; ruang_makan | ➡ Ke ruang makan | 0.57, 0.38 | 0 ; rumah_warung | 🚪 Keluar rumah | 0.13, 0.44 | 0
-benda  = nonton_tv | 📺 TV | 0.80, 0.46 ; lipat_pakaian | 👕 Lipat pakaian | 0.30, 0.52 ; pr_laras | ✏️ PR Laras | 0.47, 0.60 ; radio_ayah | 📻 Radio Ayah | 0.30, 0.44
-orang  = ayah 0.27, 0.62, 0.34 ; ibu 0.36, 0.62, 0.34 ; laras 0.55, 0.70, 0.22
+pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.87, 0.46 | 0 ; ruang_makan | ➡ Ke ruang makan | 0.53, 0.36 | 0 ; rumah_warung | 🚪 Keluar rumah | 0.12, 0.40 | 0 ; kamar_ayah_ibu | 🚪 Kamar Ayah & Ibu | 0.34, 0.33 | 0 ; kamar_laras | 🚪 Kamar Laras | 0.73, 0.33 | 0
+benda  = nonton_tv | 📺 TV | 0.81, 0.44 ; lipat_pakaian | 👕 Lipat pakaian | 0.30, 0.50 ; radio_ayah | 📻 Radio Ayah | 0.18, 0.44
+orang  = ayah 0.22, 0.55, 0.20 ; ibu 0.27, 0.52, 0.17 ; laras 0.57, 0.56, 0.12
+
+[kamar_ayah_ibu]
+nama   = Kamar Ayah & Ibu
+tempat = desa
+pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.85, 0.45 | 0
+
+[kamar_laras]
+nama   = Kamar Laras
+tempat = desa
+pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.85, 0.45 | 0
+benda  = pr_laras | ✏️ Meja belajar Laras | 0.62, 0.48
+orang  = laras 0.70, 0.60, 0.26
 
 [ruang_makan]
 nama   = Ruang makan

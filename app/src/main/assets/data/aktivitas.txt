@@ -123,7 +123,7 @@ teks    = Sinetron di TV sedang tegang. Ibu melipat sambil berkomentar ke tokoh-
 batas   = 1
 
 [pr_laras]
-lokasi  = ruang_tengah
+lokasi  = kamar_laras
 nama    = Membantu PR Laras
 ikon    = ✏️
 tempat  = desa
