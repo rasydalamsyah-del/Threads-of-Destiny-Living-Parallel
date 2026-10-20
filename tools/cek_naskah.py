@@ -116,6 +116,15 @@ for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
         if j not in labels:
             err(f, n, f"Label ':: {j}' tidak ditemukan")
 
+# data/latar.txt: setiap gambar latar (selain versi _pagi/_siang/_sore/_malam) wajib punya waktu
+_lt = os.path.join(data, "latar.txt")
+if os.path.exists(_lt):
+    _listed = {l.strip()[1:-1] for l in open(_lt, encoding="utf-8") if l.strip().startswith("[")}
+    for _n in sorted(latar):
+        if any(_n.endswith(v) for v in ("_pagi", "_siang", "_sore", "_malam")) and _n not in ("kamar_pagi", "dermaga_malam"):
+            continue
+        if _n not in _listed:
+            err(_lt, 1, f"latar {_n} belum ada di data/latar.txt (tambahkan [{_n}] + waktu = ...)")
 # data/sosmed.txt: penulis harus karakter yang ada
 sos = os.path.join(data, "sosmed.txt")
 if os.path.exists(sos):
