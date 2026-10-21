@@ -133,6 +133,14 @@ waktu = malam
 [ruang_makan__ayah]
 waktu = siang
 
+# sarapan hari libur: Laras masih tidur
+[ruang_makan__ayah_ibu]
+waktu = pagi
+
+# Laras makan sendiri (sarapan libur 07:30, makan siang 13:00), baju rumah
+[ruang_makan__laras]
+waktu = pagi
+
 [dapur]
 waktu = sore
 

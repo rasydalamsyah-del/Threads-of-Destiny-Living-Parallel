@@ -554,9 +554,9 @@ Setiap adegan yang sudah terjadi tercatat otomatis sebagai `adegan_<id> = 1`.
 | | 20:30–21:00 | Laras menggambar | ✅ |
 | | 21:00–06:15 (libur s.d. 07:30) | Laras tidur | ✅ (fitur tokoh tidur) |
 | Kamar Ayah & Ibu | — | (kosong; dipakai adegan celengan) | ✅ latar |
-| Ruang makan | 06:15–07:15 | sarapan Ayah, Ibu, Laras (Laras berseragam) — libur: Ayah & Ibu | ✅ bertiga (+ pose Ibu & Laras menoleh) · ⏳ versi Ayah & Ibu (libur) belum rapi |
-| | 07:30–08:00 (libur) | Laras sarapan sendiri (piyama) | ⏳ belum diputuskan (gambar sendiri / hapus jadwal) |
-| | 12:00–13:00 · 13:00–14:00 | Ayah makan siang · Laras makan siang (baju rumah) | ✅ Ayah (+ pose) · ⏳ Laras sendiri belum rapi |
+| Ruang makan | 06:15–07:15 | sarapan Ayah, Ibu, Laras (Laras berseragam) — libur: Ayah & Ibu | ✅ bertiga (+ pose Ibu & Laras menoleh) · ✅ Ayah & Ibu libur (+ pose Ayah & Ibu menoleh, build 64) |
+| | 07:30–08:00 (libur) | Laras sarapan sendiri (baju rumah) | ✅ ruang_makan__laras (build 64; belum ada pose menoleh) |
+| | 12:00–13:00 · 13:00–14:00 | Ayah makan siang · Laras makan siang (baju rumah) | ✅ Ayah (+ pose) · ✅ Laras (gambar yang sama dengan sarapan libur) |
 | | 17:45–18:30 | makan malam bertiga | ✅ |
 | Dapur (baru) | 05:00–06:15 · 17:15–17:45 | Ibu memasak (depan kompor) | ✅ (+ pose menoleh 1/2/3 subuh, 1/2 sore) |
 | Halaman belakang (baru) | 05:30–06:15 | Ayah membasuh muka di sumur sepulang melaut | ✅ |
