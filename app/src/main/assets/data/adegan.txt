@@ -225,6 +225,7 @@ syarat = bab == 3 && jalur == sma && tgl >= 705
 naskah = adegan_pamit.txt
 judul  = Ibu menyiapkan bekal, menangis di dapur
 orang  = ibu
+lokasi = dapur
 syarat = bab == 3 && jalur == sma && tgl >= 707
 
 [k3_bayu_pamit]
@@ -592,3 +593,25 @@ lokasi = gudang_ikan
 waktu  = senin-sabtu 08:00-13:00
 syarat = desa_bab == 4 && bayu_kerja_gudang == 1 && kerja_desa == gudang && adegan_b4_bola_ajak == 1
 
+# ---------------- RUMAH DESA — dapur & halaman belakang (CERITA.md bagian 14) ----------------
+
+[b2_laras_wc]
+naskah = adegan_rumah.txt
+judul  = Laras takut ke WC malam-malam
+lokasi = kamar_pagi
+waktu  = setiap hari 20:30-21:00
+syarat = bab == 2 && tgl >= 608
+
+[b2_ibu_sumur]
+naskah = adegan_rumah.txt
+judul  = Menimba air bersama Ibu, Minggu subuh
+lokasi = halaman_belakang
+waktu  = minggu 05:00-06:15
+syarat = bab == 2 || bab == 3 && jalur == kerja
+
+[b4_ayah_sumur]
+naskah = adegan_rumah.txt
+judul  = Ayah di bibir sumur setelah badai
+lokasi = halaman_belakang
+waktu  = setiap hari 20:00-23:30
+syarat = desa_bab == 4 && perahu_rusak >= 1 && tgl >= 808

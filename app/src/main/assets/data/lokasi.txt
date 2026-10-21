@@ -52,9 +52,23 @@ orang  = laras 0.62, 0.52, 0.18 ; laras_tidur 0.22, 0.50, 0.12
 [ruang_makan]
 nama   = Ruang makan
 tempat = desa
-pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.13, 0.46 | 0
-benda  = makan_keluarga | 🍲 Makan bersama | 0.52, 0.52 ; makan_sisa | 🍚 Makan sisa lauk | 0.40, 0.66 ; bantu_masak | 🍳 Bantu masak | 0.78, 0.40 ; cuci_piring | 🧽 Cuci piring | 0.86, 0.50
-orang  = ayah 0.26, 0.74, 0.40 ; laras 0.66, 0.72, 0.30 ; ibu 0.80, 0.68, 0.40
+pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.50, 0.90 | 0 ; dapur | 🍳 Ke dapur | 0.88, 0.40 | 0
+benda  = makan_keluarga | 🍲 Makan bersama | 0.45, 0.51 ; makan_sisa | 🍚 Makan sisa lauk | 0.56, 0.43
+orang  = ayah 0.20, 0.70, 0.36 ; laras 0.36, 0.56, 0.20 ; ibu 0.75, 0.70, 0.36
+
+[dapur]
+nama   = Dapur
+tempat = desa
+pintu  = ruang_makan | ⬅ Ke ruang makan | 0.50, 0.90 | 0 ; halaman_belakang | 🚪 Ke halaman belakang | 0.87, 0.38 | 0
+benda  = bantu_masak | 🍳 Bantu Ibu memasak | 0.58, 0.47 ; cuci_piring | 🧽 Cuci piring | 0.34, 0.41
+orang  = ibu 0.63, 0.56, 0.30
+
+[halaman_belakang]
+nama   = Halaman belakang
+tempat = desa
+pintu  = dapur | ⬅ Masuk ke dapur | 0.45, 0.90 | 0
+benda  = mandi | 🚿 Mandi | 0.55, 0.27 ; menimba_air | 🪣 Menimba air | 0.76, 0.45 ; menjemur_pakaian | 👕 Menjemur pakaian | 0.20, 0.30
+orang  = ayah 0.55, 0.59, 0.33
 
 [rumah_warung]
 nama   = Depan rumah & warung

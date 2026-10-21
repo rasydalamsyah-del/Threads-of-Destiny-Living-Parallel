@@ -55,6 +55,7 @@ class TimeLookTest {
         times.forEach { assertTrue(it, it in setOf("pagi", "siang", "sore", "malam", "tetap")) }
         val files = File("src/main/assets/latar").listFiles()!!.map { it.nameWithoutExtension }
             .filterNot { n -> listOf("_pagi", "_siang", "_sore", "_malam").any { n.endsWith(it) && n != "kamar_pagi" && n != "dermaga_malam" } }
+            .filterNot { it.contains('-') } // gambar pose "<nama>-<id><n>" mengikuti waktu gambar dasarnya
         files.forEach { assertTrue("latar $it belum ada di data/latar.txt", it in listed) }
     }
 }

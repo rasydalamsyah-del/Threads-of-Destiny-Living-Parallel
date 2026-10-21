@@ -123,6 +123,10 @@ if os.path.exists(_lt):
     for _n in sorted(latar):
         if any(_n.endswith(v) for v in ("_pagi", "_siang", "_sore", "_malam")) and _n not in ("kamar_pagi", "dermaga_malam"):
             continue
+        if "-" in _n:  # gambar pose "<nama>-<id><n>": dasarnya harus ada
+            if _n.split("-")[0] not in latar:
+                err(_lt, 1, f"gambar pose {_n}: gambar dasar {_n.split('-')[0]} tidak ada")
+            continue
         if _n not in _listed:
             err(_lt, 1, f"latar {_n} belum ada di data/latar.txt (tambahkan [{_n}] + waktu = ...)")
 # data/sosmed.txt: penulis harus karakter yang ada

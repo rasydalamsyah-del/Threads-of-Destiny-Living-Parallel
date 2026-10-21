@@ -27,7 +27,8 @@ waktu = tetap
 waktu = sore
 
 [ruang_makan]
-waktu = pagi
+# gambar dasar = suasana sore; versi lain: ruang_makan_pagi / _siang / _malam
+waktu = sore
 
 [sarapan_keluarga]
 waktu = pagi
@@ -124,3 +125,34 @@ waktu = sore
 
 [kamar_laras__laras_tidur]
 waktu = malam
+
+# ---- ruang makan, dapur, halaman belakang (gambar pose "<nama>-<id><n>" mengikuti gambar dasarnya) ----
+[ruang_makan__ayah_ibu_laras]
+waktu = malam
+
+[ruang_makan__ayah]
+waktu = siang
+
+[dapur]
+waktu = sore
+
+[dapur__ibu]
+waktu = sore
+
+[halaman_belakang]
+waktu = sore
+
+[halaman_belakang__ayah]
+waktu = pagi
+
+[cg_ibu_jatuh_dapur]
+waktu = tetap
+
+[cg_ibu_sumur]
+waktu = tetap
+
+[cg_ayah_sumur_malam]
+waktu = tetap
+
+[cg_laras_wc_malam]
+waktu = tetap

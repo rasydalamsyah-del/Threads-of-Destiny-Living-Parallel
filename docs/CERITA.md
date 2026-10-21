@@ -554,12 +554,12 @@ Setiap adegan yang sudah terjadi tercatat otomatis sebagai `adegan_<id> = 1`.
 | | 20:30–21:00 | Laras menggambar | ✅ |
 | | 21:00–06:15 (libur s.d. 07:30) | Laras tidur | ✅ (fitur tokoh tidur) |
 | Kamar Ayah & Ibu | — | (kosong; dipakai adegan celengan) | ✅ latar |
-| Ruang makan | 06:15–07:15 | sarapan Ayah, Ibu, Laras (Laras berseragam) — libur: Ayah & Ibu | ⏳ dibuat pemilik (no. 4; versi berdua dipecah dari no. 4) |
+| Ruang makan | 06:15–07:15 | sarapan Ayah, Ibu, Laras (Laras berseragam) — libur: Ayah & Ibu | ✅ bertiga (+ pose Ibu & Laras menoleh) · ⏳ versi Ayah & Ibu (libur) belum rapi |
 | | 07:30–08:00 (libur) | Laras sarapan sendiri (piyama) | ⏳ belum diputuskan (gambar sendiri / hapus jadwal) |
-| | 12:00–13:00 · 13:00–14:00 | Ayah makan siang · Laras makan siang (baju rumah) | ⏳ satu gambar Ayah + Laras, dipecah |
-| | 17:45–18:30 | makan malam bertiga | ⏳ |
-| Dapur (baru) | 05:00–06:15 · 17:15–17:45 | Ibu memasak (depan kompor) | ⏳ |
-| Halaman belakang (baru) | (05:30–06:15 usulan) | Ayah membasuh muka di sumur sepulang melaut | ⏳ opsional |
+| | 12:00–13:00 · 13:00–14:00 | Ayah makan siang · Laras makan siang (baju rumah) | ✅ Ayah (+ pose) · ⏳ Laras sendiri belum rapi |
+| | 17:45–18:30 | makan malam bertiga | ✅ |
+| Dapur (baru) | 05:00–06:15 · 17:15–17:45 | Ibu memasak (depan kompor) | ✅ (+ pose menoleh 1/2/3 subuh, 1/2 sore) |
+| Halaman belakang (baru) | 05:30–06:15 | Ayah membasuh muka di sumur sepulang melaut | ✅ |
 - Tempat duduk ruang makan tetap: Ayah kiri depan, Ibu kanan depan, Laras kiri belakang.
 - Kegiatan pindah/baru: *Bantu Ibu memasak* & *Cuci piring* → dapur; baru di halaman belakang: *Mandi*, *Menimba air* (Cinta Ibu +),
   *Menjemur pakaian*. Belum dibuat di game — dipasang bersama gambarnya.
@@ -571,7 +571,7 @@ Setiap adegan yang sudah terjadi tercatat otomatis sebagai `adegan_<id> = 1`.
 - Bab 3 desa (Senin 13 Juli 05:45): Ibu jatuh di dapur. Bab 3 kota: Ibu menyiapkan bekal & menangis di dapur. Bab 4 kota: telepon
   "Ibu jatuh di dapur". Halaman belakang, sumur, jemuran, WC: belum pernah disebut.
 
-### Rencana (BELUM dibuat di game)
+### Rencana — ✅ dibuat di game build 63 (adegan_rumah.txt, desa_bab3.txt, adegan.txt)
 **Perbaikan supaya nyambung**
 1. **Ibu jatuh (Bab 3 desa):** setelah teriakan Laras, latar pindah sebentar ke dapur subuh (gambar khusus: Ibu terduduk di lantai,
    panci sayur terguling), baru ke ruang tengah saat Ayah membopongnya.

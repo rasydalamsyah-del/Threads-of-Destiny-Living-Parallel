@@ -386,7 +386,9 @@ Bayu: Makasih. Kamu memang paling ngerti.
 @tampil laras menangis
 Laras: Kak! Kak! Bangun! Ibu... Ibu jatuh di dapur!
 @sembunyi laras
-* Kamu melompat dari kasur. Di dapur, Ibu terduduk di lantai, bersandar ke lemari, wajahnya pucat pasi. Panci sayur terguling.
+@latar cg_ibu_jatuh_dapur
+@atur _tempat = dapur
+* Kamu melompat dari kasur dan berlari ke dapur. Ibu terduduk di lantai, bersandar ke lemari, wajahnya pucat pasi. Panci sayur terguling.
 * Ayah yang baru pulang melaut berlari masuk, masih bau laut, lalu membopong Ibu ke tikar di ruang tengah.
 @latar ruang_tengah
 @atur _tempat = ruang_tengah

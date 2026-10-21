@@ -176,7 +176,7 @@ batas  = 2
 jeda   = 3 jam
 
 [bantu_masak]
-lokasi  = ruang_makan
+lokasi  = dapur
 nama    = Membantu Ibu memasak
 ikon    = 🍳
 tempat  = desa
@@ -185,11 +185,11 @@ durasi  = 45 menit
 mulai   = 05:00-05:45, 17:15-17:30
 bersama = ibu
 efek    = energi -6, kewarasan +3, cinta_ibu +2, keahlian_masak +1
-teks    = Ibu menyuruhmu mengulek sambal. "Jangan terlalu halus, Ayahmu suka yang masih ada bijinya." Matamu pedih kena uap cabai, tapi Ibu kelihatan senang.
+teks    = Dapur penuh uap dan bau bawang goreng. Ibu menyuruhmu mengulek sambal. "Jangan terlalu halus, Ayahmu suka yang masih ada bijinya." Matamu pedih kena uap cabai, tapi Ibu kelihatan senang.
 batas   = 1
 
 [cuci_piring]
-lokasi = ruang_makan
+lokasi = dapur
 nama   = Mencuci piring
 ikon   = 🧽
 tempat = desa
@@ -475,4 +475,41 @@ durasi = 4 jam
 mulai  = 19:00-02:00
 efek   = uang -20000, kewarasan +10, energi -25, kesehatan -3, akademik -1, foya +1
 teks   = "Satu ronde lagi," katamu, untuk kesepuluh kalinya. Saat keluar warnet, langit sudah mulai terang.
+batas  = 1
+
+# ---------------- HALAMAN BELAKANG (rumah desa) ----------------
+
+[mandi]
+lokasi = halaman_belakang
+nama   = Mandi
+ikon   = 🚿
+tempat = desa
+waktu  = pagi, sore, malam
+durasi = 20 menit
+efek   = kesehatan +2, kewarasan +4, energi +3
+teks   = Air sumur di bak mandi dinginnya menusuk tulang. Gayung pertama selalu yang paling berat; sesudahnya badan terasa ringan dan pikiran jernih lagi.
+batas  = 2
+jeda   = 4 jam
+teks_ulang = Kamu mandi lagi. Air sumur masih sama dinginnya, tapi kali ini kamu sudah siap.
+
+[menimba_air]
+lokasi = halaman_belakang
+nama   = Menimba air untuk Ibu
+ikon   = 🪣
+tempat = desa
+waktu  = pagi, siang, sore
+durasi = 30 menit
+efek   = energi -8, cinta_ibu +2, kesehatan +1
+teks   = Katrol berderit setiap kali ember naik. Sepuluh ember untuk mengisi gentong dapur dan bak mandi. Lenganmu pegal, tapi malamnya Ibu tidak perlu menimba sendiri.
+batas  = 1
+
+[menjemur_pakaian]
+lokasi = halaman_belakang
+nama   = Menjemur pakaian
+ikon   = 👕
+tempat = desa
+waktu  = pagi, siang
+durasi = 30 menit
+efek   = energi -5, kewarasan +2, cinta_ibu +2
+teks   = Kamu memeras cucian lalu menjepitnya satu per satu di tali jemuran. Sarung Ayah, seragam Laras, daster Ibu, kausmu sendiri. Angin laut langsung mengibarkannya.
 batas  = 1

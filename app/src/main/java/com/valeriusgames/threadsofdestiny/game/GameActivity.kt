@@ -1062,6 +1062,7 @@ class GameActivity : Activity() {
 
     /** @kembali: tutup adegan, kembali ke naskah utama & waktu bebas. false bila tidak sedang dalam adegan. */
     private fun returnFromScene(): Boolean {
+        clearPose()
         val path = vars.remove("_kembali_naskah") ?: return false
         val idx = vars.remove("_kembali_pc")?.toIntOrNull() ?: 0
         vars.remove("_adegan")
@@ -1306,12 +1307,12 @@ class GameActivity : Activity() {
         // orang: sudah tergambar di latar (latar/<lokasi>__<orang>.jpg) → area sentuh tak terlihat di badannya.
         // Bila gambar gabungan itu belum ada, latar kosong yang tampil → tanda nama selalu terlihat.
         if (!walking) {
-            val drawn = shownBgFile?.let { stripTimeVariant(it) } == presenceFile(loc)
+            val drawn = shownBgFile?.let { stripTimeVariant(it.substringBefore('-')) } == presenceFile(loc)
             peopleAt(loc).forEach { c ->
                 val spot = loc.people.firstOrNull { it.charId == c.id } ?: GameData.PersonSpot(c.id, 0.5f, 0.80f, 0.36f)
                 if (drawn) {
-                    addTapZone(spot.x, spot.y, spot.height, sc) { meetCharacter(c) }
-                    if (hints) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height, 0) { meetCharacter(c) }
+                    addTapZone(spot.x, spot.y, spot.height, sc) { turnAndMeet(c) }
+                    if (hints) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height, 0) { turnAndMeet(c) }
                 } else {
                     addMarker("👤 ${c.name}", spot.x, spot.y - spot.height * 0.6f, 0, always = true, showLabel = true) { meetCharacter(c) }
                 }
@@ -1475,7 +1476,48 @@ class GameActivity : Activity() {
     }
 
     /** File yang seharusnya tampil: versi khusus jam ini bila ada, selain itu gambar biasa. */
+    /** Tokoh yang sedang menoleh ke pemain (gambar pose latar/<file>-<id><n>.jpg) dan nomor pose yang tampil. */
+    private var poseChar: String? = null
+    private var poseFrame = 0
+
     private fun bgFileNow(name: String): String {
+        val f = bgFileNowPlain(name)
+        val who = poseChar ?: return f
+        if (!presenceOn()) return f
+        return "$f-$who$poseFrame".takeIf { it in latarFiles } ?: f
+    }
+
+    /** Nomor pose (2, 3, ...) yang tersedia untuk tokoh ini di gambar latar sekarang. 1 = gambar biasa. */
+    private fun poseFramesFor(id: String): List<Int> {
+        val f = bgName?.let { bgFileNowPlain(it) } ?: return emptyList()
+        return (2..5).filter { "$f-$id$it" in latarFiles }
+    }
+
+    /** Diketuk: tokoh menoleh (pose 1 → 2 → 3) lalu pertemuan dimulai; tanpa gambar pose langsung bertemu. */
+    private fun turnAndMeet(c: GameData.CharacterDef) {
+        val frames = poseFramesFor(c.id)
+        if (frames.isEmpty() || bgName == null) { meetCharacter(c); return }
+        hideExploreUi()
+        poseChar = c.id
+        var i = 0
+        fun step() {
+            poseFrame = frames[i]
+            bg.show(loadBackground(bgName!!), memoryMode, StoryScript.Motion.NONE, instant = true, time = bgTimeMatrix()) {}
+            lastTimeLookKey = null
+            i++
+            if (i < frames.size) handler.postDelayed({ step() }, 170) else handler.postDelayed({ meetCharacter(c) }, 220)
+        }
+        step()
+    }
+
+    private fun clearPose() {
+        if (poseChar == null) return
+        poseChar = null
+        poseFrame = 0
+        lastTimeLookKey = null
+    }
+
+    private fun bgFileNowPlain(name: String): String {
         // naskah bisa mengganti sementara gambar sebuah lokasi, mis. ruang tengah saat keluarga sedang sarapan:
         // @atur latar_ruang_tengah = ruang_tengah_sarapan   (kembalikan dengan "-")
         vars["latar_${bgBaseFile(name)}"]?.trim()?.takeIf { it.isNotEmpty() && it != "-" && it in latarFiles }?.let { return it }
@@ -1495,8 +1537,9 @@ class GameActivity : Activity() {
         val base = bgBaseFile(name)
         val file = bgFileNow(name)
         if (vars["latar_$base"]?.trim()?.let { it.isNotEmpty() && it != "-" && it in latarFiles } == true) return null
-        if (stripTimeVariant(file) != file) return null
-        return TimeLook.matrix(gameData.backgroundTimes[file] ?: gameData.backgroundTimes[base], timeKey())
+        val plain = file.substringBefore('-') // gambar pose "<file>-<id><n>" mengikuti gambar dasarnya
+        if (stripTimeVariant(plain) != plain) return null
+        return TimeLook.matrix(gameData.backgroundTimes[plain] ?: gameData.backgroundTimes[base], timeKey())
     }
 
     /** Karakter digambar dengan cahaya siang: ikut menyesuaikan jam, tapi lebih lembut dari latar. */
@@ -2131,6 +2174,7 @@ class GameActivity : Activity() {
     }
 
     private fun showFreeSheet() {
+        clearPose()
         if (freeLeft <= 0 || freeUntilReached()) {
             endFree()
             return
@@ -4810,6 +4854,7 @@ class GameActivity : Activity() {
         vars["_bebas_sisa"] = freeLeft.toString()
         // lama pertemuan: sapaan 15 menit + tiap obrolan 20 menit + hadiah 10 menit
         passTime(15 + meetingTalks * 20 + (if (meetingGaveGift) 10 else 0))
+        clearPose()
         if (life.dead) return
         continueFree()
     }

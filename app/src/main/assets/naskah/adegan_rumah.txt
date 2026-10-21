@@ -1,0 +1,126 @@
+# ==========================================================
+#  ADEGAN WAKTU BEBAS — RUMAH DESA: DAPUR & HALAMAN BELAKANG
+#  Pemicu & jam: data/adegan.txt · Rencana: docs/CERITA.md bagian 14
+#  Setiap adegan diakhiri @kembali.
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  BAB 2 — LARAS TAKUT KE WC MALAM-MALAM
+# ----------------------------------------------------------
+
+:: b2_laras_wc
+* Tok. Tok. Tok. Tiga ketukan pelan di pintu kamarmu. Kode lama kalian.
+@tampil laras sedih
+* Laras berdiri di ambang pintu dengan piyama dan sandal jepit, memeluk senter kecil.
+Laras: Kak... temenin ke WC, dong. Di belakang gelap banget. Tadi pohon pisangnya gerak-gerak sendiri.
+{nama}: Itu angin, Ras.
+Laras: Angin juga bisa jadi hantu! Kata Dino!
+@pilihan
+> "Ayo, Kakak tungguin di luar." -> b2wc_temani
+> "Kamu sudah besar, Ras. Berani sendiri, ya." -> b2wc_sendiri
+
+:: b2wc_temani
+@latar cg_laras_wc_malam
+* Halaman belakang sunyi. Bulan menggantung di atas pohon kelapa, dan lampu kecil di atas kamar mandi berkedip-kedip dikerubungi laron.
+* Laras berjalan di atas batu pijakan, menoleh ke belakang setiap tiga langkah untuk memastikan kamu masih di pintu dapur.
+Laras: Kakak jangan ke mana-mana! Cerita sesuatu, biar aku tahu Kakak masih di situ!
+* Kamu bercerita tentang ikan buntal yang menggembung di gudang Juragan Darto. Dari balik pintu seng terdengar tawa Laras yang bergema.
+@tampil laras senyum
+Laras: Makasih, Kak. Besok aku coba sendiri. ...Mungkin lusa.
+@cinta laras +4
+@percaya laras +3
+@lompat b2wc_akhir
+
+:: b2wc_sendiri
+@tampil laras kesal
+Laras: Ih! Kakak tega!
+* Laras menghentakkan kaki dan berjalan ke dapur. Kamu mendengar pintu belakang dibuka pelan-pelan, langkah kaki berlari di batu pijakan, lalu pintu seng ditutup keras.
+* Beberapa menit kemudian, langkah yang sama berlari pulang lebih cepat lagi.
+* Besok paginya, Laras mengumumkan di meja makan dengan dada membusung: "Aku ke WC sendirian tadi malam. Nggak takut sama sekali."
+@percaya laras +2
+@stat kewarasan +1
+
+:: b2wc_akhir
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2–3 — MENIMBA AIR BERSAMA IBU (Minggu subuh)
+# ----------------------------------------------------------
+
+:: b2_ibu_sumur
+@latar cg_ibu_sumur
+@tampil ibu senyum
+* Ibu sedang menimba di sumur, menyempatkan diri di sela memasak. Katrolnya berderit, embernya naik penuh air bening.
+Ibu: Pas sekali kamu bangun. Gentong dapur kosong, bak mandi juga.
+* Kamu mengambil alih tali katrol. Ember demi ember. Ibu menuangnya ke jeriken sambil memandangi bibir sumur yang berlumut.
+Ibu: Sumur ini Ayahmu yang gali sendiri, tahu. Waktu kamu masih tiga tahun. Dua minggu tiap pulang melaut dia menggali, sampai tangannya lecet semua.
+Ibu: Pas airnya keluar, dia teriak kencang sekali sampai tetangga kira ada yang tenggelam.
+@pilihan
+> Terus menimba sampai gentong penuh -> b2is_timba
+> "Ibu dulu ketemu Ayah di mana, sih?" -> b2is_tanya
+
+:: b2is_timba
+* Dua puluh ember. Gentong penuh, bak mandi penuh, lenganmu gemetar. Ibu menepuk punggungmu.
+Ibu: Anak Ayahmu betul. Keras kepala kalau sudah mulai.
+@stat energi -8
+@cinta ibu +4
+@lompat b2is_akhir
+
+:: b2is_tanya
+@tampil ibu senyum
+Ibu: Hah? Kok tiba-tiba?
+* Ibu tertawa, lalu memandang ke arah laut di balik pohon pisang.
+Ibu: Di pelelangan ikan. Ibu jualan gorengan, Ayahmu tiap pagi beli lima tapi bayar cuma tiga. Katanya sisanya diutang. Tiga bulan utangnya nggak pernah lunas.
+Ibu: Akhirnya dia bilang, "Daripada bayar utang, gimana kalau saya bayar pakai seumur hidup saya?" Gombal sekali, kan?
+* Pipi Ibu memerah. Kamu belum pernah melihat Ibu seperti itu.
+@cinta ibu +3
+@percaya ibu +3
+
+:: b2is_akhir
+@sembunyi ibu
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 4 DESA — AYAH DI BIBIR SUMUR SETELAH BADAI
+# ----------------------------------------------------------
+
+:: b4_ayah_sumur
+@latar cg_ayah_sumur_malam
+@tampil ayah sedih
+* Ayah duduk sendirian di bibir sumur. Tangannya yang diperban bertumpu di lutut. Ia menatap tanah, seperti sedang menghitung sesuatu yang tidak ada habisnya.
+Ayah: Belum tidur?
+{nama}: Ayah juga belum.
+Ayah: Tiap pejam mata, yang kelihatan ombak. Sama tiang bagan. Sama perahu yang... ya sudahlah.
+@pilihan
+> Duduk di sebelah Ayah, diam saja -> b4as_diam
+> "Kita cari jalan sama-sama, Yah." -> b4as_bareng
+> Biarkan Ayah sendiri -> b4as_pergi
+
+:: b4as_diam
+* Kamu duduk di bibir sumur yang dingin, di sebelah Ayah. Tidak ada yang bicara. Jangkrik berbunyi, angin laut membawa bau garam.
+* Lama sekali. Lalu Ayah menyandarkan bahunya sedikit ke bahumu.
+@cinta ayah +6
+@lompat b4as_akhir
+
+:: b4as_bareng
+@tampil ayah kaget
+Ayah: Sama-sama?
+{nama}: Iya. Ayah nggak sendirian, Yah. Ada aku, ada Ibu, ada Laras. Perahu bisa dicari lagi.
+* Ayah menatapmu lama. Matanya basah, tapi ia tersenyum.
+@tampil ayah senyum
+Ayah: Sejak kapan kamu bicara seperti Ayah?
+@percaya ayah +6
+@cinta ayah +3
+@lompat b4as_akhir
+
+:: b4as_pergi
+* Kamu kembali ke dalam pelan-pelan. Dari jendela dapur, kamu melihat Ayah masih di sana sampai lewat tengah malam.
+@stat kewarasan -2
+
+:: b4as_akhir
+@sembunyi ayah
+@kembali
