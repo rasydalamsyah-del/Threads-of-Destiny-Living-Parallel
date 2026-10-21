@@ -29,7 +29,7 @@
 @maju 15 menit
 @jalan ruang_makan | Sarapan
 
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi_libur
 @tampil ayah biasa
 @tampil ibu biasa
 @jika bohong_laras_pergi == 1 -> sabtu_laras_marah
@@ -361,7 +361,7 @@ Bayu: Nanti di kota jangan sombong, ya. Kalau aku telepon, angkat.
 @gelap 1000
 @kalender Senin 06:00
 @waktu Senin, 6 Juli 2026
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi_libur
 @atur _tempat = ruang_makan
 @terang 1000
 @tampil ayah biasa

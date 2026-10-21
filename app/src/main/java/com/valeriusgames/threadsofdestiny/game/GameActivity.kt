@@ -1465,7 +1465,8 @@ class GameActivity : Activity() {
     private fun presenceOn(): Boolean = wait == Wait.FREE || vars["_kembali_naskah"] != null
 
     /** "rumah_warung__ibu_malam" → "rumah_warung__ibu" (versi khusus jam); nama lain tidak berubah. */
-    private fun stripTimeVariant(f: String): String {
+    private fun stripTimeVariant(f0: String): String {
+        val f = f0.removeSuffix("_libur").takeIf { it != f0 && it in latarFiles } ?: f0
         for (t in listOf("pagi", "siang", "sore", "malam")) {
             if (f.endsWith("_$t")) {
                 val b = f.removeSuffix("_$t")
@@ -1528,8 +1529,15 @@ class GameActivity : Activity() {
         if (file == base && base !in latarFiles) loc?.fallback?.takeIf { it in latarFiles }?.let { file = it }
         val t = timeKey() ?: return file
         if ((gameData.backgroundTimes[file] ?: gameData.backgroundTimes[base]) == "tetap") return file
-        return "${file}_$t".takeIf { it in latarFiles } ?: file
+        val timed = "${file}_$t".takeIf { it in latarFiles } ?: file
+        // hari Minggu / libur sekolah: versi "<gambar>_libur" bila ada (mis. Laras sarapan berbaju rumah)
+        if (file != base && loc != null && isDayOff(loc)) "${timed}_libur".takeIf { it in latarFiles }?.let { return it }
+        return timed
     }
+
+    /** Hari Minggu, atau salah satu orang di lokasi ini sedang libur (kolom "libur" di karakter.txt). */
+    private fun isDayOff(loc: GameData.LocationDef): Boolean =
+        life.weekdayIndex == 6 || peopleAt(loc).any { GameData.inDateRange(it.text["libur"], todayTgl()) }
 
     /** Pewarnaan latar sekarang (null bila memakai versi khusus jam / "tetap" / gambar pengganti naskah). */
     private fun bgTimeMatrix(): FloatArray? {

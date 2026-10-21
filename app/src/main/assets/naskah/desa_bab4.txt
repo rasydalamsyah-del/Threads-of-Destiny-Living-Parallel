@@ -72,7 +72,7 @@ Ibu: Ibu tahu batas, Nak. Lagi pula ini cuma sehari. Kamu bantu Ibu, ya, biar Ib
 @gelap 1000
 @kalender Senin 06:30
 @waktu Senin, 3 Agustus 2026
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi
 @atur _tempat = ruang_makan
 @terang 1000
 @tampil ayah biasa

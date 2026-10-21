@@ -446,3 +446,7 @@ Per jam terjaga: 🍚 −2, 💧 −2,8, ⚡ −1 (begadang 00:00–04:00: ⚡ �
 | Kenyang ≥50, Hidrasi ≥50, Energi ≥30 | Kesehatan pulih +2 per slot |
 | Kenyang/Hidrasi <25 atau Energi <20 | Kewarasan −3 per slot |
 | Kesehatan 0 | **Meninggal (game over)** |
+
+
+### Versi latar hari libur (`_libur`)
+Gambar kehadiran boleh punya versi `<gambar>_libur` (setelah akhiran jam), mis. `ruang_makan__ayah_ibu_laras_pagi_libur`. Dipakai otomatis pada hari Minggu atau bila salah satu tokoh di lokasi itu sedang dalam rentang `libur`-nya. Tulis juga di latar.txt (waktu = jam gambarnya). Gambar pose ikut: `<gambar>_libur-<id><n>`.

@@ -23,7 +23,7 @@
 @maju 15 menit
 @jalan ruang_makan | Ibu sudah memanggil untuk sarapan
 
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi
 @tampil ayah biasa
 @tampil ibu biasa
 @tampil laras biasa
@@ -55,7 +55,7 @@ Laras: Ooh. Nanti bawa pulang ikan asin yang banyak, ya! ...Eh jangan, aku nggak
 Ibu: Habiskan dulu sarapanmu, Nona Komentator.
 @maju 30 menit
 @sembunyi laras
-@latar sarapan_tanpa_laras
+@latar ruang_makan__ayah_ibu
 * Laras berangkat dengan sepeda kecilnya. Ayah masuk kamar untuk tidur.
 @sembunyi semua
 

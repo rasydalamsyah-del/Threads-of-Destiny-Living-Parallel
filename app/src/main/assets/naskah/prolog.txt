@@ -61,9 +61,7 @@ Ibu: {nama}! Sudah bangun belum? Sarapan sudah siap. Ayahmu juga baru pulang!
 {nama}: Iya, Bu! Sebentar!
 @maju 10 menit
 * {nama} merapikan selimut, lalu keluar kamar menuju ruang makan.
-@atur latar_ruang_tengah = ruang_tengah_sarapan
 @jalan ruang_makan | Ibu memanggil untuk sarapan
-@atur latar_ruang_tengah = -
 
 
 # ----------------------------------------------------------
@@ -71,7 +69,7 @@ Ibu: {nama}! Sudah bangun belum? Sarapan sudah siap. Ayahmu juga baru pulang!
 #  Latar: gambar keluarga sedang makan (tanpa gambar setengah badan)
 # ----------------------------------------------------------
 
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi
 @kenal ayah
 @kenal laras
 # gambar besar tidak ditampilkan (sudah ada di gambar keluarga); @tampil di sini hanya mengatur ekspresi di kotak dialog
@@ -117,7 +115,7 @@ Ibu: Ibu dengar, lho.
 Ibu: Laras, ini bekalmu. Dihabiskan, jangan dikasih ke kucing lagi.
 Laras: Iya, Bu~
 @sembunyi laras
-@latar sarapan_tanpa_laras
+@latar ruang_makan__ayah_ibu
 * Laras berlari ke teras dan memasang sepatu hitamnya yang mulai sobek di ujung.
 * Ia kembali sebentar untuk mencium tangan Ayah dan Ibu, mengucap salam, lalu mengayuh sepeda kecilnya menyusuri jalan tanah menuju sekolah.
 * Bunyi bel sepedanya terdengar sampai menghilang di tikungan dekat dermaga.

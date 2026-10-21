@@ -358,7 +358,7 @@ Ibu: Kamu masih yakin mau di sini? Ibu tidak akan marah kalau kamu berubah pikir
 @gelap 1200
 @kalender Jumat 06:30
 @waktu Jumat, 26 Juni 2026 · Hari terakhir pendaftaran
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi_libur
 @atur _tempat = ruang_makan
 @terang 1200
 @tampil ayah biasa

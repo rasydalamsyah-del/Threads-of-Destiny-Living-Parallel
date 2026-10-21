@@ -24,7 +24,7 @@
 @maju 15 menit
 @jalan ruang_makan | Sarapan
 
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi_libur
 @tampil ayah sedih
 @tampil ibu biasa
 @tampil laras biasa
@@ -151,7 +151,7 @@ Bayu: Sekar mau berangkat seminggu lagi. Dia nggak mau datang. Katanya sibuk ber
 @maju 15 menit
 @jalan ruang_makan | Sarapan dulu
 
-@latar sarapan_keluarga
+@latar ruang_makan__ayah_ibu_laras_pagi_libur
 @tampil ayah biasa
 @tampil ibu biasa
 @tampil laras biasa

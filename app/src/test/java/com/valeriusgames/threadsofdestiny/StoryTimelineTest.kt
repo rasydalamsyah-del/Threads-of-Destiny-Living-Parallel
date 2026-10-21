@@ -123,7 +123,7 @@ class StoryTimelineTest {
     @Test fun breakfastHasExpressions() {
         // adegan sarapan memakai gambar keluarga, tapi ekspresi di kotak dialog tetap berganti
         val l = File(dir, "prolog.txt").readLines().map { it.trim() }
-        val start = l.indexOf("@latar sarapan_keluarga")
+        val start = l.indexOf("@latar ruang_makan__ayah_ibu_laras_pagi")
         val end = l.indexOf("@latar ruang_makan")
         assertTrue(start in 0 until end)
         val scene = l.subList(start, end)
