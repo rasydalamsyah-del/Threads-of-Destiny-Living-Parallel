@@ -66,6 +66,15 @@ class SceneTest {
         }
     }
 
+    @Test fun leaveCommandAndScheduleBlock() {
+        val s = StoryScript.parse(listOf("@pergi ayah ibu laras"))
+        assertEquals(Cmd.Leave(listOf("ayah", "ibu", "laras")), s.cmds[0])
+        val spec = "setiap hari 06:15-07:15 ruang_makan, setiap hari 12:00-13:00 ruang_makan"
+        assertEquals(7 * 60 + 15 to "ruang_makan", GameData.blockAt(spec, 0, 6 * 60 + 40))
+        assertEquals(13 * 60 to "ruang_makan", GameData.blockAt(spec, 3, 12 * 60 + 5))
+        assertEquals(null, GameData.blockAt(spec, 3, 9 * 60))
+    }
+
     @Test fun scheduleParsing() {
         val sc = GameData.scene("x", mapOf("naskah" to "a.txt", "lokasi" to "lapangan", "waktu" to "senin-sabtu 15:00-17:00, minggu 08:00-10:30"))
         assertEquals("masuk", sc.trigger)

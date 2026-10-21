@@ -56,6 +56,8 @@ Ayah: Ke perahu? Tidak. Ombak lagi tinggi.
 Laras: Huh. Libur kok nggak boleh ngapa-ngapain.
 
 :: sabtu_akhir
+# selesai sarapan: Ayah, Ibu, Laras meninggalkan ruang makan (tidak tampil lagi di gambar sampai jadwal berikutnya)
+@pergi ayah ibu laras
 @sembunyi semua
 @latar ruang_makan
 * Laras libur kenaikan kelas sampai 12 Juli. Ia akan sering ada di rumah, warung, dan lapangan.
@@ -251,6 +253,8 @@ Laras: Yeay! Aku pakai baju baru dari Bu Wati!
 Laras: Huh. Pelit.
 
 :: senin_akhir
+# selesai sarapan: Ayah, Ibu, Laras meninggalkan ruang makan (tidak tampil lagi di gambar sampai jadwal berikutnya)
+@pergi ayah ibu laras
 @sembunyi semua
 @latar ruang_makan
 * Teman-temanmu bersiap pergi. Di sekelilingmu, semua orang sepertinya sedang memutuskan sesuatu yang besar.

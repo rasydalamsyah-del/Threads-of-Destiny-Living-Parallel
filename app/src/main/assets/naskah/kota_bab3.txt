@@ -58,6 +58,8 @@ Ayah: Dia bilang apa?
 @percaya ayah +2
 
 :: sabtu_akhir
+# selesai sarapan: Ayah, Ibu, Laras meninggalkan ruang makan (tidak tampil lagi di gambar sampai jadwal berikutnya)
+@pergi ayah ibu laras
 @sembunyi semua
 @jika kerja_desa != gudang -> sabtu_bebas
 * Hari ini hari kerja terakhirmu di gudang. Selesai kerja, pukul 14:00, kamu akan menemui Juragan Darto.
@@ -376,6 +378,8 @@ Laras: Kakak bawa aja kucingnya Bu Wati. Biar ada temannya.
 * Semua orang tertawa. Untuk sebentar, rasanya seperti sarapan biasa.
 @hp pesan Bayu | Rani & Dodi juga berangkat Sabtu, kereta yang sama! Satu desa pindah ke Sakala wkwk. Aku antar ke stasiun ya.
 @tunggu_hp
+# selesai sarapan: Ayah, Ibu, Laras meninggalkan ruang makan (tidak tampil lagi di gambar sampai jadwal berikutnya)
+@pergi ayah ibu laras
 @sembunyi semua
 @latar ruang_makan
 * Lima hari lagi. Temui orang-orang yang ingin kamu pamiti. Mereka mungkin punya sesuatu untuk dikatakan... atau diberikan.

@@ -126,6 +126,8 @@ Ayah: Terima kasih, Nak.
 @percaya ayah +5
 
 :: darto_pergi
+# selesai sarapan: Ayah, Ibu, Laras meninggalkan ruang makan (tidak tampil lagi di gambar sampai jadwal berikutnya)
+@pergi ayah ibu laras
 @sembunyi semua
 @latar ruang_makan
 * Hari itu, Ayah lebih sering menatap langit daripada biasanya.

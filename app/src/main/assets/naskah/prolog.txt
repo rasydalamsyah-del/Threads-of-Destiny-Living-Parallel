@@ -128,6 +128,7 @@ Ibu: {nama}, siap-siap, ya. Tolong buka warung duluan. Ibu cuci piring sebentar,
 @sembunyi semua
 @latar ruang_makan
 * Ibu membawa piring-piring kotor ke dapur. Ruang makan kini sepi.
+@pergi ayah ibu laras
 @maju 15 menit
 @jalan rumah_warung | Buka warung untuk Ibu
 

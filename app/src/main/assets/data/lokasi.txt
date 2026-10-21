@@ -5,7 +5,9 @@
 #  [id]            = nama file latar (tanpa .jpg). Satu latar = satu lokasi.
 #  nama            = nama tempat yang tampil
 #  tempat          = desa / kota (aktivitas & orang mengikuti ini)
-#  pintu           = tujuan | teks tombol | x, y | menit perjalanan        (pisahkan beberapa pintu dengan ;)
+#  pintu           = tujuan | nama pintu | x, y | menit perjalanan | lebar, tinggi   (pisahkan beberapa pintu dengan ;)
+#                    Pintu = area sentuh tak terlihat seukuran pintunya (lebar, tinggi = bagian gambar; bawaan 0.16, 0.26).
+#                    Pintu di belakang kamera (y >= 0.84) tampil sebagai panah kecil di bawah layar.
 #                    tujuan "kos" = kamar kos yang sedang disewa
 #  benda           = id_aktivitas | teks | x, y                           (ketuk → lakukan aktivitas itu)
 #  orang           = id_karakter x, y, tinggi                              (posisi berdiri bila belum ada gambar adegan)
@@ -26,40 +28,40 @@
 [kamar_pagi]
 nama   = Kamarmu
 tempat = desa
-pintu  = ruang_tengah | 🚪 Ke ruang tengah | 0.80, 0.42 | 0
+pintu  = ruang_tengah | 🚪 Ke ruang tengah | 0.81, 0.41 | 0 | 0.17, 0.52
 benda  = istirahat | 🛏️ Kasur | 0.30, 0.86 ; belajar | 📚 Meja belajar | 0.56, 0.52 ; belajar_paket | 📖 Meja belajar | 0.56, 0.52 ; buku_harian | ✍️ Buku harian | 0.62, 0.62 ; kotak_kenangan | 🧶 Gelang & foto lama | 0.16, 0.52
 tidur  = ya
 
 [ruang_tengah]
 nama   = Ruang tengah
 tempat = desa
-pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.87, 0.46 | 0 ; ruang_makan | ➡ Ke ruang makan | 0.53, 0.36 | 0 ; rumah_warung | 🚪 Keluar rumah | 0.12, 0.40 | 0 ; kamar_ayah_ibu | 🚪 Kamar Ayah & Ibu | 0.34, 0.33 | 0 ; kamar_laras | 🚪 Kamar Laras | 0.73, 0.33 | 0
+pintu  = kamar_pagi | 🚪 Ke kamarmu | 0.88, 0.42 | 0 | 0.14, 0.50 ; ruang_makan | ➡ Ke ruang makan | 0.53, 0.36 | 0 | 0.20, 0.20 ; rumah_warung | 🚪 Keluar rumah | 0.12, 0.38 | 0 | 0.10, 0.46 ; kamar_ayah_ibu | 🚪 Kamar Ayah & Ibu | 0.34, 0.36 | 0 | 0.11, 0.20 ; kamar_laras | 🚪 Kamar Laras | 0.735, 0.36 | 0 | 0.08, 0.20
 benda  = nonton_tv | 📺 TV | 0.81, 0.44 ; lipat_pakaian | 👕 Lipat pakaian | 0.30, 0.50 ; radio_ayah | 📻 Radio Ayah | 0.18, 0.44
 orang  = ayah 0.22, 0.55, 0.20 ; ibu 0.27, 0.52, 0.17 ; laras 0.57, 0.56, 0.12
 
 [kamar_ayah_ibu]
 nama   = Kamar Ayah & Ibu
 tempat = desa
-pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.85, 0.45 | 0
+pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.88, 0.40 | 0 | 0.14, 0.60
 
 [kamar_laras]
 nama   = Kamar Laras
 tempat = desa
-pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.85, 0.40 | 0
+pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.86, 0.38 | 0 | 0.14, 0.60
 benda  = pr_laras | ✏️ Meja belajar Laras | 0.49, 0.47
 orang  = laras 0.62, 0.52, 0.18 ; laras_tidur 0.22, 0.50, 0.12
 
 [ruang_makan]
 nama   = Ruang makan
 tempat = desa
-pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.50, 0.90 | 0 ; dapur | 🍳 Ke dapur | 0.88, 0.40 | 0
+pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.50, 0.90 | 0 ; dapur | 🍳 Ke dapur | 0.90, 0.35 | 0 | 0.12, 0.42
 benda  = makan_keluarga | 🍲 Makan bersama | 0.45, 0.51 ; makan_sisa | 🍚 Makan sisa lauk | 0.56, 0.43
 orang  = ayah 0.20, 0.70, 0.36 ; laras 0.36, 0.56, 0.20 ; ibu 0.75, 0.70, 0.36
 
 [dapur]
 nama   = Dapur
 tempat = desa
-pintu  = ruang_makan | ⬅ Ke ruang makan | 0.50, 0.90 | 0 ; halaman_belakang | 🚪 Ke halaman belakang | 0.87, 0.38 | 0
+pintu  = ruang_makan | ⬅ Ke ruang makan | 0.50, 0.90 | 0 ; halaman_belakang | 🚪 Ke halaman belakang | 0.88, 0.38 | 0 | 0.18, 0.45
 benda  = bantu_masak | 🍳 Bantu Ibu memasak | 0.58, 0.47 ; cuci_piring | 🧽 Cuci piring | 0.34, 0.41
 orang  = ibu 0.63, 0.56, 0.30
 
@@ -73,7 +75,7 @@ orang  = ayah 0.55, 0.59, 0.33
 [rumah_warung]
 nama   = Depan rumah & warung
 tempat = desa
-pintu  = ruang_tengah | 🚪 Masuk rumah | 0.14, 0.32 | 0 ; dermaga | 🌅 Ke dermaga | 0.58, 0.44 | 5 ; gudang_ikan | ➡ Ke gudang ikan | 0.72, 0.54 | 15 ; lapangan | ⚽ Ke lapangan | 0.84, 0.66 | 5
+pintu  = ruang_tengah | 🚪 Masuk rumah | 0.14, 0.32 | 0 | 0.14, 0.28 ; dermaga | 🌅 Ke dermaga | 0.58, 0.44 | 5 | 0.12, 0.10 ; gudang_ikan | ➡ Ke gudang ikan | 0.72, 0.54 | 15 | 0.12, 0.10 ; lapangan | ⚽ Ke lapangan | 0.84, 0.66 | 5 | 0.14, 0.12
 benda  = bantu_warung | 🍳 Warung | 0.22, 0.52 ; jaring_ayah | 🪢 Jaring Ayah | 0.62, 0.78 ; sapu_halaman | 🧹 Sapu halaman | 0.46, 0.88 ; kucing_warung | 🐈 Kucing warung | 0.30, 0.86 ; layangan_laras | 🪁 Ajak Laras main layangan | 0.48, 0.72
 orang  = ibu 0.30, 0.66, 0.40 ; ayah 0.70, 0.76, 0.40 ; laras 0.48, 0.80, 0.28
 
@@ -90,7 +92,7 @@ orang  = darto 0.36, 0.64, 0.42
 nama     = Lapangan desa
 tempat   = desa
 cadangan = kota_kecil
-pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.30, 0.88 | 5 ; dermaga | 🌅 Ke dermaga | 0.80, 0.46 | 5
+pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.30, 0.88 | 5 ; dermaga | 🌅 Ke dermaga | 0.80, 0.46 | 5 | 0.14, 0.14
 benda    = main_bola | ⚽ Main bola bersama Bayu | 0.42, 0.52 ; lari_sore | 🏃 Lari keliling lapangan | 0.58, 0.62 ; duduk_ketapang | 🌳 Pohon ketapang | 0.16, 0.48
 orang    = bayu 0.66, 0.72, 0.40 ; laras 0.32, 0.76, 0.30
 
@@ -98,7 +100,7 @@ orang    = bayu 0.66, 0.72, 0.40 ; laras 0.32, 0.76, 0.30
 nama     = Dermaga mercusuar
 tempat   = desa
 cadangan = dermaga_malam
-pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.70, 0.88 | 5 ; lapangan | ⚽ Ke lapangan | 0.84, 0.56 | 5
+pintu    = rumah_warung | ⬅ Pulang ke rumah | 0.70, 0.88 | 5 ; lapangan | ⚽ Ke lapangan | 0.84, 0.56 | 5 | 0.14, 0.14
 benda    = dermaga | 🌅 Duduk di dermaga | 0.60, 0.74 ; memancing | 🎣 Memancing | 0.42, 0.64 ; melaut | 🚣 Perahu Pak Karta | 0.24, 0.60 ; siapkan_perahu | ⛵ Perahu Ayah | 0.50, 0.52
 orang    = sekar 0.30, 0.86, 0.36 ; bayu 0.70, 0.82, 0.38 ; ayah 0.48, 0.68, 0.36
 
@@ -128,7 +130,7 @@ tidur  = ya
 [kota_besar]
 nama   = Pusat Kota Sakala
 tempat = kota
-pintu  = kos | 🏠 Pulang ke kos | 0.30, 0.82 | 10 ; kelas_sma | 🏫 Sekolah | 0.20, 0.46 | 10 ; toko_buku | 📚 Toko buku | 0.48, 0.56 | 15 ; taman_kota | 🌳 Taman kota | 0.78, 0.62 | 15 ; stasiun_besar | 🚉 Stasiun Besar | 0.70, 0.36 | 15 ; pasar_lama | 🧺 Pasar Lama | 0.14, 0.66 | 20
+pintu  = kos | 🏠 Pulang ke kos | 0.30, 0.82 | 10 | 0.14, 0.10 ; kelas_sma | 🏫 Sekolah | 0.20, 0.46 | 10 | 0.14, 0.12 ; toko_buku | 📚 Toko buku | 0.48, 0.56 | 15 | 0.12, 0.10 ; taman_kota | 🌳 Taman kota | 0.78, 0.62 | 15 | 0.14, 0.12 ; stasiun_besar | 🚉 Stasiun Besar | 0.70, 0.36 | 15 | 0.14, 0.12 ; pasar_lama | 🧺 Pasar Lama | 0.14, 0.66 | 20 | 0.14, 0.12
 benda  = jelajah_kota | 🧭 Jelajah | 0.62, 0.74 ; nongkrong_mal | 🛍️ Mal | 0.40, 0.66 ; kafe_kekinian | 🧋 Kafe | 0.58, 0.46 ; begadang_game | 🎮 Warnet | 0.82, 0.80 ; perpustakaan | 🏛️ Perpustakaan | 0.30, 0.38
 
 [kelas_sma]
@@ -152,7 +154,7 @@ orang  = nadia 0.36, 0.62, 0.40
 [stasiun_besar]
 nama   = Stasiun Besar
 tempat = kota
-pintu  = kota_besar | ⬅ Keluar stasiun | 0.30, 0.86 | 15 ; pelabuhan | ⚓ Angkot ke Pelabuhan | 0.82, 0.70 | 30
+pintu  = kota_besar | ⬅ Keluar stasiun | 0.30, 0.86 | 15 ; pelabuhan | ⚓ Angkot ke Pelabuhan | 0.82, 0.70 | 30 | 0.14, 0.12
 benda  = cari_jejak | 🔍 Tanya orang di peron | 0.60, 0.62
 
 [pasar_lama]

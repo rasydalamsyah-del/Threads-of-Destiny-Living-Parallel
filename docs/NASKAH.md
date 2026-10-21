@@ -161,6 +161,8 @@ Laras: Kak... Ibu jatuh di dapur.
 
 ### Karakter & hubungan
 ```
+@pergi ayah ibu laras            tokoh meninggalkan tempat jadwalnya sekarang sampai jendela jadwal itu selesai
+                                 (mis. selesai sarapan: ruang makan langsung kosong, tidak tampil di gambar)
 @kenal bayu                      pemain mengenal karakter (muncul di panel & "Temui seseorang")
 @tampil bayu senyum kiri         tampilkan gambar karakter (posisi: kiri / tengah / kanan)
 @sembunyi bayu                   sembunyikan satu karakter   (@sembunyi semua = semua)
@@ -302,3 +304,10 @@ Ayah: Nanti itu kapan?
 - Di dalam adegan boleh `@maju`, `@latar` (gambar khusus), `@kerja_mulai`, `@hp pesan`, dll. Jangan memakai `@bebas`, `@naskah`, `@tamat`.
 - Adegan bisa memindahkan pemain: `@atur _tempat = dermaga` (setelah `@kembali`, pemain berada di dermaga).
 - Alur & daftar adegan desa: [CERITA.md](CERITA.md).
+
+
+### Tokoh menatap pemain saat berbicara
+Bila latar yang tampil punya gambar pose `<latar>-<id><n>.jpg` (mis. `ruang_makan__ayah_ibu_laras_pagi-ibu2.jpg`), setiap kali
+tokoh itu berbicara gambar berganti ke posenya yang terakhir (menatap pemain); tokoh lain tetap melihat kegiatannya.
+Narasi (* ...) → semua kembali ke gambar biasa. Kalimat pemain → pembicara terakhir tetap menatap. Berlaku di naskah utama,
+adegan waktu bebas, dan saat menemui tokoh.

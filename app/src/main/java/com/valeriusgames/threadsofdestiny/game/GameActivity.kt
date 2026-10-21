@@ -524,7 +524,7 @@ class GameActivity : Activity() {
         while (pc < script.size) {
             currentIndex = pc
             when (val c = script[pc++]) {
-                is Cmd.Background -> { changeBackground(c) { next() }; return }
+                is Cmd.Background -> { clearSpeakPose(); changeBackground(c) { next() }; return }
                 is Cmd.FadeToBlack -> { hideDialog(); fadeBlack(1f, c.ms) { next() }; return }
                 is Cmd.FadeFromBlack -> { fadeBlack(0f, c.ms) { next() }; return }
                 is Cmd.TimeCard -> { showTimecard(c.text) { next() }; return }
@@ -627,6 +627,11 @@ class GameActivity : Activity() {
                 }
                 is Cmd.ShowChar -> showCharacter(c.id, c.expression, c.position)
                 is Cmd.HideChar -> hideCharacter(c.id)
+                is Cmd.Leave -> c.ids.forEach { id ->
+                    val ch = gameData.characters[id] ?: return@forEach
+                    val end = gameData.characterBlockEnd(ch, life.weekdayIndex, life.minute, todayTgl()) ?: return@forEach
+                    vars["pergi_$id"] = "${life.day}|$end"
+                }
                 is Cmd.Meet -> {
                     gameData.characters[c.id]?.let { social.rel(it).met = true }
                     syncSocialVars()
@@ -1063,6 +1068,7 @@ class GameActivity : Activity() {
     /** @kembali: tutup adegan, kembali ke naskah utama & waktu bebas. false bila tidak sedang dalam adegan. */
     private fun returnFromScene(): Boolean {
         clearPose()
+        clearSpeakPose()
         val path = vars.remove("_kembali_naskah") ?: return false
         val idx = vars.remove("_kembali_pc")?.toIntOrNull() ?: 0
         vars.remove("_adegan")
@@ -1093,7 +1099,11 @@ class GameActivity : Activity() {
     private fun setupExplore() {
         val root = charLayer.parent as ViewGroup
         val d = resources.displayMetrics.density
-        exploreLayer = FrameLayout(this).apply { visibility = View.GONE }
+        exploreLayer = FrameLayout(this).apply {
+            visibility = View.GONE
+            // ketuk tempat kosong → sorot pintu-pintu yang bisa dipakai
+            setOnClickListener { if (wait == Wait.FREE) flashDoors() }
+        }
         root.addView(exploreLayer, root.indexOfChild(charLayer),
             FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         freeToggle = TextView(this).apply {
@@ -1194,6 +1204,7 @@ class GameActivity : Activity() {
     /** Pindah lokasi (latar berganti halus), memakan waktu perjalanan bila ada. */
     private fun moveTo(target: String, minutes: Int = 0, done: () -> Unit = { renderExplore() }) {
         hideExploreUi()
+        clearSpeakPose()
         if (minutes > 0) {
             passTime(minutes)
             if (life.dead) return
@@ -1220,6 +1231,7 @@ class GameActivity : Activity() {
         if (!::exploreLayer.isInitialized) return
         exploreLayer.removeAllViews()
         if (wait != Wait.FREE) { hideExploreUi(); return }
+        clearSpeakPose()
         updateTimeLook()
         val loc = currentLocation()
         if (loc == null) {
@@ -1260,7 +1272,17 @@ class GameActivity : Activity() {
 
     /** Di lokasi mana karakter berada sekarang (jadwal "lokasi" + ada_bila), atau null. */
     private fun whereIs(c: GameData.CharacterDef): String? =
-        if (presentInStory(c)) gameData.characterLocation(c, life.weekdayIndex, life.minute, todayTgl()) else null
+        if (presentInStory(c) && !leftForNow(c)) gameData.characterLocation(c, life.weekdayIndex, life.minute, todayTgl()) else null
+
+    /** @pergi: tokoh sudah meninggalkan tempat jadwalnya (mis. selesai sarapan) sampai jendela jadwal itu selesai. */
+    private fun leftForNow(c: GameData.CharacterDef): Boolean {
+        val v = vars["pergi_${c.id}"] ?: return false
+        val day = v.substringBefore('|').toIntOrNull() ?: return false
+        val end = v.substringAfter('|').toIntOrNull() ?: return false
+        if (day == life.day && life.minute < end) return true
+        vars.remove("pergi_${c.id}")
+        return false
+    }
 
     /** Tanggal hari ini sebagai bulan×100 + tanggal (0 bila tanggal belum diatur). */
     private fun todayTgl(): Int = life.date()?.let { it.monthValue * 100 + it.dayOfMonth } ?: 0
@@ -1352,12 +1374,112 @@ class GameActivity : Activity() {
             val bed = loc.objects.firstOrNull { it.target.startsWith("istirahat") }
             addMarker("😴 Tidur", bed?.x ?: 0.5f, (bed?.y ?: 0.8f) - 0.07f, 0, always = true) { sleepUntilMorning() }
         }
-        // pintu
+        // pintu: area sentuh tak terlihat di pintunya (seperti orang). Pintu "di belakang kamera" (bawah layar) diberi panah kecil.
+        // Saat @jalan, hanya pintu menuju tujuan yang bisa dipakai.
+        val nextHop = walkTarget?.let { nextDoorToward(loc, it) }
+        doorZones.clear()
         loc.doors.forEach { door ->
             val target = resolveLoc(door.target)
             if (gameData.locations[target] == null) return@forEach
-            val label = door.label + if (door.minutes > 0) " · ${door.minutes} mnt" else ""
-            addMarker(label, door.x, door.y, 2, always = true) { moveTo(target, door.minutes) }
+            val open = walkTarget == null || target == nextHop
+            val go: () -> Unit = if (open) { { moveTo(target, door.minutes) } } else { {
+                notice("🚶 ${walkHint.ifEmpty { "Pergi ke ${gameData.locations[walkTarget!!]?.name} dulu" }}")
+                flashDoors()
+            } }
+            val zone = addDoorZone(door, sc, go)
+            if (open) doorZones += zone
+            if (door.y >= 0.84f) addBackArrow(door.x, open) { go() }
+        }
+        // baru masuk ruangan / sedang @jalan: sorot sebentar pintu yang bisa dipakai (tanpa tulisan)
+        if (walking || loc.id != lastDoorFlashLoc) {
+            lastDoorFlashLoc = loc.id
+            handler.postDelayed({ flashDoors() }, 350)
+        }
+    }
+
+    private var lastDoorFlashLoc: String? = null
+
+    private val doorZones = mutableListOf<View>()
+
+    /** Langkah pertama (lokasi tetangga) di jalan terpendek dari [from] ke [target] lewat pintu-pintu. */
+    private fun nextDoorToward(from: GameData.LocationDef, target: String): String? {
+        val prev = HashMap<String, String>()
+        val queue = ArrayDeque(listOf(from.id))
+        val seen = hashSetOf(from.id)
+        while (queue.isNotEmpty()) {
+            val cur = queue.removeFirst()
+            if (cur == target) break
+            gameData.locations[cur]?.doors?.forEach { d ->
+                val t = resolveLoc(d.target)
+                if (gameData.locations[t] != null && seen.add(t)) { prev[t] = cur; queue.addLast(t) }
+            }
+        }
+        if (target !in seen) return null
+        var step = target
+        while (prev[step] != null && prev[step] != from.id) step = prev[step]!!
+        return step
+    }
+
+    /** Area sentuh pintu (ukuran dari lokasi.txt kolom ke-5 "lebar, tinggi", bawaan 0,16 × 0,26 gambar). */
+    private fun addDoorZone(door: GameData.Spot, sc: Float, onTap: () -> Unit): View {
+        val d = resources.displayMetrics.density
+        val bottom = door.y >= 0.84f
+        val w = ((if (door.w > 0f) door.w else if (bottom) 0.46f else 0.16f) * bgImgW * sc).coerceAtLeast(56 * d)
+        val h = ((if (door.h > 0f) door.h else if (bottom) 0.12f else 0.26f) * bgImgH * sc).coerceAtLeast(56 * d)
+        val (cx, cy) = imgToScreen(door.x, door.y)
+        val v = View(this).apply {
+            setOnClickListener { onTap() }
+            contentDescription = door.label
+            background = android.graphics.drawable.GradientDrawable().apply {
+                cornerRadius = 18 * d
+                setColor(0x00FFFFFF)
+            }
+        }
+        val maxTop = exploreLayer.height - h.toInt() - (96 * d).toInt()
+        exploreLayer.addView(v, 0, FrameLayout.LayoutParams(w.toInt(), h.toInt()).apply {
+            leftMargin = (cx - w / 2f).toInt().coerceIn(0, maxOf(0, exploreLayer.width - w.toInt()))
+            topMargin = (cy - h / 2f).toInt().coerceIn((64 * d).toInt(), maxOf((64 * d).toInt(), maxTop))
+        })
+        return v
+    }
+
+    /** Panah kecil tanpa tulisan untuk pintu di belakang kamera (tidak terlihat di gambar). */
+    private fun addBackArrow(x: Float, open: Boolean, onTap: () -> Unit) {
+        val d = resources.displayMetrics.density
+        val tv = TextView(this).apply {
+            text = "⌄"
+            textSize = 26f
+            gravity = android.view.Gravity.CENTER
+            setTextColor(if (open) 0xEEF6E7C8.toInt() else 0x55F6E7C8)
+            background = android.graphics.drawable.GradientDrawable().apply {
+                shape = android.graphics.drawable.GradientDrawable.OVAL
+                setColor(if (open) 0x88203A2E.toInt() else 0x44181E32)
+                setStroke((1.5f * d).toInt(), if (open) 0xCCD2AE62.toInt() else 0x44D2AE62)
+            }
+            setPadding(0, 0, 0, (6 * d).toInt())
+            setOnClickListener { onTap() }
+        }
+        val size = (46 * d).toInt()
+        val (sx, _) = imgToScreen(x, 0.5f)
+        exploreLayer.addView(tv, FrameLayout.LayoutParams(size, size).apply {
+            leftMargin = (sx - size / 2f).toInt().coerceIn((8 * d).toInt(), maxOf((8 * d).toInt(), exploreLayer.width - size - (8 * d).toInt()))
+            topMargin = exploreLayer.height - size - (104 * d).toInt()
+        })
+    }
+
+    /** Sorot sebentar area pintu yang bisa dipakai (saat mengetuk tempat kosong, atau saat @jalan). */
+    private fun flashDoors() {
+        val d = resources.displayMetrics.density
+        doorZones.forEach { v ->
+            val g = v.background as? android.graphics.drawable.GradientDrawable ?: return@forEach
+            g.setColor(0x33F6E7C8)
+            g.setStroke((2 * d).toInt(), 0xCCD2AE62.toInt())
+            v.alpha = 0f
+            v.animate().setStartDelay(0).alpha(1f).setDuration(220).withEndAction {
+                v.animate().alpha(0f).setStartDelay(650).setDuration(450).withEndAction {
+                    g.setColor(0x00FFFFFF); g.setStroke(0, 0); v.alpha = 1f
+                }.start()
+            }.start()
         }
     }
 
@@ -1483,10 +1605,35 @@ class GameActivity : Activity() {
 
     private fun bgFileNow(name: String): String {
         val f = bgFileNowPlain(name)
-        val who = poseChar ?: return f
-        if (!presenceOn()) return f
-        return "$f-$who$poseFrame".takeIf { it in latarFiles } ?: f
+        poseChar?.let { who ->
+            if (!presenceOn()) return f
+            return "$f-$who$poseFrame".takeIf { it in latarFiles } ?: f
+        }
+        // tokoh yang sedang berbicara menatap pemain (pose terakhirnya), yang lain tetap melihat kegiatannya
+        speakChar?.let { who -> (5 downTo 2).map { "$f-$who$it" }.firstOrNull { it in latarFiles }?.let { return it } }
+        return f
     }
+
+    /** Tokoh yang sedang berbicara di naskah dan punya gambar pose di latar sekarang (menatap pemain). */
+    private var speakChar: String? = null
+
+    /** Dipanggil tiap kalimat: pembicara menoleh ke pemain; narasi → semua kembali ke kegiatannya. */
+    private fun updateSpeakPose(def: GameData.CharacterDef?, isPlayer: Boolean, narration: Boolean) {
+        val name = bgName ?: return
+        if (poseChar != null || memoryMode) return
+        val wanted = when {
+            narration -> null
+            isPlayer || def == null -> speakChar
+            else -> def.id
+        }
+        val plain = bgFileNowPlain(name)
+        val target = wanted?.takeIf { id -> (2..5).any { "$plain-$id$it" in latarFiles } }
+        if (target == speakChar) return
+        speakChar = target
+        bg.show(loadBackground(name), memoryMode, StoryScript.Motion.NONE, instant = true, time = bgTimeMatrix()) {}
+    }
+
+    private fun clearSpeakPose() { speakChar = null }
 
     /** Nomor pose (2, 3, ...) yang tersedia untuk tokoh ini di gambar latar sekarang. 1 = gambar biasa. */
     private fun poseFramesFor(id: String): List<Int> {
@@ -1699,7 +1846,9 @@ class GameActivity : Activity() {
         val speakerDef = who?.let { w -> gameData.findCharacter(w) ?: speakerIdFromRaw(speaker) }
         updateCharPanel(speakerDef)
         highlightSpeaker(speakerDef?.id)
-        updateDialogBust(speakerDef, isPlayer = speaker?.contains("{nama}") == true || (who != null && who == playerName))
+        val isPlayerLine = speaker?.contains("{nama}") == true || (who != null && who == playerName)
+        updateDialogBust(speakerDef, isPlayer = isPlayerLine)
+        updateSpeakPose(speakerDef, isPlayerLine, who == null)
 
         // Selalu batalkan animasi sebelumnya: perintah "sembunyikan dialog" yang baru dijadwalkan
         // (alpha masih 1) bisa menghapus kalimat ini kalau tidak dibatalkan.

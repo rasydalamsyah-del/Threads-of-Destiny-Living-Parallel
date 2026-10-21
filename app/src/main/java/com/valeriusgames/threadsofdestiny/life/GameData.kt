@@ -50,7 +50,8 @@ class GameData private constructor(
         val once: Boolean,
     )
 
-    data class Spot(val target: String, val label: String, val x: Float, val y: Float, val minutes: Int = 0)
+    /** Pintu/benda. w, h = ukuran area sentuh pintu (bagian lebar & tinggi gambar; 0 = ukuran bawaan). */
+    data class Spot(val target: String, val label: String, val x: Float, val y: Float, val minutes: Int = 0, val w: Float = 0f, val h: Float = 0f)
     data class PersonSpot(val charId: String, val x: Float, val y: Float, val height: Float)
     data class LocationDef(
         val id: String,
@@ -72,6 +73,13 @@ class GameData private constructor(
         val alt = c.text["lokasi_libur"]
         if (!alt.isNullOrBlank() && tgl > 0 && inDateRange(c.text["libur"], tgl)) return locationAt(alt, weekdayIndex, minute)
         return locationAt(c.text["lokasi"], weekdayIndex, minute)
+    }
+
+    /** Menit selesainya jendela jadwal karakter yang sedang berjalan (untuk @pergi), atau null. */
+    fun characterBlockEnd(c: CharacterDef, weekdayIndex: Int, minute: Int, tgl: Int = 0): Int? {
+        val alt = c.text["lokasi_libur"]
+        if (!alt.isNullOrBlank() && tgl > 0 && inDateRange(c.text["libur"], tgl)) return blockAt(alt, weekdayIndex, minute)?.first
+        return blockAt(c.text["lokasi"], weekdayIndex, minute)?.first
     }
 
     /**
@@ -610,7 +618,8 @@ class GameData private constructor(
                 val f = part.split('|').map { it.trim() }
                 if (f.size < 3) return@mapNotNull null
                 val (x, y) = xy(f[2]) ?: return@mapNotNull null
-                Spot(f[0], f[1], x, y, if (withMinutes) f.getOrNull(3)?.toIntOrNull() ?: 0 else 0)
+                val area = if (withMinutes) f.getOrNull(4)?.let { xy(it) } else null
+                Spot(f[0], f[1], x, y, if (withMinutes) f.getOrNull(3)?.toIntOrNull() ?: 0 else 0, area?.first ?: 0f, area?.second ?: 0f)
             }
             val people = m["orang"].orEmpty().split(';').mapNotNull { part ->
                 val t = part.trim()
@@ -634,7 +643,10 @@ class GameData private constructor(
          * "setiap hari 12:00-13:30 ruang_makan, senin-sabtu 07:00-16:00 gudang_ikan" → lokasi pada hari & jam itu.
          * Jendela boleh melewati tengah malam.
          */
-        internal fun locationAt(spec: String?, weekdayIndex: Int, minute: Int): String? {
+        internal fun locationAt(spec: String?, weekdayIndex: Int, minute: Int): String? = blockAt(spec, weekdayIndex, minute)?.second
+
+        /** Jendela jadwal yang sedang berjalan: (menit selesai, lokasi), atau null. */
+        internal fun blockAt(spec: String?, weekdayIndex: Int, minute: Int): Pair<Int, String>? {
             if (spec.isNullOrBlank()) return null
             spec.split(',').forEach { part ->
                 val m = Regex("^(.*?)\\s*(\\d{1,2}[:.]\\d{2}\\s*[-–]\\s*\\d{1,2}[:.]\\d{2})\\s+(\\w+)\\s*$").find(part.trim()) ?: return@forEach
@@ -643,7 +655,7 @@ class GameData private constructor(
                 val (from, to) = w
                 val inside = if (to < from) (weekdayIndex in days && minute >= from) || (((weekdayIndex + 6) % 7) in days && minute < to)
                     else weekdayIndex in days && minute in from until to
-                if (inside) return m.groupValues[3]
+                if (inside) return to to m.groupValues[3]
             }
             return null
         }

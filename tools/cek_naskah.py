@@ -12,7 +12,7 @@ import sys
 ROOT = os.path.join(os.path.dirname(__file__), "..", "app", "src", "main", "assets")
 KNOWN = set("""latar bg gelap black terang lift waktu timecard kedip blink jam clock jeda wait hp phone tunggu_hp
 wait_phone musik music suara sound sfx lompat jump goto jika if atur set tambah add hidup life kalender calendar
-bebas free maju advance uang money stat barang item lokasi location tampil show sembunyi hide kenal meet cinta love
+bebas free maju advance uang money stat barang item lokasi location tampil show sembunyi hide pergi leave kenal meet cinta love
 percaya trust perilaku behave bohong lie terbongkar reveal ungkapkan confess naskah script tanggal date kos kiriman
 allowance kerja_mulai sekolah_mulai job_start kerja_berhenti sekolah_berhenti job_stop lamar apply catatan note
 dokumen doc kejadian event tamat end pilihan choice mulai_ulang reset tunjuk show_ui info jalan walk kembali return telepon call""".split())
@@ -94,6 +94,10 @@ for f in sorted(glob.glob(os.path.join(ROOT, "naskah", "*.txt"))):
         a0 = args[0] if args else ""
         if name in ("latar", "bg") and parts[1:] and parts[1] not in latar and parts[1] not in loc_fallback:
             err(f, n, f"Gambar latar '{parts[1]}' tidak ada di folder latar")
+        if name in ("pergi", "leave"):
+            for a in args:
+                if a.strip(",") not in chars:
+                    err(f, n, f"@pergi: karakter '{a}' tidak ada di karakter.txt")
         if name in ("kenal", "cinta", "percaya", "perilaku", "ungkapkan") and a0 and a0 not in chars:
             err(f, n, f"Karakter '{a0}' tidak ada di data/karakter.txt")
         if name in ("tampil", "show") and a0 and a0 not in chars and a0 not in karakter_img:

@@ -69,6 +69,8 @@ object StoryScript {
         data class ShowChar(val id: String, val expression: String, val position: String) : Cmd()
         /** Sembunyikan karakter (null = semua). */
         data class HideChar(val id: String?) : Cmd()
+        /** Tokoh-tokoh ini meninggalkan tempat jadwalnya sekarang sampai jendela jadwal itu selesai (mis. selesai sarapan). */
+        data class Leave(val ids: List<String>) : Cmd()
         /** Pemain mengenal karakter ini (muncul di daftar & panel). */
         data class Meet(val id: String) : Cmd()
         /** Ubah Cinta karakter. */
@@ -327,6 +329,8 @@ object StoryScript {
                 Cmd.ShowChar(id, expr, pos)
             }
             "sembunyi", "hide" -> Cmd.HideChar(args.firstOrNull()?.takeIf { it != "semua" && it != "all" })
+            "pergi", "leave" -> Cmd.Leave(args.map { it.trim(',').lowercase() }.filter { it.isNotEmpty() }
+                .ifEmpty { throw ParseError(n, "format: @pergi ayah ibu laras") })
             "kenal", "meet" -> Cmd.Meet(args.firstOrNull() ?: throw ParseError(n, "format: @kenal id_karakter"))
             "cinta", "love", "percaya", "trust" -> {
                 val m = Regex("^(\\w+)\\s+([+-]?\\d+)$").find(rest)

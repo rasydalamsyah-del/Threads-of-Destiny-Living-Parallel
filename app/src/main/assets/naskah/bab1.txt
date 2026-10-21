@@ -57,6 +57,8 @@ Ibu: Habiskan dulu sarapanmu, Nona Komentator.
 @sembunyi laras
 @latar ruang_makan__ayah_ibu
 * Laras berangkat dengan sepeda kecilnya. Ayah masuk kamar untuk tidur.
+# selesai sarapan: Ayah, Ibu, Laras meninggalkan ruang makan (tidak tampil lagi di gambar sampai jadwal berikutnya)
+@pergi ayah ibu laras
 @sembunyi semua
 
 
