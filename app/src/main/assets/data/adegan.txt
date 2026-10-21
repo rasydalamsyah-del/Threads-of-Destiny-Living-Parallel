@@ -615,3 +615,136 @@ judul  = Ayah di bibir sumur setelah badai
 lokasi = halaman_belakang
 waktu  = setiap hari 20:00-23:30
 syarat = desa_bab == 4 && perahu_rusak >= 1 && tgl >= 808
+
+
+# ---------------- ADEGAN RUMAH TAMBAHAN (build 66) — naskah/adegan_rumah.txt ----------------
+
+[r2_ibu_sambal]
+naskah = adegan_rumah.txt
+judul  = Dapur subuh: Ibu mengajari mengulek sambal
+orang  = ibu
+lokasi = dapur
+waktu  = setiap hari 05:00-06:15
+syarat = bab == 2
+
+[r2_ayah_langit]
+naskah = adegan_rumah.txt
+judul  = Sumur subuh: Ayah mengajari membaca langit (langit merah)
+orang  = ayah
+lokasi = halaman_belakang
+syarat = bab == 2
+
+[r2_kepala_ikan]
+naskah = adegan_rumah.txt
+judul  = Sarapan: Ayah selalu mengambil kepala ikan
+lokasi = ruang_makan
+waktu  = senin-sabtu 06:15-07:15
+syarat = bab == 2 && tgl <= 620
+
+[r2_ayah_siang]
+naskah = adegan_rumah.txt
+judul  = Makan siang Ayah: trik menyortir ikan asin
+lokasi = ruang_makan
+waktu  = setiap hari 12:00-13:00
+syarat = bab == 2
+
+[r2_laras_siang]
+naskah = adegan_rumah.txt
+judul  = Makan siang Laras: kerupuk dicuri
+lokasi = ruang_makan
+waktu  = senin-sabtu 13:00-14:00
+syarat = bab == 2 && tgl <= 620
+
+[r2_rapor_laras]
+naskah = adegan_rumah.txt
+judul  = Makan malam Sabtu 20 Juni: rapor Laras naik kelas 6
+lokasi = ruang_makan
+waktu  = setiap hari 17:45-18:30
+syarat = bab == 2 && tgl == 620
+
+[r2_ibu_buku]
+naskah = adegan_rumah.txt
+judul  = Ibu sendirian malam: buku utang warung (cita-cita Ibu)
+orang  = ibu
+lokasi = ruang_tengah
+waktu  = setiap hari 20:30-21:00
+syarat = bab == 2
+
+[r2_kamar_ortu]
+naskah = adegan_rumah.txt
+judul  = Kamar Ayah & Ibu: foto pernikahan & tas tua Ibu
+lokasi = kamar_ayah_ibu
+waktu  = setiap hari 13:00-16:00
+syarat = bab == 2
+
+[r2_laras_daftar]
+naskah = adegan_rumah.txt
+judul  = Kamar Laras malam: daftar cita-cita Laras
+lokasi = kamar_laras
+waktu  = setiap hari 21:00-23:30
+syarat = bab == 2
+
+[rk3_ayah_timba]
+naskah = adegan_rumah.txt
+judul  = Sumur subuh: menimba untuk terakhir kali
+orang  = ayah
+lokasi = halaman_belakang
+syarat = bab == 3 && jalur == sma
+
+[rk3_makan_kesukaan]
+naskah = adegan_rumah.txt
+judul  = Makan malam: semua makanan kesukaanmu
+lokasi = ruang_makan
+waktu  = setiap hari 17:45-18:30
+syarat = bab == 3 && jalur == sma && tgl >= 707 && tgl <= 710
+
+[rk3_laras_kaus]
+naskah = adegan_rumah.txt
+judul  = Kamar Laras malam: Laras memeluk kaus lamamu
+lokasi = kamar_laras
+waktu  = setiap hari 21:00-23:30
+syarat = bab == 3 && jalur == sma && tgl >= 706
+
+[rd3_lauk_ayah]
+naskah = adegan_rumah.txt
+judul  = Sarapan musim ombak: lauk Ayah disimpan untuk Laras
+lokasi = ruang_makan
+waktu  = setiap hari 06:15-07:15
+syarat = bab == 3 && jalur == kerja && tgl >= 629 && tgl <= 712
+
+[rd3_kaleng_ayah]
+naskah = adegan_rumah.txt
+judul  = Ruang tengah sore: kaleng cicilan Ayah
+orang  = ayah
+lokasi = ruang_tengah
+syarat = bab == 3 && jalur == kerja
+
+[rd3_ibu_masak_sakit]
+naskah = adegan_rumah.txt
+judul  = Dapur subuh: Ibu memaksa memasak setelah sakit
+orang  = ibu
+lokasi = dapur
+waktu  = setiap hari 05:00-06:15
+syarat = bab == 3 && jalur == kerja && ibu_sakit == 1
+
+[rd4_sarapan_badai]
+naskah = adegan_rumah.txt
+judul  = Sarapan sesudah badai
+lokasi = ruang_makan
+waktu  = setiap hari 06:15-07:15
+syarat = desa_bab == 4 && perahu_rusak >= 1 && tgl >= 809 && tgl <= 814
+
+[rd4_ibu_khawatir]
+naskah = adegan_rumah.txt
+judul  = Ibu sendirian malam: khawatir soal Ayah
+orang  = ibu
+lokasi = ruang_tengah
+waktu  = setiap hari 20:30-21:00
+syarat = desa_bab == 4 && perahu_rusak >= 1 && tgl >= 808
+
+[rd4_laras_gugup]
+naskah = adegan_rumah.txt
+judul  = Kamar Laras 16 Agustus: tidak bisa tidur sebelum lomba
+lokasi = kamar_laras
+waktu  = setiap hari 20:30-21:00
+syarat = desa_bab == 4 && tgl == 816

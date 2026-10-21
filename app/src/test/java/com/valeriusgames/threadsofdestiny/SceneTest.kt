@@ -52,6 +52,20 @@ class SceneTest {
         }
     }
 
+    /** Adegan "temui orang di lokasi X" hanya bisa terjadi bila jadwal orang itu memang membawanya ke X pada jam adegan. */
+    @Test fun personScenesMatchSchedules() {
+        val charText = sections("karakter.txt").toMap()
+        scenes.filter { it.trigger == "orang" && it.location != null }.forEach { s ->
+            val t = charText.getValue(s.person!!)
+            if (t["lokasi"].isNullOrBlank()) return@forEach
+            val ok = (0..6).any { wd -> (0 until 24 * 60 step 15).any { m ->
+                GameData.inSchedule(s.schedule, wd, m) &&
+                    (GameData.locationAt(t["lokasi"], wd, m) == s.location || GameData.locationAt(t["lokasi_libur"], wd, m) == s.location)
+            } }
+            assertTrue("${s.id}: ${s.person} tidak pernah di ${s.location} pada jam adegan", ok)
+        }
+    }
+
     @Test fun scheduleParsing() {
         val sc = GameData.scene("x", mapOf("naskah" to "a.txt", "lokasi" to "lapangan", "waktu" to "senin-sabtu 15:00-17:00, minggu 08:00-10:30"))
         assertEquals("masuk", sc.trigger)

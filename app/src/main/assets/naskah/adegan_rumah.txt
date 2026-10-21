@@ -124,3 +124,785 @@ Ayah: Sejak kapan kamu bicara seperti Ayah?
 :: b4as_akhir
 @sembunyi ayah
 @kembali
+
+
+# ==========================================================
+#  ADEGAN RUMAH TAMBAHAN (build 66) — semua memakai gambar yang sudah ada
+#  Rencana: docs/CERITA.md bagian 14 ("Adegan rumah tambahan")
+# ==========================================================
+
+
+# ----------------------------------------------------------
+#  BAB 2 — DAPUR SUBUH: SAMBAL IBU
+# ----------------------------------------------------------
+
+:: r2_ibu_sambal
+@tampil ibu senyum
+* Dapur masih gelap. Hanya lampu kuning di atas kompor yang menyala. Wajan berdesis, dan bau bawang goreng memenuhi udara.
+Ibu: Lho, tumben subuh-subuh sudah bangun. Mimpi buruk?
+{nama}: Nggak, Bu. Kebangun saja. Ibu tiap hari bangun jam segini?
+Ibu: Jam empat. Kalau Ibu bangun jam lima, gorengan baru matang jam tujuh. Orang yang mau ke pelelangan sudah lewat semua.
+* Ibu menyodorkan cobek batu berisi cabai, bawang, dan tomat yang sudah digoreng setengah layu.
+Ibu: Mumpung kamu di sini. Sambal ini yang bikin orang balik lagi ke warung kita. Bukan gorengannya.
+@pilihan
+> Ambil ulekannya dan bantu mengulek -> r2is_ulek
+> "Ibu istirahat dulu, duduk sebentar. Aku yang lanjutkan." -> r2is_istirahat
+
+:: r2is_ulek
+* Kamu mengulek terlalu keras. Sebutir cabai melompat dan mendarat di lantai.
+Ibu: Bukan ditumbuk, Nak. Diputar. Seperti ini... pelan, tekan, putar. Sambal itu dirayu, bukan dipukul.
+* Lama-lama tanganmu menemukan iramanya. Ibu menambahkan sejumput garam, segumpal kecil terasi bakar, lalu gula merah seujung kuku.
+Ibu: Rahasianya di sini. Terasinya dibakar dulu sampai wangi. Jangan bilang siapa-siapa, nanti semua warung di dermaga ikut laris.
+* Ibu tertawa. Di luar, azan subuh mulai terdengar dari surau.
+@cinta ibu +4
+@atur resep_sambal_ibu = 1
+@lompat r2is_akhir
+
+:: r2is_istirahat
+@tampil ibu kaget
+Ibu: Duduk? Jam segini? Nanti gorengannya gosong semua.
+{nama}: Lima menit saja, Bu. Aku jagain wajannya.
+* Ibu menatapmu ragu, lalu duduk di bangku kecil dekat pintu belakang. Ia memejamkan mata. Belum dua menit, napasnya sudah teratur.
+* Kamu membalik tempe satu per satu, pelan-pelan supaya tidak berisik. Beberapa agak terlalu cokelat, tapi tidak ada yang gosong.
+@tampil ibu senyum
+Ibu: ...Ibu ketiduran, ya? Ya ampun. Sudah lama Ibu tidak tidur sambil duduk begitu enaknya.
+@cinta ibu +3
+@percaya ibu +2
+@stat kewarasan +2
+
+:: r2is_akhir
+@sembunyi ibu
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — SUMUR SUBUH: AYAH MEMBACA LANGIT
+# ----------------------------------------------------------
+
+:: r2_ayah_langit
+@tampil ayah senyum
+* Ayah baru pulang melaut. Bajunya basah garam, rambutnya kaku. Ia menimba seember air dan mengguyurkannya ke kepala, lalu menggeleng-geleng seperti anjing kehujanan.
+Ayah: Brrr! Air sumur ini selalu lebih dingin dari air laut. Aneh, ya?
+{nama}: Dapat banyak, Yah?
+Ayah: Lumayan. Tongkol dua keranjang. Langit semalam bersih, bintang Waluku kelihatan jelas.
+* Ayah menunjuk langit timur yang mulai terang. Awan tipis bergaris-garis, kemerahan di ujungnya.
+Ayah: Kamu anak nelayan. Harus bisa baca langit. Awan tipis seperti sisik ikan begitu, artinya angin akan berubah dalam sehari dua hari.
+@pilihan
+> "Kalau langitnya merah, Yah?" -> r2al_merah
+> "Aku nggak mau jadi nelayan, Yah." -> r2al_tolak
+
+:: r2al_merah
+* Senyum Ayah hilang. Ia menatap langit lama sebelum menjawab.
+@tampil ayah biasa
+Ayah: Langit pagi merah, nelayan jangan pergi. Langit sore merah tembaga, jangan pernah berangkat malamnya.
+Ayah: Kalau merah tembaga, artinya badai sedang berjalan ke sini. Bisa datang tengah malam, tanpa permisi.
+Ayah: Ingat itu baik-baik. Biar suatu hari, kalau Ayah lupa, ada yang mengingatkan.
+@atur tahu_langit_merah = 1
+@catatan Kata Ayah: "Langit pagi merah, nelayan jangan pergi. Langit sore merah tembaga, jangan pernah berangkat malamnya." Itu tanda badai.
+@percaya ayah +3
+@cinta ayah +2
+@tambah keahlian_laut +1
+@lompat r2al_akhir
+
+:: r2al_tolak
+@tampil ayah biasa
+* Ayah tidak marah. Ia hanya menggantung ember di kerekan dan mengeringkan wajah dengan handuk lusuhnya.
+Ayah: Ayah juga tidak mau kamu jadi nelayan.
+Ayah: Tapi membaca langit itu bukan cuma buat nelayan. Di mana pun kamu nanti, kamu harus bisa lihat badai sebelum dia datang.
+* Ayah menepuk bahumu dengan tangan dingin dan kasar, lalu masuk lewat pintu dapur.
+@cinta ayah +2
+
+:: r2al_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — SARAPAN: KEPALA IKAN
+# ----------------------------------------------------------
+
+:: r2_kepala_ikan
+@tampil ayah biasa
+@tampil ibu biasa
+@tampil laras biasa
+* Sarapan pagi ini ikan kembung goreng, satu ekor untuk tiap orang. Ibu sudah memotongnya jadi dua.
+* Seperti biasa, Ayah mengambil semua bagian kepala lebih dulu. Laras dan kamu dapat bagian badan yang tebal dagingnya.
+Laras: Ayah kok suka banget sih sama kepala ikan? Kan isinya tulang semua.
+Ayah: Kepala itu bagian paling enak, Ras. Otaknya bikin pintar.
+Laras: Kalau gitu Ayah harusnya juara kelas terus dong dulu!
+@tampil ibu senyum
+* Ibu tertawa sambil menutup mulut. Ayah pura-pura tersinggung.
+* Kamu memperhatikan piring Ayah. Kepala-kepala ikan itu ia hisap sampai bersih. Sepotong daging pun tidak ada di sana. Sejak kamu kecil, selalu begitu.
+@pilihan
+> Diam-diam tukar bagian badan ikanmu ke piring Ayah -> r2ki_tukar
+> Biarkan saja, tapi ingat baik-baik -> r2ki_diam
+
+:: r2ki_tukar
+* Saat Ayah menoleh menanggapi celoteh Laras, kamu memindahkan potongan ikanmu ke piringnya dan mengambil satu kepala.
+@tampil ayah kaget
+Ayah: Eh? Ini punyamu.
+{nama}: Aku mau pintar juga, Yah. Kayak Ayah.
+* Ayah menatapmu. Mulutnya membuka, lalu menutup lagi. Ia menunduk dan makan pelan-pelan, seperti ikan itu terlalu berharga untuk dihabiskan cepat.
+@tampil ayah senyum
+Ayah: ...Dasar. Besok jangan diulang. Ayah memang suka kepala ikan.
+* Tapi Ibu, dari seberang meja, mengedip padamu.
+@cinta ayah +5
+@cinta ibu +2
+@lompat r2ki_akhir
+
+:: r2ki_diam
+* Kamu tidak berkata apa-apa. Tapi sejak pagi itu, setiap kali Ayah menyendok kepala ikan, kamu tahu itu bukan karena ia suka.
+@stat kewarasan +1
+@cinta ayah +1
+
+:: r2ki_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — MAKAN SIANG BERSAMA AYAH
+# ----------------------------------------------------------
+
+:: r2_ayah_siang
+@tampil ayah senyum
+* Ayah baru bangun. Rambutnya basah sehabis mandi, matanya masih sembap. Ia makan nasi dengan sambal dan sisa tongkol pagi tadi.
+Ayah: Duduk sini. Bagaimana kerja di gudang Darto? Tangannya sudah perih kena garam?
+{nama}: Perih banget, Yah. Apalagi kalau ada luka kecil. Terus aku lambat. Mbak Yati bisa nyortir dua kali lebih cepat.
+* Ayah mengambil sepotong ikan dari piringnya dan meletakkannya di depanmu, lalu membaliknya.
+Ayah: Ikan asin bagus itu dilihat dari tiga tempat. Matanya, bening atau keruh. Insangnya, merah atau cokelat. Perutnya, utuh atau sobek.
+Ayah: Jangan lihat satu-satu. Lihat matanya dulu, sekaligus sepuluh ekor. Yang keruh langsung pisah. Baru sisanya kamu cek perutnya.
+{nama}: Ayah kok tahu banyak soal ikan asin?
+Ayah: Dari kecil Ayah sudah pegang ikan. Kakekmu yang ajari, sebelum Ayah berhenti sekolah. Tangan Ayah dulu juga perih begitu.
+@pilihan
+> "Makasih, Yah. Besok aku coba." -> r2as_coba
+> "Ayah nggak capek? Tiap malam ke laut." -> r2as_capek
+
+:: r2as_coba
+Ayah: Coba. Seminggu lagi kamu pasti lebih cepat dari Yati. Tapi jangan bilang dia Ayah yang ajari.
+@tambah keahlian_ikan +1
+@cinta ayah +3
+@lompat r2as_akhir
+
+:: r2as_capek
+@tampil ayah biasa
+* Ayah menyuap nasinya pelan.
+Ayah: Capek itu ada, Nak. Tapi capek di laut beda dengan capek di darat. Di laut, Ayah yang menentukan kapan berangkat, kapan pulang. Tidak ada yang menyuruh.
+Ayah: Itu harga perahu sendiri. Mahal, tapi Ayah bebas.
+* Kamu teringat bisik-bisik soal hutang perahu yang belum lunas, lalu memilih diam.
+@cinta ayah +2
+@percaya ayah +2
+
+:: r2as_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — MAKAN SIANG BERSAMA LARAS
+# ----------------------------------------------------------
+
+:: r2_laras_siang
+@tampil laras senyum
+* Laras baru pulang sekolah. Kaus kakinya dilempar sembarangan, dan ia makan sambil bercerita tanpa berhenti.
+Laras: Kak, tadi Bu Guru bilang bumi itu muter. Terus kenapa kita nggak pusing? Terus kenapa laut nggak tumpah?
+{nama}: Karena ada gravitasi. Bumi narik semua ke bawah.
+Laras: Narik kerupuk juga? Kok kerupukmu tinggal satu?
+* Kamu melihat piringmu. Tadi ada tiga kerupuk. Laras mengunyah dengan wajah polos.
+@pilihan
+> "Gravitasi apanya! Balikin!" -> r2ls_kejar
+> Biarkan, sodorkan kerupuk terakhir juga -> r2ls_kasih
+
+:: r2ls_kejar
+@tampil laras kaget
+* Laras melompat dari kursinya dan lari keliling meja. Kamu mengejarnya sampai keduanya tertawa terengah-engah.
+Laras: Ampun! Ampun! Nanti aku ganti pakai uang seribu yang Kakak janjiin itu!
+{nama}: Itu kan uangku sendiri!
+@cinta laras +3
+@stat kewarasan +2
+@lompat r2ls_akhir
+
+:: r2ls_kasih
+@tampil laras kaget
+Laras: ...Beneran? Kakak nggak marah?
+{nama}: Kakak sudah kenyang. Habisin.
+* Laras memegangi kerupuk itu seperti piala. Ia membaginya jadi dua dan menyodorkan satu potong padamu.
+Laras: Setengah-setengah. Biar adil. Kata Bu Guru, adil itu penting.
+@cinta laras +4
+
+:: r2ls_akhir
+@sembunyi laras
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — MAKAN MALAM SABTU 20 JUNI: RAPOR LARAS
+# ----------------------------------------------------------
+
+:: r2_rapor_laras
+@tampil ayah biasa
+@tampil ibu senyum
+@tampil laras senyum
+* Laras duduk paling tegak di meja makan malam ini. Di samping piringnya ada map biru bergambar garuda: rapor kelas lima.
+Laras: Ehem. Pengumuman. Laras... NAIK KELAS ENAM!
+Ayah: Wah! Siapa yang menyangka!
+Laras: Ayah! Semua orang menyangka!
+* Ibu membuka rapornya. Matematika: 78. Bahasa Indonesia: 90. IPA: 85. Di kolom catatan wali kelas tertulis: "Laras anak yang ceria dan suka menolong teman."
+@jika laras_diejek == hibur -> r2rl_catatan
+@lompat r2rl_pilih
+
+:: r2rl_catatan
+* Di bawahnya ada satu kalimat lagi: "Akhir-akhir ini Laras lebih percaya diri."
+* Laras melirikmu cepat, lalu pura-pura sibuk dengan nasinya.
+
+:: r2rl_pilih
+@pilihan
+> "Matematikanya tujuh delapan? Ras, kamu hebat!" -> r2rl_puji
+> "Kalau kelas enam ranking lima besar, Kakak belikan sepatu baru." -> r2rl_janji
+
+:: r2rl_puji
+@tampil laras kaget
+Laras: Kakak nggak ketawa? Kemarin-kemarin nilaiku lima terus.
+{nama}: Dari lima ke tujuh delapan itu bukan naik kelas lagi, Ras. Itu naik gunung.
+* Laras tersenyum lebar sampai matanya menyipit. Ayah menepuk-nepuk kepalanya, dan nasi di sendok Laras tumpah ke meja.
+@cinta laras +5
+@percaya laras +2
+@lompat r2rl_akhir
+
+:: r2rl_janji
+Laras: Janji? Sepatu yang ada lampunya kalau diinjak?
+{nama}: ...Yang biasa saja, Ras.
+Laras: Yang ada lampunya!
+@tampil ibu biasa
+Ibu: Jangan suka janji kalau belum tentu bisa, Nak.
+* Tapi Laras sudah tidak mendengar. Ia sibuk menghitung dengan jari, berapa nilai yang perlu naik supaya masuk lima besar.
+@atur janji_sepatu_laras = 1
+@cinta laras +4
+@tambah akademik +1
+
+:: r2rl_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — IBU SENDIRIAN MALAM: BUKU UTANG WARUNG
+# ----------------------------------------------------------
+
+:: r2_ibu_buku
+@tampil ibu biasa
+* TV sudah dimatikan. Laras sudah masuk kamar. Ibu duduk sendirian di sofa dengan buku tulis bersampul batik yang sudah lecek, kacamata baca bertengger di ujung hidungnya.
+* Di halaman yang terbuka, nama-nama ditulis berderet: Pak Usman 12.000. Mbak Yati 7.500. Pak Karta 31.000. Beberapa sudah dicoret, sebagian besar belum.
+{nama}: Itu apa, Bu?
+Ibu: Buku utang warung. Orang-orang ambil gorengan dulu, bayar belakangan. Belakangan sekali, kadang-kadang.
+@tampil ibu senyum
+Ibu: Tapi ya bagaimana. Pak Karta itu dulu yang menarik perahu Ayahmu waktu kandas. Masa Ibu tagih tiga puluh ribu.
+@pilihan
+> Bantu Ibu menghitung dan merapikan bukunya -> r2ib_hitung
+> Pijat kaki Ibu yang bengkak -> r2ib_pijat
+
+:: r2ib_hitung
+* Kamu menyalin ulang semuanya ke halaman baru: siapa, berapa, sejak kapan. Totalnya membuatmu terdiam.
+{nama}: Bu... semuanya tiga ratus dua puluh ribu.
+Ibu: Sebanyak itu?
+* Ibu melepas kacamatanya dan memijit pangkal hidung.
+Ibu: Tahu tidak, cita-cita Ibu itu dari dulu cuma satu. Punya warung makan kecil, yang ada meja sama kursinya. Bukan bangku plastik. Ada taplaknya. Orang makan duduk, tidak sambil berdiri.
+Ibu: Tapi kalau buku ini terus begini... ya, mimpi itu tetap di buku saja.
+@info ibu cita_cita
+@percaya ibu +4
+@cinta ibu +2
+@tambah komunikasi +1
+@lompat r2ib_akhir
+
+:: r2ib_pijat
+* Kamu duduk di lantai dan memijat telapak kaki Ibu. Kakinya bengkak dan kasar. Seharian ia berdiri di depan wajan.
+@tampil ibu kaget
+Ibu: Aduh, aduh, pelan! ...Ah. Di situ. Ya, di situ.
+* Ibu menutup buku utangnya dan bersandar. Dalam beberapa menit, matanya terpejam.
+Ibu: Dulu waktu kamu masih kecil, Ibu yang pijat kakimu tiap kamu demam. Sekarang gantian. Cepat sekali waktu, ya.
+@cinta ibu +5
+@stat kewarasan +2
+
+:: r2ib_akhir
+@sembunyi ibu
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — KAMAR AYAH & IBU: FOTO DAN TAS TUA
+# ----------------------------------------------------------
+
+:: r2_kamar_ortu
+* Kamar Ayah dan Ibu kosong. Siang begini, keduanya di warung depan. Kelambu putih tersampir di tiang ranjang, dan sarung Ayah tergeletak kusut di kasur.
+* Di dinding tergantung foto pernikahan mereka. Ayah memakai jas yang kebesaran, Ibu berkebaya putih. Keduanya kaku menatap kamera, tapi tangan mereka saling menggenggam erat di bawah buket bunga plastik.
+* Di atas lemari, terselip di balik kardus, ada sebuah tas kain tua bermotif bunga. Warnanya sudah pudar.
+* Kamu ingat cerita itu. Ibu pergi menyeberang teluk hanya dengan satu tas.
+@pilihan
+> Rapikan kamar, lalu keluar -> r2ko_rapi
+> Turunkan tas itu dan lihat isinya -> r2ko_tas
+
+:: r2ko_rapi
+* Kamu melipat sarung Ayah, merapikan seprai, dan menyapu pasir halus yang selalu terbawa dari dermaga.
+* Malamnya, Ibu bertanya pada Laras siapa yang merapikan kamar. Laras mengangkat bahu. Ibu menatapmu lama, lalu diam-diam menaruh telur dadar ekstra di piringmu.
+@cinta ibu +3
+@stat kewarasan +1
+@lompat r2ko_akhir
+
+:: r2ko_tas
+* Tas itu ringan. Di dalamnya hanya ada tiga benda: selendang batik terlipat rapi, sebuah sisir kayu, dan selembar foto.
+* Foto keluarga besar di depan rumah panggung bercat hijau. Seorang lelaki tua berpeci berdiri di tengah, wajahnya keras. Di sebelahnya, seorang gadis remaja tersenyum lebar. Itu Ibu.
+* Di balik foto tertulis dengan pensil: "Lebaran 2008. Rumah Bapak, Seberang Teluk."
+* Kamu memandangi lelaki tua itu lama. Kakekmu. Orang yang tidak pernah kamu temui, dan tidak pernah mau bicara dengan Ibu lagi.
+* Kamu memasukkan foto itu kembali dengan hati-hati, persis seperti semula.
+@atur lihat_foto_kakek = 1
+@catatan Di tas tua Ibu ada foto keluarga Ibu: "Lebaran 2008. Rumah Bapak, Seberang Teluk." Kakek berpeci, wajahnya keras.
+@stat kewarasan -1
+
+:: r2ko_akhir
+@kembali
+
+
+# ----------------------------------------------------------
+#  BAB 2 — KAMAR LARAS MALAM: DAFTAR CITA-CITA
+# ----------------------------------------------------------
+
+:: r2_laras_daftar
+* Laras sudah tertidur, memeluk boneka kelincinya. Lampu meja belajarnya lupa dimatikan.
+* Kamu berjinjit ke meja untuk mematikannya. Di bawah lampu ada selembar kertas bergaris, ditulis dengan pensil warna berganti-ganti.
+* "CITA-CITAKU (RAHASIA!!!)
+1. Dokter hewan. Buat kucing-kucing di dermaga.
+2. Kalau nggak bisa, jualan gorengan kayak Ibu. Tapi pakai meja.
+3. Naik kapal besar kayak yang Ayah ceritain.
+4. Ikut Kakak ke mana pun Kakak pergi."
+* Nomor empat ditulis paling besar, lalu dicoret, lalu ditulis lagi.
+@pilihan
+> Tambahkan sesuatu di bawahnya -> r2ld2_tulis
+> Matikan lampu, biarkan apa adanya -> r2ld2_biar
+
+:: r2ld2_tulis
+* Kamu mengambil pensil dan menulis kecil di pojok kertas: "5. Jadi adik paling berisik sedunia. (Sudah tercapai.)"
+* Besok paginya, Laras keluar kamar dengan wajah merah, menunjuk-nunjukmu, lalu tertawa sampai tersedak teh.
+@cinta laras +4
+@percaya laras +2
+@lompat r2ld2_akhir
+
+:: r2ld2_biar
+* Kamu mematikan lampu. Dalam gelap, Laras bergumam, "...Kakak jangan pergi..." lalu membalikkan badan.
+* Kamu berdiri di ambang pintu lebih lama dari yang kamu kira.
+@stat kewarasan -1
+@cinta laras +1
+
+:: r2ld2_akhir
+@kembali
+
+
+# ==========================================================
+#  BAB 3 KOTA — MINGGU TERAKHIR DI RUMAH
+# ==========================================================
+
+# ----------------------------------------------------------
+#  SUMUR SUBUH: MENIMBA UNTUK TERAKHIR KALI
+# ----------------------------------------------------------
+
+:: rk3_ayah_timba
+@tampil ayah biasa
+* Ayah baru pulang melaut. Ia menyerahkan tali kerekan padamu tanpa berkata apa-apa.
+Ayah: Isi bak mandi. Biar Ayah lihat kamu masih kuat.
+* Kamu menimba. Ember demi ember. Ayah duduk di bibir sumur memperhatikan, seperti dulu waktu ia mengajarimu pertama kali.
+Ayah: Di kota nanti tidak ada sumur. Airnya dari keran. Putar sedikit, keluar. Gampang.
+Ayah: Tapi justru karena gampang, orang kota lupa air itu dari mana. Kamu jangan lupa.
+@pilihan
+> "Aku nggak akan lupa, Yah. Sumur ini Ayah yang gali." -> rk3at_ingat
+> "Ayah takut aku berubah?" -> rk3at_takut
+
+:: rk3at_ingat
+@tampil ayah kaget
+Ayah: Ibumu yang cerita?
+* Ayah memalingkan muka ke arah pohon pisang. Kamu melihat bahunya naik turun sekali.
+Ayah: Ya sudah. Ember terakhir. Habis itu sarapan.
+@cinta ayah +5
+@lompat rk3at_akhir
+
+:: rk3at_takut
+* Ayah lama tidak menjawab. Katrol berderit pelan diterpa angin.
+@tampil ayah sedih
+Ayah: Ayah tidak takut kamu berubah. Semua orang berubah. Ayah takut kamu tidak pulang.
+Ayah: Orang kota kalau sudah sukses, kampungnya jadi cerita masa kecil saja. Seperti anak Darto.
+{nama}: Aku pulang, Yah. Tiap libur.
+Ayah: ...Janji itu, pegang.
+@percaya ayah +4
+@cinta ayah +3
+
+:: rk3at_akhir
+@stat energi -5
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  MAKAN MALAM: SEMUA MAKANAN KESUKAANMU
+# ----------------------------------------------------------
+
+:: rk3_makan_kesukaan
+@tampil ayah biasa
+@tampil ibu senyum
+@tampil laras sedih
+* Meja makan malam ini penuh. Cumi hitam, sayur asem, tempe mendoan, sambal terasi, dan ikan bakar bumbu kecap, semua makanan kesukaanmu sekaligus.
+{nama}: Bu, ini ada acara apa?
+Ibu: Acara apa? Tidak ada acara. Ibu cuma lagi rajin masak.
+* Tapi Ibu terus menambahkan lauk ke piringmu, bahkan sebelum piringmu kosong.
+* Laras hanya mengaduk-aduk nasinya. Cumi kesukaannya tidak disentuh sama sekali.
+Ayah: Ras, makan. Nanti cuminya dihabiskan kakakmu.
+Laras: Aku nggak lapar.
+@pilihan
+> Taruh cumi di piring Laras: "Ini buat kamu. Kakak bagi." -> rk3mk_bagi
+> "Ras, Kakak perginya ke Sakala, bukan ke bulan." -> rk3mk_bulan
+
+:: rk3mk_bagi
+@tampil laras menangis
+* Laras memandangi cumi itu. Lalu air matanya jatuh, satu, dua, ke atas nasinya.
+Laras: Nanti di kota siapa yang bagi lauk sama Kakak?
+* Tidak ada yang menjawab. Ibu bangkit ke dapur, katanya mau ambil air, tapi lama sekali tidak kembali.
+@cinta laras +5
+@cinta ibu +2
+@lompat rk3mk_akhir
+
+:: rk3mk_bulan
+@tampil laras kesal
+Laras: Sama aja! Bulan juga kelihatan tiap malam, tapi nggak bisa dipegang!
+* Ayah tersedak. Ibu menatap Laras dengan mata berkaca-kaca, lalu tertawa kecil.
+Ibu: Anak ini kalau ngomong, kayak penyair.
+* Laras akhirnya makan juga, sambil cemberut. Tapi ia menghabiskan cuminya sampai bersih.
+@cinta laras +3
+@stat kewarasan +2
+
+:: rk3mk_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  KAMAR LARAS MALAM: KAUS LAMA KAKAK
+# ----------------------------------------------------------
+
+:: rk3_laras_kaus
+* Laras sudah tidur. Tapi bukan boneka kelinci yang ia peluk malam ini.
+* Itu kaus lamamu. Kaus abu-abu bergambar perahu yang kamu pakai waktu kelas tujuh, yang kamu kira sudah lama dibuang Ibu.
+* Di sebelah bantalnya ada kertas kecil bertuliskan: "Bau Kakak. Jangan dicuci."
+@pilihan
+> Selimuti Laras, biarkan kaus itu di pelukannya -> rk3lk_selimut
+> Taruh juga gelang benang kuning dari tasmu di sebelah bantalnya -> rk3lk_gelang
+
+:: rk3lk_selimut
+* Kamu menarik selimut sampai ke bahunya. Laras menggeliat, mempererat pelukannya pada kaus itu, lalu tersenyum dalam tidur.
+@cinta laras +3
+@stat kewarasan -1
+@lompat rk3lk_akhir
+
+:: rk3lk_gelang
+* Kamu mengambil seutas benang kuning dari tasmu, mengikatnya jadi gelang kecil, dan meletakkannya di dekat tangan Laras.
+* Besok paginya, Laras sarapan dengan gelang kuning di pergelangan tangan. Ia tidak berkata apa-apa. Tapi sepanjang pagi, ia terus memutar-mutarnya.
+@cinta laras +5
+@percaya laras +2
+
+:: rk3lk_akhir
+@kembali
+
+
+# ==========================================================
+#  BAB 3 DESA — MUSIM OMBAK TINGGI
+# ==========================================================
+
+# ----------------------------------------------------------
+#  SARAPAN: LAUK AYAH DISIMPAN UNTUK LARAS
+# ----------------------------------------------------------
+
+:: rd3_lauk_ayah
+@tampil ayah sedih
+@tampil ibu biasa
+* Laras masih tidur, libur sekolah. Di meja hanya ada nasi, sambal, dan tiga potong tongkol kecil. Hasil melaut semalam.
+* Ayah mengambil nasi dan sambal saja. Potongan tongkolnya ia masukkan ke bawah tudung saji.
+Ayah: Buat Laras nanti. Anak kecil harus makan ikan, biar tumbuh.
+Ibu: Pak, Bapak juga harus makan. Semalaman di laut.
+Ayah: Ayah sudah makan roti di perahu.
+* Kamu tahu tidak ada roti di perahu. Kamu sendiri yang membereskan bekal Ayah kemarin sore: hanya sebotol air dan termos kopi.
+@pilihan
+> Bagi tongkol punyamu ke piring Ayah -> rd3la_bagi
+> "Yah, makan dulu. Nanti siang aku belikan ikan buat Laras dari upahku." -> rd3la_janji
+
+:: rd3la_bagi
+* Kamu memotong tongkolmu jadi dua dan meletakkan setengahnya di piring Ayah, sebelum ia sempat menolak.
+@tampil ayah kesal
+Ayah: Kamu kerja seharian di gudang, butuh tenaga.
+{nama}: Ayah kerja semalaman di laut. Sama-sama butuh, Yah.
+* Ayah menghela napas panjang, lalu makan. Ibu memalingkan wajah ke jendela dan diam-diam menyeka sudut matanya.
+@cinta ayah +4
+@percaya ayah +2
+@stat kenyang -5
+@lompat rd3la_akhir
+
+:: rd3la_janji
+@tampil ayah biasa
+Ayah: Upahmu itu buat simpananmu sendiri.
+{nama}: Lima belas ribu saja, Yah. Nggak bikin aku miskin.
+* Ayah diam lama. Lalu perlahan ia mengeluarkan satu potong tongkol dari bawah tudung saji dan menaruhnya di piringnya sendiri.
+Ayah: Satu. Sisanya tetap buat Laras.
+@uang -15000
+@cinta ayah +3
+@cinta ibu +2
+
+:: rd3la_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  RUANG TENGAH SORE: KALENG CICILAN AYAH
+# ----------------------------------------------------------
+
+:: rd3_kaleng_ayah
+@tampil ayah sedih
+* Radio tidak menyala sore ini. Ayah duduk di sofa dengan kaleng biskuit Khong Guan di pangkuan. Isinya uang lusuh: lembaran dua ribu, lima ribu, dan koin.
+* Ia menghitung, menyusun, lalu menghitung ulang, seakan jumlahnya bisa bertambah kalau dihitung sekali lagi.
+Ayah: ...Kurang lima puluh ribu.
+* Ayah baru sadar kamu berdiri di sana. Ia cepat-cepat menutup kalengnya.
+@tampil ayah kaget
+Ayah: Sudah pulang? Ayah cuma... menghitung uang solar.
+@pilihan
+> Keluarkan lima puluh ribu dari dompetmu -> rd3ka_beri
+> "Itu uang setoran ke Juragan, kan, Yah?" -> rd3ka_tanya
+> Pura-pura percaya, lalu pergi -> rd3ka_pergi
+
+:: rd3ka_beri
+@jika uang < 50000 -> rd3ka_tak_cukup
+@uang -50000
+@tambah uang_untuk_ayah +50000
+* Kamu meletakkan selembar lima puluh ribu di atas tutup kaleng. Uang itu hasil tiga hari kerja di gudang.
+@tampil ayah sedih
+Ayah: Ambil lagi.
+{nama}: Nggak, Yah.
+Ayah: {nama}. Ambil.
+{nama}: Kalau Ayah kembalikan, besok aku taruh di bawah bantal Ayah. Ayah tahu aku keras kepala. Turunan Ayah.
+* Ayah menatap uang itu lama sekali. Lalu ia membuka kaleng dan memasukkannya, pelan-pelan, seperti meletakkan sesuatu yang bisa pecah.
+Ayah: Ayah ganti. Nanti kalau tangkapan bagus.
+@cinta ayah +5
+@percaya ayah +4
+@lompat rd3ka_akhir
+
+:: rd3ka_tak_cukup
+* Kamu membuka dompet. Isinya tidak sampai lima puluh ribu. Kamu menutupnya lagi, malu.
+Ayah: Simpan saja dompetmu. Ayah bisa cari sendiri.
+* Tapi Ayah menepuk lututmu sebelum berdiri, dan tepukannya lebih lama dari biasanya.
+@cinta ayah +2
+@lompat rd3ka_akhir
+
+:: rd3ka_tanya
+@jika tahu_hutang_perahu != 1 -> rd3ka_tutup
+* Ayah tidak menjawab. Ia meletakkan kaleng itu di meja dan bersandar, menatap langit-langit.
+@tampil ayah sedih
+Ayah: Sabtu ini setoran. Kalau kurang, Darto tidak marah. Darto cuma diam. Dan diamnya itu lebih berat dari marah.
+Ayah: Jangan bilang Ibumu Ayah kurang. Tekanan darahnya sedang naik.
+@percaya ayah +3
+@lompat rd3ka_akhir
+
+:: rd3ka_tutup
+@tampil ayah biasa
+Ayah: Setoran apa? Ini uang solar. Sudah, sana mandi.
+@lompat rd3ka_akhir
+
+:: rd3ka_pergi
+* Kamu mengangguk dan berjalan ke kamar. Dari balik pintu, kamu mendengar koin-koin itu dihitung sekali lagi.
+@stat kewarasan -2
+
+:: rd3ka_akhir
+@sembunyi ayah
+@kembali
+
+
+# ----------------------------------------------------------
+#  DAPUR SUBUH SETELAH IBU SAKIT
+# ----------------------------------------------------------
+
+:: rd3_ibu_masak_sakit
+@tampil ibu biasa
+* Lampu dapur sudah menyala. Ibu berdiri di depan kompor, tangan kirinya berpegangan pada pinggir meja. Wajahnya masih pucat.
+{nama}: Bu! Kata Pak Mantri Ibu harus istirahat total!
+Ibu: Ibu cuma masak nasi, Nak. Bukan angkat karung.
+* Tapi saat Ibu membungkuk mengambil panci, badannya oleng sedikit. Kamu menangkap lengannya.
+@pilihan
+> "Duduk, Bu. Pagi ini aku yang masak." -> rd3im_masak
+> "Ibu yang kasih tahu caranya, aku yang kerjakan." -> rd3im_bantu
+
+:: rd3im_masak
+* Ibu akhirnya duduk di bangku. Kamu memasak nasi, menggoreng telur, dan membuat sayur bening bayam. Semuanya sendiri.
+* Di meja makan, Laras menyuap sayur pertamanya, lalu membeku.
+@tampil laras kesal
+Laras: Kak... ini sayur apa air laut?
+Ayah: Ras. Habiskan.
+* Ayah sendiri menghabiskan sayurnya tanpa berkata apa-apa, lalu minta tambah. Mukanya agak merah karena keasinan.
+@tampil ibu senyum
+Ibu: Garamnya cukup sejumput, Nak. Bukan segenggam.
+@cinta ibu +4
+@cinta laras +2
+@cinta ayah +2
+@stat energi -6
+@lompat rd3im_akhir
+
+:: rd3im_bantu
+* Ibu duduk dan memberi aba-aba. Berapa gelas beras, berapa ruas air. Kapan api dikecilkan. Kapan bawang masuk.
+Ibu: Kalau tumisan bawangnya sudah wangi dan pinggirnya kuning, baru masukkan bayamnya. Jangan lama-lama, nanti hitam.
+* Hasilnya tidak seenak masakan Ibu. Tapi tidak ada yang mengeluh, bahkan Laras.
+Ibu: Nah. Sekarang kalau Ibu sakit lagi, rumah ini tidak kelaparan.
+{nama}: Ibu jangan sakit lagi.
+@tampil ibu sedih
+Ibu: ...Iya. Ibu usahakan.
+@cinta ibu +3
+@percaya ibu +3
+@atur bisa_masak = 1
+
+:: rd3im_akhir
+@sembunyi semua
+@kembali
+
+
+# ==========================================================
+#  BAB 4 DESA — TUJUH BELASAN
+# ==========================================================
+
+# ----------------------------------------------------------
+#  SARAPAN SESUDAH BADAI
+# ----------------------------------------------------------
+
+:: rd4_sarapan_badai
+@tampil ayah sedih
+@tampil ibu biasa
+@tampil laras biasa
+@jika perahu_rusak == 2 -> rd4sb_retak
+* Kedua telapak tangan Ayah masih dibalut perban, lecet dan robek karena semalaman berpegangan di tiang bagan. Pelipisnya ditempeli plester. Ia mencoba memegang sendok, lalu meringis.
+* Laras langsung bergeser ke kursi di sebelahnya.
+Laras: Sini, Yah. Aku suapin. Kayak Ayah suapin aku waktu aku cacar dulu.
+Ayah: Ayah bisa sendiri, Ras.
+Laras: Aaa... buka mulutnya. Kereta api mau masuk terowongan. Tuut tuut!
+* Ayah menatap Laras, lalu menatapmu, lalu Ibu. Akhirnya ia membuka mulut. Ibu menahan tawa sambil menutupi mata yang basah.
+@lompat rd4sb_pilih
+
+:: rd4sb_retak
+* Perahu Ayah retak, tapi Ayah selamat. Pagi ini Ayah makan lebih lahap dari biasanya, seperti orang yang baru diberi umur kedua.
+Laras: Ayah, nanti siang aku bantu dempul perahunya, ya! Aku bisa!
+Ayah: Kamu bantu pegang ember saja. Dempul itu lengket, nanti rambutmu ikut jadi perahu.
+
+:: rd4sb_pilih
+@pilihan
+> "Yah, nanti aku yang urus perahu. Ayah istirahat dulu." -> rd4sb_urus
+> Diam dan nikmati sarapan bersama -> rd4sb_diam
+
+:: rd4sb_urus
+@tampil ayah biasa
+Ayah: Kamu? Kamu tahu bedanya papan meranti sama papan kamper?
+{nama}: Belum. Tapi Ayah bisa ajari sambil duduk.
+* Ayah tertawa, tawa pertamanya sejak malam badai itu.
+@tampil ayah senyum
+Ayah: Anak ini. Ya sudah. Nanti siang ke dermaga. Bawa topi.
+@cinta ayah +4
+@percaya ayah +3
+@tambah keahlian_laut +1
+@lompat rd4sb_akhir
+
+:: rd4sb_diam
+* Tidak ada yang membicarakan perahu, hutang, atau badai. Laras bercerita soal kucing tetangga yang melahirkan empat anak di bawah warung. Ayah menebak nama-namanya. Semuanya salah.
+* Untuk satu pagi, rumah ini terasa seperti dulu.
+@stat kewarasan +4
+@cinta laras +2
+
+:: rd4sb_akhir
+@sembunyi semua
+@kembali
+
+
+# ----------------------------------------------------------
+#  IBU SENDIRIAN MALAM: KHAWATIR SOAL AYAH
+# ----------------------------------------------------------
+
+:: rd4_ibu_khawatir
+@tampil ibu sedih
+* Ibu duduk sendirian di sofa. Lipatan baju di sebelahnya belum disentuh. Ia memandangi pintu belakang yang menuju dapur.
+Ibu: Ayahmu masih di sumur?
+{nama}: Iya, Bu. Dari tadi.
+Ibu: Tiap malam begitu sejak badai. Duduk saja di situ, sampai lewat tengah malam.
+@jika perahu_ayah == ikut_darto -> rd4ik_darto
+Ibu: Tiga puluh tahun Ayahmu bangun untuk laut. Sekarang perahunya di darat, dan dia tidak tahu harus bangun untuk apa.
+@lompat rd4ik_pilih
+
+:: rd4ik_darto
+Ibu: Sekarang dia ikut kapal motor Juragan Darto. Jadi anak buah. Dia bilang tidak apa-apa. Tapi Ibu kenal suara Ayahmu kalau dia bilang "tidak apa-apa".
+
+:: rd4ik_pilih
+@pilihan
+> "Aku temani Ayah di sumur, Bu." -> rd4ik_temani
+> "Ibu juga harus tidur. Biar aku yang tunggu Ayah." -> rd4ik_tidur
+
+:: rd4ik_temani
+@tampil ibu senyum
+Ibu: Bawa ini.
+* Ibu menuang teh jahe panas ke dua gelas dan menyodorkannya padamu.
+Ibu: Jangan ajak bicara soal perahu. Ajak bicara soal apa saja yang lain. Soal Laras, soal tujuh belasan. Dia suka dengar kamu cerita.
+@cinta ibu +3
+@percaya ibu +2
+@atur bawa_teh_ayah = 1
+@lompat rd4ik_akhir
+
+:: rd4ik_tidur
+@tampil ibu kaget
+Ibu: Kamu besok kerja.
+{nama}: Ibu juga besok jualan. Ibu yang baru sakit, Bu.
+* Ibu memandangmu lama. Lalu mengangguk, mengusap kepalamu sekali seperti waktu kamu masih SD, dan masuk kamar.
+@cinta ibu +4
+@stat energi -4
+
+:: rd4ik_akhir
+@sembunyi ibu
+@kembali
+
+
+# ----------------------------------------------------------
+#  KAMAR LARAS 16 AGUSTUS MALAM: TIDAK BISA TIDUR
+# ----------------------------------------------------------
+
+:: rd4_laras_gugup
+@tampil laras sedih
+* Laras sudah berpiyama, tapi duduk tegak di kasurnya. Selimutnya dililit seperti kepompong.
+Laras: Kak... aku nggak bisa tidur.
+@jika layangan_tahap >= 1 -> rd4lg_layang
+Laras: Besok aku ikut lomba makan kerupuk sama balap karung. Kalau aku jatuh di depan semua orang gimana? Kalau Dino ketawa?
+@lompat rd4lg_pilih
+
+:: rd4lg_layang
+Laras: Besok lombanya. Kalau anginnya nggak ada gimana? Kalau benangnya putus? Kalau layanganku nyungsep ke laut di depan semua orang?
+* Di sudut kamar, layangan yang kalian buat bersama bersandar di dinding. Kertasnya kencang, rangkanya rapi.
+
+:: rd4lg_pilih
+@pilihan
+> "Kalau jatuh, bangun lagi. Kakak teriak paling keras." -> rd4lg_teriak
+> Ceritakan kegagalan memalukan Kakak dulu -> rd4lg_cerita
+
+:: rd4lg_teriak
+Laras: Jangan teriak keras-keras! Malu!
+{nama}: Paling keras. Pakai nama lengkap. "LARAS! ADIKKU! ANAK PAK DARMAN!"
+@tampil laras senyum
+* Laras melempar bantal ke wajahmu sambil cekikikan. Lima menit kemudian, ia sudah tidur dengan mulut sedikit terbuka.
+@cinta laras +4
+@lompat rd4lg_akhir
+
+:: rd4lg_cerita
+* Kamu bercerita tentang lomba tujuh belasan waktu kamu kelas tiga. Lomba panjat pinang. Celanamu melorot sampai lutut di depan seluruh desa, dan kamu tetap memanjat sampai atas.
+@tampil laras kaget
+Laras: Celana Kakak... melorot?! Terus Kakak tetap manjat?!
+{nama}: Hadiahnya sepeda. Masa mau turun.
+* Laras tertawa sampai terguling dari kasurnya. Selimut kepompongnya terlepas.
+Laras: Oke. Kalau Kakak bisa manjat tanpa celana, aku bisa menang lomba.
+@cinta laras +5
+@percaya laras +2
+
+:: rd4lg_akhir
+@sembunyi laras
+@kembali

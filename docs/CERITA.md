@@ -586,3 +586,31 @@ Setiap adegan yang sudah terjadi tercatat otomatis sebagai `adegan_<id> = 1`.
 - **Bab 4 desa, setelah badai — Ayah di bibir sumur malam-malam:** tidak bisa tidur memikirkan perahunya; 🔀 duduk menemani diam-diam /
   bilang "Kita cari jalan sama-sama, Yah" (Kepercayaan Ayah +) / biarkan sendiri.
 Gambar pendukung: prompt di PROMPT_GAMBAR.md bagian 4 (*Rumah desa: dapur & halaman belakang*).
+
+
+### Adegan rumah tambahan — ✅ dibuat build 66 (adegan_rumah.txt, adegan.txt, obrolan.txt) · disetujui 21 Okt 2026
+Prinsip: hanya memakai gambar yang sudah ada (warung depan ditahan dulu).
+| Bab | Id | Tempat & jam | Isi / pilihan |
+|---|---|---|---|
+| 2 | r2_ibu_sambal | dapur 05:00–06:15 (temui Ibu) | sambal Ibu 🔀 bantu ulek (`resep_sambal_ibu`) / suruh Ibu istirahat |
+| 2 | r2_ayah_langit | halaman belakang 05:30–06:15 (temui Ayah) | membaca langit 🔀 "kalau merah?" (`tahu_langit_merah`, catatan) / "nggak mau jadi nelayan" |
+| 2 | r2_kepala_ikan | ruang makan sarapan, s.d. 20 Juni | Ayah selalu ambil kepala ikan 🔀 tukar piring / diam |
+| 2 | r2_ayah_siang | ruang makan 12:00–13:00 | trik sortir ikan asin 🔀 coba / "Ayah nggak capek?" |
+| 2 | r2_laras_siang | ruang makan 13:00–14:00, hari sekolah | kerupuk dicuri 🔀 kejar / kasih |
+| 2 | r2_rapor_laras | ruang makan makan malam, Sabtu 20 Juni | rapor naik kelas 6 🔀 puji / janji sepatu (`janji_sepatu_laras`) |
+| 2 | r2_ibu_buku | ruang tengah 20:30–21:00 (temui Ibu) | buku utang warung 🔀 bantu hitung (cita-cita Ibu terbuka) / pijat kaki |
+| 2 | r2_kamar_ortu | kamar Ayah & Ibu 13:00–16:00 | foto nikah 🔀 rapikan kamar / buka tas tua (`lihat_foto_kakek`, catatan) |
+| 2 | r2_laras_daftar | kamar Laras 21:00–23:30 (Laras tidur) | daftar cita-cita Laras 🔀 tambah tulisan / biarkan |
+| 3 kota | rk3_ayah_timba | halaman belakang subuh (temui Ayah) | menimba terakhir 🔀 "sumur Ayah yang gali" / "Ayah takut aku berubah?" |
+| 3 kota | rk3_makan_kesukaan | ruang makan malam 7–10 Juli | semua makanan kesukaan, Laras tak mau makan 🔀 bagi cumi / "ke Sakala, bukan ke bulan" |
+| 3 kota | rk3_laras_kaus | kamar Laras malam, mulai 6 Juli | Laras memeluk kaus lamamu 🔀 selimuti / beri gelang benang kuning |
+| 3 desa | rd3_lauk_ayah | ruang makan sarapan 29 Juni–12 Juli (Laras masih tidur, libur) | lauk Ayah disimpan untuk Laras 🔀 bagi lauk / beli ikan (Rp15.000) |
+| 3 desa | rd3_kaleng_ayah | ruang tengah sore (temui Ayah) | kaleng cicilan kurang Rp50.000 🔀 beri (`uang_untuk_ayah`) / tanya / pergi |
+| 3 desa | rd3_ibu_masak_sakit | dapur subuh setelah Ibu sakit (temui Ibu) | 🔀 kamu masak (keasinan) / Ibu memberi aba-aba (`bisa_masak`) |
+| 4 desa | rd4_sarapan_badai | ruang makan sarapan 9–14 Agustus | perahu hancur: Laras menyuapi Ayah · perahu retak: Ayah lahap 🔀 urus perahu / diam |
+| 4 desa | rd4_ibu_khawatir | ruang tengah 20:30–21:00 (temui Ibu) | Ayah tiap malam di sumur 🔀 temani Ayah bawa teh jahe / suruh Ibu tidur |
+| 4 desa | rd4_laras_gugup | kamar Laras 16 Agustus 20:30–21:00 | gugup sebelum lomba (layangan / balap karung) 🔀 "Kakak teriak paling keras" / cerita panjat pinang |
+
+Obrolan baru: `ayah_ombak` (Bab 3 desa), `ayah_kota_pesan` (Bab 3 kota), `ayah_setelah_badai`, `ibu_bekal_kota` (Bab 3 kota),
+`ibu_tujuhbelas` (Bab 4 desa), `laras_kelas6` (desa, mulai 14 Juli).
+Uji baru: adegan "temui orang di lokasi" harus cocok dengan jadwal orang itu (SceneTest.personScenesMatchSchedules).

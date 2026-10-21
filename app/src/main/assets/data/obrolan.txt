@@ -859,6 +859,68 @@ jawab    = Sudah! Eh, belum. Eh, sudah setengah! // Pokoknya layangan kita harus
 efek     = cinta +2
 sekali   = tidak
 
+# ---- obrolan keluarga Bab 3–4 (build 66) ----
+
+[ayah_ombak]
+karakter = ayah
+jenis    = khusus
+judul    = Tanya tangkapan musim ombak
+syarat   = bab == 3 && jalur == kerja
+kamu     = Semalam dapat berapa, Yah?
+jawab    = * Ayah mengangkat tiga jari, lalu menurunkan satu. // Dua keranjang kecil. Ombaknya tinggi, ikannya lari ke dalam. // Musim begini memang begitu. Sabar. Laut tidak pernah lupa sama orang yang sabar.
+efek     = cinta +2
+sekali   = tidak
+
+[ayah_kota_pesan]
+karakter = ayah
+jenis    = khusus
+judul    = "Ayah ada pesan buat aku di kota?"
+syarat   = bab == 3 && jalur == sma
+kamu     = Yah, sebelum aku berangkat... Ayah ada pesan?
+jawab    = * Ayah berpikir lama. // Makan tiga kali. Jangan malu kalau tidak punya. Jangan sombong kalau punya. // Dan kalau ada yang bilang anak nelayan tidak bisa apa-apa... tunjukkan tanganmu. Tangan itu sudah menimba sumur sejak umur tujuh.
+efek     = cinta +3, percaya +2
+sekali   = ya
+
+[ayah_setelah_badai]
+karakter = ayah
+jenis    = khusus
+judul    = Tanya keadaan Ayah sesudah badai
+syarat   = desa_bab == 4 && perahu_rusak >= 1
+kamu     = Ayah sudah baikan?
+jawab    = Badan Ayah sudah. Tinggal kepala yang belum. // * Ayah mengetuk pelipisnya pelan sambil tersenyum tipis. // Tiap dengar angin kencang, Ayah kebangun. Nanti juga hilang. Kata orang tua dulu, laut itu menakuti kita supaya kita ingat pulang.
+efek     = cinta +3
+sekali   = tidak
+
+[ibu_bekal_kota]
+karakter = ibu
+jenis    = khusus
+judul    = "Ibu takut aku pergi?"
+syarat   = bab == 3 && jalur == sma
+kamu     = Bu... Ibu takut aku pergi ke kota?
+jawab    = * Ibu berhenti mengelap piring. // Takut? Ibu lebih takut kamu tidak pergi, lalu sepuluh tahun lagi menyesal di depan wajan seperti Ibu. // * Ibu tersenyum, tapi matanya basah. // Pergi. Tapi telepon Ibu tiap Minggu. Kalau tidak, Ibu suruh Laras menyanyi di telepon sampai kamu kapok.
+efek     = cinta +4, percaya +2
+sekali   = ya
+
+[ibu_tujuhbelas]
+karakter = ibu
+jenis    = santai
+judul    = Ngobrol soal tujuh belasan
+syarat   = desa_bab == 4
+kamu     = Bu, tahun ini Ibu ikut lomba ibu-ibu lagi? Bakiak?
+jawab    = * Ibu tertawa sampai memegangi perut. // Tahun lalu Ibu jatuh, bakiaknya patah, Bu RT ikut jatuh. Sekampung ketawa sebulan. // Tahun ini Ibu jadi penonton saja. Teriak paling keras untuk Laras.
+efek     = cinta +2
+topik    = keluarga
+
+[laras_kelas6]
+karakter = laras
+jenis    = khusus
+judul    = Tanya hari-hari di kelas enam
+syarat   = desa_bab >= 3 && jalur == kerja && tgl >= 714
+kamu     = Gimana kelas enam, Ras? Wali kelasnya galak?
+jawab    = Galak banget! Namanya Pak Suryo, kumisnya kayak sapu ijuk. // Tapi dia bilang aku boleh jadi ketua kelompok IPA. Soalnya aku sekarang jago pecahan! // * Laras membusungkan dada.
+efek     = cinta +2
+sekali   = ya
+
 [bayu_mancing]
 karakter = bayu
 jenis    = santai
