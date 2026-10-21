@@ -527,3 +527,62 @@ Setiap adegan yang sudah terjadi tercatat otomatis sebagai `adegan_<id> = 1`.
 | Melaut "bersama Ayah" jam 04:00 padahal Ayah melaut malam | Melaut subuh = ikut perahu Pak Karta (bapak Bayu) |
 | Sekar tidak pernah dikenalkan di cerita | Adegan *Kenalan dengan Sekar* di Bab 2 |
 | Tokoh berdiri ditempel di atas latar saat jelajah | Dihapus; latar berganti ke gambar latar+karakter buatan pemilik |
+
+## 14. RUMAH DESA BARU — denah, jadwal per ruangan & rencana adegan (21 Okt 2026)
+
+### Denah (kamera di semua ruangan menghadap ke arah yang sama: dari depan rumah ke belakang)
+```
+                     [ dapur ] ── pintu belakang ──▶ [ halaman belakang ]
+                         ▲                              sumur (kanan depan),
+ [Kamar Ayah & Ibu] [ ruang makan ]                     kamar mandi + WC (2 pintu, di belakang sumur),
+     (pintu tirai batik)   ▲ lengkungan                 tempat cuci & jemuran (kiri)
+ ┌──────────────────[ ruang tengah ]──────────────┐
+ │ dinding kiri = dinding luar: pintu depan,      │ dinding kanan: [Kamar Laras] (belakang),
+ │ jendela, foto keluarga di atas sofa            │ lemari TV, [Kamarmu] (depan)
+ └───────────────[ depan rumah & warung ]─────────┘
+```
+- Ruang makan hanya selebar lengkungan; kamar Ayah & Ibu di balik dinding kirinya. Dapur lewat pintu kanan ruang makan.
+- Mandi & WC di bangunan kecil terpisah di halaman belakang (bertembok, beratap seng, 2 pintu: kamar mandi & WC).
+
+### Siapa ada di mana (gambar tokoh dibuat per kombinasi; satu gambar bersama bisa dipecah)
+| Ruangan | Jam | Siapa / sedang apa | Status gambar |
+|---|---|---|---|
+| Ruang tengah | 16:00–17:45 | Ayah, sofa, radio | ✅ terpasang |
+| | 18:30–20:30 | Ibu (lipat baju) + Laras (TV) | ✅ |
+| | 20:30–21:00 | Ibu sendiri | ✅ (Laras dihapus dari gambar malam) |
+| Kamar Laras | 14:00–16:00 | Laras PR (siang/sore) | ✅ |
+| | 20:30–21:00 | Laras menggambar | ✅ |
+| | 21:00–06:15 (libur s.d. 07:30) | Laras tidur | ✅ (fitur tokoh tidur) |
+| Kamar Ayah & Ibu | — | (kosong; dipakai adegan celengan) | ✅ latar |
+| Ruang makan | 06:15–07:15 | sarapan Ayah, Ibu, Laras (Laras berseragam) — libur: Ayah & Ibu | ⏳ dibuat pemilik (no. 4; versi berdua dipecah dari no. 4) |
+| | 07:30–08:00 (libur) | Laras sarapan sendiri (piyama) | ⏳ belum diputuskan (gambar sendiri / hapus jadwal) |
+| | 12:00–13:00 · 13:00–14:00 | Ayah makan siang · Laras makan siang (baju rumah) | ⏳ satu gambar Ayah + Laras, dipecah |
+| | 17:45–18:30 | makan malam bertiga | ⏳ |
+| Dapur (baru) | 05:00–06:15 · 17:15–17:45 | Ibu memasak (depan kompor) | ⏳ |
+| Halaman belakang (baru) | (05:30–06:15 usulan) | Ayah membasuh muka di sumur sepulang melaut | ⏳ opsional |
+- Tempat duduk ruang makan tetap: Ayah kiri depan, Ibu kanan depan, Laras kiri belakang.
+- Kegiatan pindah/baru: *Bantu Ibu memasak* & *Cuci piring* → dapur; baru di halaman belakang: *Mandi*, *Menimba air* (Cinta Ibu +),
+  *Menjemur pakaian*. Belum dibuat di game — dipasang bersama gambarnya.
+- Nanti (opsional): sarapan hari Minggu dengan Laras berbaju rumah (game memilih versi sesuai hari).
+
+### Cerita yang sudah menyebut dapur / mandi (cek konsistensi)
+- Prolog: aroma ikan goreng dari dapur, Ibu mengambil bekal & membawa piring kotor ke dapur, "Ayahmu juga baru pulang" (06:00);
+  makan siang: rambut Ayah basah sehabis mandi. Obrolan Ibu: "Dari subuh sudah di dapur."
+- Bab 3 desa (Senin 13 Juli 05:45): Ibu jatuh di dapur. Bab 3 kota: Ibu menyiapkan bekal & menangis di dapur. Bab 4 kota: telepon
+  "Ibu jatuh di dapur". Halaman belakang, sumur, jemuran, WC: belum pernah disebut.
+
+### Rencana (BELUM dibuat di game)
+**Perbaikan supaya nyambung**
+1. **Ibu jatuh (Bab 3 desa):** setelah teriakan Laras, latar pindah sebentar ke dapur subuh (gambar khusus: Ibu terduduk di lantai,
+   panci sayur terguling), baru ke ruang tengah saat Ayah membopongnya.
+2. **Ibu menangis di dapur (Bab 3 kota, `k3_ibu_dapur`):** hanya muncul saat menemui Ibu di dapur (memasak sore 17:15–17:45).
+3. **Ayah di sumur 05:30–06:15** sepulang melaut (sesuai prolog); diketuk → obrolan singkat soal hasil tangkapan semalam.
+
+**Adegan kecil baru di halaman belakang (waktu bebas)**
+- **Bab 2 — Laras takut ke WC malam-malam:** Laras mengetuk kamarmu, minta ditemani; 🔀 temani & menunggu di luar sambil bercerita
+  (Cinta & Kepercayaan Laras +) / suruh berani sendiri (Laras cemberut, tapi besoknya bangga berhasil sendiri).
+- **Bab 2–3 — Menimba air bersama Ibu, Minggu pagi:** Ibu bercerita sumur ini digali Ayah sendiri waktu kalian masih kecil
+  (benih kisah keluarga); 🔀 bantu sampai gentong penuh / bertanya soal masa muda Ibu.
+- **Bab 4 desa, setelah badai — Ayah di bibir sumur malam-malam:** tidak bisa tidur memikirkan perahunya; 🔀 duduk menemani diam-diam /
+  bilang "Kita cari jalan sama-sama, Yah" (Kepercayaan Ayah +) / biarkan sendiri.
+Gambar pendukung: prompt di PROMPT_GAMBAR.md bagian 4 (*Rumah desa: dapur & halaman belakang*).

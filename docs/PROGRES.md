@@ -142,6 +142,8 @@
 1. ~~Perkenalan Sekar~~ ✅ (Bab 1, ambil SKL). ~~Bab 1–4 kota & desa~~ ✅ build 56.
 2. **Bab 5**: bertemu langsung dengan sahabat masa kecil (senter tiga kedip / pesan mercusuar), rahasia keluarganya (rentenir kota, Darto),
    Bang Raka & Juragan Darto, alur Dimas–Nadia & penggusuran Rel Utara, ujian Paket C (desa).
+2a. **Rumah desa (sedang berjalan):** ruang makan, dapur, halaman belakang — gambar dibuat pemilik; lalu dipasang + kegiatan
+    (masak, cuci piring, mandi, menimba, menjemur) + perbaikan cerita & 3 adegan kecil (CERITA.md bagian 14).
 2b. Gambar latar+orang & latar baru untuk Bab 3–4 (Pasar Lama, Pelabuhan, bengkel, PKBM) — prompt di PROMPT_GAMBAR.md.
 3. **Loncatan waktu antar bab** (ringkasan bulan-bulan rutin) agar cerita bisa sampai usia 18+.
 4. Hutang & cicilan (potong upah), naik jabatan & risiko orang dalam, kebohongan wawancara yang terbongkar, transportasi.

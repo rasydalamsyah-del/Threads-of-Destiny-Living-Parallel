@@ -630,6 +630,33 @@ BACK WALL LEFT: a wooden window with morning sunlight, village roofs and the sea
 Leave open floor space around the table for characters. Warm, cozy family breakfast mood.
 ```
 
+### Rumah desa: ruang makan, dapur & halaman belakang (21 Okt 2026)
+Denah & jadwal: [CERITA.md](CERITA.md) bagian 14. Cara kerja tiap ruangan: latar kosong per waktu (edit dari gambar dasar, kalimat
+pengunci "Change ONLY the time of day and lighting") → gambar dengan tokoh dari latar kosong waktu itu (kalimat pengunci "keep it
+pixel-identical ... ADD ONLY the characters"). Tokoh tidak boleh saling menutupi bila gambarnya akan dipecah.
+
+| Ruangan | Latar kosong | Gambar dengan tokoh |
+|---|---|---|
+| Ruang makan (dasar = sore) | `ruang_makan_pagi`, `_siang`, `_malam` | `ruang_makan_pagi_bertiga` (→ dipecah jadi Ayah & Ibu), `ruang_makan_siang_ayah_laras` (→ Ayah · Laras), `ruang_makan_malam_bertiga` |
+| Dapur (dasar = sore) | `dapur_pagi` (subuh), `dapur_siang`, `dapur_malam` | `dapur_pagi_ibu`, `dapur_sore_ibu` (Ibu di depan kompor) |
+| Halaman belakang (dasar = sore) | `halaman_belakang_pagi`, `_siang`, `_malam` | opsional `halaman_belakang_pagi_ayah` (Ayah di sumur) |
+
+**Gambar adegan untuk rencana cerita (CERITA.md bagian 14, opsional — dipasang dengan @latar):**
+
+`cg_ibu_jatuh_dapur.jpg` (lampirkan `dapur_pagi.jpg` + `ibu.png`) — Ibu jatuh, Bab 3 desa:
+```
+Use the FIRST attached image as the exact background and keep it pixel-identical. Use the second image only as the character reference. ADD ONLY the mother: she sits slumped on the kitchen floor in front of the counter, leaning against the cabinet, pale and dizzy, one hand on her forehead, eyes half closed; a pot of vegetable soup lies tipped over on the floor beside her with soup spilled on the tiles, a ladle dropped. Same pre-dawn lighting with the single warm bulb. No other people, no text. Vertical 9:16.
+```
+`cg_ibu_sumur.jpg` (lampirkan `halaman_belakang_pagi.jpg` + `ibu.png`) — menimba air bersama Ibu, Minggu pagi:
+```
+Use the FIRST attached image as the exact background and keep it pixel-identical. Use the second image only as the character reference. ADD ONLY the mother: she stands at the well on the RIGHT, pulling the rope of the pulley to lift a bucket of water, sleeves rolled up, a gentle nostalgic smile, soft morning light. She must not cover the bathroom doors. No other people, no text. Vertical 9:16.
+```
+`cg_ayah_sumur_malam.jpg` (lampirkan `halaman_belakang_malam.jpg` + `ayah.png`) — Ayah setelah badai, Bab 4 desa:
+```
+Use the FIRST attached image as the exact background and keep it pixel-identical. Use the second image only as the character reference. ADD ONLY the father: he sits alone on the edge of the well on the RIGHT, shoulders slumped, elbows on his knees, staring at the ground, a bandage on one hand, cool blue moonlight on him and a little warm light from the bathroom bulb. Quiet, heavy, lonely mood. No other people, no text. Vertical 9:16.
+```
+Adegan *Laras takut ke WC* cukup memakai `halaman_belakang_malam` + gambar setengah badan Laras di kotak dialog (tidak perlu gambar khusus).
+
 ### Latar baru Bab 1–4 (desa & kota)
 Tempel blok gaya + tambahan background (bagian 2) di depan setiap prompt. Simpan di `app/src/main/assets/latar/`.
 
