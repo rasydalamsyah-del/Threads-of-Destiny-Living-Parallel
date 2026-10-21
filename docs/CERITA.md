@@ -614,3 +614,13 @@ Prinsip: hanya memakai gambar yang sudah ada (warung depan ditahan dulu).
 Obrolan baru: `ayah_ombak` (Bab 3 desa), `ayah_kota_pesan` (Bab 3 kota), `ayah_setelah_badai`, `ibu_bekal_kota` (Bab 3 kota),
 `ibu_tujuhbelas` (Bab 4 desa), `laras_kelas6` (desa, mulai 14 Juli).
 Uji baru: adegan "temui orang di lokasi" harus cocok dengan jadwal orang itu (SceneTest.personScenesMatchSchedules).
+
+### Belum disambungkan (dicatat 21 Okt 2026, menunggu keputusan pemilik)
+Variabel dari adegan rumah build 66 yang sudah tercatat tapi belum memengaruhi cerita berikutnya:
+- `tahu_langit_merah` — sore badai 7 Agustus (desa_bab4): pemain langsung mengenali langit merah tembaga, bisa jadi alasan tambahan mencegah Ayah.
+- `janji_sepatu_laras` — Laras menagih sepatu (berlampu) saat masuk kelas 6; terkait pilihan seragam Bab 3 desa / chat di jalur kota.
+- `resep_sambal_ibu` — bisa dipakai di bazar tujuh belasan, warung saat Ibu sakit, atau rindu masakan Ibu di kota.
+- `lihat_foto_kakek` — benih cerita keluarga Ibu di Seberang Teluk (kakek yang tidak mau bicara dengan Ibu).
+- `uang_untuk_ayah` — Ayah mengembalikan/mengingatnya; bisa melunakkan rapat keluarga setelah badai.
+- `bisa_masak`, `bawa_teh_ayah` — obrolan kecil lanjutan.
+- Laras makan sendiri (`ruang_makan__laras`) belum punya pose menoleh.
