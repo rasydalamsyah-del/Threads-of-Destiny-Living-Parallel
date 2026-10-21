@@ -51,6 +51,11 @@ class ExploreTest {
         assertEquals("PR di kamarnya", "kamar_laras", at("laras", SENIN, "15:00"))
         assertEquals("TV malam", "ruang_tengah", at("laras", SENIN, "19:00"))
         assertEquals("menggambar sebelum tidur", "kamar_laras", at("laras", SENIN, "20:45"))
+        // tidur: tampil di kamarnya, bukan jadwal bangun
+        assertNull("tidur bukan jadwal bangun", at("laras", SENIN, "22:00"))
+        assertEquals("kamar_laras", GameData.locationAt(chars.getValue("laras")["tidur"], 0, 22 * 60))
+        assertEquals("kamar_laras", GameData.locationAt(chars.getValue("laras")["tidur"], 1, 5 * 60))
+        assertNull(GameData.locationAt(chars.getValue("laras")["tidur"], 1, 7 * 60))
         assertEquals("rumah_warung", at("laras", MINGGU, "09:00"))
         assertEquals("layangan Minggu", "lapangan", at("laras", MINGGU, "15:00"))
         assertEquals("lapangan", at("bayu", SENIN, "16:00"))

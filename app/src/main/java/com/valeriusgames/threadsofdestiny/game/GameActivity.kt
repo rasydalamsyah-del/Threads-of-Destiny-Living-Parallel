@@ -1274,6 +1274,28 @@ class GameActivity : Activity() {
             byPlan || byAppt
         }
 
+    /** Orang yang sedang TIDUR di lokasi ini (kolom "tidur" di karakter.txt); tidak sedang punya jadwal bangun. */
+    private fun sleepersAt(loc: GameData.LocationDef): List<GameData.CharacterDef> =
+        gameData.characters.values.filter { c ->
+            social.rel(c).met && presentInStory(c) && whereIs(c) == null &&
+                gameData.sleepLocation(c, life.weekdayIndex, life.minute, todayTgl()) == loc.id
+        }
+
+    /** Mengetuk orang yang sedang tidur: tidak membangunkannya; sekali semalam boleh merapikan selimutnya. */
+    private fun tapSleeper(c: GameData.CharacterDef) {
+        closeSheet()
+        hideExploreUi()
+        afterTap = { showFreeSheet() }
+        val key = "selimut_${c.id}"
+        if (vars[key] != life.day.toString()) {
+            vars[key] = life.day.toString()
+            announce(social.changeLove(gameData, c.id, 1))
+            showLine(null, c.text["tidur_teks"] ?: "${c.name} sudah tidur pulas. Kamu merapikan selimutnya pelan-pelan, lalu keluar tanpa suara.")
+        } else {
+            showLine(null, "${c.name} masih tidur pulas. Biarkan saja.")
+        }
+    }
+
     private fun buildExplore(loc: GameData.LocationDef) {
         if (wait != Wait.FREE || currentLocation()?.id != loc.id) return
         exploreLayer.removeAllViews()
@@ -1292,6 +1314,17 @@ class GameActivity : Activity() {
                     if (hints) addMarker("💬 ${c.name}", spot.x, spot.y - spot.height, 0) { meetCharacter(c) }
                 } else {
                     addMarker("👤 ${c.name}", spot.x, spot.y - spot.height * 0.6f, 0, always = true, showLabel = true) { meetCharacter(c) }
+                }
+            }
+            // orang yang tidur: posisi khusus "<id>_tidur" di lokasi.txt
+            sleepersAt(loc).forEach { c ->
+                val spot = loc.people.firstOrNull { it.charId == "${c.id}_tidur" }
+                    ?: loc.people.firstOrNull { it.charId == c.id } ?: GameData.PersonSpot(c.id, 0.5f, 0.80f, 0.20f)
+                if (drawn) {
+                    addTapZone(spot.x, spot.y, spot.height, sc) { tapSleeper(c) }
+                    if (hints) addMarker("😴 ${c.name}", spot.x, spot.y - spot.height, 0) { tapSleeper(c) }
+                } else {
+                    addMarker("😴 ${c.name}", spot.x, spot.y - spot.height * 0.6f, 0, always = true, showLabel = true) { tapSleeper(c) }
                 }
             }
         }
@@ -1422,7 +1455,7 @@ class GameActivity : Activity() {
      * latar/ruang_makan__ayah_ibu_laras.jpg. Hanya orang yang sudah dikenal; id diurutkan abjad. null bila belum ada.
      */
     private fun presenceFile(loc: GameData.LocationDef): String? {
-        val ids = peopleAt(loc).map { it.id }.sorted()
+        val ids = (peopleAt(loc).map { it.id } + sleepersAt(loc).map { "${it.id}_tidur" }).sorted()
         if (ids.isEmpty()) return null
         return "${loc.id}__${ids.joinToString("_")}".takeIf { it in latarFiles }
     }

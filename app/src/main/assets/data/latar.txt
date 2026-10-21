@@ -118,3 +118,9 @@ waktu = sore
 
 [kamar_laras]
 waktu = sore
+
+[kamar_laras__laras]
+waktu = sore
+
+[kamar_laras__laras_tidur]
+waktu = malam

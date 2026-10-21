@@ -244,6 +244,8 @@ Hanya orang yang **sudah dikenal**, ada di **tempat yang sama** (desa/kota), dan
 | Sahabat | tidak | hanya lewat cerita |
 `ada_bila` (opsional) = syarat karakter masih ada di tempatnya; mis. Sekar tidak ada lagi di desa setelah berangkat beasiswa ke Sakala.
 Boleh memakai `&&` (semua harus benar) dan `||` (salah satu cukup), juga di `syarat` adegan, aktivitas, pekerjaan, Sosmed.
+`tidur` / `tidur_libur` (opsional) = tempat & jam tidur, mis. Laras `tidur = setiap hari 21:00-06:15 kamar_laras`. Orang yang tidur tampil di latar
+(gambar `latar/<lokasi>__<id>_tidur.jpg`, posisi `<id>_tidur` di lokasi.txt) tapi tidak bisa diajak bicara; diketuk = merapikan selimut (`tidur_teks`).
 `libur` + `lokasi_libur` (opsional) = jadwal pengganti di rentang tanggal tertentu, mis. Laras `libur = 622-712` (libur kenaikan kelas,
 tanggal = bulan×100 + hari) dengan `lokasi_libur` berisi jadwal seharian di rumah/warung/lapangan.
 

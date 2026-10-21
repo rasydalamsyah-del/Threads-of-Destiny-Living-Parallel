@@ -269,6 +269,8 @@ if os.path.exists(lk):
                 err(lk, e["_line"], f"[{lid}] benda '{f[0]}': tambahkan {lid} ke 'lokasi' aktivitas itu di aktivitas.txt")
         for part in [p for p in e.get("orang", "").split(";") if p.strip()]:
             cid = part.strip().split()[0]
+            if cid.endswith("_tidur"):  # posisi saat tidur (kolom "tidur" di karakter.txt)
+                cid = cid[:-len("_tidur")]
             if cid not in chars:
                 err(lk, e["_line"], f"[{lid}] orang '{cid}' tidak ada di karakter.txt")
     for c in entries(os.path.join(data, "karakter.txt")):

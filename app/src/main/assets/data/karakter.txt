@@ -27,6 +27,8 @@
 #  lokasi      = di mana ia berada & kapan (mis. setiap hari 12:00-13:00 ruang_makan, ...) → menggantikan jadwal:
 #                bisa ditemui tepat saat ia ada di salah satu lokasinya. Jadwal lengkap desa: docs/CERITA.md
 #  ada_bila    = (opsional) syarat karakter masih ada di tempatnya, mis. sekar_pergi != 1
+#  tidur       = (opsional) di mana & kapan ia tidur, mis. setiap hari 21:00-06:15 kamar_laras (tampil di latar, tidak bisa diajak bicara)
+#  tidur_libur = (opsional) pengganti "tidur" saat tanggal libur · tidur_teks = narasi saat diketuk (merapikan selimut)
 #  libur / lokasi_libur = (opsional) rentang tanggal (bulan×100+tanggal, mis. 627-712) & jadwal pengganti saat libur
 #  tempat_janji = lokasi tempat ia menunggu saat kalian janjian (untuk ditemui = janji)
 #  (pesan chat yang ia kirim & pilihan balasannya ada di data/pesan.txt)
@@ -143,6 +145,9 @@ lokasi      = setiap hari 06:15-07:15 ruang_makan, senin-sabtu 13:00-14:00 ruang
 # libur kenaikan kelas (22 Juni – 12 Juli, setelah rapor Sabtu 20 Juni): bangun siang, bantu warung, main layangan di lapangan
 libur       = 622-712
 lokasi_libur = setiap hari 07:30-08:00 ruang_makan, setiap hari 08:00-12:00 rumah_warung, setiap hari 13:00-14:00 ruang_makan, setiap hari 14:00-16:00 lapangan, setiap hari 16:00-17:15 rumah_warung, setiap hari 17:45-18:30 ruang_makan, setiap hari 18:30-20:30 ruang_tengah, setiap hari 20:30-21:00 kamar_laras
+tidur       = setiap hari 21:00-06:15 kamar_laras
+tidur_libur = setiap hari 21:00-07:30 kamar_laras
+tidur_teks  = Laras tidur pulas memeluk boneka kelincinya, mulutnya sedikit terbuka. Selimutnya melorot sampai ke lantai. Kamu menariknya pelan-pelan sampai ke bahunya. Laras bergumam, "...Kakak..." lalu tidur lagi.
 cinta_awal  = 65
 percaya_awal = 70
 suka_topik  = layangan, kota, sekolah

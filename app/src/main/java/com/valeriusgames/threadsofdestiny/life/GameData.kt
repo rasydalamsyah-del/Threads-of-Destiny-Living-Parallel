@@ -75,6 +75,16 @@ class GameData private constructor(
     }
 
     /**
+     * Tempat karakter TIDUR sekarang (kolom "tidur", saat libur "tidur_libur"), atau null.
+     * Orang yang tidur tampil di latar (gambar latar/<lokasi>__<id>_tidur.jpg) tapi tidak bisa diajak bicara.
+     */
+    fun sleepLocation(c: CharacterDef, weekdayIndex: Int, minute: Int, tgl: Int = 0): String? {
+        val alt = c.text["tidur_libur"]
+        if (!alt.isNullOrBlank() && tgl > 0 && inDateRange(c.text["libur"], tgl)) return locationAt(alt, weekdayIndex, minute)
+        return locationAt(c.text["tidur"], weekdayIndex, minute)
+    }
+
+    /**
      * Karakter yang nama/jenis kelaminnya menyesuaikan pemain (kolom nama_l / nama_p,
      * kelamin = lawan). Diatur ulang lewat [applyPlayerGender].
      */
