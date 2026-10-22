@@ -75,6 +75,20 @@ class SceneTest {
         assertEquals(null, GameData.blockAt(spec, 3, 9 * 60))
     }
 
+    @Test fun parentsRoomLockedAtNightAndActivityImages() {
+        val lok = sections("lokasi.txt").toMap()
+        val room = GameData.location("kamar_ayah_ibu", lok.getValue("kamar_ayah_ibu"))
+        assertTrue(room.lockedText(22 * 60)!!.contains("Ibu"))
+        assertTrue(room.lockedText(3 * 60) != null)
+        assertTrue(room.lockedText(9 * 60)!!.contains("Ayah"))
+        assertEquals(null, room.lockedText(14 * 60))
+        val akt = sections("aktivitas.txt").toMap()
+        val belajar = GameData.activity("belajar", akt.getValue("belajar"))
+        assertEquals("meja_belajar", belajar.sceneFor("kamar_pagi", false))
+        assertEquals(null, belajar.sceneFor("kos_cendana", true))
+        assertEquals("buku_harian", GameData.activity("buku_harian", akt.getValue("buku_harian")).sceneFor("kamar_pagi", false))
+    }
+
     @Test fun scheduleParsing() {
         val sc = GameData.scene("x", mapOf("naskah" to "a.txt", "lokasi" to "lapangan", "waktu" to "senin-sabtu 15:00-17:00, minggu 08:00-10:30"))
         assertEquals("masuk", sc.trigger)

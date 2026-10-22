@@ -450,3 +450,9 @@ Per jam terjaga: 🍚 −2, 💧 −2,8, ⚡ −1 (begadang 00:00–04:00: ⚡ �
 
 ### Versi latar hari libur (`_libur`)
 Gambar kehadiran boleh punya versi `<gambar>_libur` (setelah akhiran jam), mis. `ruang_makan__ayah_ibu_laras_pagi_libur`. Dipakai otomatis pada hari Minggu atau bila salah satu tokoh di lokasi itu sedang dalam rentang `libur`-nya. Tulis juga di latar.txt (waktu = jam gambarnya). Gambar pose ikut: `<gambar>_libur-<id><n>`.
+
+
+### Gambar saat kegiatan (`latar` di aktivitas.txt) & pintu terkunci (`kunci` di lokasi.txt)
+- `latar = meja_belajar` → selama kegiatan tampil `latar/meja_belajar.jpg` (versi jam `_malam` dst. boleh), lalu kembali ke ruangan.
+  Per lokasi: `latar = kamar_pagi: meja_belajar, kos: meja_kos`. Gambar belum ada → latar tidak berubah. Tulis gambarnya di latar.txt.
+- `kunci = 21:00-05:00 | Pintunya tertutup. ... ; 07:30-11:45 | ...` → pada jam itu pintu menuju lokasi ini tidak bisa dibuka, teksnya tampil.

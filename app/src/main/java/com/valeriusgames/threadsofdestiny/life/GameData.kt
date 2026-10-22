@@ -63,7 +63,14 @@ class GameData private constructor(
         val bed: Boolean,
         /** Gambar pengganti selama latar/<id>.jpg belum ada (mis. lapangan memakai gambar lain dulu). */
         val fallback: String? = null,
-    )
+        /** Jam pintu lokasi ini terkunci: (dari, sampai, teks). Kolom "kunci = 21:00-05:00 | teks ; ...". */
+        val locks: List<Triple<Int, Int, String>> = emptyList(),
+    ) {
+        /** Teks kunci bila lokasi ini sedang terkunci pada [minute], selain itu null. */
+        fun lockedText(minute: Int): String? = locks.firstOrNull { (a, b, _) ->
+            if (b < a) minute >= a || minute < b else minute in a until b
+        }?.third
+    }
 
     /**
      * Di lokasi mana karakter berada sekarang (kolom "lokasi" di karakter.txt), atau null.
@@ -305,7 +312,19 @@ class GameData private constructor(
         val windows: List<Pair<Int, Int>> = emptyList(),
         /** Hanya bisa dilakukan saat karakter ini ada di lokasi yang sama (kolom "bersama"). */
         val with: String? = null,
-    )
+        /** Gambar yang tampil selama kegiatan (kolom "latar"): "meja_belajar" atau per lokasi "kamar_pagi: meja_belajar, kos: meja_kos". */
+        val scene: String? = null,
+    ) {
+        /** Gambar kegiatan untuk lokasi [locId] (id kos ikut "kos"), atau null. */
+        fun sceneFor(locId: String?, isKos: Boolean): String? {
+            val v = scene?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+            if (':' !in v) return v
+            return v.split(',').map { it.trim() }.firstOrNull { e ->
+                val k = e.substringBefore(':').trim()
+                k == locId || (k == "kos" && isKos)
+            }?.substringAfter(':')?.trim()?.takeIf { it.isNotEmpty() }
+        }
+    }
 
     data class ItemDef(
         val id: String,
@@ -327,27 +346,7 @@ class GameData private constructor(
         fun get(ctx: Context): GameData = cached ?: load(ctx).also { cached = it }
 
         private fun load(ctx: Context): GameData {
-            val acts = readSections(ctx, "data/aktivitas.txt").map { (id, m) ->
-                ActivityDef(
-                    id = id,
-                    name = m["nama"] ?: id,
-                    places = list(m["tempat"]).ifEmpty { setOf("semua") },
-                    slots = list(m["waktu"]).ifEmpty { setOf("semua") },
-                    effects = effects(m["efek"]),
-                    condition = m["syarat"]?.takeIf { it.isNotBlank() },
-                    text = m["teks"] ?: "",
-                    icon = m["ikon"] ?: "•",
-                    minutes = minutes(m["durasi"]) ?: 60,
-                    startFrom = windows(m["mulai"]).firstOrNull()?.first,
-                    startUntil = windows(m["mulai"]).firstOrNull()?.second,
-                    windows = windows(m["mulai"]),
-                    with = m["bersama"]?.trim()?.lowercase()?.takeIf { it.isNotEmpty() },
-                    maxPerDay = m["batas"]?.filter { it.isDigit() }?.toIntOrNull(),
-                    cooldown = minutes(m["jeda"]),
-                    repeatText = m["teks_ulang"]?.takeIf { it.isNotBlank() },
-                    locations = list(m["lokasi"]),
-                )
-            }
+            val acts = readSections(ctx, "data/aktivitas.txt").map { (id, m) -> activity(id, m) }
             val items = readSections(ctx, "data/barang.txt").associate { (id, m) ->
                 id to ItemDef(
                     id = id,
@@ -609,6 +608,28 @@ class GameData private constructor(
             v?.split(',')?.map { it.trim().lowercase() }?.filter { it.isNotEmpty() }?.toSet() ?: emptySet()
 
         /** Satu entri lokasi.txt → [LocationDef]. */
+        internal fun activity(id: String, m: Map<String, String>): ActivityDef =
+            ActivityDef(
+                    id = id,
+                    name = m["nama"] ?: id,
+                    places = list(m["tempat"]).ifEmpty { setOf("semua") },
+                    slots = list(m["waktu"]).ifEmpty { setOf("semua") },
+                    effects = effects(m["efek"]),
+                    condition = m["syarat"]?.takeIf { it.isNotBlank() },
+                    text = m["teks"] ?: "",
+                    icon = m["ikon"] ?: "•",
+                    minutes = minutes(m["durasi"]) ?: 60,
+                    startFrom = windows(m["mulai"]).firstOrNull()?.first,
+                    startUntil = windows(m["mulai"]).firstOrNull()?.second,
+                    windows = windows(m["mulai"]),
+                    with = m["bersama"]?.trim()?.lowercase()?.takeIf { it.isNotEmpty() },
+                    scene = m["latar"]?.trim()?.takeIf { it.isNotEmpty() },
+                    maxPerDay = m["batas"]?.filter { it.isDigit() }?.toIntOrNull(),
+                    cooldown = minutes(m["jeda"]),
+                    repeatText = m["teks_ulang"]?.takeIf { it.isNotBlank() },
+                    locations = list(m["lokasi"]),
+                )
+
         internal fun location(id: String, m: Map<String, String>): LocationDef {
             fun xy(v: String): Pair<Float, Float>? {
                 val p = v.split(',').map { it.trim().toFloatOrNull() }
@@ -636,6 +657,10 @@ class GameData private constructor(
                 people = people,
                 bed = (m["tidur"] ?: "").trim().lowercase() == "ya",
                 fallback = m["cadangan"]?.trim()?.takeIf { it.isNotEmpty() },
+                locks = m["kunci"].orEmpty().split(';').mapNotNull { part ->
+                    val w = window(part.substringBefore('|').trim()) ?: return@mapNotNull null
+                    Triple(w.first, w.second, part.substringAfter('|', "").trim().ifEmpty { "Pintunya terkunci." })
+                },
             )
         }
 

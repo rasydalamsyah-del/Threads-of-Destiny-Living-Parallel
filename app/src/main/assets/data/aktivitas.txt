@@ -23,6 +23,8 @@
 #  batas  = (opsional) paling banyak berapa kali per hari, contoh 1
 #  jeda   = (opsional) jarak minimal sebelum boleh diulang, contoh 4 jam (makan) — dihitung dari jam mulai
 #  teks_ulang = (opsional) narasi bila dilakukan lagi di hari yang sama (mis. Ibu menegur)
+#  latar  = (opsional) gambar yang tampil selama kegiatan, mis. meja_belajar (sudut pandang pemain).
+#           Per lokasi: kamar_pagi: meja_belajar, kos: meja_kos. Versi jam boleh (_malam). Bila gambar belum ada, latar tidak berubah.
 #  bersama = (opsional) id karakter: hanya bisa saat ia ada di lokasi yang sama (mis. bersama = ibu).
 #           Tandanya di layar baru muncul saat orangnya ada.
 #  efek hubungan: cinta_ayah +2, percaya_laras +1 (ikut tercatat di halaman Karakter)
@@ -49,6 +51,7 @@ teks   = Kamu berbaring sejenak, memejamkan mata, membiarkan tubuhmu beristiraha
 teks_ulang = Baru saja memejamkan mata, Ibu melongok dari pintu: "Tidur lagi? Anak muda kok tidur terus. Bantu Ibu sebentar, dong!" Kamu tetap berbaring... tapi rasanya tidak setenang tadi.
 
 [belajar]
+latar  = kamar_pagi: meja_belajar
 lokasi = kamar_pagi, kos
 nama   = Belajar untuk persiapan SMA
 ikon   = 📚
@@ -62,6 +65,7 @@ batas  = 2
 jeda   = 2 jam
 
 [belajar_paket]
+latar  = meja_belajar
 lokasi = kamar_pagi
 nama   = Belajar mandiri (persiapan Paket C)
 ikon   = 📖
@@ -74,6 +78,7 @@ teks   = Kamu membuka buku pinjaman Sekar. Catatan kecil di pinggir halamannya �
 batas  = 1
 
 [buku_harian]
+latar  = buku_harian
 lokasi = kamar_pagi
 nama   = Menulis buku harian
 ikon   = ✍️
@@ -85,6 +90,7 @@ teks   = Kamu menulis tentang hari ini. Tentang bau ikan, tawa Laras, dan nama y
 batas  = 1
 
 [kotak_kenangan]
+latar  = kenangan_gelang
 lokasi = kamar_pagi
 nama   = Melihat gelang & foto lama
 ikon   = 🧶
@@ -512,4 +518,29 @@ waktu  = pagi, siang
 durasi = 30 menit
 efek   = energi -5, kewarasan +2, cinta_ibu +2
 teks   = Kamu memeras cucian lalu menjepitnya satu per satu di tali jemuran. Sarung Ayah, seragam Laras, daster Ibu, kausmu sendiri. Angin laut langsung mengibarkannya.
+batas  = 1
+
+
+# ----- Kamar Ayah & Ibu -----
+[foto_nikah]
+lokasi = kamar_ayah_ibu
+nama   = Melihat foto pernikahan Ayah & Ibu
+ikon   = 🖼️
+tempat = desa
+waktu  = semua
+durasi = 15 menit
+efek   = kewarasan +1
+teks   = Ayah dengan jas kebesaran, Ibu berkebaya putih. Keduanya kaku menatap kamera, tapi tangan mereka saling menggenggam erat di bawah buket bunga plastik. Kamu tidak pernah melihat Ayah setegang itu, bahkan di tengah badai.
+batas  = 1
+
+[rapikan_kamar_ortu]
+lokasi = kamar_ayah_ibu
+nama   = Merapikan kamar Ayah & Ibu
+ikon   = 🧺
+tempat = desa
+waktu  = semua
+durasi = 30 menit
+efek   = energi -4, cinta_ibu +1
+teks   = Kamu melipat sarung Ayah, merapikan seprai, dan menyapu pasir halus yang selalu terbawa dari dermaga. Malamnya Ibu tidak berkata apa-apa, tapi ada telur dadar ekstra di piringmu.
+teks_ulang = Kamarnya sudah rapi. Kamu hanya meluruskan kelambu yang sedikit miring.
 batas  = 1

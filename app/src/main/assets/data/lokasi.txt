@@ -12,6 +12,7 @@
 #  benda           = id_aktivitas | teks | x, y                           (ketuk → lakukan aktivitas itu)
 #  orang           = id_karakter x, y, tinggi                              (posisi berdiri bila belum ada gambar adegan)
 #  tidur           = ya → bisa tidur di sini (kasur)
+#  kunci           = jam pintu lokasi ini tertutup | teks   (mis. 21:00-05:00 | Ibu sudah tidur.) — pisahkan dengan ;
 #
 #  x, y = posisi di gambar (0 = kiri/atas, 1 = kanan/bawah). Layar HP memotong ±10% kiri & kanan,
 #  jadi taruh tanda di antara x 0.12 – 0.88.
@@ -43,6 +44,8 @@ orang  = ayah 0.22, 0.55, 0.20 ; ibu 0.27, 0.52, 0.17 ; laras 0.57, 0.56, 0.12
 nama   = Kamar Ayah & Ibu
 tempat = desa
 pintu  = ruang_tengah | ⬅ Ke ruang tengah | 0.88, 0.40 | 0 | 0.14, 0.60
+benda  = foto_nikah | 🖼️ Foto pernikahan | 0.72, 0.25 ; rapikan_kamar_ortu | 🧺 Rapikan kamar | 0.25, 0.52
+kunci  = 21:00-05:00 | Pintunya tertutup. Dari dalam terdengar dengkur halus Ibu. ; 07:30-11:45 | Pintunya tertutup. Ayah sedang tidur sehabis melaut semalaman.
 
 [kamar_laras]
 nama   = Kamar Laras

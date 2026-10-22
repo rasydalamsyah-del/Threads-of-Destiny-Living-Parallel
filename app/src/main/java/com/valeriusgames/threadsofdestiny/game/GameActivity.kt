@@ -1382,7 +1382,10 @@ class GameActivity : Activity() {
             val target = resolveLoc(door.target)
             if (gameData.locations[target] == null) return@forEach
             val open = walkTarget == null || target == nextHop
-            val go: () -> Unit = if (open) { { moveTo(target, door.minutes) } } else { {
+            val go: () -> Unit = if (open) { {
+                val locked = if (walkTarget == null) gameData.locations[target]?.lockedText(life.minute) else null
+                if (locked != null) notice("🔒 $locked") else moveTo(target, door.minutes)
+            } } else { {
                 notice("🚶 ${walkHint.ifEmpty { "Pergi ke ${gameData.locations[walkTarget!!]?.name} dulu" }}")
                 flashDoors()
             } }
@@ -2557,10 +2560,36 @@ class GameActivity : Activity() {
         passTime(a.minutes)
         if (life.dead) return
         afterTap = { continueFree() }
-        showLine(null, text.ifEmpty { a.name } + "\n(⏱ ${LifeState.duration(a.minutes)} · sekarang ${life.timeText})")
+        val line = text.ifEmpty { a.name } + "\n(⏱ ${LifeState.duration(a.minutes)} · sekarang ${life.timeText})"
+        // gambar kegiatan (mis. meja belajar dari sudut pandang pemain), lalu kembali ke ruangan
+        val loc = currentLocation()
+        val scene = a.sceneFor(loc?.id, loc?.id?.startsWith("kos_") == true)?.takeIf { sc ->
+            sc in latarFiles || listOf("pagi", "siang", "sore", "malam").any { "${sc}_$it" in latarFiles }
+        }
+        if (scene != null && bgName != null) {
+            activityBgReturn = bgName
+            bgName = scene
+            bg.show(loadBackground(scene), false, StoryScript.Motion.NONE, instant = false, time = bgTimeMatrix()) {}
+            updateCharTint()
+            handler.postDelayed({ showLine(null, line) }, 450)
+        } else {
+            showLine(null, line)
+        }
+    }
+
+    /** Lokasi yang ditinggalkan sementara selama gambar kegiatan tampil. */
+    private var activityBgReturn: String? = null
+
+    private fun restoreActivityBg() {
+        val back = activityBgReturn ?: return
+        activityBgReturn = null
+        bgName = back
+        bg.show(loadBackground(back), false, StoryScript.Motion.NONE, instant = false, time = bgTimeMatrix()) {}
+        updateCharTint()
     }
 
     private fun continueFree() {
+        restoreActivityBg()
         if (freeLeft > 0 && !freeUntilReached()) {
             hideDialog()
             // kembali ke layar jelajah (halaman waktu bebas tertutup; buka lewat tombol 📋)
@@ -2572,6 +2601,7 @@ class GameActivity : Activity() {
     }
 
     private fun endFree() {
+        restoreActivityBg()
         hideExploreUi()
         vars.remove("_bebas_sisa")
         vars.remove("_bebas_sampai")
