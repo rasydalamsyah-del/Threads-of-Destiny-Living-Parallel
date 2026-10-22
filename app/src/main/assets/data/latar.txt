@@ -159,3 +159,15 @@ waktu = tetap
 
 [cg_laras_wc_malam]
 waktu = tetap
+
+# ---- gambar saat kegiatan (sudut pandang pemain, aktivitas.txt kolom "latar") ----
+# meja belajar: gambar dasar sore (lampu menyala); versi malam = meja_belajar_malam
+[meja_belajar]
+waktu = sore
+
+[buku_harian]
+waktu = sore
+
+# kaleng kenangan: cahaya lampu dalam ruangan, tidak diwarnai ulang
+[kenangan_gelang]
+waktu = tetap
